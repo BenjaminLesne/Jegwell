@@ -1,0 +1,45 @@
+name: Deploy Action
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: "styfle/cancel-workflow-action@0.5.0"
+        with:
+          access_token: ${{ github.token }}
+      - uses: "actions/checkout@v2"
+      - uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "8.0"
+          extensions: mbstring, intl, gd, zip, xml, mysql
+      - uses: "ramsey/composer-install@v1"
+        with:
+          composer-options: "--optimize-autoloader --ignore-platform-reqs"
+      # - name: Run grunt
+      #   uses: "elstudio/actions-js-build/build@v2"
+      - name: Zip entire project
+        uses: "montudor/action-zip@master"
+        with:
+          args: zip -qq -r ./latest.zip .
+      - name: Send zip to remote server
+        uses: "horochx/deploy-via-scp@master"
+        with:
+          local: "./latest.zip"
+          remote: "/var/www/my-website.com"
+          host: ${{ secrets.PRODUCTION_IP_ADDRESS }}
+          port: "22"
+          user: "deploy"
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+      - name: Execute post-deploy.sh
+        uses: "appleboy/ssh-action@master"
+        with:
+          host: ${{ secrets.PRODUCTION_IP_ADDRESS }}
+          username: "deploy"
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+          port: "22"
+          script: sh /home/deploy/deploy.sh
