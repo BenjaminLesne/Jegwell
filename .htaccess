@@ -1,0 +1,74 @@
+<IfModule mod_headers.c>
+    # Serve gzip compressed CSS and JS files if they exist
+    # and the client accepts gzip.
+    RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+    RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+    RewriteRule "^(.*)\.(css|js)"         "$1\.$2\.gz" [QSA]
+
+    # Serve correct content types, and prevent mod_deflate double gzip.
+    RewriteRule "\.css\.gz$" "-" [T=text/css,E=no-gzip:1]
+    RewriteRule "\.js\.gz$"  "-" [T=text/javascript,E=no-gzip:1]
+
+
+    <FilesMatch "(\.js\.gz|\.css\.gz)$">
+      # Serve correct encoding type.
+      Header append Content-Encoding gzip
+
+      # Force proxies to cache gzipped &
+      # non-gzipped css/js files separately.
+      Header append Vary Accept-Encoding
+    </FilesMatch>
+</IfModule>
+
+
+
+
+
+# # AddEncoding allows you to have certain browsers uncompress information on the fly.
+# AddEncoding gzip .gz
+
+# #Serve gzip compressed CSS files if they exist and the client accepts gzip.
+# RewriteCond %{HTTP:Accept-encoding} gzip
+# RewriteCond %{REQUEST_FILENAME}\.gz -s
+# RewriteRule ^(.*)\.css $1\.css\.gz [QSA]
+
+# # Serve gzip compressed JS files if they exist and the client accepts gzip.
+# RewriteCond %{HTTP:Accept-encoding} gzip
+# RewriteCond %{REQUEST_FILENAME}\.gz -s
+# RewriteRule ^(.*)\.js $1\.js\.gz [QSA]
+
+# # Serve correct content types, and prevent mod_deflate double gzip.
+# RewriteRule \.css\.gz$ - [T=text/css,E=no-gzip:1]
+# RewriteRule \.js\.gz$ - [T=text/javascript,E=no-gzip:1]
+
+# # --
+
+# # # source: https://httpd.apache.org/docs/current/mod/mod_deflate.html
+
+# # SetOutputFilter DEFLATE # active la compression des fichiers envoyés par le serveur...
+# # SetEnvIfNoCase Request_URI "\.(?:gif|jpe?g|png|webp)$" no-gzip #  ...sauf pour les images
+
+# # <IfModule mod_headers.c>
+# #     # Plutôt que de compresser à chaque fois les fichiers, on vérifie que le fichier compressé n'existe pas déjà sur le serveur.
+# #     # Si il existe, on l'utilise; Sinon, on compresse le fichier avant de l'envoyer.
+
+# #     # Serve gzip compressed CSS and JS files if they exist
+# #     # and the client accepts gzip.
+# #     RewriteCond "%{HTTP:Accept-encoding}" "gzip"
+# #     RewriteCond "%{REQUEST_FILENAME}\.gz" -s
+# #     RewriteRule "^(.*)\.(css|js)"         "$1\.$2\.gz" [QSA]
+
+# #     # Serve correct content types, and prevent mod_deflate double gzip.
+# #     RewriteRule "\.css\.gz$" "-" [T=text/css,E=no-gzip:1]
+# #     RewriteRule "\.js\.gz$"  "-" [T=text/javascript,E=no-gzip:1]
+
+
+# #     <FilesMatch "(\.js\.gz|\.css\.gz)$">
+# #       # Serve correct encoding type.
+# #       Header append Content-Encoding gzip
+
+# #       # Force proxies to cache gzipped &
+# #       # non-gzipped css/js files separately.
+# #       Header append Vary Accept-Encoding
+# #     </FilesMatch>
+# # </IfModule>

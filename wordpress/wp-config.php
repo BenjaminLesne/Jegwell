@@ -110,13 +110,32 @@ if (WORDPRESS_ENV === 'development' || WORDPRESS_ENV === 'staging') {
 }
 
 if (WORDPRESS_ENV === 'production') {
-	define('WP_DEBUG', false);
+	define('WP_DEBUG', false); // this turns off debug.log and WooCommerce logs
 	define('WP_DEBUG_LOG', $logfile);
 	define('WP_DEBUG_DISPLAY', false);
 	define('SAVEQUERIES', false);
 	define('SCRIPT_DEBUG', false);
 	define('DIEONDBERROR', false);
+
+	// permet d'avoir des logs QUE pour les erreurs (pas pour les warnings et autre)
+	@ini_set('display_errors', '0');
+	@ini_set('display_startup_errors', '0');
+	error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE & ~E_WARNING); // log errors only
+
 }
+// Désactive le Cron Wordpress
+defined('DISABLE_WP_CRON') or define('DISABLE_WP_CRON', true);
+defined('DISABLE_WP_HTTP_WORKER') or define('DISABLE_WP_HTTP_WORKER', true);
+
+defined('WP_HTTP_BLOCK_EXTERNAL') or define('WP_HTTP_BLOCK_EXTERNAL', true); // active le firewall de wordpress
+defined('WP_ACCESSIBLE_HOSTS') or define('WP_ACCESSIBLE_HOSTS', 'api.wordpress.org'); // les exceptions pour le firewall
+
+// Désactive les mise à jour automatique
+// On met à jour avec composer et avec le repo gitHub !!
+defined('AUTOMATIC_UPDATER_DISABLED') or define('AUTOMATIC_UPDATER_DISABLED', $_ENV['AUTOMATIC_UPDATER_DISABLED']);
+defined('WP_AUTO_UPDATE_CORE') or define('WP_AUTO_UPDATE_CORE', $_ENV['WP_AUTO_UPDATE_CORE']);
+defined('DISALLOW_FILE_MODS') or define('DISALLOW_FILE_MODS', $_ENV['DISALLOW_FILE_MODS']);
+defined('DISALLOW_FILE_EDIT') or define('DISALLOW_FILE_EDIT', $_ENV['DISALLOW_FILE_EDIT']);
 
 /* That's all, stop editing! Happy publishing. */
 
