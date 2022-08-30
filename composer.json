@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "db": "sudo /usr/local/mysql/bin/mysqld_safe --user=mysql",
+    "start-mysql": "sudo /usr/local/mysql/bin/mysqld_safe --user=mysql",
     "serve": "php -S localhost:8080 -t wordpress &> /dev/null & xdg-open http://localhost:8080",
-    "stop-mysql": "sudo /usr/local/mysql/bin/mysqladmin -u root -p shutdown"
+    "stop-mysql": "sudo /usr/local/mysql/bin/mysqladmin -u root -p shutdown",
+    "tests": "./vendor/bin/phpunit --verbose --debug"
   },
   "name": "benjamin/jegwell",
   "description": "La boutique officielle de Jegwell",
@@ -14,7 +15,9 @@
     "drupal-composer/preserve-paths": "^0.1.6",
     "wpackagist-plugin/woocommerce": "^6.8",
     "vlucas/phpdotenv": "^5.4",
-    "wpackagist-plugin/manage-notification-emails": "^1.8"
+    "wpackagist-plugin/manage-notification-emails": "^1.8",
+    "sentry/sdk": "^3.2",
+    "phpmailer/phpmailer": "^6.6"
   },
   "license": "GPL",
   "authors": [
