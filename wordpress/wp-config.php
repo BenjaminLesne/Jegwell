@@ -2,9 +2,16 @@
 
 /** @desc this loads the composer autoload file */
 require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/wordpress/jegwell-functions.php';
+
 /** @desc this instantiates Dotenv and passes in our path to .env */
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
+
+use function Jegwell\functions\initializeSentry;
+
+initializeSentry($_ENV['SENTRY_DSN']);
+
 /**
  * The base configuration for WordPress
  *
