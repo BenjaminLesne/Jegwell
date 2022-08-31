@@ -39,7 +39,7 @@ class jegwellFuntionsTest extends TestCase
         $randomId = rand();
         $message = "this is my error message {$randomId}";
         $type = 'test-error';
-        $logPath  = dirname(__DIR__) . "/logs/{$type}-logs";
+        $logPath  = dirname(__DIR__) . "/logs/{$type}-logs.log";
         $previousContent = file_exists($logPath) ? file_get_contents($logPath) : "default";
 
         addToLogs('test-error', $message);
