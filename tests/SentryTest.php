@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-$root_directory_level = 5;
-require_once dirname(__DIR__, $root_directory_level) . '/vendor/autoload.php';
-require_once dirname(__DIR__, $root_directory_level) . '/wordpress/jegwell-functions.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/wordpress/jegwell-functions.php';
 
 /** @desc this instantiates Dotenv and passes in our path to .env */
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, $root_directory_level));
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
 use PHPUnit\Framework\TestCase;
@@ -23,7 +22,7 @@ class jegwellFuntionsTest extends TestCase
     {
         $inputs = array(123, "345", true, false, null);
         foreach ($inputs as $input) {
-            $result = initializeSentry($input);
+            $result = initializeSentry($input, "development");
             $this->assertSame($result, array("status" => "fail", "email" => "success"));
         }
     }
@@ -40,7 +39,7 @@ class jegwellFuntionsTest extends TestCase
         $randomId = rand();
         $message = "this is my error message {$randomId}";
         $type = 'test-error';
-        $logPath  = dirname(__DIR__, 5) . "/logs/{$type}-logs";
+        $logPath  = dirname(__DIR__) . "/logs/{$type}-logs";
         $previousContent = file_exists($logPath) ? file_get_contents($logPath) : "default";
 
         addToLogs('test-error', $message);
