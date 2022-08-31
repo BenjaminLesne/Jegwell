@@ -69,7 +69,7 @@ function emailOurDevAboutError($body, $subject)
 function addToLogs($type = "error", $message)
 {
   $type = strtolower($type);
-  $logPath  = dirname(__DIR__) . "/logs/{$type}-logs";
+  $logPath  = dirname(__DIR__) . "/logs/{$type}-logs.log";
   date_default_timezone_set('Europe/Paris');
   $todayRaw = new \DateTime;
   $today = $todayRaw->format('d-m-Y H:i:s');
@@ -78,12 +78,12 @@ function addToLogs($type = "error", $message)
 
   // vu que le mode w de fopen tronque le contenu du fichier, on doit l'ouvrir après file_get_contents()
   if (!$openedFile = fopen($logPath, 'w')) {
-    throw new \Exception("Cannot open ${type}-logs.txt file");
+    throw new \Exception("Cannot open ${type}-logs.log file");
     exit;
   }
 
   if (fwrite($openedFile, $text) === FALSE) {
-    throw new \Exception("Cannot write ${type}-logs.txt file");
+    throw new \Exception("Cannot write ${type}-logs.log file");
     exit;
   }
 
