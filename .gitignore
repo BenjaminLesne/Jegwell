@@ -26,3 +26,4 @@ node_modules/
 .env
 .phpunit.result.cache
 /vendor/
+test-error-logs
