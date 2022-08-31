@@ -4,9 +4,8 @@ namespace Jegwell\functions;
 
 //Import PHPMailer classes into the global namespace
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 
-function initializeSentry($dsn)
+function initializeSentry($dsn, $environment)
 {
 
   try {
@@ -15,7 +14,7 @@ function initializeSentry($dsn)
     }
 
     // Initialise Sentry.io
-    \Sentry\init(['dsn' => $dsn]);
+    \Sentry\init(['dsn' => $dsn, 'environment' => $environment,]);
 
     return array("status" => "success");
   } catch (\Throwable $th) {

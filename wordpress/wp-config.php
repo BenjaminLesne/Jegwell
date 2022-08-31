@@ -10,7 +10,7 @@ $dotenv->load();
 
 use function Jegwell\functions\initializeSentry;
 
-initializeSentry($_ENV['SENTRY_DSN']);
+initializeSentry($_ENV['SENTRY_DSN'], $_ENV['WORDPRESS_ENV']);
 
 /**
  * The base configuration for WordPress
