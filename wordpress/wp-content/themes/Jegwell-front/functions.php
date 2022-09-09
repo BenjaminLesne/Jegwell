@@ -11,4 +11,5 @@ function remove_the_bloat()
     wp_dequeue_style('wc-blocks-style'); // enlève une partie du css de woocommerce 2/2
     wp_deregister_style('dashicons');
     remove_action('wp_head', 'print_emoji_detection_script', 7); // enlève twemoji.js et wp-emoji.js
+    wp_dequeue_style('wp-block-library');
 }
