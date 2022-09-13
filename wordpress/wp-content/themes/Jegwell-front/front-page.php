@@ -1,2 +1,3 @@
 <?php
-get_header();
+$page_title = "Jegwell | Accueil";
+include 'header.php';
