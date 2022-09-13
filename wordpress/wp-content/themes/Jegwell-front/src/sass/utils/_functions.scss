@@ -1,0 +1,3 @@
+@function convertToRem($pixelNumber) {
+  @return calc($pixelNumber / 16px * 1rem);
+}
