@@ -91,7 +91,7 @@ function addToLogs($type = "error", $message)
 }
 
 
-function getAbsoluteAndDomainPath($relativePathToFile, $currentDirectoryPath)
+function getFileUrl($relativePathToFile, $currentDirectoryPath)
 {
   // filemtime ne fonctionne uniquement qu'avec un chemin absolue /home/John/path/ et non http://localhost:8080/path/
   // le chemin sans nom de domaine ne fonctionne pas pour le href... donc on utilise un deuxieme chemin.
@@ -99,5 +99,5 @@ function getAbsoluteAndDomainPath($relativePathToFile, $currentDirectoryPath)
   $absolute_path = $currentDirectoryPath . $relativePathToFile;
   $domain_path = get_template_directory_uri() . $relativePathToFile;
 
-  return array("absolute" => $absolute_path, "domain" => $domain_path);
+  return $domain_path . '?' . filemtime($absolute_path);
 }

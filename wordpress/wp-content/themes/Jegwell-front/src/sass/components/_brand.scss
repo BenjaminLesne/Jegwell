@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: rgba(var(--primary-color));
+  color: rgb(var(--primary-color));
 }
 
 .brand {
@@ -19,7 +19,6 @@
 
   &__name {
     text-decoration: none;
-    color: var(--primary-color);
     border-top-style: solid;
     border-top-width: 1px;
     white-space: nowrap;

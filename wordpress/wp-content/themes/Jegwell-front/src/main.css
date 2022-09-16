@@ -1,14 +1,32 @@
+:root {
+  --primary-color: 172, 140, 48;
+  --secondary-color: 248, 239, 230;
+  --ternary-color: 51, 51, 51;
+  --neutral-color: 128, 128, 128;
+  --error-color: 179, 38, 30;
+  --primary-background-color: 255, 255, 255;
+}
+
+html,
 body {
   margin: 0;
+  font-family: "primary font";
+  scroll-behavior: smooth;
 }
 
 button,
-a {
+a,
+.clickable {
   min-height: 48px;
   min-width: 48px;
   margin: 8px;
   text-decoration: none;
   padding: 0;
+  display: grid;
+  place-items: center;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 
 img,
@@ -20,11 +38,22 @@ svg {
   width: fit-content;
 }
 
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
 @font-face {
-  font-family: "ternary font";
+  font-family: "primary font";
   font-style: normal;
   font-weight: 400;
-  src: local("ternary font"), local("Cinzel"), local("Cinzel-regular"), local("Cinzel regular"), url("./assets/fonts/Cinzel-regular.woff2") format("woff2");
+  src: local("primary font"), local("Roboto"), local("Roboto-regular"), local("Roboto regular"), url("./assets/fonts/Roboto-regular.woff2") format("woff2");
 }
 @font-face {
   font-family: "secondary font";
@@ -33,10 +62,10 @@ svg {
   src: local("secondary font"), local("Alegreya"), local("Alegreya-regular"), local("Alegreya regular"), url("./assets/fonts/Alegreya-regular.woff2") format("woff2");
 }
 @font-face {
-  font-family: "primary font";
+  font-family: "ternary font";
   font-style: normal;
   font-weight: 400;
-  src: local("primary font"), local("Roboto"), local("Roboto-regular"), local("Roboto regular"), url("./assets/fonts/Roboto-regular.woff2") format("woff2");
+  src: local("ternary font"), local("Cinzel"), local("Cinzel-regular"), local("Cinzel regular"), url("./assets/fonts/Cinzel-regular.woff2") format("woff2");
 }
 .burger-button {
   display: flex;
@@ -62,7 +91,7 @@ svg {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: rgba(var(--primary-color));
+  color: rgb(var(--primary-color));
 }
 
 .brand {
@@ -77,7 +106,6 @@ svg {
 }
 .brand__name {
   text-decoration: none;
-  color: var(--primary-color);
   border-top-style: solid;
   border-top-width: 1px;
   white-space: nowrap;
@@ -128,6 +156,18 @@ svg {
   fill: transparent;
 }
 
+.backToTopWrapper {
+  margin: 80px auto 40px auto;
+}
+
+.backToTop {
+  background: url("./assets/svgs-sprite.svg") 50.7456558773% 50.9719222462% no-repeat;
+  width: 27px;
+  height: 27px;
+  fill: rgb(var(--secondary-color));
+  stroke: rgb(var(--ternary-color));
+}
+
 .primary-header-wrapper {
   height: 57px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -142,11 +182,44 @@ svg {
   height: 100%;
 }
 
-:root {
-  --primary-color: 172, 140, 48;
-  --secondary-color: 248, 239, 230;
-  --ternary-color: 109, 63, 81;
-  --neutral-color: 128, 128, 128;
-  --error-color: 179, 38, 30;
-  --primary-background-color: 255, 255, 255;
+.footer {
+  background-color: rgb(var(--secondary-color));
+  color: rgb(var(--ternary-color));
+  padding: 40px 20px;
+}
+.footer__heading {
+  font-size: 0.75rem;
+  position: relative;
+  font-weight: bold;
+}
+.footer__heading::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  border-bottom: solid 1px;
+}
+.footer__list {
+  padding: 20px;
+  list-style: none;
+}
+.footer__items {
+  margin: 8px 0;
+}
+.footer__links {
+  color: rgb(var(--ternary-color));
+  margin: 0;
+  font-size: 0.75rem;
+  position: relative;
+}
+.footer__links::before {
+  content: "";
+  position: absolute;
+  border-radius: 100%;
+  background-color: rgb(var(--ternary-color));
+  width: 3px;
+  height: 3px;
+  left: -16px;
+  top: 50%;
 }/*# sourceMappingURL=main.css.map */
