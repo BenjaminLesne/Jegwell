@@ -5,6 +5,17 @@ namespace Jegwell\functions;
 //Import PHPMailer classes into the global namespace
 use PHPMailer\PHPMailer\PHPMailer;
 
+$root_level = 2;
+
+/**
+ * Initialise Sentry.io
+ * 
+ *
+ * @param string $dsn string fourni par sentry
+ * @param string $environment production ou development
+ * 
+ * @return array array("status" => "success/fail", "email?" => "success/fail")
+ */
 function initializeSentry($dsn, $environment)
 {
 
@@ -25,13 +36,23 @@ function initializeSentry($dsn, $environment)
     <div>Line:{$th->getLine()}</div></br>
     <div>Code:{$th->getCode()}</div>
      ";
-    $subject = 'JUSTATEST: Erreur lors de l\'initialisation de Sentry.io';
+    $subject = 'Erreur lors de l\'initialisation de Sentry.io';
 
     $emailStatus = emailOurDevAboutError($body, $subject);
 
     return array("status" => "fail", "email" => $emailStatus);
   }
 }
+
+/**
+ * ajoute/crée un fichier de log avec le message fourni en argument
+ * 
+ *
+ * @param string $subject sujet du mail
+ * @param string $body le message à envoyer 
+ * 
+ * @return string 'success' ou 'fail'
+ */
 
 function emailOurDevAboutError($body, $subject)
 {
@@ -66,10 +87,21 @@ function emailOurDevAboutError($body, $subject)
   }
 }
 
-function addToLogs($type = "error", $message)
+/**
+ * ajoute/créer un fichier de log avec le message fourni en argument
+ * 
+ *
+ * @param string $type si vous savez pas mettez null
+ * @param string $message à ajouter aux logs
+ * @param string $root_level 
+ * 
+ * @return void
+ */
+
+function addToLogs($type = "error", $message, $root_level = 2)
 {
   $type = strtolower($type);
-  $logPath  = dirname(__DIR__) . "/logs/{$type}-logs.log";
+  $logPath  = dirname(__DIR__, $root_level) . "/code/logs/{$type}-logs.log";
   date_default_timezone_set('Europe/Paris');
   $todayRaw = new \DateTime;
   $today = $todayRaw->format('d-m-Y H:i:s');
@@ -82,7 +114,7 @@ function addToLogs($type = "error", $message)
     exit;
   }
 
-  if (fwrite($openedFile, $text) === FALSE) {
+  if (fwrite($openedFile, $text) == FALSE) {
     throw new \Exception("Cannot write ${type}-logs.log file");
     exit;
   }
@@ -91,13 +123,44 @@ function addToLogs($type = "error", $message)
 }
 
 
-function getAbsoluteAndDomainPath($relativePathToFile, $currentDirectoryPath)
+/**
+ * retourne une url contenant un numéro de version basé sur la date de modification du fichier
+ * 
+ * type d'url retournée: http://[domaine].[extension]/[votre fichier]?[date de dernière modification].
+ * 
+ * exemple: http://jegwell.fr/myStyle.css?123456
+ * Q: Pourquoi ne pas appeler get_template_uri() dans la fonction plutôt que de le demander en argument ? R: Afin de faciliter les tests unitaires
+ *
+ * @param string $relativePathToFile 
+ * @param string $currentDirectoryPath peut être généré avec dirname(__FILE__)
+ * @param string $root_theme_directory peut être généré avec get_template_uri()
+ * 
+ * @return string URL ex: http://jegwell.fr/myStyle.css?123456
+ */
+function getFileUrl($relativePathToFile, $currentDirectoryPath, $root_theme_directory)
 {
-  // filemtime ne fonctionne uniquement qu'avec un chemin absolue /home/John/path/ et non http://localhost:8080/path/
-  // le chemin sans nom de domaine ne fonctionne pas pour le href... donc on utilise un deuxieme chemin.
+  try {
 
-  $absolute_path = $currentDirectoryPath . $relativePathToFile;
-  $domain_path = get_template_directory_uri() . $relativePathToFile;
+    $absolute_path = $currentDirectoryPath . $relativePathToFile;
+    $domain_path = $root_theme_directory . $relativePathToFile;
+    $version = filemtime($absolute_path); // fonctionne uniquement avec le chemin absolue (ex: /home/John/path/ et non http://localhost:8080/path/)
 
-  return array("absolute" => $absolute_path, "domain" => $domain_path);
+  } catch (\Exception $exception) {
+
+    if ($_ENV['WORDPRESS_ENV'] == 'production') {
+
+      \Sentry\captureException($exception);
+    }
+
+    if ($_ENV['WORDPRESS_ENV'] == 'development') {
+
+      throw $exception;
+    }
+  }
+
+
+
+
+  // l'url ne fonctionne que si le nom de domaine est inclu
+  return $domain_path . '?' . $version;
 }

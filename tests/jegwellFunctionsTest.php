@@ -2,20 +2,22 @@
 
 declare(strict_types=1);
 
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+$root_level = 1;
+require_once dirname(__DIR__, $root_level) . '/vendor/autoload.php';
 require_once dirname(__DIR__) . '/wordpress/jegwell-functions.php';
 
 /** @desc this instantiates Dotenv and passes in our path to .env */
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, $root_level) . '/code');
 $dotenv->load();
 
 use PHPUnit\Framework\TestCase;
 
 use function Jegwell\functions\addToLogs;
 use function Jegwell\functions\initializeSentry;
+use function Jegwell\functions\getFileUrl;
 
 
-class jegwellFuntionsTest extends TestCase
+class jegwellFunctionsTest extends TestCase
 {
     // Sentry 
     public function testSentryWrongDsn()
@@ -39,7 +41,7 @@ class jegwellFuntionsTest extends TestCase
         $randomId = rand();
         $message = "this is my error message {$randomId}";
         $type = 'test-error';
-        $logPath  = dirname(__DIR__) . "/logs/{$type}-logs.log";
+        $logPath  = dirname(__DIR__, 2) . "/code/logs/{$type}-logs.log";
         $previousContent = file_exists($logPath) ? file_get_contents($logPath) : "default";
 
         addToLogs('test-error', $message);
@@ -51,5 +53,21 @@ class jegwellFuntionsTest extends TestCase
         if ($previousContent !== "default") {
             $this->assertStringContainsString($previousContent, $currentContent);
         }
+    }
+
+
+    public function testGetFileUrl()
+    {
+        try {
+            $url = getFileUrl('/jegwellFunctionsTest.php', dirname(__FILE__), dirname(__FILE__, 2) . '/tests');
+            getFileUrl('/path.php', 'wrong/path/again', '/wrong/path' . '/worng');
+        } catch (\Throwable $th) {
+
+            $this->assertSame('filemtime(): stat failed for wrong/path/again/path.php', $th->getMessage());
+        }
+
+        $expected = "/[a-zA-Z]+\.(php|js|html|css)+\?\d*/";
+
+        $this->assertSame(preg_match($expected, $url), 1);
     }
 }

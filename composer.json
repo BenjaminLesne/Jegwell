@@ -3,7 +3,7 @@
     "start-mysql": "sudo /usr/local/mysql/bin/mysqld_safe --user=mysql",
     "serve": "php -S localhost:8080 -t wordpress &> /dev/null & xdg-open http://localhost:8080",
     "stop-mysql": "sudo /usr/local/mysql/bin/mysqladmin -u root -p shutdown",
-    "tests": "./vendor/bin/phpunit --verbose --debug --coverage-html tests/coverage"
+    "tests": "./vendor/bin/phpunit --verbose --debug --coverage-html tests/coverage tests/"
   },
   "name": "benjamin/jegwell",
   "description": "La boutique officielle de Jegwell",

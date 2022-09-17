@@ -1,9 +1,11 @@
 @import "sass/utils/functions";
+@import "sass/utils/variables";
 @import "sass/base/reset";
 @import "sass/base/typography";
 @import "sass/components/burger-button";
 @import "sass/components/brand";
 @import "sass/components/logo";
 @import "sass/components/basket-icon";
+@import "sass/components/backToTop";
 @import "sass/layout/header";
-@import "sass/utils/variables";
+@import "sass/layout/footer";
