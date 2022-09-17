@@ -27,4 +27,4 @@ node_modules/
 .phpunit.result.cache
 /vendor/
 /logs/
-/tests/coverage/
+/tests/coverage/**/*
