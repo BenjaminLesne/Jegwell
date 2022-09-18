@@ -27,7 +27,7 @@ $facebookUrl = "https://www.facebook.com/jegwell";
 
     <link rel="stylesheet" href="<?php echo $main_css_url ?>">
     <link rel="icon" type="image/x-icon" href="<?php echo $favicon_file_url ?>">
-    <script src="<?php echo $index_js_url ?>"></script>
+    <script type="module" src="<?php echo $index_js_url ?>"></script>
 
     <!-- Wordpress en-dessous-->
     <?php
@@ -38,9 +38,26 @@ $facebookUrl = "https://www.facebook.com/jegwell";
 </head>
 
 <body id="topOfThePage">
-    <header class="primary-header-wrapper">
+    <header class="primary-header-wrapper <?php echo $_SERVER['REQUEST_URI'] == '/' ? 'primary-header-wrapper--home' : '' ?>">
         <nav class="primary-header" aria-labelledby="primary-navigation">
-            <button class="burger-button">
+            <div class="main-menu" id="main-menu">
+                <button class="close-button" id="main-menu-close-button" value="default">
+                    <svg class="close-button__cross-icon">
+                        <use href="<?php echo $svgs_sprite_url . '#cross' ?>" />
+                    </svg>
+                </button>
+                <ul class="main-menu__list">
+                    <?php
+                    $pages = array("accueil" => "#", "nos création" => "#", "catégories" => "#", "panier" => "#",);
+
+                    reset($pages);
+                    foreach ($pages as $page => $url) {
+                        echo "<li class='main-menu__item' data-request-uri='/$page'><a class='main-menu__link' href='$url'>$page</a></li>";
+                    }
+                    ?>
+                </ul>
+            </div>
+            <button class="burger-button" id="burger-button">
                 <span class="burger-button__slice"></span>
                 <span class="burger-button__slice"></span>
                 <span class="burger-button__slice"></span>
