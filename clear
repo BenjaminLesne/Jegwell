@@ -1,0 +1,301 @@
+[33mcommit 634da96acf39da9990107960a862ac40d335e7dc[m[33m ([m[1;36mHEAD -> [m[1;32mwip-JG-25-installer-sentry-js[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Sun Sep 18 17:24:58 2022 +0200
+
+    feat:JG-36 ouvre navigation au tap du menu burger (#19)
+    
+    ## Quel est la fonctionnalité:
+    1-Glissement vers la droite/apparition de la navigation lorsqu'on clique sur le bouton burger
+    2-Création du menu en suivant le design figma
+    
+    ## Pourquoi cela est utile ?
+    1-Afin d'accéder aux différentes pages de notre site
+    
+    ## Comment je l'ai implémenté :
+    /
+    
+    Maintenant, le menu de navigation s'affiche lorsqu'on clique/tap sur le boutn burger.
+
+[33mcommit 90dc65aecba369e5649d56062fcc4b7881def6ec[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Sat Sep 17 16:31:17 2022 +0200
+
+    feat:JG-33 création du footer (#15)
+    
+    ## Quel est la fonctionnalité:
+    1- Création du footer
+    2- Création de la fonction getFileUrl()
+    3- Suppression de la fonction getAbsoluteAndDomainPath()
+    4- Mise à jour du .gitignore
+    5- Mise à jour du script de tests
+    6- Ajout de commentaire pour documenter des fonctions
+    
+    ## Pourquoi cela est utile ?
+    1- Afin de respecter le design convenu
+    2- Afin de rendre + lisible le code
+    3- Car remplacé par getFileUrl()
+    4- Afin que git ignore les résultats des couvertures de tests
+    5- /
+    6- /
+    
+    ## Comment je l'ai implémenté :
+    /
+    
+    Maintenant, nous avons un footer, une légère mise à jour du code et de la documentation.
+
+[33mcommit 82358746f1fee00075018b2a6543e5231d3358a2[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Tue Sep 13 16:21:40 2022 +0200
+
+    feat:JG-32 création du header (#13)
+    
+    ## Quel est la fonctionnalité:
+    1- changement de l'architecture dossier (theme racine > src [new] > sass | assets)
+    2- suppression d'un script css wordpress pour les émojis
+    3- ajout du favicon.ico
+    4- création du header (css, html, php)
+    5- suppression des thème Wordpress installé par défauts
+    6- ajout du dossier de couverture de test dans le .gitignore
+    
+    ## Pourquoi cela est utile ?
+    1- Afin d'être mieux organisé
+    2- Afin de retirer le gonflement de Wordpress
+    3- Afin de reconnaître les onglets Jegwell
+    4- Comme convenu dans le design
+    5- Afin d'alléger le poid du site
+    6- Afin d'éviter de push des changements qui ne sont pas pertinent à tracker
+    
+    ## Comment je l'ai implémenté :
+    2- J'ai ajouté une ligne dans functions > remove_the_bloat()
+    
+    Maintenant, nous avons un magnifique header, architecture dossier et un site allégé.
+
+[33mcommit 3b4cc1ff5f08f9e84af696d31a5b7be0c287593e[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Fri Sep 9 13:07:06 2022 +0200
+
+    fix:JG-31 wp-block css unwanted load (#12)
+    
+    ## Quel est le problème:
+    Un fichier css de wordpress (style.css?ver=6.0) est chargé dans notre page d'accueil.
+    Il ne sera pas utilisé donc ce style est superflue ce qui est contre notre eco conception du site.
+    
+    ## Pourquoi cela se produit-il ?
+    Worpdress injecte par défaut son css pour les block de code wordpress. (lié a Gutenberg?)
+    
+    ## Comment je l'ai corrigé] :
+    J'ai retiré le css 'wp-block-library' de la queue de style wordpress.
+    
+    Maintenant, aucun style associé à Wordpress n'est chargé dans nos pages.
+
+[33mcommit 714cac468ce808d95f31e22a706c16d34128e309[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Wed Aug 31 18:58:56 2022 +0200
+
+    feat:JG-28 ajout de la couverture de tests (#11)
+    
+    ## Quel est la fonctionnalité ?:
+    1- Génération d'un rapport de couverture de test avec composer tests
+    2- ajout de l'extension .log sur les fichiers de log
+    
+    ## Pourquoi cela est utile ?
+    1- Afin de savoir si nous devons faire + de tests sur certains fichier.
+    2- Afin d'être ignoré par git
+    
+    ## Comment je l'ai implémenté ?:
+    1- Via le fichier de configuration phpunit.xml et la mise à jour de la commande composer tests.
+    2- /
+    
+    Maintenant, nous pouvons mesurer notre taux de couverture de tests.
+
+[33mcommit 562428887ffaecdb90110dbc39f72667a0435d43[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Wed Aug 31 17:35:47 2022 +0200
+
+    bug:JG-27 dégonflé wp head (#10)
+    
+    ## Quel est le problème:
+    Des scripts et style sont injectés dans les pages
+    
+    ## Pourquoi cela se produit-il ?
+    C'est le comportement par default de la fonction wp_head().
+    
+    ## Comment je l'ai corrigé :
+    J'ai utilisé les fonctions add_filter, wp_deregister_script, wp_dequeue_style et remove_action afin de retirer les différents style/scripts du système de file d'attente de Wordpress.
+    
+    Maintenant, nos pages ont uniquement 3 appels dans le head, le document html lui-même, le style.css du thème et le favicon.ico.
+
+[33mcommit 9965a4ae3c311c588a3dbc543ea754c1efad8c62[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Wed Aug 31 11:23:20 2022 +0200
+
+    feat:JG-23 envoie email erreur sentry (#9)
+    
+    ## Quel est la fonctionnalité:
+    1-Envoie d'email lors d'une erreur en production reçu par Sentry.
+    2-Déplacement du dossier tests à la racine du projet
+    3-Ligne de code non utilisée retirée.
+    
+    ## Pourquoi cela est utile ?
+    1- Afin de débugger plus facilement
+    2- Afin d'améliorer l'architecture dossier du projet. Ca n'avait pas de sens de tester du code en dehors du dossier wordpress et que nos tests soient dans ce même dossier.
+    3 petit nettoyage.
+    
+    ## Comment je l'ai implémenté :
+    1- En créant une alerte sur Sentry a chaque erreur reçu en environnement de production. J'ai donc ajouter la variable d'environnement en argument de la fonction sentry init.
+    
+    Maintenant, nous recevons un email lors d'erreur en production
+
+[33mcommit fff3e08c2e2c4732a815377b305b8ffddcfbf931[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Wed Aug 31 10:11:20 2022 +0200
+
+    feat:JG-22 ajouts de lien dans le readme (#7)
+    
+    ## Quel est la fonctionnalité:
+    1-Ajouts de lien vers Sentry, le repo Github et le Jira
+    2-Ajout de test-error-logs au .gitignore
+    
+    ## Pourquoi cela est utile ?
+    1-Si quelqu'un n'a pas accès à la documentation, les liens sont dans le readme.
+    2-Ce fichier n'a pas besoin d'être tracké, il ne sert qu'aux tests unitaires.
+    
+    ## Comment je l'ai implémenté:
+    /
+    Maintenant, nous avons un meilleur readme.md et .gitignore
+
+[33mcommit 93acd131437706b6dff5d5940426731710f32f83[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Tue Aug 30 19:41:55 2022 +0200
+
+    feat:JG-20 mise a jour .env-exemple (#6)
+    
+    ## Quel est la fonctionnalité:
+    Mise à jour du fichier .env-exemple
+    
+    ## Pourquoi cela est utile ?
+    Afin de faciliter la configuration des nouveaux arrivants sur le projet
+    
+    ## Comment je l'ai implémenté :
+    /
+    
+    Maintenant, nous avons un fichier .env-exmple à jour.
+
+[33mcommit 795b07b3cad479d267cabe9a26272e850db7ad6a[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Tue Aug 30 19:19:29 2022 +0200
+
+    feat:JG-12 installation de sentry (#5)
+    
+    ## Quel est la fonctionnalité:
+    1-Installation de Sentry.io
+    2-Envoie d'un email lorsque l'initialisation de Sentry renvoie une erreur.
+    3-Créer des logs d'erreurs en même temps.
+    
+    ## Pourquoi cela est utile ?
+    1-Afin de tracker les erreurs coté client
+    2-Afin d'être sûr que Sentry se lance
+    3-Afin d'être vraiment sûr que Sentry s'initialise
+    
+    ## Comment je l'ai implémenté :
+    J'ai utilisé la méthode init de la classe Sentry comme indiqué par la documentation Sentry. (https://docs.sentry.io/platforms/php/)
+    J'ai utilisé PHPMailer pour les mails. (https://github.com/PHPMailer/PHPMailer)
+    Pour les logs j'ai utilisé les fonctionnalité natives de PHP (création/modification de fichier)
+    
+    Maintenant, nous sommes sûr que nous pouvons tracker les erreurs coté clients.
+
+[33mcommit 3d878c22d620be17e296f0a94abf051543724176[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Sun Aug 28 18:00:26 2022 +0200
+
+    feat:JG-24 installation de phpunit (#4)
+    
+    ## Quel est la fonctionnalité:
+    Installation de phpunit
+    
+    ## Pourquoi cela est utile ?
+    Afin de faire des tests unitaires
+    
+    ## Comment je l'ai implémentée :
+    Avec Composer et en suivant la documentation phpunit
+    https://phpunit.readthedocs.io/en/9.5/installation.html
+    
+    Maintenant, nous pouvons faire des tests unitaires.
+
+[33mcommit 34a97d68140171a5a14859521d1e2711452362b9[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Sun Aug 28 13:17:15 2022 +0200
+
+    feat:JG-13 création du thème jegwell-front (#3)
+    
+    ## Quel est la fonctionnalité:
+    Création du thème Jegwell-front avec le strict minimum nécessaire.
+    
+    ## Pourquoi cela est utile ?
+    Pour commencer le développement du thème
+    
+    ## Comment je l'ai implémentée :
+    En suivant la documentation Wordpress.
+    https://codex.wordpress.org/Theme_Development
+    
+    Maintenant, nous avons un thème jegwell-front activable dans Wordpress.
+
+[33mcommit a5e9761c0c13f72b6f9be22f417553a0d17d40ff[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Sat Aug 27 13:29:04 2022 +0200
+
+    feat:JG-19 paramètre wordpress pour performance (#2)
+    
+    ## Quel est la fonctionnalité:
+    1- ajout du plugin manage-notification-emails
+    
+    2- changement des scripts serve, stop-mysql et db
+    
+    3- wp-config.php:
+    
+    - désactivation des logs concernant les warnings en production
+    - désactivation du faux Cron de Wordpress
+    - activation du firewall de wordpress avec ajout des exceptions pour le firewall
+    - desactivation des mise à jour automatique
+    - plugin akismet supprimé
+    - plugin hello supprimé
+    - création d'un fichier .htaccess
+    
+    ## Pourquoi cela est utile ?
+    1- afin de désactiver les mails inutiles envoyer par wordpress and autre.
+    2- afin de lancer le site en local plus rapidement.
+    3- afin de gagner en performance en retirant les process superflue.
+    le .htaccess permet d'utiliser un fichier compressé existant plutot que de compresser chaque fichier envoyé par le serveur.
+    
+    ## Comment je l'ai implémenté:
+    En suivant ces tutoriels du numéro 6 à 8, 14 à 16 et le 26.
+    https://erikpoehler.com/2020/12/26/25-tutorials-on-how-to-boost-the-performance-of-your-woocommerce-store/
+    
+    Maintenant, le site est + performant.
+
+[33mcommit efe4fc6731d4bab89fd47790bcb31f92ca41daf4[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Fri Aug 26 15:02:14 2022 +0200
+
+    feat:JG-10 setup initial (#1)
+    
+    ## Quel est la fonctionnalité:
+    Le setup initial avec composer, .env, installation de wordpress, l'ajout des variables d'environnement dans le fichier wp-config.php et le déclenchement des fonctionnalités de debug de wordpress lorsque WORDPRESS_ENV === 'development' ou 'staging'
+    
+    ## Pourquoi cela est utile ?
+    Parce que le 'client' souhaite wordpress. Utiliser composer permet d'installer et mettre a jour les plugins ainsi que wordpress en même temps avec une seule commande (composer update)
+    Le .env va permettre de ne pas mettre dans le code source les identifiants sensibles comme ceux de la base de donnée
+    
+    ## Comment je l'ai implémenté :
+    En suivant les trois premiers tutoriels de ce site:
+    https://erikpoehler.com/2020/12/26/25-tutorials-on-how-to-boost-the-performance-of-your-woocommerce-store/
+    
+    J'ai lancé: composer int. Puis j'ai ajouter mes dépendances dans le composer.json généré. J'ai ensuite lancé 'composer install'. Wordpress s'est installé ainsi que les autres dépendances. (cf composer.json)
+    
+    Maintenant, nous avons une bonne base pour créer Jegwell
+
+[33mcommit 915f538f4ebb26c375f376b5b956061c6b652db8[m
+Author: BenjaminLesne <73464907+BenjaminLesne@users.noreply.github.com>
+Date:   Mon Aug 22 21:31:49 2022 +0200
+
+    Initial commit

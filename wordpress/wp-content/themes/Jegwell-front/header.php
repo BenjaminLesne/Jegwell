@@ -27,7 +27,8 @@ $facebookUrl = "https://www.facebook.com/jegwell";
 
     <link rel="stylesheet" href="<?php echo $main_css_url ?>">
     <link rel="icon" type="image/x-icon" href="<?php echo $favicon_file_url ?>">
-    <script type="module" src="<?php echo $index_js_url ?>"></script>
+
+    <script type="module" src="<?php echo $index_js_url ?>" type="text/html"></script>
 
     <!-- Wordpress en-dessous-->
     <?php
