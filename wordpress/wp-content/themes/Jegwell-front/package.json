@@ -1,0 +1,16 @@
+{
+  "name": "jegwell",
+  "version": "1.0.0",
+  "description": "La boutique officielle de Jegwell",
+  "main": "wordpress/index.php",
+  "repository": "https://github.com/BenjaminLesne/Jegwell.git",
+  "author": "Benjamin LESNE <benjamin.lesne@outlook.fr>",
+  "license": "GPL",
+  "devDependencies": {
+    "@types/node": "^18.7.18",
+    "gulp": "^4.0.2",
+    "gulp-svg-sprite": "^1.5.0",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {}
+}

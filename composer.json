@@ -17,7 +17,8 @@
     "vlucas/phpdotenv": "^5.4",
     "wpackagist-plugin/manage-notification-emails": "^1.8",
     "sentry/sdk": "^3.2",
-    "phpmailer/phpmailer": "^6.6"
+    "phpmailer/phpmailer": "^6.6",
+    "wpackagist-plugin/wp-sentry-integration": "^6.0"
   },
   "license": "GPL",
   "authors": [
