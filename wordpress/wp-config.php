@@ -8,10 +8,6 @@ require_once dirname(__DIR__) . '/wordpress/jegwell-functions.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
-use function Jegwell\functions\initializeSentry;
-
-initializeSentry($_ENV['SENTRY_DSN'], $_ENV['WORDPRESS_ENV']);
-
 /**
  * The base configuration for WordPress
  *
@@ -106,7 +102,7 @@ $logdir = dirname(__DIR__) . '/log';
 define('ERRORLOGFILE', $logfile);
 define('WC_LOG_DIR', $logdir);
 
-if (WORDPRESS_ENV === 'development' || WORDPRESS_ENV === 'staging') {
+if ($_ENV['WORDPRESS_ENV'] === 'development' || $_ENV['WORDPRESS_ENV'] === 'staging') {
 	define('WP_DEBUG', true);
 	define('WP_DEBUG_LOG', $logfile);
 	define('WP_DEBUG_DISPLAY', true);
@@ -116,7 +112,7 @@ if (WORDPRESS_ENV === 'development' || WORDPRESS_ENV === 'staging') {
 	define('WP_DISABLE_FATAL_ERROR_HANDLER', true);
 }
 
-if (WORDPRESS_ENV === 'production') {
+if ($_ENV['WORDPRESS_ENV'] === 'production') {
 	define('WP_DEBUG', false); // this turns off debug.log and WooCommerce logs
 	define('WP_DEBUG_LOG', $logfile);
 	define('WP_DEBUG_DISPLAY', false);
@@ -129,6 +125,12 @@ if (WORDPRESS_ENV === 'production') {
 	@ini_set('display_startup_errors', '0');
 	error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE & ~E_WARNING); // log errors only
 
+	// Sentry
+	define('WP_SENTRY_PHP_DSN', $_ENV['SENTRY_PHP_DSN']); // php
+	define('WP_SENTRY_BROWSER_DSN', $_ENV['SENTRY_JS_DSN']); // js
+	define('WP_SENTRY_BROWSER_TRACES_SAMPLE_RATE', 1);
+	define('WP_SENTRY_ENV', 'production');
+	define('WP_SENTRY_ERROR_TYPES', E_ALL & ~E_NOTICE);
 }
 // Désactive le Cron Wordpress
 defined('DISABLE_WP_CRON') or define('DISABLE_WP_CRON', true);
