@@ -5,7 +5,7 @@ use function Jegwell\functions\getFileUrl;
 $currentDirectoryPath = dirname(__FILE__);
 
 // fichiers
-$main_css_url = getFileUrl('/src/main.css', $currentDirectoryPath, get_template_directory_uri());
+$main_css_url = getFileUrl('/src/css/main.css', $currentDirectoryPath, get_template_directory_uri());
 $favicon_file_url = getFileUrl('/src/assets/favicon.ico', $currentDirectoryPath, get_template_directory_uri());
 $index_js_url = getFileUrl('/src/js/index.js', $currentDirectoryPath, get_template_directory_uri());
 $svgs_sprite_url = getFileUrl('/src/assets/svgs-sprite.svg', $currentDirectoryPath, get_template_directory_uri());
@@ -15,10 +15,15 @@ $instagramUrl = "https://www.instagram.com/jegwell/";
 $tikTokUrl = "https://www.tiktok.com/@jegwell";
 $facebookUrl = "https://www.facebook.com/jegwell";
 
+// pages
+$basket_url = $_ENV['WP_HOME'] . '/panier';
+$categories_url = $_ENV['WP_HOME'] . '/#catégories';
+$home_url = $_ENV['WP_HOME'] . '/';
+$products_url = $_ENV['WP_HOME'] . '/produits';
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -26,6 +31,7 @@ $facebookUrl = "https://www.facebook.com/jegwell";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="<?php echo $main_css_url ?>">
+    <link rel="stylesheet" href="<?php echo $page_css ?>">
     <link rel="icon" type="image/x-icon" href="<?php echo $favicon_file_url ?>">
 
     <script type="module" src="<?php echo $index_js_url ?>" type="text/html"></script>
@@ -49,7 +55,7 @@ $facebookUrl = "https://www.facebook.com/jegwell";
                 </button>
                 <ul class="main-menu__list">
                     <?php
-                    $pages = array("accueil" => "#", "nos création" => "#", "catégories" => "#", "panier" => "#",);
+                    $pages = array("accueil" => $home_url, "nos créations" => $products_url, "catégories" => $categories_url, "panier" => $basket_url,);
 
                     reset($pages);
                     foreach ($pages as $page => $url) {
@@ -67,7 +73,7 @@ $facebookUrl = "https://www.facebook.com/jegwell";
                 <div class="brand">
                     <div class="logo">
                         <div class="logo__image">
-                            <svg>
+                            <svg class="logo__svg">
                                 <use href="<?php echo $svgs_sprite_url . '#rings' ?>" />
                             </svg>
                         </div>
