@@ -27,4 +27,8 @@
     width: calc(24.5px / 41px * $width);
     height: calc(18px / 41px * $width);
   }
+
+  &__svg {
+    width: 100%;
+  }
 }

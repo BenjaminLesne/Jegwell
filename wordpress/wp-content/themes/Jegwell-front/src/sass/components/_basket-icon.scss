@@ -8,7 +8,7 @@
 
 .basket-icon {
   width: convertToRem(25px);
-  padding-inline: convertToRem(19px);
+  padding-inline: var(--page-padding-right);
 
   stroke-width: 20;
   stroke: rgb(var(--primary-color));

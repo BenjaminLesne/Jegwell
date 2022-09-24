@@ -4,7 +4,7 @@
   font-weight: 400;
   src: local("primary font"), local("Roboto"), local("Roboto-regular"),
     local("Roboto regular"),
-    url("./assets/fonts/Roboto-regular.woff2") format("woff2");
+    url("../assets/fonts/Roboto-regular.woff2") format("woff2");
 }
 
 @font-face {
@@ -13,7 +13,7 @@
   font-weight: 400;
   src: local("secondary font"), local("Alegreya"), local("Alegreya-regular"),
     local("Alegreya regular"),
-    url("./assets/fonts/Alegreya-regular.woff2") format("woff2");
+    url("../assets/fonts/Alegreya-regular.woff2") format("woff2");
 }
 
 @font-face {
@@ -22,5 +22,5 @@
   font-weight: 400;
   src: local("ternary font"), local("Cinzel"), local("Cinzel-regular"),
     local("Cinzel regular"),
-    url("./assets/fonts/Cinzel-regular.woff2") format("woff2");
+    url("../assets/fonts/Cinzel-regular.woff2") format("woff2");
 }
