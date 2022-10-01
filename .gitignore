@@ -1,0 +1,9 @@
+# ignore node dependency directories
+node_modules/
+
+# custom
+.env
+.phpunit.result.cache
+/vendor/
+/logs/
+/tests/coverage/**/*
