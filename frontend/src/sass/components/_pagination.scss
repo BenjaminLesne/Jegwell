@@ -1,0 +1,44 @@
+.pagination {
+  display: flex;
+  color: rgb(var(--neutral-color));
+  justify-content: space-between;
+
+  &__arrow {
+    border-style: solid;
+    border-width: 2px 2px 0 0;
+    border-color: rgb(var(--neutral-color));
+    transform: rotate(calc(45deg + 180deg));
+
+    $width: 10px;
+    width: $width;
+    height: $width;
+
+    &--right {
+      transform: rotate(45deg);
+    }
+  }
+
+  &__item-wrapper {
+    min-width: unset;
+    flex: 1;
+  }
+
+  &__item {
+    &--active {
+      border-radius: 100%;
+      border-style: solid;
+      border-width: 1px;
+
+      color: black;
+      background-color: rgb(var(--secondary-color));
+
+      $width: 28px;
+      width: $width;
+      height: $width;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

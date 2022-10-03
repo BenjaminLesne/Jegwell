@@ -1,0 +1,19 @@
+.burger-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5.6px;
+  background-color: transparent;
+  border-width: 0;
+  margin: 0 8px 0 0;
+  padding-left: var(--page-padding-left);
+
+  &__slice {
+    border-style: solid;
+    border-width: convertToRem(1.6px);
+    border-color: rgb(var(--primary-color));
+    background-color: rgb(var(--primary-color));
+    width: convertToRem(23px);
+  }
+}
