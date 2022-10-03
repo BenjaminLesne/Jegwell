@@ -4,6 +4,6 @@ node_modules/
 # custom
 .env
 .phpunit.result.cache
-/vendor/
+vendor
 /logs/
 /tests/coverage/**/*

@@ -24,6 +24,28 @@ export default {
       title: "Description",
     },
     {
+      name: "categories",
+      title: "Catégorie(s)",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "category" }],
+        },
+      ],
+    },
+    {
+      name: "cross_sells",
+      title: "Produits similaires",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "product" }],
+        },
+      ],
+    },
+    {
       name: "slug",
       title: "Slug",
       type: "slug",
