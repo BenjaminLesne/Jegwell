@@ -8,5 +8,11 @@
     $width: convertToRem(25px);
     width: $width;
     height: $width;
+
+    &--modal {
+      $width: convertToRem(20px);
+      width: $width;
+      height: $width;
+    }
   }
 }

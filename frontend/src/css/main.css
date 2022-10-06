@@ -73,39 +73,31 @@ figure {
   font-family: "primary font";
   font-style: normal;
   font-weight: 400;
-  src: local("primary font"), local("Roboto"), local("Roboto-regular"),
-    local("Roboto regular"),
-    url("../assets/fonts/Roboto-regular.woff2") format("woff2");
+  src: local("primary font"), local("Roboto"), local("Roboto-regular"), local("Roboto regular"), url("../assets/fonts/Roboto-regular.woff2") format("woff2");
 }
 @font-face {
   font-family: "primary font light";
   font-style: normal;
   font-weight: 300;
-  src: local("primary font light"), local("Roboto light"), local("Roboto-light"),
-    url("../assets/fonts/Roboto-light.woff2") format("woff2");
+  src: local("primary font light"), local("Roboto light"), local("Roboto-light"), url("../assets/fonts/Roboto-light.woff2") format("woff2");
 }
 @font-face {
   font-family: "primary font bold";
   font-style: normal;
   font-weight: 700;
-  src: local("primary font bold"), local("Roboto bold"), local("Roboto-bold"),
-    url("../assets/fonts/Roboto-bold.woff2") format("woff2");
+  src: local("primary font bold"), local("Roboto bold"), local("Roboto-bold"), url("../assets/fonts/Roboto-bold.woff2") format("woff2");
 }
 @font-face {
   font-family: "secondary font";
   font-style: normal;
   font-weight: 400;
-  src: local("secondary font"), local("Alegreya"), local("Alegreya-regular"),
-    local("Alegreya regular"),
-    url("../assets/fonts/Alegreya-regular.woff2") format("woff2");
+  src: local("secondary font"), local("Alegreya"), local("Alegreya-regular"), local("Alegreya regular"), url("../assets/fonts/Alegreya-regular.woff2") format("woff2");
 }
 @font-face {
   font-family: "ternary font";
   font-style: normal;
   font-weight: 400;
-  src: local("ternary font"), local("Cinzel"), local("Cinzel-regular"),
-    local("Cinzel regular"),
-    url("../assets/fonts/Cinzel-regular.woff2") format("woff2");
+  src: local("ternary font"), local("Cinzel"), local("Cinzel-regular"), local("Cinzel regular"), url("../assets/fonts/Cinzel-regular.woff2") format("woff2");
 }
 .burger-button {
   display: flex;
@@ -220,7 +212,53 @@ figure {
   width: 1.5625rem;
   height: 1.5625rem;
 }
+.close-button__cross-icon--modal {
+  width: 1.25rem;
+  height: 1.25rem;
+}
 
+.error-banner {
+  background-color: rgb(255, 0, 0);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-weight: 700;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99;
+  -webkit-animation-name: fadein;
+          animation-name: fadein;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-animation-delay: 3s;
+          animation-delay: 3s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes fadein {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-101%);
+    z-index: 0;
+  }
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-101%);
+    z-index: 0;
+  }
+}
 .primary-header-wrapper {
   z-index: 1;
   height: 3.5625rem;
@@ -259,7 +297,7 @@ figure {
   text-transform: capitalize;
   background-color: rgb(var(--primary-background-color));
   -ms-scroll-chaining: none;
-  overscroll-behavior: contain;
+      overscroll-behavior: contain;
 }
 .main-menu[open] {
   transform: translateX(0);
