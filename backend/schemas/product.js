@@ -35,6 +35,18 @@ export default {
       ],
     },
     {
+      name: "options",
+      title: "Options/Variants",
+      type: "array",
+      of: [
+        {
+          name: "option",
+          type: "option",
+          title: "Options/Variants",
+        },
+      ],
+    },
+    {
       name: "cross_sells",
       title: "Produits similaires",
       type: "array",

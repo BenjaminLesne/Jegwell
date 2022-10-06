@@ -48,7 +48,16 @@ $products_url = $_ENV['HOME'] . '/creations';
     ?>
     <link rel="icon" type="image/x-icon" href="<?php echo $favicon_file_url ?>">
 
-    <script type="module" src="<?php echo $index_js_url ?>" type="text/html"></script>
+    <!-- doit être importé en premier car contient l'initialisation de Sentry -->
+    <script type="module" src="<?php echo $index_js_url ?>"></script>
+
+    <?php
+    if (isset($page_js)) { ?>
+        <script type="module" src="<?php echo $page_js ?>"></script>
+    <?php
+    }
+    ?>
+
 
     <title><?php echo $page_title ?? 'Jegwell' ?></title>
 </head>

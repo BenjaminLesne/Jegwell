@@ -212,7 +212,53 @@ figure {
   width: 1.5625rem;
   height: 1.5625rem;
 }
+.close-button__cross-icon--modal {
+  width: 1.25rem;
+  height: 1.25rem;
+}
 
+.error-banner {
+  background-color: rgb(255, 0, 0);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-weight: 700;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99;
+  -webkit-animation-name: fadein;
+          animation-name: fadein;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-animation-delay: 3s;
+          animation-delay: 3s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes fadein {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-101%);
+    z-index: 0;
+  }
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-101%);
+    z-index: 0;
+  }
+}
 .primary-header-wrapper {
   z-index: 1;
   height: 3.5625rem;
