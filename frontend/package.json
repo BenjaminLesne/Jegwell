@@ -1,5 +1,7 @@
 {
-  "scripts": {},
+  "scripts": {
+    "test": "python tests/selenium/test_products_page.py"
+  },
   "devDependencies": {
     "@types/node": "^18.8.2",
     "typescript": "^4.8.4"
