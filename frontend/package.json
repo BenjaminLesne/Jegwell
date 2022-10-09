@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "test": "python tests/selenium/test_products_page.py"
+    "tests": "cd tests/selenium; python -m unittest; cd -",
+    "single_test": "cd tests/selenium; python -m unittest $FILE; cd -;"
   },
   "devDependencies": {
     "@types/node": "^18.8.2",
