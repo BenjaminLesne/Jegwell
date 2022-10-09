@@ -60,7 +60,7 @@ $sanity = new SanityClient([
 
             foreach ($categories as $category) {
                 $name = $category['name'];
-                $category_url = $_ENV['HOME'] . '/panier?category=' . $category['slug'];
+                $category_url = $_ENV['HOME'] . '/creations?categories=' . $category['slug'];
                 $picture_url = $category['image_url'] . '?h=200&w=200&fit=crop';
 
                 echo "<li class=\"categories__item\">
