@@ -107,7 +107,8 @@ $sanity = new SanityClient([
                         </a>
                         <span class='product__price'>$price €</span>
                         <button class='product__call-to-action-wrapper' data-product-id=\"$product_id\">
-                            <span class='product__call-to-action'>Ajouter au panier</span>
+                        <span class='product__call-to-action'>Ajouter au panier<span class='product__success-message'>Ajouté &#10003;</span></span>
+                        
                         </button>
                     </div>
                   </article>";
