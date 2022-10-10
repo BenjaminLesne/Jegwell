@@ -1,4 +1,4 @@
-import { closeMainMenu, getCookie, handleAddToBasket } from "./utils/functions.js";
+import { closeMainMenu, handleAddToBasket } from "./utils/functions.js";
 //import * as dotenv from "../../node_modules/dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 
 // import * as dotenv from "http://localhost:8080/node_modules/dotenv";
@@ -23,7 +23,7 @@ const linkToActivate = document.querySelector(
 const burgerButton = document.getElementById("burger-button");
 const mainMenuCloseButton = document.getElementById("main-menu-close-button");
 const mainMenuLinks = document.querySelectorAll(".main-menu__link");
-const addToBasketButtons = document.querySelectorAll(".product__call-to-action-wrapper");
+const addToBasketButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".product__call-to-action-wrapper");
 
 
 

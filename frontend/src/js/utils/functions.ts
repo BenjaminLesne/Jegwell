@@ -15,9 +15,11 @@ export function getCookie(cookieWanted: string) {
   return cookies[cookieWanted] || null;
 }
 
-export function handleAddToBasket(button: Element) {
+export function handleAddToBasket(button: HTMLButtonElement) {
   const product_id = button.getAttribute("data-product-id");
   if (product_id == null) {
+    // Ca prenait trop de temps, solution court terme alert(), a l'avenir faire que le code commenté fonctionne:
+
     // const header = document.querySelector(".primary-header-wrapper");
     // header ? header.innerHTML += '<div class="error-banner">L\'ajout au panier n\'a pas fonctionné :(</div>' : null;
 
@@ -32,8 +34,9 @@ export function handleAddToBasket(button: Element) {
 
   } else {
     const currentProductsAddedJson = getCookie("productsToBasket");
-
     let newProductsAddedJson;
+
+    button.classList.remove('success');
 
     if (currentProductsAddedJson != null) {
       // != null signifie que un/des produits ont été ajouté au panier
@@ -69,6 +72,11 @@ export function handleAddToBasket(button: Element) {
 
     // ajout du json du/des produits avec une date d'expiration
     document.cookie = 'productsToBasket=' + newProductsAddedJson + expiriringDate;
+
+    void button.offsetWidth; // déclenche un 'reflow' du navigateur, nécessaire pour relancer l'animation rapidement voir: https://css-tricks.com/restart-css-animation/
+    button.classList.add('success');
+
+
   }
 
 

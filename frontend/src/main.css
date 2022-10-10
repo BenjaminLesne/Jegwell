@@ -21,24 +21,6 @@ body {
   scroll-behavior: smooth;
 }
 
-button,
-a,
-.clickable {
-  min-height: 48px;
-  min-width: 48px;
-  margin: 8px;
-  text-decoration: none;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-  background-color: transparent;
-  border: none;
-}
-
 img,
 svg {
   max-width: 100%;
@@ -69,6 +51,53 @@ figure {
   font-weight: 400;
 }
 
+button,
+a,
+.clickable {
+  min-height: 48px;
+  min-width: 48px;
+  margin: 8px;
+  text-decoration: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: transparent;
+  border: none;
+}
+
+@-webkit-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 @font-face {
   font-family: "primary font";
   font-style: normal;
@@ -238,27 +267,6 @@ figure {
           animation-fill-mode: forwards;
 }
 
-@-webkit-keyframes fadein {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-101%);
-    z-index: 0;
-  }
-}
-
-@keyframes fadein {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-101%);
-    z-index: 0;
-  }
-}
 .primary-header-wrapper {
   z-index: 1;
   height: 3.5625rem;
