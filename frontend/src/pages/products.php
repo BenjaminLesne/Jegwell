@@ -26,14 +26,14 @@ $sanity = new SanityClient([
             <button class="input-wrapper" id="categoriesButton" data-modal="categoriesModal">
                 <div class="input" data-label="Catégories">
                     <span>Toutes</span>
-                    <div class="input__caret"></div>
+                    <div class="caret"></div>
                 </div>
             </button>
 
             <button class="input-wrapper" id="sort" data-modal="sortModal">
                 <div class="input" data-label="Trier">
                     <span>Popularité</span>
-                    <div class="input__caret"></div>
+                    <div class="caret"></div>
                 </div>
             </button>
         </div>
@@ -63,7 +63,7 @@ $sanity = new SanityClient([
                         break;
                 }
             }
-
+            $categoriesFilter = '';
             if (isset($_GET['categories'])) {
 
                 $categoriesFilter = " && count((categories[]->slug.current)[@ in [\"$_GET[categories]\"]]) > 0";
@@ -81,9 +81,6 @@ $sanity = new SanityClient([
                         _id
                     }";
 
-
-            if (isset($_GET['categories'])) {
-            }
 
             $products = $sanity->fetch($query);
 
@@ -106,7 +103,7 @@ $sanity = new SanityClient([
                             <span>$product_name</span>
                         </a>
                         <span class='product__price'>$price €</span>
-                        <button class='product__call-to-action-wrapper' data-product-id=\"$product_id\">
+                        <button class='product__call-to-action-wrapper' data-product-id=\"$product_id\" data-product-option=\"default\">
                         <span class='product__call-to-action'>Ajouter au panier<span class='product__success-message'>Ajouté &#10003;</span></span>
                         
                         </button>

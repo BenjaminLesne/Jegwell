@@ -77,3 +77,62 @@ function createProductsPageModal($modalId, $title, $items, $url_key)
 
     return $first_part . $second_part . $third_part;
 }
+
+
+/**
+ * retourne le html de la modal des options sous forme de string.
+ *
+ * @param string $productId 
+ * @param array $productOptions 
+ * @param string $alt 
+ * @param string $svgs_sprite_url 
+ * 
+ * @return string le html de la modal
+ */
+function createOptionsModal($productId, $product_default_image_url, $productOptions, $alt, $svgs_sprite_url)
+{
+    $first_part = "
+    <dialog class=\"modal optionsModal\" data-product-id=\"$productId\">
+        <button class=\"close-button close-button--modal\">
+            <svg class=\"close-button__cross-icon close-button__cross-icon--modal\">
+                <use href=\"$svgs_sprite_url#cross\" />
+            </svg>
+        </button>
+        <section>
+            <h2 class=\"modal__title\">Choisissez votre option :</h2>
+            <ul class=\"product-options-wrapper\">
+                <li>
+                    <button class=\"product-option-wrapper\" data-product-option=\"default\" data-product-id=\"$productId\">
+                        <article class=\"product-option\" data-product-option=\"default\">
+                            <div class=\"product-option__image-wrapper\">
+                                <img src=\"$product_default_image_url\" alt=\"Défaut\">
+                            </div>
+                            <h3 class=\"product-option__name\">Défaut</h3>
+                        </article>
+                    </button>
+                </li>
+            ";
+
+    $second_part = "";
+    foreach ($productOptions as $option) {
+        $second_part = $second_part . "
+                <li>
+                    <button  class=\"product-option-wrapper\" data-product-option=\"$option[name]\" data-product-id=\"$productId\">
+                        <article class=\"product-option\">
+                            <div class=\"product-option__image-wrapper\">
+                                <img src=\"$option[image_url]\" alt=\"$alt\">
+                            </div>
+                            <h3 class=\"product-option__name\">$option[name]</h3>
+                        </article>
+                    </button>
+                </li>
+                    ";
+    }
+    $third_part = "  
+            </ul>
+            <button class=\"main-call-to-action\">Confirmer</button>
+        </section>
+    </dialog>";
+
+    return $first_part . $second_part . $third_part;
+}

@@ -29,6 +29,7 @@ $basket_url = $_ENV['HOME'] . '/panier';
 $categories_url = $_SERVER['REQUEST_URI'] == '/' ? '#catégories' : $_ENV['HOME'] . '#catégories';
 $home_url = $_ENV['HOME'] . '/';
 $products_url = $_ENV['HOME'] . '/creations';
+$delivery_url = $_ENV['HOME'] . '/panier/livraison';
 
 ?>
 <!DOCTYPE html>
