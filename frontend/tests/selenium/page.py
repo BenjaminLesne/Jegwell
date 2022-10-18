@@ -181,10 +181,19 @@ class ProductsPage(BasePage):
         
         basket_cookies = self.chrome_driver.get_cookie("productsToBasket")
 
-        expected_value = [{"id": product_id, "quantity": 1}]
+        expected_value = [{ "id": product_id, "option": "default","quantity": 1 }]
         current_value = json.loads(basket_cookies['value'])
 
-        return expected_value == current_value
+        result = expected_value == current_value
+
+        if(result == False):
+            print("expected_value :")
+            print(expected_value)
+
+            print("current_value :")
+            print(current_value)
+
+        return result
 
     def does_add_to_basket_update_quantity_properly(self):
             # condition initial: un cookie productsToBasket est déjà
@@ -197,17 +206,26 @@ class ProductsPage(BasePage):
 
             basket_cookies = self.chrome_driver.get_cookie("productsToBasket")
 
-            expected_value = [{"id": product_id, "quantity": 2}]
+            expected_value = [{"id": product_id, "option": "default", "quantity": 2}]
             current_value = json.loads(basket_cookies['value'])
 
-            return expected_value == current_value
+            result = expected_value == current_value
+
+            if(result == False):
+                # debug purposes
+                print("expected_value :")
+                print(expected_value)
+                print("current_value :")
+                print(current_value)
+
+            return result
 
     def does_add_to_basket_add_new_product(self):
             # condition initial: un cookie productsToBasket est déjà
             # présent sur le site suite à un premier clique de l'utilisateur
             # sur le bouton ajouter au panier
             # ce code doit être lancé APRES does_add_to_basket_create_right_cookie
-            add_to_basket_buttons = self.chrome_driver.find_elements(*ProductsPageLocators.ADD_TO_BASKET_BUTTONs[0])
+            add_to_basket_buttons = self.chrome_driver.find_elements(*ProductsPageLocators.ADD_TO_BASKET_BUTTON)
             if(len(add_to_basket_buttons) > 0):
                 product_id = add_to_basket_buttons[0].get_attribute("data-product-id")
                 index = 1
@@ -222,15 +240,242 @@ class ProductsPage(BasePage):
                 add_to_basket_buttons[index].click()
                 basket_cookies = self.chrome_driver.get_cookie("productsToBasket")
 
-                expected_value = [{"id": product_id, "quantity": 2}, {"id": new_product_id, "quantity": 1},]
+                expected_value = {product_id: {"id": product_id, "quantity": 2}, new_product_id: {"id": new_product_id, "quantity": 1}}
                 current_value = json.loads(basket_cookies['value'])
 
-                return expected_value == current_value
+                result = expected_value == current_value
+
+                if(result == False):
+                    # debug purposes
+                    print("expected_value :")
+                    print(expected_value)
+                    print("current_value :")
+                    print(current_value)
+
+                return result
+
+
+class BasketPage(BasePage):
+
+    def does_quantity_modal_open(self):
+        # vérifie que la modal quantité s'affiche au clique du bouton quantité
+        button = self.chrome_driver.find_element(*BasketPageLocators.FIRST_QUANTITY_BUTTON)
+        button.click()
+        modals = self.chrome_driver.find_elements(By.CSS_SELECTOR, '#quantityModal[open=""]')
+
+        return len(modals) > 0  
+
+    def does_options_modal_open(self):
+        # vérifie que la modal quantité s'affiche au clique du bouton quantité
+        button = self.chrome_driver.find_element(*BasketPageLocators.FIRST_OPTIONS_BUTTON)
+        product_id = button.get_attribute("data-product-id")
+        product_option = button.get_attribute("data-product-option")
+        button.click()
+        modals = self.chrome_driver.find_elements(By.CSS_SELECTOR, f'.optionsModal[data-product-id="{product_id}"][data-product-option="{product_option}"][open=""]')
+
+        return len(modals) > 0  
+
+    def does_quantity_modal_close(self):
+        modal = self.chrome_driver.find_element(*BasketPageLocators.QUANTITY_MODAL)
+        modalCloseButton = modal.find_element(By.CSS_SELECTOR, '.close-button--modal')
+        modalCloseButton.click()
+
+        is_modal_open = modal.get_attribute("open")
+
+        if(is_modal_open):
+            # debug purposes
+            print("is_modal_open :")
+            print(is_modal_open)        
+
+        return is_modal_open == None
+    
+    def does_modal_have_right_quantity_when_opened(self):
+        modal = self.chrome_driver.find_element(*BasketPageLocators.QUANTITY_MODAL)
+        modalQuantityElement = modal.find_element(By.CSS_SELECTOR, '.quantity-setter__value')
+        quantityAttribute = modalQuantityElement.get_attribute('data-quantity')
+        productId = modal.get_attribute('data-product-id')
+        basket_cookies = self.chrome_driver.get_cookie("productsToBasket")
+        products_to_basket = json.loads(basket_cookies['value'])
+        
+        result = quantityAttribute == modalQuantityElement.text == str(products_to_basket[0]['quantity'])
+
+        if(result == False):
+            print("quantityAttribute type? :")
+            print(quantityAttribute)
+            print(type(quantityAttribute))
+
+
+            print("modalQuantityElement type? :")
+            print(modalQuantityElement.text)
+            print(type(modalQuantityElement.text))
+
+            print("products_to_basket[productId]['quantity'] type? :")
+            print(products_to_basket[productId]['quantity']) 
+            print(type(products_to_basket[productId]['quantity']))      
+
+  
+        return result
+
+    def does_quantity_incrementation_and_decrementation_work(self):
+        increment_button = self.chrome_driver.find_element(By.CSS_SELECTOR, '.quantity-setter__button > .plus')
+        decrement_button = self.chrome_driver.find_element(By.CSS_SELECTOR, '.quantity-setter__button > .minus')
+        quantity_displayed_element = self.chrome_driver.find_element(By.CSS_SELECTOR, '.quantity-setter__value')
+        modal = self.chrome_driver.find_element(*BasketPageLocators.QUANTITY_MODAL)
+        
+        increment_button.click()
+        increment_button.click()
+        increment_result = quantity_displayed_element.text == modal.get_attribute('data-quantity') == "3"
+
+        if(increment_result == False):
+
+            print("quantity_displayed_element.text :")
+            print(quantity_displayed_element.text)
+
+            print("modal.get_attribute('data-quantity') :")
+            print(modal.get_attribute('data-quantity'))
+
+        decrement_button.click()
+        decrement_result = quantity_displayed_element.text == modal.get_attribute('data-quantity') == "2"
+
+        if(decrement_result == False):
+
+            print("quantity_displayed_element.text :")
+            print(quantity_displayed_element.text)
+
+            print("modal.get_attribute('data-quantity') :")
+            print(modal.get_attribute('data-quantity'))
+
+        return increment_result and decrement_result
+
+    def does_options_modal_close(self):
+        modal = self.chrome_driver.find_element(*BasketPageLocators.OPTIONS_MODAL)
+        modalCloseButton = modal.find_element(By.CSS_SELECTOR, '.close-button--modal')
+        modalCloseButton.click()
+
+        is_modal_open = modal.get_attribute("open")
+
+        if(is_modal_open):
+            # debug purposes
+            print("is_modal_open :")
+            print(is_modal_open)        
+
+        return is_modal_open == None
+
+    def does_quantity_updates_on_confirm(self):
+        first_quantity_button = self.chrome_driver.find_element(*BasketPageLocators.FIRST_QUANTITY_BUTTON)
+        confirm_button = self.chrome_driver.find_element(By.CSS_SELECTOR, '#quantityModal .main-call-to-action')
+        
+        quantity_set = self.chrome_driver.find_element(By.CSS_SELECTOR, '.quantity-setter__value').text
+        item_price = int(self.chrome_driver.find_element(By.CSS_SELECTOR, '.item__price').text.replace(" €", ""))
+        # variables à vérifier:
+        current_quantity = first_quantity_button.get_attribute("data-quantity")
+        subtotal_price = self.chrome_driver.find_element(*BasketPageLocators.SUBTOTAL_PRICE_ELEMENT).text
+        number_of_articles_text = self.chrome_driver.find_element(*BasketPageLocators.ARTICLES_ELEMENT).text
+
+
+        confirm_button.click()
+
+        new_first_quantity_button = self.chrome_driver.find_element(*BasketPageLocators.FIRST_QUANTITY_BUTTON)
+
+        new_current_quantity = new_first_quantity_button.get_attribute("data-quantity")
+        new_subtotal_price = self.chrome_driver.find_element(*BasketPageLocators.SUBTOTAL_PRICE_ELEMENT).text
+        new_number_of_articles_text = self.chrome_driver.find_element(*BasketPageLocators.ARTICLES_ELEMENT).text
+
+        # les variables devraient être différente des originales
+        number_of_articles_changed = new_number_of_articles_text != number_of_articles_text
+        subtotal_price_changed = new_subtotal_price != subtotal_price
+        current_quantity_changed = new_current_quantity != current_quantity
+
+        # les variables devraient avoir ces résultats
+        number_of_articles_match_expectation = new_number_of_articles_text == f"({quantity_set} articles)" and new_number_of_articles_text == "(2 articles)"
+        subtotal_price_match_expectation = str(int(new_current_quantity) * item_price) in new_subtotal_price  and new_subtotal_price == "70 €"
+        current_quantity_match_expectation = new_current_quantity == quantity_set and new_current_quantity == "2"
+
+        results = [
+            number_of_articles_changed,
+            subtotal_price_changed,
+            current_quantity_changed,
+            number_of_articles_match_expectation,
+            subtotal_price_match_expectation,
+            current_quantity_match_expectation
+        ]
+
+        if(False in results):
+            print("number_of_articles_changed :")
+            print(number_of_articles_changed)
+
+            print("subtotal_price_changed :")
+            print(subtotal_price_changed)
+
+            print("current_quantity_changed :")
+            print(current_quantity_changed)
+
+            print("number_of_articles_match_expectation :")
+            print(number_of_articles_match_expectation)
+
+            print("subtotal_price_match_expectation :")
+            print(subtotal_price_match_expectation)
+
+            print("current_quantity_match_expectation :")
+            print(current_quantity_match_expectation)
+
+            print("DEBUUUUUUUUUUUUUUUUUG :")
+            print(new_number_of_articles_text == "(2 articles)")
+            print(new_number_of_articles_text)
+
+        return False not in results 
+
+    def does_options_updates_on_confirm(self):
+        first_options_button = self.chrome_driver.find_element(*BasketPageLocators.FIRST_OPTIONS_BUTTON)
+        confirm_button = self.chrome_driver.find_element(By.CSS_SELECTOR, '.optionsModal .main-call-to-action')
+        option_unselected = self.chrome_driver.find_element(By.CSS_SELECTOR, '.optionsModal .product-option-wrapper:not(.selected)')
+
+        expected_new_option = option_unselected.get_attribute('data-product-option')
+        expected_new_product_id = option_unselected.get_attribute('data-product-id')  
+
+        current_option = first_options_button.get_attribute('data-product-option')
+        current_product_id = first_options_button.get_attribute('data-product-id')
+
+        option_unselected.click()
+
+        confirm_button.click()
+
+        new_first_options_button = self.chrome_driver.find_element(*BasketPageLocators.FIRST_OPTIONS_BUTTON)
+        # new_first_options_button.click()
+        self.does_options_modal_open()
+
+        new_option_unselected_element = self.chrome_driver.find_element(By.CSS_SELECTOR, '.optionsModal .product-option-wrapper:not(.selected)')
+        new_option_selected = self.chrome_driver.find_element(By.CSS_SELECTOR, '.optionsModal .product-option-wrapper.selected').get_attribute('data-product-option')
+        new_product_id = new_option_unselected_element.get_attribute('data-product-id')
+
+        option_value_displayed = new_first_options_button.find_element(By.CSS_SELECTOR, '.setting__value').text
+
+        condition1 = expected_new_option !=  current_option
+        condition2 = expected_new_product_id == current_product_id == new_product_id
+        condition3 = option_value_displayed == expected_new_option == new_option_selected
+
+        results = condition1 and condition2 and condition3
+
+        if(results == False):
+            print("condition1 :")
+            print(condition1)
+            print("condition2 :")
+            print(condition2)
+            print("condition3 :")
+            print(condition3)
+            
+
+
+        return results   
+
+        
+
 
 
 
 
         
+    
              
 
 

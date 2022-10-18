@@ -1,0 +1,10 @@
+.main-call-to-action {
+  background-color: rgb(var(--secondary-color));
+  max-width: 328px;
+  width: 100%;
+  text-align: center;
+  border-radius: var(--border-radius);
+  color: rgb(var(--primary-color));
+  font-size: convertToRem(20px);
+  margin: 0 auto;
+}

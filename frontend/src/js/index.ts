@@ -1,18 +1,14 @@
-import { closeMainMenu, handleAddToBasket } from "./utils/functions.js";
-//import * as dotenv from "../../node_modules/dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+import {
+  closeMainMenu,
+  handleAddToBasket,
+  openQuantityModal,
+  handleQuantity,
+  handleBasketQuantityConfirmation,
+  openOptionsModal,
+  showSelectedOption,
+  handleOptionConfirm
+} from "./utils/functions.js";
 
-// import * as dotenv from "http://localhost:8080/node_modules/dotenv";
-// import * as Sentry from "../../node_modules/@sentry/browser";
-// import { BrowserTracing } from "../../node_modules/@sentry/tracing";
-
-// dotenv.config();
-// console.log(process.env.SENTRY_JS_DSN);
-
-// Sentry.init({
-//   dsn: process.env.SENTRY_JS_DSN,
-//   integrations: [new BrowserTracing()],
-//   tracesSampleRate: 1.0,
-// });
 
 // ** HEADER **
 const currentRequestUri =
@@ -24,6 +20,16 @@ const burgerButton = document.getElementById("burger-button");
 const mainMenuCloseButton = document.getElementById("main-menu-close-button");
 const mainMenuLinks = document.querySelectorAll(".main-menu__link");
 const addToBasketButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".product__call-to-action-wrapper");
+const modalCloseButtons = document.querySelectorAll(".close-button--modal");
+
+const quantityButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".setting--quantity");
+const quantitySetterButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".quantity-setter__button");
+const quantityModalConfirmButton: HTMLElement | null = document.querySelector('#quantityModal .main-call-to-action');
+
+const optionsButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".setting--option");
+const productOptionWrapperAll: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".product-option-wrapper");
+const optionsModalConfirmButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".optionsModal .main-call-to-action");
+
 
 
 
@@ -47,5 +53,62 @@ mainMenuLinks?.forEach(linkElement => {
 addToBasketButtons?.forEach(button => {
   button?.addEventListener("click", () => handleAddToBasket(button));
 });
+
+
+modalCloseButtons?.forEach(button => {
+  button?.addEventListener("click", () => {
+    (<HTMLDialogElement>button?.parentElement)?.close();
+  });
+
+});
+
+// bouton quantité des produits
+quantityButtons.forEach((button) => {
+  button.addEventListener("click", () => openQuantityModal(button))
+});
+
+quantitySetterButtons.forEach(button => {
+  const isAddition = button.firstElementChild?.classList.contains("plus");
+  if (isAddition != null) {
+    button.addEventListener("click", () => handleQuantity(isAddition, button))
+  }
+
+})
+
+quantityModalConfirmButton?.addEventListener('click', () => handleBasketQuantityConfirmation(quantityModalConfirmButton))
+
+// boutons option des produits
+optionsButtons.forEach((button) => {
+  button.addEventListener("click", () => openOptionsModal(button))
+});
+
+productOptionWrapperAll.forEach((button) => {
+  const productOption = button.getAttribute('data-product-option');
+  const productId = button.getAttribute('data-product-id');
+  const modal = button.parentElement?.closest("dialog");
+
+  if (productOption != null && productId != null && modal != null) {
+    button.addEventListener("click", () => showSelectedOption(productId, productOption, modal))
+  }
+});
+
+
+optionsModalConfirmButtons.forEach((button) => {
+  const modal: HTMLDialogElement | null | undefined = button.parentElement?.closest('.optionsModal');
+
+  if (modal != null) {
+    button.addEventListener("click", () => handleOptionConfirm(modal))
+  } else {
+    const message = "modal is undefined or null"
+    console.error(message)
+    throw new Error(message);
+
+  }
+});
+
+
+
+
+
 
 
