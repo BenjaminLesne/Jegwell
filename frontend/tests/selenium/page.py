@@ -81,7 +81,8 @@ class HomePage(BasePage):
         
         close_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#main-menu-close-button")))
         main_menu = self.chrome_driver.find_element(By.CSS_SELECTOR, "#main-menu")
-
+        
+        time.sleep(1) # autrement ça clique trop vite parfois
         close_button.click()
 
         is_main_menu_open = main_menu.get_attribute("open")
@@ -256,6 +257,27 @@ class ProductsPage(BasePage):
 
 
 class BasketPage(BasePage):
+
+    def does_item_gets_removed_properly(self):
+        remove_button = self.chrome_driver.find_element(By.CSS_SELECTOR, '.item__remove')
+        remove_button.click()
+        new_remove_buttons = self.chrome_driver.find_elements(By.CSS_SELECTOR, '.item__remove')
+        cookie = self.chrome_driver.get_cookie("productsToBasket")
+        cookie_contains_null = "null" in cookie['value']
+
+        result = len(new_remove_buttons) == 0 and cookie_contains_null == False
+
+        if(result == False):
+            # debug purposes
+            print("cookie_contains_null :")
+            print(cookie_contains_null)  
+            print("number of remove_buttons :")
+            print(len(new_remove_buttons))  
+            print("cookies :")
+            print(cookie['value'])  
+
+        return result
+
 
     def does_quantity_modal_open(self):
         # vérifie que la modal quantité s'affiche au clique du bouton quantité

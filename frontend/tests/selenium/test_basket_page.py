@@ -21,6 +21,10 @@ class BasketPage(unittest.TestCase):
         
         self.chrome_driver.get(basket_page_url)
 
+    def test_item_delete_button(self):
+        item_is_deleted_properly = self.basketPage.does_item_gets_removed_properly()
+        assert item_is_deleted_properly
+
     def test_quantity_modal(self):
         # test l'ouverture de la modal
         modal_opened = self.basketPage.does_quantity_modal_open()
