@@ -22,8 +22,8 @@ include 'src/components/header.php'; // contient le code pour lire les variables
 $sanity = new SanityClient([
     'projectId' => $_ENV['SANITY_PROJECT_ID'],
     'dataset' => 'production',
-    'useCdn' => true,
     'apiVersion' => $_ENV['SANITY_API_VERSION'],
+    'token' => $_ENV['SANITY_TOKEN_TO_READ'],
 ]);
 ?>
 
