@@ -55,7 +55,6 @@ export function removeProductFromBasket(productId, productOption) {
         const currentProductsAdded = JSON.parse(currentProductsAddedJson);
         const productIndex = currentProductsAdded.findIndex((product) => (product === null || product === void 0 ? void 0 : product.id) === productId && (product === null || product === void 0 ? void 0 : product.option) === productOption);
         currentProductsAdded.splice(productIndex, 1);
-        // delete currentProductsAdded[];
         addToCookies('productsToBasket', JSON.stringify(currentProductsAdded), 365);
     }
     else {

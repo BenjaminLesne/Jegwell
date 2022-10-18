@@ -7,7 +7,6 @@ import {
   openOptionsModal,
   showSelectedOption,
   handleOptionConfirm,
-  getCookie
 } from "./utils/functions.js";
 
 

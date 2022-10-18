@@ -7,8 +7,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import ElementNotVisibleException, ElementNotSelectableException
+from selenium.webdriver.support import expected_conditions
+from selenium.common.exceptions import ElementNotVisibleException, ElementNotSelectableException, UnexpectedAlertPresentException
 
 from locator import *
 
@@ -79,7 +79,7 @@ class HomePage(BasePage):
     def does_main_menu_close_properly(self):
         wait = WebDriverWait(self.chrome_driver, timeout=10, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException, ElementNotSelectableException])
         
-        close_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#main-menu-close-button")))
+        close_button = wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, "#main-menu-close-button")))
         main_menu = self.chrome_driver.find_element(By.CSS_SELECTOR, "#main-menu")
         
         time.sleep(1) # autrement ça clique trop vite parfois
@@ -491,9 +491,51 @@ class BasketPage(BasePage):
         return results   
 
         
+class CheckoutPage(BasePage):
 
+    def does_it_redirect_when_cookie_missing(self, cookie_name, expected_alert_message, expected_redirection_url):
+        wait = WebDriverWait(self.chrome_driver, timeout=10, poll_frequency=1, ignored_exceptions=[UnexpectedAlertPresentException])
 
+        self.chrome_driver.delete_cookie(cookie_name)
+        # Wait for the alert to be displayed and store it in a variable
+        alert = wait.until(expected_conditions.alert_is_present())
 
+        # Press the OK button
+        alert.accept()
+
+        # On va sur la page de paiement
+        self.chrome_driver.get("http://localhost:8080/src/pages/checkout.php")
+
+        # Wait for the alert to be displayed and store it in a variable
+        alert = wait.until(expected_conditions.alert_is_present())
+
+        current_alert_message = alert.text
+
+        alert_has_right_message = expected_alert_message == current_alert_message
+
+        # Press the OK button
+        alert.accept()
+
+        current_url = self.chrome_driver.current_url
+
+        is_right_redirection = current_url == expected_redirection_url
+
+        result = alert_has_right_message and is_right_redirection
+
+        if(alert_has_right_message == False):
+            print("expected_alert_message :")
+            print(">>" + expected_alert_message)
+            print("current_alert_message :")
+            print(">>" + current_alert_message)
+
+        if(is_right_redirection == False):
+            print("current_url :")
+            print(">>" + current_url)
+            print("expected_redirection_url :")
+            print(">>" + expected_redirection_url)
+            
+
+        return result
 
 
         

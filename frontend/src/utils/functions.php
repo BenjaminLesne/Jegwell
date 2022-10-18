@@ -2,6 +2,8 @@
 
 namespace Jegwell\functions;
 
+use Error;
+use Sanity\Client as SanityClient;
 
 /**
  * retourne une url contenant un numéro de version basé sur la date de modification du fichier, cela permet d'optimiser le cache navigateur.
@@ -135,4 +137,83 @@ function createOptionsModal($productId, $product_default_image_url, $productOpti
     </dialog>";
 
     return $first_part . $second_part . $third_part;
+}
+
+/**
+ * retourne le montant total items + livraison en centimes d'euros, exemple: 14€ = 1400.
+ *
+ * @param object $order 
+ * 
+ * @return int le montant total en centime d'euros
+ */
+function calculateOrderAmount($order, $ENV): int
+{
+    $products_to_basket = $order->products;
+
+    $wanted_ids = '';
+
+    foreach ($products_to_basket as $wanted_product) {
+        $wanted_id = $wanted_product->id;
+
+        if (str_contains($wanted_ids, $wanted_id) == false) {
+            $previous_ids = $wanted_ids === '' ? '' : ", $wanted_id";
+            $wanted_ids = "'$wanted_id' $previous_ids";
+        }
+    }
+
+    if ($wanted_ids !== '' and isset($order->deliveryOption)) {
+        $sanity = new SanityClient([
+            'projectId' => $ENV['SANITY_PROJECT_ID'],
+            'dataset' => 'production',
+            'apiVersion' => $ENV['SANITY_API_VERSION'],
+            'token' => $ENV['SANITY_TOKEN_TO_READ'],
+        ]);
+
+        $query_products = "
+                *[_id in [$wanted_ids]]{    
+                    name,
+                    price,
+                    'slug': slug.current,
+                    'image_url': image.asset->url,
+                    'options': options[]{'name': name, 'image_url': image.asset->url},
+                    'id': _id,
+                    categories,
+                    'categories4': *[_type=='category' && _id==categories[]._ref]{ 
+                        name,
+                      }
+                }
+            ";
+        $query_delivery_option = "
+                *[_type == 'deliveryOption' && _id == '$order->deliveryOption']{    
+                    price,
+                    }
+            ";
+
+
+
+        $products = $sanity->fetch($query_products);
+        $delivery_option = $sanity->fetch($query_delivery_option);
+
+        $subtotal_price = 0;
+        $delivery_fee = $delivery_option['price'];
+
+
+        foreach ($products as $product) {
+
+            foreach ($products_to_basket as $basket_product) {
+                // récupère la position des objets dans le panier contenant l'id du produit
+                if ($basket_product->id === $product['id']) {
+
+                    $quantity = $basket_product->quantity;
+                    // prix total = subtotal + frais de livraison
+                    $subtotal_price += ($product['price'] * $quantity);
+                }
+            }
+        }
+
+        $total_price = $subtotal_price + $delivery_fee;
+        return ($total_price * 100);
+    };
+    $error_message = "calculateOrderAmount failed. deliveryOption: $order->deliveryOption | \$wanted_ids: $wanted_ids ";
+    throw new Error($error_message);
 }
