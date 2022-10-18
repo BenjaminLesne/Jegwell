@@ -1,8 +1,10 @@
 @import "sass/utils/functions";
 @import "sass/utils/variables";
+
 @import "sass/base/reset";
 @import "sass/base/base";
 @import "sass/base/typography";
+
 @import "sass/components/burger-button";
 @import "sass/components/brand";
 @import "sass/components/logo";
@@ -10,6 +12,12 @@
 @import "sass/components/backToTop";
 @import "sass/components/close-button";
 @import "sass/components/error-banner";
+@import "sass/components/caret";
+@import "sass/components/price";
+@import "sass/components/call-to-action-button";
+@import "sass/components/product-option";
+
 @import "sass/layout/header";
 @import "sass/layout/main-menu";
+@import "sass/layout/modal";
 @import "sass/layout/footer";

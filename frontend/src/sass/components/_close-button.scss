@@ -14,5 +14,11 @@
       width: $width;
       height: $width;
     }
+
+    &--small {
+      $width: convertToRem(15px);
+      width: $width;
+      height: $width;
+    }
   }
 }

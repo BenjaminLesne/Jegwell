@@ -28,16 +28,4 @@ $padding-inline: 16px;
     background-color: rgb(var(--primary-background-color));
     padding-inline: 5px;
   }
-
-  $caret-width: 8px;
-  &__caret {
-    position: relative;
-    width: $caret-width;
-    height: $caret-width;
-    border-style: solid;
-    $borderWidth: 2px;
-    border-width: 0 $borderWidth $borderWidth 0;
-    border-color: rgb(var(--neutral-color));
-    transform: rotate(45deg);
-  }
 }

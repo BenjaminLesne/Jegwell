@@ -1,0 +1,25 @@
+.setting {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0;
+  font-size: convertToRem(16px);
+  font-family: "primary font light";
+
+  &__value {
+    display: flex;
+    gap: 13px;
+    font-family: "primary font";
+  }
+
+  &--option::after {
+    content: "";
+    height: 1.5px;
+    background-color: rgba(var(--neutral-color), 0.25);
+    width: 100%;
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+  }
+}
