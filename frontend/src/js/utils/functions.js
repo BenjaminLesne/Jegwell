@@ -26,10 +26,10 @@ export function handleAddToBasket(button) {
         if (currentProductsAddedJson != null) {
             // != null signifie que un/des produits ont été ajouté au panier
             const currentProductsAdded = JSON.parse(currentProductsAddedJson);
+            const productIndex = currentProductsAdded.findIndex((product) => (product === null || product === void 0 ? void 0 : product.id) === product_id && (product === null || product === void 0 ? void 0 : product.option) === product_option);
             // si le produit ajouté est déjà dans la panier...
-            if (currentProductsAddedJson.includes(product_id)) {
-                // récupère l'index du produit dans le tableau trouvé dans les cookies
-                const productIndex = currentProductsAdded.findIndex((product) => product.id === product_id && product.option === product_option);
+            if (productIndex > (-1)) {
+                // le produit exist déjà,
                 // on ajoute 1 à sa quantité
                 currentProductsAdded[productIndex]['quantity'] += 1;
                 newProductsAddedJson = JSON.stringify(currentProductsAdded);
@@ -53,8 +53,9 @@ export function removeProductFromBasket(productId, productOption) {
     const currentProductsAddedJson = getCookie("productsToBasket");
     if (currentProductsAddedJson) {
         const currentProductsAdded = JSON.parse(currentProductsAddedJson);
-        const productIndex = currentProductsAdded.findIndex((product) => product.id === productId && product.option === productOption);
-        delete currentProductsAdded[productIndex];
+        const productIndex = currentProductsAdded.findIndex((product) => (product === null || product === void 0 ? void 0 : product.id) === productId && (product === null || product === void 0 ? void 0 : product.option) === productOption);
+        currentProductsAdded.splice(productIndex, 1);
+        // delete currentProductsAdded[];
         addToCookies('productsToBasket', JSON.stringify(currentProductsAdded), 365);
     }
     else {
@@ -180,7 +181,7 @@ export function handleOptionConfirm(optionsModal) {
         throw new Error(message);
     }
 }
-function getCookie(cookieWanted) {
+export function getCookie(cookieWanted) {
     let cookies = {};
     document.cookie.split(';').forEach(cookie => {
         let [key, value] = cookie.split('=');
@@ -193,15 +194,9 @@ function updateBasket(productId, productOption, key, value) {
     if (currentProductsAddedJson) {
         const currentProductsAdded = JSON.parse(currentProductsAddedJson);
         const productIndex = currentProductsAdded.findIndex((product) => {
-            const result = product.id === productId && product.option === productOption;
+            const result = (product === null || product === void 0 ? void 0 : product.id) === productId && (product === null || product === void 0 ? void 0 : product.option) === productOption;
             if ((product === null || product === void 0 ? void 0 : product.id) != null && (product === null || product === void 0 ? void 0 : product.option) != null && result != false) {
                 return result;
-            }
-            else {
-                const message = `could not find index of id:${productId} option: ${productOption}`;
-                console.table(currentProductsAdded);
-                console.table({ "productId": productId, "productOption": productOption });
-                throw new Error(message);
             }
         });
         switch (true) {
@@ -211,19 +206,11 @@ function updateBasket(productId, productOption, key, value) {
                 break;
             case key === 'option':
                 const targetedProductIndex = currentProductsAdded.findIndex((product) => {
-                    const result = product.id === productId && product.option === value;
-                    console.log(product.option, value, result);
+                    const result = (product === null || product === void 0 ? void 0 : product.id) === productId && (product === null || product === void 0 ? void 0 : product.option) === value;
                     return result;
                 });
                 if (targetedProductIndex > (-1)) {
-                    // après avoir changé d'option d'un item, on trouve un itemdé à présent avec la nouvelle option
-                    // 
-                    // const currentQuantity = currentProductsAdded[targetedProductIndex]["quantity"];
-                    // updateBasket(productId, value.toString(), 'quantity', currentQuantity + 1)
-                    // removeProductFromBasket(productId, productOption)
                     alert(`Vous avez déjà l'option ${value} dans votre panier !`);
-                    //  check ces valeurs: product.option === value et targetedProductIndex
-                    // pourquoi
                 }
                 else {
                     if (currentProductsAdded[productIndex] != null) {

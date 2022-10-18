@@ -1,5 +1,3 @@
-import { info } from "console";
-import { userInfo } from "os";
 import { Product } from "./type";
 
 export function closeMainMenu() {
@@ -35,13 +33,12 @@ export function handleAddToBasket(button: HTMLButtonElement) {
       // != null signifie que un/des produits ont été ajouté au panier
 
       const currentProductsAdded = JSON.parse(currentProductsAddedJson);
+      const productIndex = currentProductsAdded.findIndex((product: Product) => product?.id === product_id && product?.option === product_option);
 
       // si le produit ajouté est déjà dans la panier...
-      if (currentProductsAddedJson.includes(product_id)) {
+      if (productIndex > (-1)) {
 
-        // récupère l'index du produit dans le tableau trouvé dans les cookies
-        const productIndex = currentProductsAdded.findIndex((product: Product) => product.id === product_id && product.option === product_option);
-
+        // le produit exist déjà,
         // on ajoute 1 à sa quantité
         currentProductsAdded[productIndex]['quantity'] += 1;
 
@@ -76,11 +73,12 @@ export function handleAddToBasket(button: HTMLButtonElement) {
 export function removeProductFromBasket(productId: string, productOption: string): void {
 
   const currentProductsAddedJson = getCookie("productsToBasket");
+
   if (currentProductsAddedJson) {
     const currentProductsAdded = JSON.parse(currentProductsAddedJson);
-    const productIndex = currentProductsAdded.findIndex((product: Product) => product.id === productId && product.option === productOption);
+    const productIndex = currentProductsAdded.findIndex((product: Product) => product?.id === productId && product?.option === productOption);
 
-    delete currentProductsAdded[productIndex];
+    currentProductsAdded.splice(productIndex, 1);
 
     addToCookies('productsToBasket', JSON.stringify(currentProductsAdded), 365)
   } else {
@@ -241,7 +239,7 @@ export function handleOptionConfirm(optionsModal: HTMLDialogElement) {
   }
 }
 
-function getCookie(cookieWanted: string) {
+export function getCookie(cookieWanted: string) {
   interface cookiesObject {
     [key: string]: string;
   }
@@ -258,23 +256,15 @@ function updateBasket(productId: string, productOption: string, key: string, val
 
   if (currentProductsAddedJson) {
     const currentProductsAdded = JSON.parse(currentProductsAddedJson);
+
     const productIndex = currentProductsAdded.findIndex((product: Product) => {
 
-      const result = product.id === productId && product.option === productOption;
+      const result = product?.id === productId && product?.option === productOption;
 
       if (product?.id != null && product?.option != null && result != false) {
         return result;
 
-      } else {
-        const message = `could not find index of id:${productId} option: ${productOption}`
-        console.table(currentProductsAdded)
-        console.table({ "productId": productId, "productOption": productOption })
-
-        throw new Error(message);
-
       }
-
-
 
     });
 
@@ -287,8 +277,7 @@ function updateBasket(productId: string, productOption: string, key: string, val
       case key === 'option':
         const targetedProductIndex = currentProductsAdded.findIndex((product: Product) => {
 
-          const result = product.id === productId && product.option === value
-          console.log(product.option, value, result)
+          const result = product?.id === productId && product?.option === value
 
           return result
 

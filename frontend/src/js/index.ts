@@ -6,7 +6,8 @@ import {
   handleBasketQuantityConfirmation,
   openOptionsModal,
   showSelectedOption,
-  handleOptionConfirm
+  handleOptionConfirm,
+  getCookie
 } from "./utils/functions.js";
 
 
@@ -105,10 +106,6 @@ optionsModalConfirmButtons.forEach((button) => {
 
   }
 });
-
-
-
-
 
 
 
