@@ -53,7 +53,11 @@ $delivery_url = $_ENV['HOME'] . '/panier/livraison';
     <script type="module" src="<?php echo $index_js_url ?>"></script>
 
     <?php
-    if (isset($page_js)) { ?>
+    if (isset($js_files_urls)) {
+        foreach ($js_files_urls as $js_file_url) {
+            echo "<script type=\"module\" src=\"$js_file_url\"></script>";
+        }
+    } elseif (isset($page_js)) { ?>
         <script type="module" src="<?php echo $page_js ?>"></script>
     <?php
     }

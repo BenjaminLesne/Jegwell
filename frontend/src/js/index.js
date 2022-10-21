@@ -1,4 +1,4 @@
-import { closeMainMenu, handleAddToBasket, openQuantityModal, handleQuantity, handleBasketQuantityConfirmation, openOptionsModal, showSelectedOption, handleOptionConfirm } from "./utils/functions.js";
+import { closeMainMenu, handleAddToBasket, openQuantityModal, handleQuantity, handleBasketQuantityConfirmation, openOptionsModal, showSelectedOption, handleOptionConfirm, } from "./utils/functions.js";
 // ** HEADER **
 const currentRequestUri = location.pathname === "/" ? "/accueil" : location.pathname;
 const linkToActivate = document.querySelector(`[data-request-uri="${currentRequestUri}"]`);
