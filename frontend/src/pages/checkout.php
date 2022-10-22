@@ -34,6 +34,7 @@ $sanity = new SanityClient([
             </button>
             <div id="payment-message" class="hidden"></div>
         </form>
+    </section>
 </main>
 <?php
 include '../components/footer.php';

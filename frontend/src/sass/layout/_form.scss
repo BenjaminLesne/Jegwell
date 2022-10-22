@@ -1,0 +1,64 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+  &__fieldset {
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+    border: none;
+    padding: 0;
+    margin: 0;
+
+    &--radio {
+      & .form__input-label-wrapper {
+        display: flex;
+        gap: 0;
+        padding-block: 0;
+
+        & > * {
+          padding: 11px;
+        }
+      }
+
+      & label {
+        width: 100%;
+      }
+    }
+  }
+  &__legend {
+    width: 100%;
+    text-align: center;
+  }
+
+  &__input {
+    box-sizing: border-box;
+    &--radio {
+      width: unset;
+      margin: 0;
+    }
+  }
+
+  &__textarea {
+    resize: none;
+  }
+
+  &__tel {
+    display: flex;
+    flex-direction: column;
+
+    &--country-code {
+      width: 90px;
+    }
+
+    &--number {
+      flex: 1;
+    }
+  }
+
+  &__tel-wrapper {
+    display: flex;
+    gap: 7px;
+  }
+}
