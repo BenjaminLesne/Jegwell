@@ -33,7 +33,7 @@ if (deliveryOption === null || deliveryOption === '') {
 }
 // The items the customer wants to buy
 const items = JSON.parse(itemsJson);
-const order = { products: items };
+const order = { products: items, deliveryOption: deliveryOption };
 const orderStringified = JSON.stringify(order);
 console.log("orderStringified");
 console.log(orderStringified);
@@ -51,7 +51,7 @@ function initialize() {
             headers: { "Content-Type": "application/json" },
             body: orderStringified,
         }).then((r) => r.json()); // retourner la reponseJson parsed pour pouvoir récupérer clientSecret et totalPriceInCents /!\
-        if (error || totalPriceInCents < 1) {
+        if (error || totalPriceInCents < 100) {
             console.log("error", error);
             alert("Oups, une erreur est survenue !");
         }

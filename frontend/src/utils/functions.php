@@ -195,7 +195,7 @@ function calculateOrderAmount($order, $ENV): int
         $delivery_option = $sanity->fetch($query_delivery_option);
 
         $subtotal_price = 0;
-        $delivery_fee = $delivery_option['price'];
+        $delivery_fee = $delivery_option[0]['price'];
 
 
         foreach ($products as $product) {
@@ -209,6 +209,9 @@ function calculateOrderAmount($order, $ENV): int
                     $subtotal_price += ($product['price'] * $quantity);
                 }
             }
+        }
+        if (gettype($subtotal_price) != 'integer' and gettype($delivery_fee) != 'integer') {
+            throw new Error('$subtotal_price or $delivery_fee is not an integer');
         }
 
         $total_price = $subtotal_price + $delivery_fee;

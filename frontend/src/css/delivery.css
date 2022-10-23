@@ -11,6 +11,12 @@
   padding: 0;
   margin: 0;
 }
+.form__fieldset .invalid .form__input {
+  border-color: red;
+}
+.form__fieldset .invalid .form__error-message {
+  display: unset;
+}
 .form__fieldset--radio .form__input-label-wrapper {
   display: flex;
   gap: 0;
@@ -32,6 +38,16 @@
 .form__input--radio {
   width: unset;
   margin: 0;
+}
+.form__label.required::after {
+  content: "*";
+  color: red;
+}
+.form__error-message {
+  display: none;
+  margin: 0;
+  font-size: 0.75rem;
+  color: red;
 }
 .form__textarea {
   resize: none;

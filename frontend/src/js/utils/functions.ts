@@ -319,6 +319,75 @@ function updateBasket(productId: string, productOption: string, key: string, val
   }
 }
 
+export function handleFormSubmit(event: MouseEvent) {
+  const form: HTMLFormElement | null = document.querySelector(".form");
+  let isFormValid = null;
+
+  // checks all inputs value
+  if (form != null) {
+    const data = new FormData(form);
+
+    // @ts-ignore
+    for (const entry of data) {
+      let newRegex: RegExp | null = null;
+
+      switch (entry[0]) {
+        case "phone-number":
+          newRegex = /^[0-9]{10,}$/
+        case "delivery":
+          // newRegex = newRegex ?? /^[express|folowed-letter]$/
+          newRegex = newRegex ?? /.*/
+          console.log(entry)
+        case "address-line-1":
+          newRegex = newRegex ?? /[a-z0-9]+/i
+        case "postal-code":
+          newRegex = newRegex ?? /^(?:0[1-9]|[1-8]\d|9[0-8])\d{3}$/
+        case "email":
+          newRegex = newRegex ?? /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/g
+        case "firstname":
+        case "lastname":
+        case "city":
+          const regex = newRegex ?? /^[a-z]+$/i;
+          const result = handleInputValidation(entry, regex)
+
+          isFormValid = isFormValid ? result : isFormValid;
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    if (isFormValid === false) {
+      event?.preventDefault()
+      const firstInvalidInput = document.querySelector(".invalid")
+      firstInvalidInput?.scrollIntoView()
+    }
+
+  } else {
+    alert("On ne trouve pas de formulaire sur cette page !")
+  }
+
+  function handleInputValidation(entry: [string, string], regexValue: RegExp) {
+
+    const input = document.querySelector(`input[name="${entry[0]}"`)
+    const required = input?.hasAttribute("required")
+    const additionalCondition = required ? false : entry[1] === "";
+    const isRegexFollowed = entry[1].match(regexValue) || additionalCondition;
+
+    const inputLabelWrapper = input?.parentElement?.closest(".form__input-label-wrapper")
+    //  trigger invalid class if false
+    if (isRegexFollowed === false) {
+
+      inputLabelWrapper?.classList.add("invalid")
+    } else {
+      inputLabelWrapper?.classList.remove("invalid")
+    }
+
+    return isRegexFollowed
+  }
+}
+
 function addToCookies(key: string, value: string, days: number) {
 
   const date = new Date();

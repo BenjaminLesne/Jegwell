@@ -44,7 +44,7 @@ figure {
 .screenreader {
   position: absolute;
   visibility: hidden;
-  left: 101vw;
+  top: -999vh;
 }
 
 .section {

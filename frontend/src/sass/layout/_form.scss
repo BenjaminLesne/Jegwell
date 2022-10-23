@@ -11,6 +11,16 @@
     padding: 0;
     margin: 0;
 
+    & .invalid {
+      & .form__input {
+        border-color: red;
+      }
+
+      & .form__error-message {
+        display: unset;
+      }
+    }
+
     &--radio {
       & .form__input-label-wrapper {
         display: flex;
@@ -38,6 +48,20 @@
       width: unset;
       margin: 0;
     }
+  }
+
+  &__label {
+    &.required::after {
+      content: "*";
+      color: red;
+    }
+  }
+
+  &__error-message {
+    display: none;
+    margin: 0;
+    font-size: convertToRem(12px);
+    color: red;
   }
 
   &__textarea {
