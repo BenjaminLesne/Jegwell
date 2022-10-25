@@ -28,6 +28,13 @@
 .form__fieldset--radio label {
   width: 100%;
 }
+.form__fieldset--radio.invalid .form__input-label-wrapper {
+  border-color: red;
+}
+.form__fieldset--radio.invalid .form__error-message {
+  display: unset;
+  margin-inline: auto;
+}
 .form__legend {
   width: 100%;
   text-align: center;

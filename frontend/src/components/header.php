@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 /** @desc this loads the composer autoload file */
 require_once dirname(__DIR__, 2) . '/vendor/autoload.php';

@@ -53,8 +53,8 @@ $sanity = new SanityClient([
                     </div> -->
 
                     <div class="form__tel form__tel--number form__input-label-wrapper">
-                        <label class="form__label" for="phone-number">Téléphone</label>
-                        <input class="input form__input" type="tel" id="phone-number" name="phone-number" placeholder="0612345678" />
+                        <label class="form__label" for="phoneNumber">Téléphone</label>
+                        <input class="input form__input" type="tel" id="phoneNumber" name="phoneNumber" placeholder="0612345678" />
                         <p class="form__error-message">Doit être un numéro de téléphone valide</p>
                     </div>
                 </div>
@@ -63,10 +63,11 @@ $sanity = new SanityClient([
 
             <fieldset class="form__fieldset form__fieldset--radio">
                 <legend class="form__legend section__h2 section__h2--margin-bottom-reduced">LIVRAISON</legend>
+                <p class="form__error-message">Un type de livraison doit être sélectionné</p>
 
                 <div>
                     <div class="form__input-label-wrapper input input--width-unset">
-                        <label class="form__label" for="express">Livraison Express</label>
+                        <label class="form__label" for="express">Livraison Express (9€)</label>
                         <input class="input form__input input form__input--radio" type="radio" id="express" name="delivery" value="054d9226-3128-49b5-a458-deab4705847f" required />
                     </div>
                     <p class="input__details">Expédition sous 24H en colissimo</p>
@@ -89,14 +90,14 @@ $sanity = new SanityClient([
                 <legend class="form__legend section__h2 section__h2--margin-bottom-reduced">ADRESSE</legend>
 
                 <div class="form__input-label-wrapper">
-                    <label class="form__label required" for="address-line-1">Adresse</label>
-                    <input class="input form__input" type="text" id="address-line-1" name="address-line-1" placeholder="35 rue de la Genetais" required />
+                    <label class="form__label required" for="addressLine1">Adresse</label>
+                    <input class="input form__input" type="text" id="addressLine1" name="addressLine1" placeholder="35 rue de la Genetais" required />
                     <p class="form__error-message">Doit être une adresse valide</p>
 
                 </div>
                 <div class="form__input-label-wrapper">
-                    <label class="form__label" for="address-line-2">Complément d'adresse</label>
-                    <input class="input form__input" type="text" id="address-line-2" name="address-line-2" placeholder="Bâtiment A, boite aux lettres 42" />
+                    <label class="form__label" for="addressLine2">Complément d'adresse</label>
+                    <input class="input form__input" type="text" id="addressLine2" name="addressLine2" placeholder="Bâtiment A, boite aux lettres 42" />
                 </div>
                 <div class="form__input-label-wrapper">
                     <label class="form__label required" for="country">Pays</label>
@@ -106,8 +107,8 @@ $sanity = new SanityClient([
                     </select>
                 </div>
                 <div class="form__input-label-wrapper">
-                    <label class="form__label required" for="postal-code">Code Postal</label>
-                    <input class="input form__input" type="number" id="postal-code" name="postal-code" placeholder="75015" required />
+                    <label class="form__label required" for="postalCode">Code Postal</label>
+                    <input class="input form__input" type="number" id="postalCode" name="postalCode" placeholder="75015" required />
                     <p class="form__error-message">Doit être un code postal valide</p>
                 </div>
                 <div class="form__input-label-wrapper">

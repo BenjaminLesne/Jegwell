@@ -146,7 +146,7 @@ function createOptionsModal($productId, $product_default_image_url, $productOpti
  * 
  * @return int le montant total en centime d'euros
  */
-function calculateOrderAmount($order, $ENV): int
+function calculateOrderAmountInCents($order, $ENV): int
 {
     $products_to_basket = $order->products;
 
@@ -219,4 +219,25 @@ function calculateOrderAmount($order, $ENV): int
     };
     $error_message = "calculateOrderAmount failed. deliveryOption: $order->deliveryOption | \$wanted_ids: $wanted_ids ";
     throw new Error($error_message);
+}
+
+/**
+ * 
+ *
+ * @param string $key 
+ * @param string $value 
+ * @param string $regexValue 
+ * 
+ * @return boolean URL ex: http://jegwell.fr/myStyle.css?123456
+ */
+function handleInputValidation($key, $value, $regexValue)
+{
+
+    $required_inputs = array('name', 'email', 'delivery', 'address-line-1', 'country', 'postal-code', 'city');
+    $isRequired = in_array($key, $required_inputs, true);
+
+    $additionalCondition = $isRequired ? false : ($value === '');
+    $isRegexFollowed = ((preg_match($regexValue, $value) >= 1) or $additionalCondition);
+
+    return $isRegexFollowed;
 }

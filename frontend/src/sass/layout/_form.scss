@@ -35,6 +35,17 @@
       & label {
         width: 100%;
       }
+
+      &.invalid {
+        & .form__input-label-wrapper {
+          border-color: red;
+        }
+
+        & .form__error-message {
+          display: unset;
+          margin-inline: auto;
+        }
+      }
     }
   }
   &__legend {

@@ -237,6 +237,7 @@ function updateBasket(productId, productOption, key, value) {
     }
 }
 export function handleFormSubmit(event) {
+    var _a, _b;
     const form = document.querySelector(".form");
     let isFormValid = null;
     // checks all inputs value
@@ -246,30 +247,47 @@ export function handleFormSubmit(event) {
         for (const entry of data) {
             let newRegex = null;
             switch (entry[0]) {
-                case "phone-number":
+                case "phoneNumber":
                     newRegex = /^[0-9]{10,}$/;
-                case "delivery":
-                    // newRegex = newRegex ?? /^[express|folowed-letter]$/
-                    newRegex = newRegex !== null && newRegex !== void 0 ? newRegex : /.*/;
-                    console.log(entry);
-                case "address-line-1":
+                case "addressLine1":
+                case "addressLine2":
                     newRegex = newRegex !== null && newRegex !== void 0 ? newRegex : /[a-z0-9]+/i;
-                case "postal-code":
+                case "postalCode":
                     newRegex = newRegex !== null && newRegex !== void 0 ? newRegex : /^(?:0[1-9]|[1-8]\d|9[0-8])\d{3}$/;
                 case "email":
-                    newRegex = newRegex !== null && newRegex !== void 0 ? newRegex : /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/g;
+                    newRegex = newRegex !== null && newRegex !== void 0 ? newRegex : /^[a-z0-9!-~]+(?:\.[a-z0-9!-~]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
                 case "firstname":
                 case "lastname":
                 case "city":
                     const regex = newRegex !== null && newRegex !== void 0 ? newRegex : /^[a-z]+$/i;
                     const result = handleInputValidation(entry, regex);
-                    isFormValid = isFormValid ? result : isFormValid;
+                    isFormValid = isFormValid !== false ? result : isFormValid;
                     break;
                 default:
                     break;
             }
         }
         ;
+        const deliveryChosen = document.querySelector(".form__input--radio:checked");
+        const deliveryChosenInvalid = (_b = (_a = document.querySelector(".form__input--radio")) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.closest(".form__fieldset--radio.invalid");
+        if (deliveryChosen === null) {
+            const radioInputs = document.querySelectorAll(".form__input--radio");
+            radioInputs.forEach(input => {
+                var _a, _b;
+                (_b = (_a = input === null || input === void 0 ? void 0 : input.parentElement) === null || _a === void 0 ? void 0 : _a.closest(".form__fieldset--radio")) === null || _b === void 0 ? void 0 : _b.classList.add("invalid");
+            });
+            isFormValid = false;
+        }
+        else if (deliveryChosen != null && deliveryChosenInvalid != null) {
+            // si une option de livraison est choisi ET que les inputs affichés sont rouge (précédemment invalide)
+            const radioInputs = document.querySelectorAll(".form__input--radio");
+            radioInputs.forEach(input => {
+                var _a, _b;
+                // on retire la classe invalid
+                (_b = (_a = input === null || input === void 0 ? void 0 : input.parentElement) === null || _a === void 0 ? void 0 : _a.closest(".form__fieldset--radio")) === null || _b === void 0 ? void 0 : _b.classList.remove("invalid");
+            });
+            isFormValid = isFormValid ? true : isFormValid;
+        }
         if (isFormValid === false) {
             event === null || event === void 0 ? void 0 : event.preventDefault();
             const firstInvalidInput = document.querySelector(".invalid");
@@ -295,6 +313,17 @@ export function handleFormSubmit(event) {
         }
         return isRegexFollowed;
     }
+}
+export function deleteCookie(name) {
+    document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+export function handleAfterPaymentSucceeded() {
+    // delete productsToBasket and deliveryOption cookie
+    deleteCookie("productsToBasket");
+    deleteCookie("deliveryOption");
+    // create an order on sanity
+    // send email to customer
+    // forward to jegwell
 }
 function addToCookies(key, value, days) {
     const date = new Date();

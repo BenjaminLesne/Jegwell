@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { getCookie } from "../utils/functions.js";
+import { getCookie, deleteCookie } from "../utils/functions.js";
 
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
@@ -67,7 +67,7 @@ async function initialize() {
     const paymentElement = elements.create("payment");
     paymentElement.mount("#payment-element");
 
-    const payButton = document.querySelector('#submit');
+    const payButton = document.querySelector('#button-text');
     const totalPriceInEuros = totalPriceInCents / 100;
     payButton.textContent = `Payer ${totalPriceInEuros} €`;
 }
@@ -80,7 +80,7 @@ async function handleSubmit(e) {
         elements,
         confirmParams: {
             // Make sure to change this to your payment completion page
-            return_url: "http://localhost:4242/public/checkout.html",
+            return_url: "http://localhost:8080/src/pages/success.php",
         },
     });
 
@@ -113,15 +113,21 @@ async function checkStatus() {
     switch (paymentIntent.status) {
         case "succeeded":
             showMessage("Payment succeeded!");
+
+            // réinitialise le panier et la livraison choisi
+            deleteCookie("productsToBasket")
+            deleteCookie("deliveryOption")
+
+
             break;
         case "processing":
-            showMessage("Your payment is processing.");
+            showMessage("Paiement en cours.");
             break;
         case "requires_payment_method":
-            showMessage("Your payment was not successful, please try again.");
+            showMessage("Votre paiement n'a pas abouti, veuillez réessayer.");
             break;
         default:
-            showMessage("Something went wrong.");
+            showMessage("Une erreur est survenue.");
             break;
     }
 }

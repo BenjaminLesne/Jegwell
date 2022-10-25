@@ -7,8 +7,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var _a;
 // @ts-nocheck
-import { getCookie } from "../utils/functions.js";
+import { getCookie, deleteCookie } from "../utils/functions.js";
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
 // Sign in to see your own test API key embedded in code samples.
@@ -35,14 +36,11 @@ if (deliveryOption === null || deliveryOption === '') {
 const items = JSON.parse(itemsJson);
 const order = { products: items, deliveryOption: deliveryOption };
 const orderStringified = JSON.stringify(order);
-console.log("orderStringified");
-console.log(orderStringified);
 let elements;
 initialize();
 checkStatus();
-document
-    .querySelector("#payment-form")
-    .addEventListener("submit", handleSubmit);
+(_a = document
+    .querySelector("#payment-form")) === null || _a === void 0 ? void 0 : _a.addEventListener("submit", handleSubmit);
 // Fetches a payment intent and captures the client secret
 function initialize() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -58,7 +56,7 @@ function initialize() {
         elements = stripe.elements({ clientSecret });
         const paymentElement = elements.create("payment");
         paymentElement.mount("#payment-element");
-        const payButton = document.querySelector('#submit');
+        const payButton = document.querySelector('#button-text');
         const totalPriceInEuros = totalPriceInCents / 100;
         payButton.textContent = `Payer ${totalPriceInEuros} €`;
     });
@@ -71,7 +69,7 @@ function handleSubmit(e) {
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
-                return_url: "http://localhost:4242/public/checkout.html",
+                return_url: "http://localhost:8080/src/pages/success.php",
             },
         });
         // This point will only be reached if there is an immediate error when
@@ -99,6 +97,9 @@ function checkStatus() {
         switch (paymentIntent.status) {
             case "succeeded":
                 showMessage("Payment succeeded!");
+                // réinitialise le panier et la livraison choisi
+                deleteCookie("productsToBasket");
+                deleteCookie("deliveryOption");
                 break;
             case "processing":
                 showMessage("Your payment is processing.");

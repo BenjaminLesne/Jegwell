@@ -332,31 +332,55 @@ export function handleFormSubmit(event: MouseEvent) {
       let newRegex: RegExp | null = null;
 
       switch (entry[0]) {
-        case "phone-number":
+        case "phoneNumber":
           newRegex = /^[0-9]{10,}$/
-        case "delivery":
-          // newRegex = newRegex ?? /^[express|folowed-letter]$/
-          newRegex = newRegex ?? /.*/
-          console.log(entry)
-        case "address-line-1":
+        case "addressLine1":
+        case "addressLine2":
           newRegex = newRegex ?? /[a-z0-9]+/i
-        case "postal-code":
+        case "postalCode":
           newRegex = newRegex ?? /^(?:0[1-9]|[1-8]\d|9[0-8])\d{3}$/
         case "email":
-          newRegex = newRegex ?? /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/g
+          newRegex = newRegex ?? /^[a-z0-9!-~]+(?:\.[a-z0-9!-~]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
+
         case "firstname":
         case "lastname":
         case "city":
           const regex = newRegex ?? /^[a-z]+$/i;
           const result = handleInputValidation(entry, regex)
 
-          isFormValid = isFormValid ? result : isFormValid;
+          isFormValid = isFormValid !== false ? result : isFormValid;
           break;
 
         default:
           break;
       }
+
     };
+
+    const deliveryChosen = document.querySelector(".form__input--radio:checked")
+    const deliveryChosenInvalid = document.querySelector(".form__input--radio")?.parentElement?.closest(".form__fieldset--radio.invalid")
+
+    if (deliveryChosen === null) {
+      const radioInputs = document.querySelectorAll(".form__input--radio")
+
+      radioInputs.forEach(input => {
+        input?.parentElement?.closest(".form__fieldset--radio")?.classList.add("invalid")
+
+      });
+
+      isFormValid = false;
+    } else if (deliveryChosen != null && deliveryChosenInvalid != null) {
+      // si une option de livraison est choisi ET que les inputs affichés sont rouge (précédemment invalide)
+      const radioInputs = document.querySelectorAll(".form__input--radio")
+
+      radioInputs.forEach(input => {
+        // on retire la classe invalid
+        input?.parentElement?.closest(".form__fieldset--radio")?.classList.remove("invalid")
+
+      });
+
+      isFormValid = isFormValid ? true : isFormValid;
+    }
 
     if (isFormValid === false) {
       event?.preventDefault()
@@ -388,6 +412,22 @@ export function handleFormSubmit(event: MouseEvent) {
   }
 }
 
+export function deleteCookie(name: string) {
+  document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+export function handleAfterPaymentSucceeded() {
+  // delete productsToBasket and deliveryOption cookie
+  deleteCookie("productsToBasket")
+  deleteCookie("deliveryOption")
+
+  // create an order on sanity
+
+  // send email to customer
+
+  // forward to jegwell
+}
+
 function addToCookies(key: string, value: string, days: number) {
 
   const date = new Date();
@@ -398,5 +438,7 @@ function addToCookies(key: string, value: string, days: number) {
   document.cookie = key + '=' + value + expiriringDate;
 
 }
+
+
 
 
