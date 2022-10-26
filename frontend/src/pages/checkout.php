@@ -3,6 +3,7 @@ include_once dirname(__FILE__, 2) . '/utils/functions.php';
 
 use function Jegwell\functions\getFileUrl;
 use function Jegwell\functions\handleInputValidation;
+use Sanity\Exception\BaseException;
 
 
 use Sanity\Client as SanityClient;
@@ -28,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' and empty($_POST) == false) {
     };
 } else {
     $required_inputs_exists = false;
+    array_push($wrong_inputs, 'request method not post or empty $_POST');
 }
 
 if ($required_inputs_exists) {
@@ -79,17 +81,38 @@ if ($required_inputs_exists) {
 
         $products_to_basket = json_decode($_COOKIE["productsToBasket"]);
 
+        $deliveryReference = (object) [
+            '_type' => 'reference',
+            '_ref' => htmlspecialchars(htmlspecialchars($_POST['delivery'])),
+        ];
+
+
+        for ($index = 0; $index < count($products_to_basket); $index++) {
+            // On formate les variables pour Sanity 
+            $products_to_basket[$index]->_key = strval($index);
+            $products_to_basket[$index]->_type = 'productToBasket';
+            $products_to_basket[$index]->id = (object) [
+                '_type' => 'reference',
+                '_ref' => htmlspecialchars($products_to_basket[$index]->id),
+            ];
+        }
+
+
+
+
+
+
         $order = [
             '_type' => 'order',
             'paid' => false,
             // 'price' => htmlspecialchars(valueGivenByUser),
             // 'paymentIntentId' => htmlspecialchars(valueGivenByUser),
-            'productsToBasket' => htmlspecialchars($products_to_basket),
+            'productsToBasket' => $products_to_basket,
             'firstname'  => htmlspecialchars($_POST['firstname']),
             'lastname' => htmlspecialchars($_POST['lastname']),
             'email' => htmlspecialchars($_POST['email']),
             'phoneNumber' => htmlspecialchars($_POST['phoneNumber']),
-            'delivery' => htmlspecialchars($_POST['delivery']),
+            'delivery' => $deliveryReference,
             'addressLine1' => htmlspecialchars($_POST['addressLine1']),
             'addressLine2' => htmlspecialchars($_POST['addressLine2']),
             'country' => htmlspecialchars($_POST['country']),
@@ -98,7 +121,14 @@ if ($required_inputs_exists) {
             'comment' => htmlspecialchars($_POST['comment']),
         ];
 
-        $newOrder = $sanity->create($order);
+        try {
+            $newOrder = $sanity->create($order);
+        } catch (BaseException $error) {
+            array_push($wrong_inputs, 'order creation failed');
+            var_dump($error);
+        }
+
+
 
         // Afin que JavaScript puisse utiliser deliveryOption coté client
         setcookie(
@@ -138,8 +168,16 @@ if ($required_inputs_exists) {
 
     <?php
     } else {
-        echo $required_inputs_exists;
-        echo print_r($wrong_inputs);
+        // echo '<pre>';
+        // echo 'Les entrées nécessaire existent :';
+        // echo $required_inputs_exists ? 'true' : 'false';
+        // echo '</pre>';
+
+        // echo '<pre>';
+        // echo 'entrées erronées :';
+        // echo var_dump($wrong_inputs);
+        // echo '</pre>';
+
     ?>
         <p class="" style="margin: 40px auto 0 auto; text-align: center;width:100%">Nous manquons d'information vous concernant pour effectuer le paiement !</p>
         <a href="<?php echo $_ENV['HOME'] . '/panier/livraison' ?>" style="margin: 40px auto 0 auto; text-align: center;width:100%" class="">Cliquez ici pour revenir au formulaire.</a>

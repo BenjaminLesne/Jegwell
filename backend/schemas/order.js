@@ -112,7 +112,7 @@ export default {
     },
 
     {
-      name: "commment",
+      name: "comment",
       type: "string",
       title: "Commentaire client",
       readOnly: true,
@@ -124,7 +124,6 @@ export default {
       title: "Commentaire interne",
       description:
         "Si tu as besoin d'ajouter un pense-bête sur la commande, mets le ici.",
-      readOnly: true,
     },
   ],
 };
