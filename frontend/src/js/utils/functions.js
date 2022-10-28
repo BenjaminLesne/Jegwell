@@ -315,15 +315,12 @@ export function handleFormSubmit(event) {
     }
 }
 export function deleteCookie(name) {
-    document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    addToCookies(name, "", 0);
 }
 export function handleAfterPaymentSucceeded() {
     // delete productsToBasket and deliveryOption cookie
     deleteCookie("productsToBasket");
     deleteCookie("deliveryOption");
-    // create an order on sanity
-    // send email to customer
-    // forward to jegwell
 }
 function addToCookies(key, value, days) {
     const date = new Date();

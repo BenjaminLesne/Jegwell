@@ -69,7 +69,7 @@ async function initialize() {
 
     const payButton = document.querySelector('#button-text');
     const totalPriceInEuros = totalPriceInCents / 100;
-    payButton.textContent = `Payer ${totalPriceInEuros} €`;
+    payButton.textContent = `Payer ${totalPriceInEuros} € TTC`;
 }
 
 async function handleSubmit(e) {
@@ -113,12 +113,6 @@ async function checkStatus() {
     switch (paymentIntent.status) {
         case "succeeded":
             showMessage("Payment succeeded!");
-
-            // réinitialise le panier et la livraison choisi
-            deleteCookie("productsToBasket")
-            deleteCookie("deliveryOption")
-
-
             break;
         case "processing":
             showMessage("Paiement en cours.");

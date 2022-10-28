@@ -7,9 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var _a;
 // @ts-nocheck
-import { getCookie, deleteCookie } from "../utils/functions.js";
+import { getCookie } from "../utils/functions.js";
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
 // Sign in to see your own test API key embedded in code samples.
@@ -39,8 +38,9 @@ const orderStringified = JSON.stringify(order);
 let elements;
 initialize();
 checkStatus();
-(_a = document
-    .querySelector("#payment-form")) === null || _a === void 0 ? void 0 : _a.addEventListener("submit", handleSubmit);
+document
+    .querySelector("#payment-form")
+    .addEventListener("submit", handleSubmit);
 // Fetches a payment intent and captures the client secret
 function initialize() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -58,7 +58,7 @@ function initialize() {
         paymentElement.mount("#payment-element");
         const payButton = document.querySelector('#button-text');
         const totalPriceInEuros = totalPriceInCents / 100;
-        payButton.textContent = `Payer ${totalPriceInEuros} €`;
+        payButton.textContent = `Payer ${totalPriceInEuros} € TTC`;
     });
 }
 function handleSubmit(e) {
@@ -97,18 +97,15 @@ function checkStatus() {
         switch (paymentIntent.status) {
             case "succeeded":
                 showMessage("Payment succeeded!");
-                // réinitialise le panier et la livraison choisi
-                deleteCookie("productsToBasket");
-                deleteCookie("deliveryOption");
                 break;
             case "processing":
-                showMessage("Your payment is processing.");
+                showMessage("Paiement en cours.");
                 break;
             case "requires_payment_method":
-                showMessage("Your payment was not successful, please try again.");
+                showMessage("Votre paiement n'a pas abouti, veuillez réessayer.");
                 break;
             default:
-                showMessage("Something went wrong.");
+                showMessage("Une erreur est survenue.");
                 break;
         }
     });

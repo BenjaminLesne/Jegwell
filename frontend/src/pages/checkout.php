@@ -83,7 +83,7 @@ if ($required_inputs_exists) {
 
         $deliveryReference = (object) [
             '_type' => 'reference',
-            '_ref' => htmlspecialchars(htmlspecialchars($_POST['delivery'])),
+            '_ref' => htmlspecialchars($_POST['delivery']),
         ];
 
 

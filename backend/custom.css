@@ -1,3 +1,0 @@
-input[label="Payé"]:disabled:checked + span span:nth-child(1) {
-  --switch-bg-color: #3ab564;
-}
