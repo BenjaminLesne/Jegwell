@@ -538,8 +538,45 @@ class CheckoutPage(BasePage):
         return result
 
 
-        
-    
+class DeliveryPage(BasePage):
+
+    def does_it_submit_on_wrong_inputs(self):
+        lastname_input = self.chrome_driver.find_element(*DeliveryPageLocators.LASTNAME_INPUT)
+        email_input = self.chrome_driver.find_element(*DeliveryPageLocators.EMAIL_INPUT)
+        express_input = self.chrome_driver.find_element(*DeliveryPageLocators.EXPRESS_INPUT)
+        followed_letter_input = self.chrome_driver.find_element(*DeliveryPageLocators.FOLLOWED_LETTER_INPUT)
+        address_line_1_input = self.chrome_driver.find_element(*DeliveryPageLocators.ADDRESS_LINE_1_INPUT)
+        postal_code_input = self.chrome_driver.find_element(*DeliveryPageLocators.POSTAL_CODE_INPUT)
+        city_input = self.chrome_driver.find_element(*DeliveryPageLocators.CITY_INPUT)
+        submit_button = self.chrome_driver.find_element(*DeliveryPageLocators.SUBMIT_BUTTON)
+
+        # tous les inputs devraient être invalid à la soumission du formulaire
+
+        #   tous les champs sont vide
+        self.chrome_driver.execute_script('return arguments[0].scrollIntoView()', submit_button)
+        time.sleep(1)
+        submit_button.click()
+
+        #   tous les champs contiennent des mauvaises valeurs
+        self.chrome_driver.execute_script('return arguments[0].scrollIntoView()', lastname_input)
+        time.sleep(1)
+
+        ActionChains(self.chrome_driver)\
+        .send_keys_to_element(lastname_input, "123")\
+        .send_keys_to_element(email_input, "not an email")\
+        .perform()
+
+        self.chrome_driver.execute_script('return arguments[0].scrollIntoView()', postal_code_input)
+
+        ActionChains(self.chrome_driver)\
+        .pause(1)\
+        .send_keys_to_element(postal_code_input, "e")\
+        .send_keys_to_element(city_input, "123")\
+        .perform()
+
+        submit_button.click()
+
+        # test with code injection <?php ?> " // stuf like that
              
 
 

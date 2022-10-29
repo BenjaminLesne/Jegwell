@@ -11,7 +11,7 @@ class DeliveryPage(unittest.TestCase):
         self.chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
         delivery_page_url = "http://localhost:8080/src/pages/delivery.php"
         products_page_url = "http://localhost:8080/src/pages/products.php"
-        self.checkoutPage = page.CheckoutPage(self.chrome_driver)
+        self.deliveryPage = page.DeliveryPage(self.chrome_driver)
 
         self.chrome_driver.get(products_page_url)
 
@@ -23,10 +23,8 @@ class DeliveryPage(unittest.TestCase):
 
 
     def test_submit_wrong_inputs(self):
-        # expected_delivery_alert_message = "Nous ne trouvons pas votre méthode de récupération. Vous allez être redirigé vers la page de livraison !"
-        # redirect_on_empty_delivery_option = self.checkoutPage.does_it_redirect_when_cookie_missing("deliveryOption", expected_delivery_alert_message, "http://localhost/panier/livraison")
-        # assert redirect_on_empty_delivery_option
-        assert False
+        submit_on_wrong_inputs = self.deliveryPage.does_it_submit_on_wrong_inputs()
+        assert submit_on_wrong_inputs == False
 
     def test_submit_good_inputs(self):
         # expected_basket_alert_message = "Votre panier est vide. Vous allez être redirigé vers les créations Jegwell !"
