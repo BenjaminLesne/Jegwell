@@ -1,0 +1,138 @@
+export default {
+  name: "order",
+  type: "document",
+  title: "Commande",
+  fields: [
+    {
+      name: "paid",
+      type: "boolean",
+      title: "Payé",
+      description: "Vers la droite = payé, vers la gauche = non payé",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "emailSent",
+      type: "boolean",
+      title: "Email de confirmation envoyé au client",
+      description: "Vers la droite = envoyé, vers la gauche = non envoyé",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "paymentIntentId",
+      type: "string",
+      title: "Identifiant de tentative de paiement Stripe",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "paymentIntentClientSecret",
+      type: "string",
+      title: "Identifiant client après paiement réussi",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "price",
+      type: "number",
+      title: "Prix",
+      description: "C'est en centimes d'euros, 14€ = 1400",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "productsToBasket",
+      type: "array",
+      of: [{ type: "productToBasket" }],
+      title: "Produits dans le panier client",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "firstname",
+      type: "string",
+      title: "Prénom",
+      readOnly: true,
+    },
+    {
+      name: "lastname",
+      type: "string",
+      title: "Nom de famille",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "email",
+      type: "string",
+      title: "email",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "phoneNumber",
+      type: "string",
+      title: "Téléphone",
+      readOnly: true,
+    },
+    {
+      name: "delivery",
+      type: "reference",
+      to: [{ type: "deliveryOption" }],
+      title: "Livraison choisi",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "addressLine1",
+      type: "string",
+      title: "Adresse ligne 1",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: "addressLine2",
+      type: "string",
+      title: "Adresse ligne 2",
+      readOnly: true,
+    },
+    {
+      name: "country",
+      type: "string",
+      title: "Pays",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+
+    {
+      name: "postalCode",
+      type: "string",
+      title: "Code postal",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+
+    {
+      name: "city",
+      type: "string",
+      title: "Ville",
+      readOnly: true,
+      validation: (Rule) => Rule.required(),
+    },
+
+    {
+      name: "comment",
+      type: "string",
+      title: "Commentaire client",
+      readOnly: true,
+    },
+
+    {
+      name: "internalComment",
+      type: "string",
+      title: "Commentaire interne",
+      description:
+        "Si tu as besoin d'ajouter un pense-bête sur la commande, mets le ici.",
+    },
+  ],
+};

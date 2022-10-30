@@ -9,18 +9,27 @@ class CheckoutPage(unittest.TestCase):
 
     def setUp(self):
         self.chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+        self.checkoutPage = page.CheckoutPage(self.chrome_driver)
+
         checkout_page_url = "http://localhost:8080/src/pages/checkout.php"
         products_page_url = "http://localhost:8080/src/pages/products.php"
-        self.checkoutPage = page.CheckoutPage(self.chrome_driver)
+        delivery_page_url = "http://localhost:8080/src/pages/delivery.php"
 
         self.chrome_driver.get(products_page_url)
 
         productsPage = page.ProductsPage(self.chrome_driver)
         # ajoute un produit a notre panier
         productsPage.does_add_to_basket_create_right_cookie()
-        
-        self.chrome_driver.get(checkout_page_url)
 
+        self.chrome_driver.get(delivery_page_url)
+
+        deliveryPage = page.DeliveryPage(self.chrome_driver)
+        # envoie un formulaire correcte afin d'être redirigé vers la page de paiement
+        deliveryPage.does_it_submit_on_good_inputs()
+
+    def test_stripe_token(self):
+        is_right_token = self.checkoutPage.is_it_right_token()
+        assert is_right_token
 
     def test_empty_deliveryOption_cookie(self):
         # expected_delivery_alert_message = "Nous ne trouvons pas votre méthode de récupération. Vous allez être redirigé vers la page de livraison !"
@@ -41,22 +50,16 @@ class CheckoutPage(unittest.TestCase):
         assert False
 
     def test_wrong_card_credentials(self):
-        assert False
+        does_not_submit_on_wrong_credentials = self.checkoutPage.does_it_submit_on_wrong_credentials()
+        assert does_not_submit_on_wrong_credentials
 
     def test_refunds(self):
         # https://stripe.com/docs/testing
         assert False
 
-    def test_redirection_on_success_payment(self):
-        assert False
-
-
-
-
-
-    
-
- 
+    def test_redirection_on_success_payment(self):    
+        redirect_on_payment_success = self.checkoutPage.does_it_redirection_on_success_payment()
+        assert redirect_on_payment_success
       
 
     def tearDown(self):

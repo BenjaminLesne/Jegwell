@@ -1,0 +1,79 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.form__fieldset {
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+.form__fieldset .invalid .form__input {
+  border-color: red;
+}
+.form__fieldset .invalid .form__error-message {
+  display: unset;
+}
+.form__fieldset--radio .form__input-label-wrapper {
+  display: flex;
+  gap: 0;
+  padding-block: 0;
+}
+.form__fieldset--radio .form__input-label-wrapper > * {
+  padding: 11px;
+}
+.form__fieldset--radio label {
+  width: 100%;
+}
+.form__fieldset--radio.invalid .form__input-label-wrapper {
+  border-color: red;
+}
+.form__fieldset--radio.invalid .form__error-message {
+  display: unset;
+  margin-inline: auto;
+}
+.form__legend {
+  width: 100%;
+  text-align: center;
+}
+.form__input {
+  box-sizing: border-box;
+}
+.form__input--radio {
+  width: unset;
+  margin: 0;
+}
+.form__label.required::after {
+  content: "*";
+  color: red;
+}
+.form__error-message {
+  display: none;
+  margin: 0;
+  font-size: 0.75rem;
+  color: red;
+}
+.form__textarea {
+  resize: none;
+}
+.form__tel {
+  display: flex;
+  flex-direction: column;
+}
+.form__tel--country-code {
+  width: 90px;
+}
+.form__tel--number {
+  flex: 1;
+}
+.form__tel-wrapper {
+  display: flex;
+  gap: 7px;
+}
+
+.section__h2--margin-bottom-reduced {
+  padding-bottom: calc(var(--page-padding-top) / 2);
+}

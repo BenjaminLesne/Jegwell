@@ -3,6 +3,7 @@ node_modules/
 
 # custom
 .env
+.htaccess
 .phpunit.result.cache
 vendor
 /logs/

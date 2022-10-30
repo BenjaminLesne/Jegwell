@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from selenium.common.exceptions import ElementNotVisibleException, ElementNotSelectableException, UnexpectedAlertPresentException
+from selenium.common.exceptions import ElementNotVisibleException, ElementNotSelectableException, UnexpectedAlertPresentException, NoSuchElementException
 
 from locator import *
 
@@ -538,8 +538,225 @@ class CheckoutPage(BasePage):
         return result
 
 
+class DeliveryPage(BasePage):
+
+    def does_it_submit_on_wrong_inputs(self):
+        lastname_input = self.chrome_driver.find_element(*DeliveryPageLocators.LASTNAME_INPUT)
+        lastname_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.LASTNAME_ERROR_MESSAGE)
+
+        email_input = self.chrome_driver.find_element(*DeliveryPageLocators.EMAIL_INPUT)
+        email_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.EMAIL_ERROR_MESSAGE)
+
+        delivery_input_wrapper = self.chrome_driver.find_element(*DeliveryPageLocators.DELIVERY_INPUT_WRAPPER)
+        delivery_input_wrapper_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.DELIVERY_INPUT_WRAPPER_ERROR_MESSAGE)
+
+        express_input = self.chrome_driver.find_element(*DeliveryPageLocators.EXPRESS_INPUT)
+
+        followed_letter_input = self.chrome_driver.find_element(*DeliveryPageLocators.FOLLOWED_LETTER_INPUT)
+
+        address_line_1_input = self.chrome_driver.find_element(*DeliveryPageLocators.ADDRESS_LINE_1_INPUT)
+        address_line_1_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.ADDRESS_LINE_1_ERROR_MESSAGE)
+
+        postal_code_input = self.chrome_driver.find_element(*DeliveryPageLocators.POSTAL_CODE_INPUT)
+        postal_code_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.POSTAL_CODE_ERROR_MESSAGE)
+
+        city_input = self.chrome_driver.find_element(*DeliveryPageLocators.CITY_INPUT)
+        city_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.CITY_ERROR_MESSAGE)
+
+        submit_button = self.chrome_driver.find_element(*DeliveryPageLocators.SUBMIT_BUTTON)
+
+        results = []
+        # tous les inputs devraient être invalid à la soumission du formulaire
+        wait = WebDriverWait(self.chrome_driver, timeout=3, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException])
+
+        #   tous les champs sont vide
+        self.chrome_driver.execute_script('return arguments[0].scrollIntoView()', submit_button)
+        time.sleep(1)
+        submit_button.click()
+
+        invalid_inputs = self.chrome_driver.find_elements(By.CSS_SELECTOR, ".invalid")
+        results.append(len(invalid_inputs) == 6)
+
+        def checkAllErrorMessagesExist():
+            lastname_error_message_visible = wait.until(expected_conditions.visibility_of(lastname_error_message))
+            email_error_message_visible = wait.until(expected_conditions.visibility_of(email_error_message))
+            delivery_input_wrapper_error_message = wait.until(expected_conditions.visibility_of(delivery_input_wrapper))
+            address_line_1_error_message_visible = wait.until(expected_conditions.visibility_of(address_line_1_error_message))
+            postal_code_error_message_visible = wait.until(expected_conditions.visibility_of(postal_code_error_message))
+
+        checkAllErrorMessagesExist()
+
+
+
+        #   tous les champs contiennent des mauvaises valeurs
+        self.chrome_driver.execute_script('return arguments[0].scrollIntoView()', lastname_input)
+        time.sleep(1)
+
+        ActionChains(self.chrome_driver)\
+        .send_keys_to_element(lastname_input, "123")\
+        .send_keys_to_element(email_input, "not an email")\
+        .perform()
+
+        self.chrome_driver.execute_script('return arguments[0].scrollIntoView()', postal_code_input)
+
+        ActionChains(self.chrome_driver)\
+        .pause(1)\
+        .send_keys_to_element(postal_code_input, "e")\
+        .send_keys_to_element(city_input, "123")\
+        .perform()
+
+        submit_button.click()
+
+        invalid_inputs = self.chrome_driver.find_elements(By.CSS_SELECTOR, ".invalid")
+        results.append(len(invalid_inputs) == 6)
+
+        checkAllErrorMessagesExist()
+
+        return False in results
+
+    def does_it_submit_on_good_inputs(self):
+        lastname_input = self.chrome_driver.find_element(*DeliveryPageLocators.LASTNAME_INPUT)
+        lastname_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.LASTNAME_ERROR_MESSAGE)
+
+        email_input = self.chrome_driver.find_element(*DeliveryPageLocators.EMAIL_INPUT)
+        email_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.EMAIL_ERROR_MESSAGE)
+
+        delivery_input_wrapper = self.chrome_driver.find_element(*DeliveryPageLocators.DELIVERY_INPUT_WRAPPER)
+        delivery_input_wrapper_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.DELIVERY_INPUT_WRAPPER_ERROR_MESSAGE)
+
+        express_input = self.chrome_driver.find_element(*DeliveryPageLocators.EXPRESS_INPUT)
+
+        followed_letter_input = self.chrome_driver.find_element(*DeliveryPageLocators.FOLLOWED_LETTER_INPUT)
+
+        address_line_1_input = self.chrome_driver.find_element(*DeliveryPageLocators.ADDRESS_LINE_1_INPUT)
+        address_line_1_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.ADDRESS_LINE_1_ERROR_MESSAGE)
+
+        postal_code_input = self.chrome_driver.find_element(*DeliveryPageLocators.POSTAL_CODE_INPUT)
+        postal_code_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.POSTAL_CODE_ERROR_MESSAGE)
+
+        city_input = self.chrome_driver.find_element(*DeliveryPageLocators.CITY_INPUT)
+        city_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.CITY_ERROR_MESSAGE)
+
+        submit_button = self.chrome_driver.find_element(*DeliveryPageLocators.SUBMIT_BUTTON)
+
+        # tous les champs sont correctes
+        # #   réinitialise tous les champs
+        # lastname_input.clear()
+        # email_input.clear()
+        # postal_code_input.clear()
+        # city_input.clear()
+        # address_line_1_input.clear()
+
+        self.chrome_driver.execute_script('return arguments[0].scrollIntoView()', lastname_input)
+        time.sleep(1)
+
+        ActionChains(self.chrome_driver)\
+        .send_keys_to_element(lastname_input, "Doe")\
+        .send_keys_to_element(email_input, "ben35170@hotmail.fr")\
+        .click(express_input)\
+        .perform()
+
+        self.chrome_driver.execute_script('return arguments[0].scrollIntoView()', address_line_1_input)
+
+        ActionChains(self.chrome_driver)\
+        .pause(1)\
+        .send_keys_to_element(address_line_1_input, "32 rue des Champs")\
+        .send_keys_to_element(postal_code_input, "75019")\
+        .send_keys_to_element(city_input, "Paris")\
+        .perform()
+
+        submit_button.click()
+
+        # results.append(self.chrome_driver.current_url ===)
+        wait2 = WebDriverWait(self.chrome_driver, timeout=3, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException])
+        checkout_page_title = wait2.until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, '.section__h2'), 'PAIEMENT'))
+
+        return True
+
         
-    
-             
+class CheckoutPage(BasePage):
 
+    def is_it_right_token(self):      
+        wait = WebDriverWait(self.chrome_driver, timeout=10, poll_frequency=1, ignored_exceptions=[NoSuchElementException])
+        submit_button = wait.until(expected_conditions.presence_of_element_located(CheckoutPageLocators.SUBMIT_BUTTON))
+        
+        token = submit_button.get_attribute("data-token")
 
+        return token == 'pk_test_oKhSR5nslBRnBZpjO6KuzZeX'
+
+    def does_it_submit_on_wrong_credentials(self):
+        result = False
+
+        if(self.is_it_right_token()):
+            # on ne peut pas accéder aux élements de l'iframe de Stripe si on ne 'switch' pas dessus
+            # et elle doit être chargé dont on attends quelques secondes avant de faire quoique ce soit
+            time.sleep(3)
+            iframe = self.chrome_driver.find_element(*CheckoutPageLocators.IFRAME)
+            self.chrome_driver.switch_to.frame(iframe)
+
+            wait = WebDriverWait(self.chrome_driver, timeout=5, poll_frequency=1, ignored_exceptions=[NoSuchElementException])
+
+            card_number_input = wait.until(expected_conditions.presence_of_element_located(CheckoutPageLocators.CARD_NUMBER_INPUT))
+            expiry_input = wait.until(expected_conditions.presence_of_element_located(CheckoutPageLocators.EXPIRY_INPUT))
+            cvc_input = wait.until(expected_conditions.presence_of_element_located(CheckoutPageLocators.CVC_INPUT))
+            
+
+            ActionChains(self.chrome_driver)\
+            .send_keys_to_element(card_number_input, "1234 1234 1234 1234")\
+            .send_keys_to_element(expiry_input, "10 / 50")\
+            .send_keys_to_element(cvc_input, "123")\
+            .perform()
+
+            # switch back to default content
+            self.chrome_driver.switch_to.default_content()
+            submit_button = wait.until(expected_conditions.presence_of_element_located(CheckoutPageLocators.SUBMIT_BUTTON))
+
+            submit_button.click()
+
+            self.chrome_driver.switch_to.frame(iframe)
+            field_number_error = wait.until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, '#Field-numberError'), 'Your card number is invalid.'))            
+
+            result = True
+
+        
+
+        return result
+
+    def does_it_redirection_on_success_payment(self):
+        result = False
+
+        if(self.is_it_right_token()):
+            # on ne peut pas accéder aux élements de l'iframe de Stripe si on ne 'switch' pas dessus
+            # et elle doit être chargé dont on attends quelques secondes avant de faire quoique ce soit
+            time.sleep(3)
+            iframe = self.chrome_driver.find_element(*CheckoutPageLocators.IFRAME)
+            self.chrome_driver.switch_to.frame(iframe)
+
+            wait = WebDriverWait(self.chrome_driver, timeout=5, poll_frequency=1, ignored_exceptions=[NoSuchElementException])
+
+            card_number_input = wait.until(expected_conditions.presence_of_element_located(CheckoutPageLocators.CARD_NUMBER_INPUT))
+            expiry_input = wait.until(expected_conditions.presence_of_element_located(CheckoutPageLocators.EXPIRY_INPUT))
+            cvc_input = wait.until(expected_conditions.presence_of_element_located(CheckoutPageLocators.CVC_INPUT))
+            
+
+            ActionChains(self.chrome_driver)\
+            .send_keys_to_element(card_number_input, "4242 4242 4242 4242")\
+            .send_keys_to_element(expiry_input, "10 / 50")\
+            .send_keys_to_element(cvc_input, "123")\
+            .perform()
+
+            # switch back to default content
+            self.chrome_driver.switch_to.default_content()
+            submit_button = wait.until(expected_conditions.presence_of_element_located(CheckoutPageLocators.SUBMIT_BUTTON))
+
+            submit_button.click()
+
+            success_page_title = wait.until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, '.section__h2'), 'PAIEMENT RÉUSSI'))
+            success_page_message = wait.until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, '.success__message p'), 'Une confirmation vous sera envoyée par mail.'))
+            
+
+            result = True
+
+        
+
+        return result
