@@ -8,8 +8,8 @@ use Sanity\Exception\BaseException;
 
 use Sanity\Client as SanityClient;
 
-$page_css = getFileUrl('../css/checkout.css', dirname(__FILE__, 2) . '/css/checkout.css');
-$page_js = getFileUrl('../js/pages/checkout.js', dirname(__FILE__, 2) . '/js/pages/checkout.js');
+$page_css = getFileUrl('/src/css/checkout.css', dirname(__FILE__, 2) . '/css/checkout.css');
+$page_js = getFileUrl('/src/js/pages/checkout.js', dirname(__FILE__, 2) . '/js/pages/checkout.js');
 
 $js_files_urls = ['https://js.stripe.com/v3/', $page_js];
 

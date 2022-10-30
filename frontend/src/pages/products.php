@@ -5,8 +5,8 @@ use function Jegwell\functions\getFileUrl;
 use function Jegwell\functions\createProductsPageModal;
 use Sanity\Client as SanityClient;
 
-$page_css = getFileUrl('../css/products.css', dirname(__FILE__, 2) . '/css/products.css');
-$page_js = getFileUrl('../js/pages/products.js', dirname(__FILE__, 2) . '/js/pages/products.js');
+$page_css = getFileUrl('/src/css/products.css', dirname(__FILE__, 2) . '/css/products.css');
+$page_js = getFileUrl('/src/js/pages/products.js', dirname(__FILE__, 2) . '/js/pages/products.js');
 
 $page_title = 'Jegwell | Créations';
 include '../components/header.php'; // contient le code pour lire les variables d'environnement

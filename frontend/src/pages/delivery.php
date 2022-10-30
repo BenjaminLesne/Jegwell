@@ -4,8 +4,8 @@ include_once dirname(__FILE__, 2) . '/utils/functions.php';
 use function Jegwell\functions\getFileUrl;
 use Sanity\Client as SanityClient;
 
-$page_css = getFileUrl('../css/delivery.css', dirname(__FILE__, 2) . '/css/delivery.css');
-$page_js = getFileUrl('../js/pages/delivery.js', dirname(__FILE__, 2) . '/js/pages/delivery.js');
+$page_css = getFileUrl('/src/css/delivery.css', dirname(__FILE__, 2) . '/css/delivery.css');
+$page_js = getFileUrl('/src/js/pages/delivery.js', dirname(__FILE__, 2) . '/js/pages/delivery.js');
 
 $page_title = 'Jegwell | Livraison';
 include '../components/header.php'; // contient le code pour lire les variables d'environnement

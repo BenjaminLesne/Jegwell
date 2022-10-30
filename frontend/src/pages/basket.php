@@ -5,8 +5,8 @@ use function Jegwell\functions\getFileUrl;
 use function Jegwell\functions\createOptionsModal;
 use Sanity\Client as SanityClient;
 
-$page_css = getFileUrl('../css/basket.css', dirname(__FILE__, 2) . '/css/basket.css');
-$page_js = getFileUrl('../js/pages/basket.js', dirname(__FILE__, 2) . '/js/pages/basket.js');
+$page_css = getFileUrl('/src/css/basket.css', dirname(__FILE__, 2) . '/css/basket.css');
+$page_js = getFileUrl('/src/js/pages/basket.js', dirname(__FILE__, 2) . '/js/pages/basket.js');
 
 $page_title = 'Jegwell | Panier';
 include '../components/header.php'; // contient le code pour lire les variables d'environnement

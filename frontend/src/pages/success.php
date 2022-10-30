@@ -9,7 +9,7 @@ use function Jegwell\functions\getOrderConfirmationEmail;
 use Sanity\Client as SanityClient;
 use Sanity\Exception\BaseException;
 
-$page_css = getFileUrl('../css/success.css', dirname(__FILE__, 2) . '/css/success.css');
+$page_css = getFileUrl('/src/css/success.css', dirname(__FILE__, 2) . '/css/success.css');
 // $page_js = getFileUrl('../js/pages/success.js', dirname(__FILE__, 2) . '/js/pages/success.js');
 
 $page_title = 'Jegwell | Paiement réussi';
