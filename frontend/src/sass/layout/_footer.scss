@@ -34,7 +34,7 @@
     margin: 0;
     font-size: convertToRem(12px);
     position: relative;
-    justify-items: start;
+    justify-content: start;
 
     &::before {
       content: "";

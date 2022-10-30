@@ -319,6 +319,110 @@ function updateBasket(productId: string, productOption: string, key: string, val
   }
 }
 
+export function handleFormSubmit(event: MouseEvent) {
+  const form: HTMLFormElement | null = document.querySelector(".form");
+  let isFormValid = null;
+
+  // checks all inputs value
+  if (form != null) {
+    const data = new FormData(form);
+
+    // @ts-ignore
+    for (const entry of data) {
+      let newRegex: RegExp | null = null;
+
+      switch (entry[0]) {
+        case "phoneNumber":
+          newRegex = /^[0-9]{10,}$/
+        case "addressLine1":
+        case "addressLine2":
+          newRegex = newRegex ?? /[a-z0-9]+/i
+        case "postalCode":
+          newRegex = newRegex ?? /^(?:0[1-9]|[1-8]\d|9[0-8])\d{3}$/
+        case "email":
+          newRegex = newRegex ?? /^[a-z0-9!-~]+(?:\.[a-z0-9!-~]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
+
+        case "firstname":
+        case "lastname":
+        case "city":
+          const regex = newRegex ?? /^[a-z]+$/i;
+          const result = handleInputValidation(entry, regex)
+
+          isFormValid = isFormValid !== false ? result : isFormValid;
+          break;
+
+        default:
+          break;
+      }
+
+    };
+
+    const deliveryChosen = document.querySelector(".form__input--radio:checked")
+    const deliveryChosenInvalid = document.querySelector(".form__input--radio")?.parentElement?.closest(".form__fieldset--radio.invalid")
+
+    if (deliveryChosen === null) {
+      const radioInputs = document.querySelectorAll(".form__input--radio")
+
+      radioInputs.forEach(input => {
+        input?.parentElement?.closest(".form__fieldset--radio")?.classList.add("invalid")
+
+      });
+
+      isFormValid = false;
+    } else if (deliveryChosen != null && deliveryChosenInvalid != null) {
+      // si une option de livraison est choisi ET que les inputs affichés sont rouge (précédemment invalide)
+      const radioInputs = document.querySelectorAll(".form__input--radio")
+
+      radioInputs.forEach(input => {
+        // on retire la classe invalid
+        input?.parentElement?.closest(".form__fieldset--radio")?.classList.remove("invalid")
+
+      });
+
+      isFormValid = isFormValid ? true : isFormValid;
+    }
+
+    if (isFormValid === false) {
+      event?.preventDefault()
+      const firstInvalidInput = document.querySelector(".invalid")
+      firstInvalidInput?.scrollIntoView()
+    }
+
+  } else {
+    alert("On ne trouve pas de formulaire sur cette page !")
+  }
+
+  function handleInputValidation(entry: [string, string], regexValue: RegExp) {
+
+    const input = document.querySelector(`input[name="${entry[0]}"`)
+    const required = input?.hasAttribute("required")
+    const additionalCondition = required ? false : entry[1] === "";
+    const isRegexFollowed = entry[1].match(regexValue) || additionalCondition;
+
+    const inputLabelWrapper = input?.parentElement?.closest(".form__input-label-wrapper")
+    //  trigger invalid class if false
+    if (isRegexFollowed === false) {
+
+      inputLabelWrapper?.classList.add("invalid")
+    } else {
+      inputLabelWrapper?.classList.remove("invalid")
+    }
+
+    return isRegexFollowed
+  }
+}
+
+export function deleteCookie(name: string) {
+  addToCookies(name, "", 0)
+}
+
+export function handleAfterPaymentSucceeded() {
+  // delete productsToBasket and deliveryOption cookie
+  deleteCookie("productsToBasket")
+  deleteCookie("deliveryOption")
+
+}
+
 function addToCookies(key: string, value: string, days: number) {
 
   const date = new Date();
@@ -329,5 +433,7 @@ function addToCookies(key: string, value: string, days: number) {
   document.cookie = key + '=' + value + expiriringDate;
 
 }
+
+
 
 

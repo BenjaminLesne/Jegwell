@@ -44,7 +44,7 @@ figure {
 .screenreader {
   position: absolute;
   visibility: hidden;
-  left: 101vw;
+  top: -999vh;
 }
 
 .section {
@@ -353,6 +353,43 @@ a,
   font-weight: 400;
 }
 
+.input-wrapper {
+  flex: 1;
+  margin: 0;
+}
+
+.input {
+  border-style: solid;
+  border-color: rgb(var(--neutral-color));
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 11px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.input::after {
+  content: attr(data-label);
+  position: absolute;
+  top: -0.5625rem;
+  left: 10px;
+  font-size: 0.75rem;
+  background-color: rgb(var(--primary-background-color));
+  padding-inline: 5px;
+}
+.input--width-unset {
+  width: unset;
+}
+.input__details {
+  font-size: 0.75rem;
+  margin: 5px;
+}
+
 .primary-header-wrapper {
   z-index: 1;
   height: 3.5625rem;
@@ -533,7 +570,7 @@ a,
   margin: 0;
   font-size: 0.75rem;
   position: relative;
-  justify-items: start;
+  justify-content: start;
 }
 .footer__links::before {
   content: "";

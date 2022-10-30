@@ -1,10 +1,11 @@
 // @ts-nocheck
 import { getCookie } from "../utils/functions.js";
 
+const token = document.querySelector("[data-token]")?.getAttribute("data-token");
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
 // Sign in to see your own test API key embedded in code samples.
-const stripe = Stripe("pk_test_oKhSR5nslBRnBZpjO6KuzZeX");
+const stripe = Stripe(token);
 
 const itemsJson = getCookie("productsToBasket");
 const deliveryOption = getCookie("deliveryOption");
@@ -37,11 +38,8 @@ if (deliveryOption === null || deliveryOption === '') {
 // The items the customer wants to buy
 const items = JSON.parse(itemsJson);
 
-const order = { products: items };
+const order = { products: items, deliveryOption: deliveryOption };
 const orderStringified = JSON.stringify(order);
-
-console.log("orderStringified")
-console.log(orderStringified)
 
 let elements;
 
@@ -60,7 +58,7 @@ async function initialize() {
         body: orderStringified,
     }).then((r) => r.json()); // retourner la reponseJson parsed pour pouvoir récupérer clientSecret et totalPriceInCents /!\
 
-    if (error || totalPriceInCents < 1) {
+    if (error || totalPriceInCents < 100) {
         console.log("error", error);
         alert("Oups, une erreur est survenue !")
     }
@@ -70,9 +68,9 @@ async function initialize() {
     const paymentElement = elements.create("payment");
     paymentElement.mount("#payment-element");
 
-    const payButton = document.querySelector('#submit');
+    const payButton = document.querySelector('#button-text');
     const totalPriceInEuros = totalPriceInCents / 100;
-    payButton.textContent = `Payer ${totalPriceInEuros} €`;
+    payButton.textContent = `Payer ${totalPriceInEuros} € TTC`;
 }
 
 async function handleSubmit(e) {
@@ -83,7 +81,7 @@ async function handleSubmit(e) {
         elements,
         confirmParams: {
             // Make sure to change this to your payment completion page
-            return_url: "http://localhost:4242/public/checkout.html",
+            return_url: "http://localhost:8080/src/pages/success.php",
         },
     });
 
@@ -118,13 +116,13 @@ async function checkStatus() {
             showMessage("Payment succeeded!");
             break;
         case "processing":
-            showMessage("Your payment is processing.");
+            showMessage("Paiement en cours.");
             break;
         case "requires_payment_method":
-            showMessage("Your payment was not successful, please try again.");
+            showMessage("Votre paiement n'a pas abouti, veuillez réessayer.");
             break;
         default:
-            showMessage("Something went wrong.");
+            showMessage("Une erreur est survenue.");
             break;
     }
 }

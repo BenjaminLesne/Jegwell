@@ -28,4 +28,13 @@ $padding-inline: 16px;
     background-color: rgb(var(--primary-background-color));
     padding-inline: 5px;
   }
+
+  &--width-unset {
+    width: unset;
+  }
+
+  &__details {
+    font-size: convertToRem(12px);
+    margin: 5px;
+  }
 }
