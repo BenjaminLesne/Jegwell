@@ -81,9 +81,6 @@ if (
         // send email to customer and forward to jegwell
         $was_email_sent = sendEmail($email_to, 'Confirmation de votre commande', $email_bodies['html'], $email_bodies['plain_text']);
 
-        echo '$was_email_sent :';
-        echo $was_email_sent === false ? 'false' : ($was_email_sent === true ? 'true' : 'unknown');
-
         if ($was_email_sent === false or $was_email_sent === true) {
             $sanity
                 ->patch($updatedOrder['_id']) // Document ID to patch
@@ -124,7 +121,7 @@ if (
             <span>Merci !</span>
             <p><?php echo $message ?></p>
         </div>
-        <a class="main-call-to-action" href="<?php echo $_ENV['HOME'] . '/creations' ?>">Continuer votre shopping</a>
+        <a class="main-call-to-action" href="/creations">Continuer votre shopping</a>
     </section>
 </main>
 <?php

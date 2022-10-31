@@ -93,7 +93,7 @@ $delivery_url = $_ENV['HOME'] . '/panier/livraison';
                 <span class="burger-button__slice"></span>
                 <span class="burger-button__slice"></span>
             </button>
-            <a class="brand-wrapper" href='<?php echo $_ENV['HOME'] ?>'>
+            <a class="brand-wrapper" href='/'>
                 <div class="brand">
                     <div class="logo">
                         <div class="logo__image">

@@ -55,7 +55,7 @@ function getFileUrl($relativePathToFile, $absolutePath)
 function createProductsPageModal($modalId, $title, $items, $url_key)
 {
 
-    $svgs_sprite_url = getFileUrl('../assets/svgs-sprite.svg', dirname(__FILE__, 2) . '/assets/svgs-sprite.svg');
+    $svgs_sprite_url = getFileUrl('/src/assets/svgs-sprite.svg', dirname(__FILE__, 2) . '/assets/svgs-sprite.svg');
 
     $first_part = "
     <dialog class=\"modal\" id=\"$modalId\">

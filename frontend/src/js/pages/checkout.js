@@ -46,7 +46,7 @@ document
 // Fetches a payment intent and captures the client secret
 function initialize() {
     return __awaiter(this, void 0, void 0, function* () {
-        const { clientSecret, totalPriceInCents, error } = yield fetch("../components/create.php", {
+        const { clientSecret, totalPriceInCents, error } = yield fetch("/src/components/create.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: orderStringified,
@@ -71,7 +71,7 @@ function handleSubmit(e) {
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
-                return_url: "http://localhost:8080/src/pages/success.php",
+                return_url: "/panier/livraison/paiement/success",
             },
         });
         // This point will only be reached if there is an immediate error when
