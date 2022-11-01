@@ -4,6 +4,18 @@
   gap: 16px;
 }
 
+.filter__content-wrapper {
+  width: calc(100% - 32px);
+}
+.filter__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.filter__text::first-letter {
+  text-transform: capitalize;
+}
+
 .products {
   display: grid;
   gap: 16px;
