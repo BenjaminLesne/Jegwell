@@ -9,6 +9,13 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+/** @desc this loads the composer autoload file */
+require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+
+/** @desc this instantiates Dotenv and passes in our path to .env */
+$dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 3));
+$dotenv->load();
+
 /**
  * retourne une url contenant un numéro de version basé sur la date de modification du fichier, cela permet d'optimiser le cache navigateur.
  * 
@@ -22,7 +29,7 @@ function getFileUrl($relativePathToFile, $absolutePath)
 {
     try {
 
-        return $relativePathToFile . '?' . filemtime($absolutePath);
+        return $_ENV['HOME'] . $relativePathToFile . '?' . filemtime($absolutePath);
     } catch (\Exception $exception) {
 
         if ($_ENV['ENV'] == 'production') {
@@ -55,7 +62,7 @@ function getFileUrl($relativePathToFile, $absolutePath)
 function createProductsPageModal($modalId, $title, $items, $url_key)
 {
 
-    $svgs_sprite_url = getFileUrl('../assets/svgs-sprite.svg', dirname(__FILE__, 2) . '/assets/svgs-sprite.svg');
+    $svgs_sprite_url = getFileUrl('/src/assets/svgs-sprite.svg', dirname(__FILE__, 2) . '/assets/svgs-sprite.svg');
 
     $first_part = "
     <dialog class=\"modal\" id=\"$modalId\">

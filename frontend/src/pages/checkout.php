@@ -80,66 +80,69 @@ if ($required_inputs_exists) {
             'token' => $_ENV['SANITY_TOKEN_TO_WRITE'],
         ]);
 
-        $products_to_basket = json_decode($_COOKIE["productsToBasket"]);
+        if (isset($_COOKIE["productsToBasket"])) {
 
-        $deliveryReference = (object) [
-            '_type' => 'reference',
-            '_ref' => htmlspecialchars($_POST['delivery']),
-        ];
+            $products_to_basket = json_decode($_COOKIE["productsToBasket"]);
 
-
-        for ($index = 0; $index < count($products_to_basket); $index++) {
-            // On formate les variables pour Sanity 
-            $products_to_basket[$index]->_key = strval($index);
-            $products_to_basket[$index]->_type = 'productToBasket';
-            $products_to_basket[$index]->id = (object) [
+            $deliveryReference = (object) [
                 '_type' => 'reference',
-                '_ref' => htmlspecialchars($products_to_basket[$index]->id),
+                '_ref' => htmlspecialchars($_POST['delivery']),
             ];
+
+
+            for ($index = 0; $index < count($products_to_basket); $index++) {
+                // On formate les variables pour Sanity 
+                $products_to_basket[$index]->_key = strval($index);
+                $products_to_basket[$index]->_type = 'productToBasket';
+                $products_to_basket[$index]->id = (object) [
+                    '_type' => 'reference',
+                    '_ref' => htmlspecialchars($products_to_basket[$index]->id),
+                ];
+            }
+
+
+
+
+
+
+            $order = [
+                '_type' => 'order',
+                'paid' => false,
+                // 'price' => htmlspecialchars(valueGivenByUser),
+                // 'paymentIntentId' => htmlspecialchars(valueGivenByUser),
+                'productsToBasket' => $products_to_basket,
+                'firstname'  => htmlspecialchars($_POST['firstname']),
+                'lastname' => htmlspecialchars($_POST['lastname']),
+                'email' => htmlspecialchars($_POST['email']),
+                'phoneNumber' => htmlspecialchars($_POST['phoneNumber']),
+                'delivery' => $deliveryReference,
+                'addressLine1' => htmlspecialchars($_POST['addressLine1']),
+                'addressLine2' => htmlspecialchars($_POST['addressLine2']),
+                'country' => htmlspecialchars($_POST['country']),
+                'postalCode' => htmlspecialchars($_POST['postalCode']),
+                'city' => htmlspecialchars($_POST['city']),
+                'comment' => htmlspecialchars($_POST['comment']),
+            ];
+
+            try {
+                $newOrder = $sanity->create($order);
+            } catch (BaseException $error) {
+                array_push($wrong_inputs, 'order creation failed');
+                var_dump($error);
+            }
+
+
+
+            // Afin que JavaScript puisse utiliser deliveryOption coté client
+            setcookie(
+                'deliveryOption',
+                htmlspecialchars($_POST['delivery']),
+                strtotime('+365 days'),
+                '/'
+            );
+
+            $_SESSION['order_id'] = $newOrder['_id'];
         }
-
-
-
-
-
-
-        $order = [
-            '_type' => 'order',
-            'paid' => false,
-            // 'price' => htmlspecialchars(valueGivenByUser),
-            // 'paymentIntentId' => htmlspecialchars(valueGivenByUser),
-            'productsToBasket' => $products_to_basket,
-            'firstname'  => htmlspecialchars($_POST['firstname']),
-            'lastname' => htmlspecialchars($_POST['lastname']),
-            'email' => htmlspecialchars($_POST['email']),
-            'phoneNumber' => htmlspecialchars($_POST['phoneNumber']),
-            'delivery' => $deliveryReference,
-            'addressLine1' => htmlspecialchars($_POST['addressLine1']),
-            'addressLine2' => htmlspecialchars($_POST['addressLine2']),
-            'country' => htmlspecialchars($_POST['country']),
-            'postalCode' => htmlspecialchars($_POST['postalCode']),
-            'city' => htmlspecialchars($_POST['city']),
-            'comment' => htmlspecialchars($_POST['comment']),
-        ];
-
-        try {
-            $newOrder = $sanity->create($order);
-        } catch (BaseException $error) {
-            array_push($wrong_inputs, 'order creation failed');
-            var_dump($error);
-        }
-
-
-
-        // Afin que JavaScript puisse utiliser deliveryOption coté client
-        setcookie(
-            'deliveryOption',
-            htmlspecialchars($_POST['delivery']),
-            strtotime('+365 days'),
-            '/'
-        );
-
-        $_SESSION['order_id'] = $newOrder['_id'];
     }
 }
 
@@ -159,7 +162,7 @@ if ($required_inputs_exists) {
                 <div id="payment-element">
                     <!--Stripe.js injects the Payment Element-->
                 </div>
-                <button id="submit" class="main-call-to-action" data-token="<?php echo $stripe_publishable_key ?>">
+                <button id="submit" class="main-call-to-action" data-token="<?php echo $stripe_publishable_key ?>" data-success-url="<?php echo $_ENV['HOME'] . '/panier/livraison/paiement/reussi' ?>">
                     <div class="spinner hidden" id="spinner"></div>
                     <span id="button-text">Chargement en cours</span>
                 </button>

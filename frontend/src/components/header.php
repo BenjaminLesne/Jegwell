@@ -37,6 +37,11 @@ $delivery_url = $_ENV['HOME'] . '/panier/livraison';
 <html lang="fr">
 
 <head>
+    <?php
+    if ($_ENV['ENV'] == 'development') {
+        echo "<base href=\"$_ENV[HOME]/\" />";
+    };
+    ?>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,9 +63,12 @@ $delivery_url = $_ENV['HOME'] . '/panier/livraison';
         foreach ($js_files_urls as $js_file_url) {
             echo "<script type=\"module\" src=\"$js_file_url\"></script>";
         }
-    } elseif (isset($page_js)) { ?>
-        <script type="module" src="<?php echo $page_js ?>"></script>
-    <?php
+    } elseif (isset($page_js)) {
+        echo "<script type=\"module\" src=\"$page_js\"></script>";
+    }
+
+    if ($_ENV['ENV'] == 'development') {
+        echo '<base href="http://localhost/Jegwell/frontend/" />';
     }
     ?>
 
@@ -93,7 +101,7 @@ $delivery_url = $_ENV['HOME'] . '/panier/livraison';
                 <span class="burger-button__slice"></span>
                 <span class="burger-button__slice"></span>
             </button>
-            <a class="brand-wrapper" href='<?php echo $_ENV['HOME'] ?>'>
+            <a class="brand-wrapper" href='/'>
                 <div class="brand">
                     <div class="logo">
                         <div class="logo__image">

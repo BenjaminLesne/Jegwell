@@ -1,9 +1,14 @@
 import unittest
 import page
+import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+
+from dotenv import dotenv_values
+
+config = dotenv_values("../../../.env")
 
 class CheckoutPage(unittest.TestCase):
 
@@ -11,11 +16,15 @@ class CheckoutPage(unittest.TestCase):
         self.chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
         self.checkoutPage = page.CheckoutPage(self.chrome_driver)
 
-        checkout_page_url = "http://localhost:8080/src/pages/checkout.php"
-        products_page_url = "http://localhost:8080/src/pages/products.php"
-        delivery_page_url = "http://localhost:8080/src/pages/delivery.php"
+        checkout_page_url = config["HOME"] + "/panier/livraison/paiement"
+        products_page_url = config["HOME"] + "/creations"
+        delivery_page_url = config["HOME"] + "/panier/livraison"
 
         self.chrome_driver.get(products_page_url)
+
+        #                         # Get all available cookies
+        # print(self.chrome_driver.get_cookies())
+        # time.sleep(300)
 
         productsPage = page.ProductsPage(self.chrome_driver)
         # ajoute un produit a notre panier
@@ -24,8 +33,13 @@ class CheckoutPage(unittest.TestCase):
         self.chrome_driver.get(delivery_page_url)
 
         deliveryPage = page.DeliveryPage(self.chrome_driver)
+
         # envoie un formulaire correcte afin d'être redirigé vers la page de paiement
         deliveryPage.does_it_submit_on_good_inputs()
+
+
+        
+
 
     def test_stripe_token(self):
         is_right_token = self.checkoutPage.is_it_right_token()

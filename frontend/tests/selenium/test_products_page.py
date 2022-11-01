@@ -5,11 +5,15 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
+from dotenv import dotenv_values
+
+config = dotenv_values("../../../.env")
+
 class ProductsPage(unittest.TestCase):
 
     def setUp(self):
         self.chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-        page_url = "http://localhost:8080/src/pages/products.php"
+        page_url = config["HOME"] + "/src/pages/products.php"
         self.productsPage = page.ProductsPage(self.chrome_driver)
         self.chrome_driver.get(page_url)
 

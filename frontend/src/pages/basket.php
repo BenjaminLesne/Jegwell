@@ -19,16 +19,19 @@ include '../components/header.php'; // contient le code pour lire les variables 
             <h2 class="screenreader">VOS ITEMS</h2>
             <ul class="basket">
                 <?php
-                $products_to_basket = json_decode($_COOKIE["productsToBasket"]);
-
                 $wanted_ids = '';
+                $products_to_basket = null;
+                if (isset($_COOKIE["productsToBasket"])) {
 
-                foreach ($products_to_basket as $wanted_product) {
-                    $wanted_id = $wanted_product->id;
+                    $products_to_basket = json_decode($_COOKIE["productsToBasket"]);
 
-                    if (str_contains($wanted_ids, $wanted_id) == false) {
-                        $previous_ids = $wanted_ids === '' ? '' : ", $wanted_id";
-                        $wanted_ids = "'$wanted_id' $previous_ids";
+                    foreach ($products_to_basket as $wanted_product) {
+                        $wanted_id = $wanted_product->id;
+
+                        if (str_contains($wanted_ids, $wanted_id) == false) {
+                            $previous_ids = $wanted_ids === '' ? '' : ", $wanted_id";
+                            $wanted_ids = "'$wanted_id' $previous_ids";
+                        }
                     }
                 }
 
@@ -48,10 +51,9 @@ include '../components/header.php'; // contient le code pour lire les variables 
                                 'image_url': image.asset->url,
                                 'options': options[]{'name': name, 'image_url': image.asset->url},
                                 'id': _id,
-                                categories,
-                                'categories4': *[_type=='category' && _id==categories[]._ref]{ 
-                                    name,
-                                  }
+                                'categories': categories[]->{
+                                    name
+                                },
                             }
                         ";
                     //  sanity doc: https://www.sanity.io/docs/reference-type
@@ -102,16 +104,17 @@ include '../components/header.php'; // contient le code pour lire les variables 
 
                                 $price_exploded =  explode('.', $product['price']);
                                 $price_integer = $price_exploded[0];
-                                $price_decimal = $price_exploded[1] ? "<span class=\"price__decimal\">,$price_exploded[1]</span>" : '';
+                                $price_decimal = isset($price_exploded[1]) ? "<span class=\"price__decimal\">,$price_exploded[1]</span>" : '';
                                 $price_html = $price_integer . $price_decimal . ' €';
 
+                                $product_random_category = $product['categories'][0]['name'];
 
                                 echo "
                         <li>
                             <article class=\"item\">
                                 <div class=\"item__main\">
                                     <div class=\"item__image-wrapper\">
-                                        <img class=\"item__image\" src=\"$image\" loading=\"lazy\" alt=\"$product[categories][0] $product[name]\">
+                                        <img class=\"item__image\" src=\"$image\" loading=\"lazy\" alt=\"$product_random_category $product[name]\">
                                     </div>
                                     <div class=\"item__information\">
                                         <div class=\"item__top-information\">
@@ -153,7 +156,7 @@ include '../components/header.php'; // contient le code pour lire les variables 
 
                     $subtotal_price_exploded =  explode('.', $subtotal_price);
                     $subtotal_price_integer = $subtotal_price_exploded[0];
-                    $subtotal_price_decimal = $subtotal_price_exploded[1] ? "<span class=\"price__decimal\">,$price_exploded[1]</span>" : '';
+                    $subtotal_price_decimal = isset($subtotal_price_exploded[1]) ? "<span class=\"price__decimal\">,$price_exploded[1]</span>" : '';
                     $subtotal_price_html = $subtotal_price_integer . $subtotal_price_decimal . ' €';
                     ?>
             </ul>

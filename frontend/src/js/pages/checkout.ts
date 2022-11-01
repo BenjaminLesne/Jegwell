@@ -2,6 +2,7 @@
 import { getCookie } from "../utils/functions.js";
 
 const token = document.querySelector("[data-token]")?.getAttribute("data-token");
+
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
 // Sign in to see your own test API key embedded in code samples.
@@ -11,8 +12,8 @@ const itemsJson = getCookie("productsToBasket");
 const deliveryOption = getCookie("deliveryOption");
 
 function warnUserAboutRedirection(message, request_uri, errorMessage) {
+    const baseUrl = document.querySelector('body').baseURI;
     alert(message);
-    const baseUrl = window.location.protocol + "//" + window.location.hostname;
     window.location.replace(baseUrl + request_uri);
     throw new Error(errorMessage)
 }
@@ -22,7 +23,6 @@ if (itemsJson === null || itemsJson === '' || itemsJson === '[]') {
     warnUserAboutRedirection("Votre panier est vide. Vous allez être redirigé vers les créations Jegwell !",
         "/creations",
         "productsToBasket cookie missing")
-    throw new Error("productsToBasket cookie missing")
 }
 
 // // si l'utilisateur n'a pas de méthode de récupération, on le redirige vers la page de livraison
@@ -30,7 +30,6 @@ if (deliveryOption === null || deliveryOption === '') {
     warnUserAboutRedirection("Nous ne trouvons pas votre méthode de récupération. Vous allez être redirigé vers la page de livraison !",
         "/panier/livraison",
         "deliveryOption cookie missing")
-    throw new Error("deliveryOption cookie missing")
 }
 
 
@@ -52,7 +51,8 @@ document
 
 // Fetches a payment intent and captures the client secret
 async function initialize() {
-    const { clientSecret, totalPriceInCents, error } = await fetch("../components/create.php", {
+
+    const { clientSecret, totalPriceInCents, error } = await fetch("./src/components/create.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: orderStringified,
@@ -77,11 +77,13 @@ async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
 
+    const success_url = document.querySelector('[data-success-url')?.getAttribute("data-success-url");
+
     const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
             // Make sure to change this to your payment completion page
-            return_url: "http://localhost:8080/src/pages/success.php",
+            return_url: success_url,
         },
     });
 
@@ -137,7 +139,7 @@ function showMessage(messageText) {
 
     setTimeout(function () {
         messageContainer.classList.add("hidden");
-        messageText.textContent = "";
+        messageContainer.textContent = "";
     }, 4000);
 }
 
