@@ -46,9 +46,9 @@ $sanity = new SanityClient([
         </svg>
     </section>
 
-    <section class="section">
+    <section class="section" id="catégories">
         <h2 class="section__h2">NOS CATÉGORIES</h2>
-        <ul class="categories" id="catégories">
+        <ul class="categories">
             <?php
             $categories = $sanity->fetch('
                 *[_type == "category"]{    

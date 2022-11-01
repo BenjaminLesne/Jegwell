@@ -12,6 +12,10 @@ from selenium.common.exceptions import ElementNotVisibleException, ElementNotSel
 
 from locator import *
 
+from dotenv import dotenv_values
+
+config = dotenv_values("../../../.env")
+
 class BasePage(object):
     def __init__(self, chrome_driver):
         self.chrome_driver = chrome_driver
@@ -56,22 +60,21 @@ class HomePage(BasePage):
         are_results_good = True
 
         links = self.chrome_driver.find_elements(By.CSS_SELECTOR, ".main-menu__link")
-        base_url = self.chrome_driver.current_url
+        base_url = config['HOME']
         expected_links_href = [
-        base_url + "creations",
-        base_url + "panier",
+        base_url + "/creations",
+        base_url + "/panier",
         base_url,
-        "http://" + base_url + "#cat%C3%A9gories",
+        base_url + "/",
+        base_url + "#cat%C3%A9gories",
         ]
 
         for link in links:
             href = link.get_attribute("href")
-            if ("http://" + href) not in expected_links_href:
+            if href not in expected_links_href:
                 are_results_good = False
-                print("href not working (sans http://):")
+                print("href not working:")
                 print(href)
-                print("expected_links_href[0]")
-                print(expected_links_href[4])
                 break
             
         return are_results_good
@@ -100,20 +103,20 @@ class HomePage(BasePage):
     def are_categories_links_good(self):
         # vérifie que les liens vers les catégories sont correctes
         categoriesLinks = self.chrome_driver.find_elements(By.CSS_SELECTOR, ".categories__link")
-        base_url = self.chrome_driver.current_url
+        base_url = config['HOME']
 
         are_results_good = True
         expected_links_href = [
-            base_url + "creations?categories=" + "collier",
-            base_url + "creations?categories=" + "bagues",
-            base_url + "creations?categories=" + self.slugify("Boucles d'oreilles"),
-            base_url + "creations?categories=" + "bracelet",
-            base_url + "creations?categories=" + self.slugify("Boite à bijoux"),
-            base_url + "creations?categories=" + "abonnement"]
+            base_url + "/creations?categories=" + "collier",
+            base_url + "/creations?categories=" + "bagues",
+            base_url + "/creations?categories=" + self.slugify("Boucles d'oreilles"),
+            base_url + "/creations?categories=" + "bracelet",
+            base_url + "/creations?categories=" + self.slugify("Boite à bijoux"),
+            base_url + "/creations?categories=" + "abonnement"]
 
         for link in categoriesLinks:
             href = link.get_attribute("href")
-            if ("http://" + href) not in expected_links_href:
+            if href not in expected_links_href:
                 are_results_good = False
                 print("href not working:")
                 print(href)
@@ -504,7 +507,7 @@ class CheckoutPage(BasePage):
         alert.accept()
 
         # On va sur la page de paiement
-        self.chrome_driver.get("http://localhost:8080/src/pages/checkout.php")
+        self.chrome_driver.get(config["HOME"] + "/src/pages/checkout.php")
 
         # Wait for the alert to be displayed and store it in a variable
         alert = wait.until(expected_conditions.alert_is_present())
@@ -615,6 +618,7 @@ class DeliveryPage(BasePage):
         return False in results
 
     def does_it_submit_on_good_inputs(self):
+    
         lastname_input = self.chrome_driver.find_element(*DeliveryPageLocators.LASTNAME_INPUT)
         lastname_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.LASTNAME_ERROR_MESSAGE)
 
@@ -667,7 +671,6 @@ class DeliveryPage(BasePage):
 
         submit_button.click()
 
-        # results.append(self.chrome_driver.current_url ===)
         wait2 = WebDriverWait(self.chrome_driver, timeout=3, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException])
         checkout_page_title = wait2.until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, '.section__h2'), 'PAIEMENT'))
 
@@ -750,7 +753,7 @@ class CheckoutPage(BasePage):
             submit_button = wait.until(expected_conditions.presence_of_element_located(CheckoutPageLocators.SUBMIT_BUTTON))
 
             submit_button.click()
-
+            
             success_page_title = wait.until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, '.section__h2'), 'PAIEMENT RÉUSSI'))
             success_page_message = wait.until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, '.success__message p'), 'Une confirmation vous sera envoyée par mail.'))
             
@@ -758,5 +761,4 @@ class CheckoutPage(BasePage):
             result = True
 
         
-
         return result

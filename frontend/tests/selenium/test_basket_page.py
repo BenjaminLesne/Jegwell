@@ -1,16 +1,21 @@
 import unittest
 import page
+import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
+from dotenv import dotenv_values
+
+config = dotenv_values("../../../.env")
+
 class BasketPage(unittest.TestCase):
 
     def setUp(self):
         self.chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-        basket_page_url = "http://localhost:8080/src/pages/basket.php"
-        products_page_url = "http://localhost:8080/src/pages/products.php"
+        basket_page_url = config["HOME"] + "/src/pages/basket.php"
+        products_page_url = config["HOME"] + "/src/pages/products.php"
         self.basketPage = page.BasketPage(self.chrome_driver)
 
         self.chrome_driver.get(products_page_url)

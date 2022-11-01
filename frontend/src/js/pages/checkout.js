@@ -18,20 +18,19 @@ const stripe = Stripe(token);
 const itemsJson = getCookie("productsToBasket");
 const deliveryOption = getCookie("deliveryOption");
 function warnUserAboutRedirection(message, request_uri, errorMessage) {
+    const baseUrl = document.querySelector('body').baseURI;
     alert(message);
-    const baseUrl = window.location.protocol + "//" + window.location.hostname;
+    // const baseUrl = window.location.protocol + "//" + window.location.hostname;
     window.location.replace(baseUrl + request_uri);
     throw new Error(errorMessage);
 }
 // si l'utilisateur a un panier vide, on le redirige vers la page des produits
 if (itemsJson === null || itemsJson === '' || itemsJson === '[]') {
     warnUserAboutRedirection("Votre panier est vide. Vous allez être redirigé vers les créations Jegwell !", "/creations", "productsToBasket cookie missing");
-    throw new Error("productsToBasket cookie missing");
 }
 // // si l'utilisateur n'a pas de méthode de récupération, on le redirige vers la page de livraison
 if (deliveryOption === null || deliveryOption === '') {
     warnUserAboutRedirection("Nous ne trouvons pas votre méthode de récupération. Vous allez être redirigé vers la page de livraison !", "/panier/livraison", "deliveryOption cookie missing");
-    throw new Error("deliveryOption cookie missing");
 }
 // The items the customer wants to buy
 const items = JSON.parse(itemsJson);
@@ -46,7 +45,7 @@ document
 // Fetches a payment intent and captures the client secret
 function initialize() {
     return __awaiter(this, void 0, void 0, function* () {
-        const { clientSecret, totalPriceInCents, error } = yield fetch("../components/create.php", {
+        const { clientSecret, totalPriceInCents, error } = yield fetch("./src/components/create.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: orderStringified,
@@ -64,14 +63,16 @@ function initialize() {
     });
 }
 function handleSubmit(e) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         e.preventDefault();
         setLoading(true);
+        const success_url = (_a = document.querySelector('[data-success-url')) === null || _a === void 0 ? void 0 : _a.getAttribute("data-success-url");
         const { error } = yield stripe.confirmPayment({
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
-                return_url: "http://localhost:8080/src/pages/success.php",
+                return_url: success_url,
             },
         });
         // This point will only be reached if there is an immediate error when
@@ -119,7 +120,7 @@ function showMessage(messageText) {
     messageContainer.textContent = messageText;
     setTimeout(function () {
         messageContainer.classList.add("hidden");
-        messageText.textContent = "";
+        messageContainer.textContent = "";
     }, 4000);
 }
 // Show a spinner on payment submission
