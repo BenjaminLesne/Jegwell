@@ -17,22 +17,70 @@ $sanity = new SanityClient([
     'apiVersion' => $_ENV['SANITY_API_VERSION'],
     'token' => $_ENV['SANITY_TOKEN_TO_READ'],
 ]);
+
+$current_categorie = 'Toutes';
+if (isset($_GET['categories'])) {
+
+    $sanitized_GET_categorie = htmlspecialchars($_GET['categories']);
+    switch ($sanitized_GET_categorie) {
+        case 'boucles-d-oreilles':
+            $current_categorie = 'Boucles d\'oreilles';
+            break;
+
+        case 'boite-a-bijoux':
+            $current_categorie = 'Boite à bijoux';
+            break;
+
+        default:
+            $current_categorie = $sanitized_GET_categorie;
+
+            break;
+    }
+}
+
+$current_sort = 'Popularité';
+if (isset($_GET['trier'])) {
+
+    $sanitized_GET_sort = htmlspecialchars($_GET['trier']);
+    switch ($sanitized_GET_sort) {
+        case 'nom-a-z':
+            $current_sort = 'Nom A-Z';
+            break;
+
+        case 'nom-z-a':
+            $current_sort = 'Nom Z-A';
+            break;
+
+        case 'prix-le-plus-bas':
+            $current_sort = 'prix le + bas';
+            break;
+
+        case 'prix-le-plus-haut':
+            $current_sort = 'prix le + haut';
+            break;
+
+        default:
+            $current_sort = $sanitized_GET_sort;
+
+            break;
+    }
+}
 ?>
 
 <main>
     <section class="section">
         <h1 class="section__h2">NOS CRÉATIONS</h1>
         <div class="filters">
-            <button class="input-wrapper" id="categoriesButton" data-modal="categoriesModal">
-                <div class="input" data-label="Catégories">
-                    <span>Toutes</span>
+            <button class="input-wrapper filter" id="categoriesButton" data-modal="categoriesModal">
+                <div class="input filter__content-wrapper" data-label="Catégories">
+                    <span class="filter__text"><?php echo $current_categorie; ?></span>
                     <div class="caret"></div>
                 </div>
             </button>
 
-            <button class="input-wrapper" id="sort" data-modal="sortModal">
-                <div class="input" data-label="Trier">
-                    <span>Popularité</span>
+            <button class="input-wrapper filter" id="sort" data-modal="sortModal">
+                <div class="input filter__content-wrapper" data-label="Trier">
+                    <span class="filter__text"><?php echo $current_sort; ?></span>
                     <div class="caret"></div>
                 </div>
             </button>
