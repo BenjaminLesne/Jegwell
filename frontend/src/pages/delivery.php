@@ -22,7 +22,7 @@ $sanity = new SanityClient([
     <section class="section">
         <h1 class="screenreader">LIVRAISON</h1>
 
-        <form class="form" action="<?php echo $_ENV['HOME'] ?>/panier/livraison/paiement" method="post">
+        <form class="form" action="<?php echo $_ENV['HOME_PAGE'] ?>/panier/livraison/paiement" method="post">
             <fieldset class="form__fieldset">
                 <legend class="form__legend section__h2 section__h2--margin-bottom-reduced">CONTACT</legend>
 

@@ -29,7 +29,7 @@ function getFileUrl($relativePathToFile, $absolutePath)
 {
     try {
 
-        return $_ENV['HOME'] . $relativePathToFile . '?' . filemtime($absolutePath);
+        return $_ENV['HOME_PAGE'] . $relativePathToFile . '?' . filemtime($absolutePath);
     } catch (\Exception $exception) {
 
         if ($_ENV['ENV'] == 'production') {

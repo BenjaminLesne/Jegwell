@@ -60,13 +60,14 @@ class HomePage(BasePage):
         are_results_good = True
 
         links = self.chrome_driver.find_elements(By.CSS_SELECTOR, ".main-menu__link")
-        base_url = config['HOME']
+        base_url = config["HOME_PAGE"]
         expected_links_href = [
         base_url + "/creations",
         base_url + "/panier",
         base_url,
         base_url + "/",
         base_url + "#cat%C3%A9gories",
+        base_url + "/#cat%C3%A9gories",
         ]
 
         for link in links:
@@ -103,7 +104,7 @@ class HomePage(BasePage):
     def are_categories_links_good(self):
         # vérifie que les liens vers les catégories sont correctes
         categoriesLinks = self.chrome_driver.find_elements(By.CSS_SELECTOR, ".categories__link")
-        base_url = config['HOME']
+        base_url = config["HOME_PAGE"]
 
         are_results_good = True
         expected_links_href = [
@@ -507,7 +508,7 @@ class CheckoutPage(BasePage):
         alert.accept()
 
         # On va sur la page de paiement
-        self.chrome_driver.get(config["HOME"] + "/src/pages/checkout.php")
+        self.chrome_driver.get(config["HOME_PAGE"] + "/src/pages/checkout.php")
 
         # Wait for the alert to be displayed and store it in a variable
         alert = wait.until(expected_conditions.alert_is_present())

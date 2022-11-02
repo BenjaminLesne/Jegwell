@@ -27,11 +27,11 @@ $tikTokUrl = "https://www.tiktok.com/@jegwell";
 $facebookUrl = "https://www.facebook.com/jegwell";
 
 // pages
-$basket_url = $_ENV['HOME'] . '/panier';
-$categories_url = $_SERVER['REQUEST_URI'] == '/' ? '#catégories' : $_ENV['HOME'] . '#catégories';
-$home_url = $_ENV['HOME'] . '/';
-$products_url = $_ENV['HOME'] . '/creations';
-$delivery_url = $_ENV['HOME'] . '/panier/livraison';
+$basket_url = $_ENV['HOME_PAGE'] . '/panier';
+$categories_url = $_SERVER['REQUEST_URI'] == '/' ? '#catégories' : $_ENV['HOME_PAGE'] . '#catégories';
+$home_url = $_ENV['HOME_PAGE'] . '/';
+$products_url = $_ENV['HOME_PAGE'] . '/creations';
+$delivery_url = $_ENV['HOME_PAGE'] . '/panier/livraison';
 
 ?>
 <!DOCTYPE html>
@@ -40,7 +40,7 @@ $delivery_url = $_ENV['HOME'] . '/panier/livraison';
 <head>
     <?php
     if ($_ENV['ENV'] == 'development') {
-        echo "<base href=\"$_ENV[HOME]/\" />";
+        echo "<base href=\"$_ENV[HOME_PAGE]/\" />";
     };
     ?>
     <meta charset="UTF-8">
@@ -125,7 +125,7 @@ $delivery_url = $_ENV['HOME'] . '/panier/livraison';
                     </div>
                 </div>
             </a>
-            <a class="basket-icon-wrapper" href='<?php echo $_ENV['HOME'] ?>/panier'>
+            <a class="basket-icon-wrapper" href='<?php echo $_ENV['HOME_PAGE'] ?>/panier'>
                 <svg class="basket-icon">
                     <use href="<?php echo $svgs_sprite_url . '#basket' ?>" />
                 </svg>

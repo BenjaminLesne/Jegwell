@@ -136,7 +136,7 @@ if (isset($_GET['trier'])) {
 
                 $options_amount = count($product['options']);
                 $options_html = $options_amount > 0 ? "data-options='$options_amount'" : '';
-                $product_page_url = $_ENV['HOME'] . '/creations/' . $product['slug'];
+                $product_page_url = $_ENV['HOME_PAGE'] . '/creations/' . $product['slug'];
                 $image_url =  $product['image_url'];
                 $product_name = $product['name'];
                 $price = $product['price'];

@@ -162,7 +162,7 @@ if ($required_inputs_exists) {
                 <div id="payment-element">
                     <!--Stripe.js injects the Payment Element-->
                 </div>
-                <button id="submit" class="main-call-to-action" data-token="<?php echo $stripe_publishable_key ?>" data-success-url="<?php echo $_ENV['HOME'] . '/panier/livraison/paiement/reussi' ?>">
+                <button id="submit" class="main-call-to-action" data-token="<?php echo $stripe_publishable_key ?>" data-success-url="<?php echo $_ENV['HOME_PAGE'] . '/panier/livraison/paiement/reussi' ?>">
                     <div class="spinner hidden" id="spinner"></div>
                     <span id="button-text">Chargement en cours</span>
                 </button>
@@ -184,7 +184,7 @@ if ($required_inputs_exists) {
 
     ?>
         <p class="" style="margin: 40px auto 0 auto; text-align: center;width:100%">Nous manquons d'information vous concernant pour effectuer le paiement !</p>
-        <a href="<?php echo $_ENV['HOME'] . '/panier/livraison' ?>" style="margin: 40px auto 0 auto; text-align: center;width:100%" class="">Cliquez ici pour revenir au formulaire.</a>
+        <a href="<?php echo $_ENV['HOME_PAGE'] . '/panier/livraison' ?>" style="margin: 40px auto 0 auto; text-align: center;width:100%" class="">Cliquez ici pour revenir au formulaire.</a>
     <?php
     }
     ?>

@@ -16,9 +16,9 @@ class CheckoutPage(unittest.TestCase):
         self.chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
         self.checkoutPage = page.CheckoutPage(self.chrome_driver)
 
-        checkout_page_url = config["HOME"] + "/panier/livraison/paiement"
-        products_page_url = config["HOME"] + "/creations"
-        delivery_page_url = config["HOME"] + "/panier/livraison"
+        checkout_page_url = config["HOME_PAGE"] + "/panier/livraison/paiement"
+        products_page_url = config["HOME_PAGE"] + "/creations"
+        delivery_page_url = config["HOME_PAGE"] + "/panier/livraison"
 
         self.chrome_driver.get(products_page_url)
 
