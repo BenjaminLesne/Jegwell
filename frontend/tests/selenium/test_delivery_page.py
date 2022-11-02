@@ -13,8 +13,8 @@ class DeliveryPage(unittest.TestCase):
 
     def setUp(self):
         self.chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-        delivery_page_url = config["HOME"] + "/panier/livraison"
-        products_page_url = config["HOME"] + "/creations"
+        delivery_page_url = config["HOME_PAGE"] + "/panier/livraison"
+        products_page_url = config["HOME_PAGE"] + "/creations"
         self.deliveryPage = page.DeliveryPage(self.chrome_driver)
 
         self.chrome_driver.get(products_page_url)

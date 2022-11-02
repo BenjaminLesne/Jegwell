@@ -13,7 +13,7 @@ class HomePage(unittest.TestCase):
 
     def setUp(self):
         self.chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-        page_url = config["HOME"]
+        page_url = config["HOME_PAGE"]
         self.homePage = page.HomePage(self.chrome_driver)
         self.chrome_driver.get(page_url)
 

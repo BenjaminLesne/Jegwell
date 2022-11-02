@@ -14,8 +14,8 @@ class BasketPage(unittest.TestCase):
 
     def setUp(self):
         self.chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-        basket_page_url = config["HOME"] + "/src/pages/basket.php"
-        products_page_url = config["HOME"] + "/src/pages/products.php"
+        basket_page_url = config["HOME_PAGE"] + "/src/pages/basket.php"
+        products_page_url = config["HOME_PAGE"] + "/src/pages/products.php"
         self.basketPage = page.BasketPage(self.chrome_driver)
 
         self.chrome_driver.get(products_page_url)
