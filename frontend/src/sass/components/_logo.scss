@@ -1,7 +1,9 @@
 // NEW
 .logo {
   position: relative;
-  $width: convertToRem(37px);
+
+  $brandFontSize: 25px;
+  $width: convertToRem(37 / 20 * $brandFontSize);
   width: $width;
   height: $width;
 

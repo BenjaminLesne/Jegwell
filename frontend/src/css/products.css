@@ -26,6 +26,8 @@
 .product {
   display: flex;
   flex-direction: column;
+  max-width: 250px;
+  margin-inline: auto;
 }
 .product__image-wrapper {
   position: relative;
