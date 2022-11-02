@@ -143,7 +143,7 @@ if (isset($_GET['trier'])) {
                 $product_id = $product['_id'];
 
                 echo "<article class='product'>
-                    <a class='product__image-wrapper' href='$product_page_url' $options_html>
+                    <a class='product__image-wrapper' single-page-not-done-yet-href='$product_page_url' $options_html>
                         <img class='product__image' src='$image_url' alt='$product_name'>
                     </a>
                     <div class='product__information'>

@@ -170,25 +170,24 @@ a,
   display: flex;
   flex-direction: column;
   font-family: "ternary font", sans-serif;
-  width: 5.4375rem;
 }
 .brand__name {
   text-decoration: none;
   border-top-style: solid;
   border-top-width: 1px;
   white-space: nowrap;
-  font-size: 1.25rem;
+  font-size: 1.5625rem;
 }
 .brand__name--slogan {
-  font-size: 0.5625rem;
+  font-size: 0.6875rem;
 }
 
 .logo {
   position: relative;
-  width: 2.3125rem;
-  height: 2.3125rem;
+  width: 2.890625rem;
+  height: 2.890625rem;
   border-style: solid;
-  border-width: 0.056402439rem;
+  border-width: 0.0705030488rem;
   border-color: rgb(var(--primary-color));
   display: flex;
   justify-content: center;
@@ -199,13 +198,13 @@ a,
   z-index: 1;
   content: "";
   position: absolute;
-  inset: 0.112804878rem;
+  inset: 0.1410060976rem;
   background-color: rgb(var(--secondary-color));
 }
 .logo__image {
   z-index: 2;
-  width: 1.3818597561rem;
-  height: 1.0152439024rem;
+  width: 1.7273246951rem;
+  height: 1.269054878rem;
 }
 .logo__svg {
   width: 100%;
@@ -220,7 +219,7 @@ a,
 }
 
 .basket-icon {
-  width: 1.5625rem;
+  width: 2.1875rem;
   padding-inline: var(--page-padding-right);
   stroke-width: 20;
   stroke: rgb(var(--primary-color));
@@ -392,11 +391,12 @@ a,
 
 .primary-header-wrapper {
   z-index: 1;
-  height: 3.5625rem;
+  height: 4.375rem;
   width: 100%;
   box-shadow: var(--box-shadow-values);
   background-color: rgb(var(--primary-background-color));
   color: rgb(var(--primary-background-color));
+  position: relative;
 }
 .primary-header-wrapper--home {
   background-color: rgba(var(--primary-background-color), 0.75);

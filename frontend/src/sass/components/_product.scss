@@ -10,6 +10,9 @@
   display: flex;
   flex-direction: column;
 
+  max-width: 250px;
+  margin-inline: auto;
+
   &__image-wrapper {
     position: relative;
     border-radius: 5px;

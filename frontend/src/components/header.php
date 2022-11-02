@@ -16,6 +16,7 @@ use function Jegwell\functions\getFileUrl;
 
 // fichiers
 $main_css_url = getFileUrl('/src/css/main.css', dirname(__FILE__, 2) . '/css/main.css');
+$main_dekstop_css_url = getFileUrl('/src/css/desktop.css', dirname(__FILE__, 2) . '/css/desktop.css');
 $favicon_file_url = getFileUrl('/src/assets/favicon.ico', dirname(__FILE__, 2) . '/assets/favicon.ico');
 $index_js_url = getFileUrl('/src/js/index.js', dirname(__FILE__, 2) . '/js/index.js');
 $svgs_sprite_url = getFileUrl('/src/assets/svgs-sprite.svg', dirname(__FILE__, 2) . '/assets/svgs-sprite.svg');
@@ -46,6 +47,7 @@ $delivery_url = $_ENV['HOME'] . '/panier/livraison';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
     <link rel="stylesheet" href="<?php echo $main_css_url ?>">
     <?php
     if (isset($page_css)) { ?>
@@ -53,6 +55,8 @@ $delivery_url = $_ENV['HOME'] . '/panier/livraison';
     <?php
     }
     ?>
+    <link rel="stylesheet" href="<?php echo $main_dekstop_css_url ?>" media="(min-width: 500px)">
+
     <link rel="icon" type="image/x-icon" href="<?php echo $favicon_file_url ?>">
 
     <!-- doit être importé en premier car contient l'initialisation de Sentry -->
@@ -86,14 +90,19 @@ $delivery_url = $_ENV['HOME'] . '/panier/livraison';
                     </svg>
                 </button>
                 <ul class="main-menu__list">
-                    <?php
-                    $pages = array("accueil" => $home_url, "nos créations" => $products_url, "catégories" => $categories_url, "panier" => $basket_url,);
+                    <li class='main-menu__item' data-request-uri='/'>
+                        <a class='main-menu__link' href='<?php echo $home_url ?>'>accueil</a>
+                    </li>
+                    <li class='main-menu__item' data-request-uri='/creations'>
+                        <a class='main-menu__link' href='<?php echo $products_url ?>'>Nos créations</a>
+                    </li>
+                    <li class='main-menu__item' data-request-uri='/#categories'>
+                        <a class='main-menu__link' href='<?php echo $categories_url ?>'>catégories</a>
+                    </li>
 
-                    reset($pages);
-                    foreach ($pages as $page => $url) {
-                        echo "<li class='main-menu__item' data-request-uri='/$page'><a class='main-menu__link' href='$url'>$page</a></li>";
-                    }
-                    ?>
+                    <li class='main-menu__item' data-request-uri='/panier'>
+                        <a class='main-menu__link' href='<?php echo $basket_url ?>'>Panier</a>
+                    </li>
                 </ul>
             </div>
             <button class="burger-button" id="burger-button">

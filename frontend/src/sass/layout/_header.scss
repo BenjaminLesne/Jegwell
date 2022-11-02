@@ -1,10 +1,11 @@
 .primary-header-wrapper {
   z-index: 1;
-  height: convertToRem(57px);
+  height: convertToRem(70px);
   width: 100%;
   box-shadow: var(--box-shadow-values);
   background-color: rgb(var(--primary-background-color));
   color: rgb(var(--primary-background-color));
+  position: relative;
 
   &--home {
     background-color: rgba(var(--primary-background-color), 0.75);

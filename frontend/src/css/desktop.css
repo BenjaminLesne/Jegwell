@@ -1,0 +1,51 @@
+main {
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.primary-header {
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.footer__content-wrapper {
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.categories {
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.categories__item {
+  width: 500px;
+}
+
+.about-us {
+  max-width: 60ch;
+  margin-inline: auto;
+}
+
+.hero {
+  height: 400px;
+}
+.hero__image {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.filters {
+  max-width: 500px;
+  margin-inline: auto;
+}
+
+.section--basket {
+  max-width: 60ch;
+  margin-inline: auto;
+}
+
+.form {
+  width: 60ch;
+  margin-inline: auto;
+}

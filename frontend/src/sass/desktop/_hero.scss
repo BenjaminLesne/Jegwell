@@ -1,0 +1,6 @@
+.hero {
+  height: 400px;
+  &__image {
+    object-fit: cover;
+  }
+}

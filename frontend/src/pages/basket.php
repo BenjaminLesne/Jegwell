@@ -13,7 +13,7 @@ include '../components/header.php'; // contient le code pour lire les variables 
 ?>
 
 <main>
-    <section class="section">
+    <section class="section section--basket">
         <h1 class="section__h2">VOTRE PANIER</h1>
         <section>
             <h2 class="screenreader">VOS ITEMS</h2>
