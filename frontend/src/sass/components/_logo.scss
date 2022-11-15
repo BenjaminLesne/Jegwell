@@ -3,7 +3,7 @@
   position: relative;
 
   $brandFontSize: 25px;
-  $width: convertToRem(37 / 20 * $brandFontSize);
+  $width: convertToRem(calc(37 / 20 * $brandFontSize));
   width: $width;
   height: $width;
 

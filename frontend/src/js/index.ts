@@ -2,11 +2,10 @@ import {
   closeMainMenu,
   handleAddToBasket,
   openQuantityModal,
-  handleQuantity,
-  handleBasketQuantityConfirmation,
   openOptionsModal,
   showSelectedOption,
-  handleOptionConfirm,
+
+  handleQuantity
 } from "./utils/functions.js";
 
 
@@ -21,14 +20,11 @@ const mainMenuCloseButton = document.getElementById("main-menu-close-button");
 const mainMenuLinks = document.querySelectorAll(".main-menu__link");
 const addToBasketButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".product__call-to-action-wrapper");
 const modalCloseButtons = document.querySelectorAll(".close-button--modal");
-
-const quantityButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".setting--quantity");
 const quantitySetterButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".quantity-setter__button");
-const quantityModalConfirmButton: HTMLElement | null = document.querySelector('#quantityModal .main-call-to-action');
+const quantityButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".setting--quantity");
 
 const optionsButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".setting--option");
 const productOptionWrapperAll: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".product-option-wrapper");
-const optionsModalConfirmButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".optionsModal .main-call-to-action");
 
 
 
@@ -75,8 +71,6 @@ quantitySetterButtons.forEach(button => {
 
 })
 
-quantityModalConfirmButton?.addEventListener('click', () => handleBasketQuantityConfirmation(quantityModalConfirmButton))
-
 // boutons option des produits
 optionsButtons.forEach((button) => {
   button.addEventListener("click", () => openOptionsModal(button))
@@ -92,19 +86,6 @@ productOptionWrapperAll.forEach((button) => {
   }
 });
 
-
-optionsModalConfirmButtons.forEach((button) => {
-  const modal: HTMLDialogElement | null | undefined = button.parentElement?.closest('.optionsModal');
-
-  if (modal != null) {
-    button.addEventListener("click", () => handleOptionConfirm(modal))
-  } else {
-    const message = "modal is undefined or null"
-    console.error(message)
-    throw new Error(message);
-
-  }
-});
 
 
 

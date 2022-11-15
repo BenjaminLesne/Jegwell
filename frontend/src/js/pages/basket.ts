@@ -1,7 +1,12 @@
-import { removeProductFromBasket } from "../utils/functions.js";
+import {
+    removeProductFromBasket,
+    handleBasketQuantityConfirmation,
+    handleOptionConfirm,
+} from "../utils/functions.js";
 
 const removeProductButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".item__remove");
-
+const quantityModalConfirmButton: HTMLElement | null = document.querySelector('#quantityModal .main-call-to-action');
+const optionsModalConfirmButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".optionsModal .main-call-to-action");
 
 removeProductButtons.forEach(button => {
     const productId = button.getAttribute('data-product-id');
@@ -24,4 +29,18 @@ removeProductButtons.forEach(button => {
 });
 
 
+quantityModalConfirmButton?.addEventListener('click', () => handleBasketQuantityConfirmation(quantityModalConfirmButton))
+
+optionsModalConfirmButtons.forEach((button) => {
+    const modal: HTMLDialogElement | null | undefined = button.parentElement?.closest('.optionsModal');
+
+    if (modal != null) {
+        button.addEventListener("click", () => handleOptionConfirm(modal))
+    } else {
+        const message = "modal is undefined or null"
+        console.error(message)
+        throw new Error(message);
+
+    }
+});
 
