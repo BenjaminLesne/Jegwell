@@ -763,3 +763,35 @@ class CheckoutPage(BasePage):
 
         
         return result
+
+class SingleProductPage(BasePage):
+
+    def does_add_to_basket_create_right_cookie(self):
+        # condition initial: aucun cookie productsToBasket présent sur le site
+        add_to_basket_button = self.chrome_driver.find_element(*SingleProductPageLocators.ADD_TO_BASKET_BUTTON)
+        
+        product_id = add_to_basket_button.get_attribute("data-product-id")
+        
+        # selenium ne peut pas cliquer sur un élément non visible à l'écran
+        # donc on scroll pour le rendre visible avec JavaScript vu que je n'y arrive pas avec selenium
+        self.chrome_driver.execute_script('return arguments[0].scrollIntoView()', add_to_basket_button)
+        time.sleep(1) # sans cette ligne, le click se fait trop vite et une erreur est retournée
+        
+        add_to_basket_button.click()
+        
+        basket_cookies = self.chrome_driver.get_cookie("productsToBasket")
+
+        expected_value = [{ "id": product_id, "option": "default","quantity": 1 }]
+        current_value = json.loads(basket_cookies['value'])
+
+        result = expected_value == current_value
+
+        if(result == False):
+            print("expected_value :")
+            print(expected_value)
+
+            print("current_value :")
+            print(current_value)
+
+        return result
+

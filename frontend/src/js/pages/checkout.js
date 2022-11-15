@@ -20,7 +20,6 @@ const deliveryOption = getCookie("deliveryOption");
 function warnUserAboutRedirection(message, request_uri, errorMessage) {
     const baseUrl = document.querySelector('body').baseURI;
     alert(message);
-    // const baseUrl = window.location.protocol + "//" + window.location.hostname;
     window.location.replace(baseUrl + request_uri);
     throw new Error(errorMessage);
 }

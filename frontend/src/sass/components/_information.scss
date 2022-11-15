@@ -1,0 +1,35 @@
+.information-wrapper {
+  flex: 3;
+}
+
+.information {
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    font-family: "ternary font";
+    margin-block: 15px;
+  }
+
+  &__product-price {
+    font-family: "secondary font";
+    font-weight: bolder;
+
+    font-size: convertToRem(20px);
+    display: grid;
+    align-items: center;
+  }
+  &__product-name {
+    font-size: convertToRem(20px);
+    display: grid;
+    align-items: center;
+  }
+
+  &__settings {
+    margin-bottom: 40px;
+    margin-top: 15px;
+  }
+
+  &__add-to-basket {
+    margin-inline: auto;
+  }
+}

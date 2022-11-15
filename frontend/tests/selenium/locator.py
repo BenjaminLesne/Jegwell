@@ -4,6 +4,9 @@ class ProductsPageLocators(object):
     ADD_TO_BASKET_BUTTON = (By.CSS_SELECTOR, ".product__call-to-action-wrapper")
     MODAL_LINK = (By.CSS_SELECTOR, ".modal__link")
 
+class SingleProductPageLocators(object):
+    ADD_TO_BASKET_BUTTON = (By.CSS_SELECTOR, ".product__call-to-action-wrapper.main-call-to-action")
+
 class BasketPageLocators(object):
     FIRST_QUANTITY_BUTTON = (By.CSS_SELECTOR, ".setting--quantity")
     FIRST_OPTIONS_BUTTON = (By.CSS_SELECTOR, ".setting--option")
