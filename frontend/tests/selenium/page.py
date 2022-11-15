@@ -763,3 +763,82 @@ class CheckoutPage(BasePage):
 
         
         return result
+
+class SingleProductPage(BasePage):
+
+    def does_add_to_basket_create_right_cookie(self):
+        # condition initial: aucun cookie productsToBasket présent sur le site
+        add_to_basket_button = self.chrome_driver.find_element(*SingleProductPageLocators.ADD_TO_BASKET_BUTTON)
+        
+        product_id = add_to_basket_button.get_attribute("data-product-id")
+        
+        # selenium ne peut pas cliquer sur un élément non visible à l'écran
+        # donc on scroll pour le rendre visible avec JavaScript vu que je n'y arrive pas avec selenium
+        self.chrome_driver.execute_script('return arguments[0].scrollIntoView()', add_to_basket_button)
+        time.sleep(1) # sans cette ligne, le click se fait trop vite et une erreur est retournée
+        
+        add_to_basket_button.click()
+        
+        basket_cookies = self.chrome_driver.get_cookie("productsToBasket")
+
+        expected_value = [{ "id": product_id, "option": "default","quantity": 1 }]
+        current_value = json.loads(basket_cookies['value'])
+
+        result = expected_value == current_value
+
+        if(result == False):
+            print("expected_value :")
+            print(expected_value)
+
+            print("current_value :")
+            print(current_value)
+
+        return result
+
+    def does_quantity_updates_on_confirm(self):
+        confirm_quantity_button = self.chrome_driver.find_element(*SingleProductPageLocators.QUANTITY_MODAL_CONFIRM_BUTTON)
+
+        confirm_quantity_button.click()
+
+
+        quantity_displayed = self.chrome_driver.find_element(*SingleProductPageLocators.QUANTITY_WRAPPER).text
+        expected_quantity_displayed = "2"
+
+        result = quantity_displayed == expected_quantity_displayed
+
+        if(result == False):
+            print("quantity_displayed")
+            print(quantity_displayed)
+            print("expected_quantity_displayed")
+            print(expected_quantity_displayed)
+            print("quantity_displayed == expected_quantity_displayed")
+            print(quantity_displayed == expected_quantity_displayed)
+
+        return result
+
+    def does_options_updates_on_confirm(self):
+        first_options_button = self.chrome_driver.find_element(*BasketPageLocators.FIRST_OPTIONS_BUTTON)
+        confirm_button = self.chrome_driver.find_element(By.CSS_SELECTOR, '.optionsModal .main-call-to-action')
+        option_unselected = self.chrome_driver.find_element(By.CSS_SELECTOR, '.optionsModal .product-option-wrapper:not(.selected)')
+
+        option_unselected.click()
+        confirm_button.click()
+
+        option_displayed = self.chrome_driver.find_element(*SingleProductPageLocators.OPTION_WRAPPER).text
+
+        expected_option_displayed = "Vert"
+        result = option_displayed == expected_option_displayed
+
+        if(result == False):
+            print("option_displayed")
+            print(option_displayed)
+            print("expected_option_displayed")
+            print(expected_option_displayed)
+            print("option_displayed == expected_option_displayed")
+            print(option_displayed == expected_option_displayed)
+
+
+        return result
+
+
+

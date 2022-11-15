@@ -7,6 +7,7 @@ export function handleAddToBasket(button) {
     var _a;
     const product_id = button.getAttribute("data-product-id");
     const product_option = (_a = button.getAttribute("data-product-option")) !== null && _a !== void 0 ? _a : "default";
+    const product_quantity_stringified = button.getAttribute("data-product-quantity");
     if (product_id == null) {
         // Ca prenait trop de temps, solution court terme alert(), a l'avenir faire que le code commenté fonctionne:
         // const header = document.querySelector(".primary-header-wrapper");
@@ -17,9 +18,11 @@ export function handleAddToBasket(button) {
         // const text = document.createTextNode("L'ajout au panier n'a pas fonctionné :(");
         // div.appendChild(text);
         // document.body.appendChild(div);
+        console.error("product_id == null || product_quantity_stringified == null - this is true");
         alert("L'ajout au panier n'a pas fonctionné :(");
     }
     else {
+        const product_quantity = parseInt(product_quantity_stringified !== null && product_quantity_stringified !== void 0 ? product_quantity_stringified : "-1");
         const currentProductsAddedJson = getCookie("productsToBasket");
         let newProductsAddedJson;
         button.classList.remove('success');
@@ -30,19 +33,26 @@ export function handleAddToBasket(button) {
             // si le produit ajouté est déjà dans la panier...
             if (productIndex > (-1)) {
                 // le produit exist déjà,
-                // on ajoute 1 à sa quantité
-                currentProductsAdded[productIndex]['quantity'] += 1;
+                // on update sa quantité
+                if (product_quantity === (-1)) {
+                    currentProductsAdded[productIndex]['quantity'] += 1;
+                }
+                else {
+                    currentProductsAdded[productIndex]['quantity'] = product_quantity;
+                }
                 newProductsAddedJson = JSON.stringify(currentProductsAdded);
             }
             else {
+                const quantity = product_quantity === (-1) ? 1 : product_quantity;
                 // ajout du produit au panier/cookie sous forme de json
-                currentProductsAdded.push({ id: product_id, option: product_option, quantity: 1 });
+                currentProductsAdded.push({ id: product_id, option: product_option, quantity: quantity });
                 newProductsAddedJson = JSON.stringify(currentProductsAdded);
             }
         }
         else {
+            const quantity = product_quantity === (-1) ? 1 : product_quantity;
             // les cookies ne contiennent aucun produit, on crée le tableau, contenant le produit a ajouté, sous forme de json
-            newProductsAddedJson = JSON.stringify([{ id: product_id, option: product_option, quantity: 1 }]);
+            newProductsAddedJson = JSON.stringify([{ id: product_id, option: product_option, quantity: quantity }]);
         }
         addToCookies('productsToBasket', newProductsAddedJson, 365);
         void button.offsetWidth; // déclenche un 'reflow' du navigateur, nécessaire pour relancer l'animation, voir: https://css-tricks.com/restart-css-animation/
@@ -113,12 +123,32 @@ export function handleBasketQuantityConfirmation(button) {
     const quantity = modal === null || modal === void 0 ? void 0 : modal.getAttribute('data-quantity');
     if (modal != null && productId != null && quantity != null && productOption != null) {
         updateBasket(productId, productOption, 'quantity', parseInt(quantity));
-        window.location.reload();
     }
     else {
         const message = "handleBasketConfirmation -> modal or productId or quantity or productOption is undefined/null";
         console.error(message);
         throw new Error(message);
+    }
+}
+export function handleSinglePageQuantityConfirmation(button) {
+    var _a;
+    const modal = (_a = button.parentElement) === null || _a === void 0 ? void 0 : _a.closest("dialog");
+    // const productId = modal?.getAttribute('data-product-id');
+    // const productOption = modal?.getAttribute('data-product-option');
+    const quantity = modal === null || modal === void 0 ? void 0 : modal.getAttribute('data-quantity');
+    const quantitySettingButton = document.querySelector(".setting--quantity");
+    const quantityValueElement = quantitySettingButton === null || quantitySettingButton === void 0 ? void 0 : quantitySettingButton.querySelector(".setting__value-span");
+    const addToBasketButton = document.querySelector(".information__add-to-basket");
+    if ((quantityValueElement === null || quantityValueElement === void 0 ? void 0 : quantityValueElement.textContent) != null && quantity != null && modal != null && addToBasketButton != null) {
+        addToBasketButton.setAttribute("data-product-quantity", quantity);
+        quantityValueElement.textContent = quantity;
+        modal.close();
+    }
+    else {
+        console.log("quantityValueElement", quantityValueElement, quantityValueElement === null || quantityValueElement === void 0 ? void 0 : quantityValueElement.textContent);
+        console.log("quantity", quantity);
+        console.error("quantityValueElement?.textContent != null && quantity != null && modal != null - this condition is false");
+        alert("Oups, une erreur est survenue !");
     }
 }
 export function openOptionsModal(button) {
@@ -141,7 +171,6 @@ export function openOptionsModal(button) {
     }
 }
 export function showSelectedOption(productId, productOption, optionsModal) {
-    // const optionsModal = document.querySelector(`.optionsModal[data-product-id='${productId}'][data-product-option='${productOption}']`)
     const currentOption = optionsModal === null || optionsModal === void 0 ? void 0 : optionsModal.querySelector(`.product-option-wrapper.selected`);
     const newOption = optionsModal === null || optionsModal === void 0 ? void 0 : optionsModal.querySelector(`.product-option-wrapper[data-product-option='${productOption}']`);
     currentOption === null || currentOption === void 0 ? void 0 : currentOption.classList.remove("selected");
@@ -163,20 +192,50 @@ export function showSelectedOption(productId, productOption, optionsModal) {
     }
 }
 export function handleOptionConfirm(optionsModal) {
-    const optionElementSelected = optionsModal.querySelector('.product-option-wrapper.selected');
+    const optionElementSelected = optionsModal === null || optionsModal === void 0 ? void 0 : optionsModal.querySelector('.product-option-wrapper.selected');
     const optionSelected = optionElementSelected === null || optionElementSelected === void 0 ? void 0 : optionElementSelected.getAttribute('data-product-option');
-    const previousOption = optionsModal.getAttribute('data-product-option');
-    const productId = optionsModal.getAttribute('data-product-id');
+    const previousOption = optionsModal === null || optionsModal === void 0 ? void 0 : optionsModal.getAttribute('data-product-option');
+    const productId = optionsModal === null || optionsModal === void 0 ? void 0 : optionsModal.getAttribute('data-product-id');
     const condition = optionElementSelected != null &&
         optionSelected != null &&
         previousOption != null &&
-        productId != null;
+        productId != null &&
+        optionsModal != null;
     if (condition) {
         updateBasket(productId, previousOption, "option", optionSelected);
     }
     else {
         const message = "optionSelected or previousOption or productId is undefined";
         console.table([optionSelected, previousOption, productId]);
+        throw new Error(message);
+    }
+}
+export function handleSingleProductOptionConfirm(optionsModal) {
+    const optionElementSelected = optionsModal === null || optionsModal === void 0 ? void 0 : optionsModal.querySelector('.product-option-wrapper.selected');
+    const optionSelected = optionElementSelected === null || optionElementSelected === void 0 ? void 0 : optionElementSelected.getAttribute('data-product-option');
+    const addToBasketButton = document.querySelector(".information__add-to-basket");
+    const settingOptionButton = document.querySelector(".setting--option");
+    const valueContainer = settingOptionButton === null || settingOptionButton === void 0 ? void 0 : settingOptionButton.querySelector(".setting__value-span");
+    const mediaScroller = document.querySelector(".media-scroller");
+    const targetMediaElement = document.querySelector(`.media-element[data-product-option="${optionSelected}"]`);
+    const condition = optionElementSelected != null &&
+        optionSelected != null &&
+        optionsModal != null &&
+        addToBasketButton != null &&
+        valueContainer != null &&
+        mediaScroller != null &&
+        targetMediaElement != null;
+    if (condition) {
+        addToBasketButton.setAttribute("data-product-option", optionSelected);
+        valueContainer.textContent = optionSelected;
+        targetMediaElement.scrollIntoView({ block: "end" });
+        optionsModal.close();
+    }
+    else {
+        const message = "could not update single product button attributes";
+        console.error(message);
+        console.log(optionElementSelected, optionSelected, optionsModal, addToBasketButton, valueContainer, mediaScroller, targetMediaElement);
+        alert('Oups, une erreur est survenue');
         throw new Error(message);
     }
 }

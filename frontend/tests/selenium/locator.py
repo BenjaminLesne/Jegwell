@@ -4,6 +4,15 @@ class ProductsPageLocators(object):
     ADD_TO_BASKET_BUTTON = (By.CSS_SELECTOR, ".product__call-to-action-wrapper")
     MODAL_LINK = (By.CSS_SELECTOR, ".modal__link")
 
+class SingleProductPageLocators(object):
+    ADD_TO_BASKET_BUTTON = (By.CSS_SELECTOR, ".information__add-to-basket")
+    QUANTITY_BUTTON = (By.CSS_SELECTOR, ".setting--quantity")
+    PLUS_MINUS_BUTTON = (By.CSS_SELECTOR, ".quantity-setter__button")
+    QUANTITY_MODAL_CONFIRM_BUTTON = (By.CSS_SELECTOR, "#quantityModal .main-call-to-action")
+    QUANTITY_WRAPPER = (By.CSS_SELECTOR, ".setting--quantity .setting__value-span")
+    OPTION_WRAPPER = (By.CSS_SELECTOR, ".setting--option .setting__value-span")
+    
+
 class BasketPageLocators(object):
     FIRST_QUANTITY_BUTTON = (By.CSS_SELECTOR, ".setting--quantity")
     FIRST_OPTIONS_BUTTON = (By.CSS_SELECTOR, ".setting--option")
