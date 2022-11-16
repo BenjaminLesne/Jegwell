@@ -81,7 +81,7 @@ $delivery_url = $_ENV['HOME_PAGE'] . '/panier/livraison';
 </head>
 
 <body id="topOfThePage">
-    <header class="primary-header-wrapper <?php echo $_SERVER['REQUEST_URI'] == '/' ? 'primary-header-wrapper--home' : '' ?>">
+    <header class="primary-header-wrapper <?php echo $_SERVER['REQUEST_URI'] == $_ENV['HOME_PATH'] ? 'primary-header-wrapper--home' : '' ?>" data-home-path="<?php echo $_ENV['HOME_PATH'] ?>">
         <nav class="primary-header" aria-labelledby="primary-navigation">
             <div class="main-menu" id="main-menu">
                 <button class="close-button" id="main-menu-close-button" value="default">
@@ -110,7 +110,7 @@ $delivery_url = $_ENV['HOME_PAGE'] . '/panier/livraison';
                 <span class="burger-button__slice"></span>
                 <span class="burger-button__slice"></span>
             </button>
-            <a class="brand-wrapper" href='/'>
+            <a class="brand-wrapper" href='<?php echo $home_url ?>'>
                 <div class="brand">
                     <div class="logo">
                         <div class="logo__image">

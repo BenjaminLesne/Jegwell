@@ -38,7 +38,7 @@ export function handleAddToBasket(button) {
                     currentProductsAdded[productIndex]['quantity'] += 1;
                 }
                 else {
-                    currentProductsAdded[productIndex]['quantity'] = product_quantity;
+                    currentProductsAdded[productIndex]['quantity'] += product_quantity;
                 }
                 newProductsAddedJson = JSON.stringify(currentProductsAdded);
             }
@@ -382,9 +382,11 @@ export function handleAfterPaymentSucceeded() {
     deleteCookie("deliveryOption");
 }
 function addToCookies(key, value, days) {
+    var _a, _b;
+    const HOME_PATH = (_b = (_a = document.querySelector(".primary-header-wrapper")) === null || _a === void 0 ? void 0 : _a.getAttribute("data-home-path")) !== null && _b !== void 0 ? _b : "/";
     const date = new Date();
     date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // crée une date d'expiration d'un an (365j * 24h * 60min etc.)
     const expiriringDate = ";expires=" + date.toUTCString();
     // ajout du json du/des produits avec une date d'expiration
-    document.cookie = key + '=' + value + expiriringDate;
+    document.cookie = key + '=' + value + expiriringDate + ';SameSite=Strict' + `;path=${HOME_PATH}`;
 }

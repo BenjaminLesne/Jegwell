@@ -47,7 +47,7 @@ export function handleAddToBasket(button: HTMLButtonElement) {
           currentProductsAdded[productIndex]['quantity'] += 1
         } else {
 
-          currentProductsAdded[productIndex]['quantity'] = product_quantity;
+          currentProductsAdded[productIndex]['quantity'] += product_quantity;
         }
 
         newProductsAddedJson = JSON.stringify(currentProductsAdded);
@@ -498,13 +498,13 @@ export function handleAfterPaymentSucceeded() {
 }
 
 function addToCookies(key: string, value: string, days: number) {
-
+  const HOME_PATH = document.querySelector(".primary-header-wrapper")?.getAttribute("data-home-path") ?? "/";
   const date = new Date();
   date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // crée une date d'expiration d'un an (365j * 24h * 60min etc.)
   const expiriringDate = ";expires=" + date.toUTCString();
 
   // ajout du json du/des produits avec une date d'expiration
-  document.cookie = key + '=' + value + expiriringDate;
+  document.cookie = key + '=' + value + expiriringDate + ';SameSite=Strict' + `;path=${HOME_PATH}`;
 
 }
 
