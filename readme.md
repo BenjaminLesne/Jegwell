@@ -2,7 +2,7 @@
 
 English version below!
 
-Jegwell est une marque de bijoux faits-main souhaitant améliorer les performances de son site E-commerce qui utilise Wordpress actuellement. La majorité des utilisateurs sont sur mobile.
+[Jegwell](https://www.instagram.com/jegwell/) est une marque de bijoux faits-main souhaitant améliorer les performances de son site E-commerce qui utilise Wordpress actuellement. La majorité des utilisateurs sont sur mobile.
 
 **BUTS DU PROJET**:
 
@@ -30,7 +30,7 @@ Créer un site:
 
 # ENGLISH VERSION
 
-Jegwell is a handmade jewelry brand wishing to improve the performance of its E-commerce site which currently uses Wordpress. The majority of their users are on mobile.
+[Jegwell](https://www.instagram.com/jegwell/) is a handmade jewelry brand wishing to improve the performance of its E-commerce site which currently uses Wordpress. The majority of their users are on mobile.
 
 **PROJECT GOALS**:
 
