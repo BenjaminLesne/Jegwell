@@ -53,8 +53,8 @@ $sanity = new SanityClient([
                     </div> -->
 
                     <div class="form__tel form__tel--number form__input-label-wrapper">
-                        <label class="form__label" for="phoneNumber">Téléphone</label>
-                        <input class="input form__input" type="tel" id="phoneNumber" name="phoneNumber" placeholder="0612345678" />
+                        <label class="form__label required" for="phoneNumber">Téléphone</label>
+                        <input class="input form__input" type="tel" id="phoneNumber" name="phoneNumber" placeholder="0612345678" required />
                         <p class="form__error-message">Doit être un numéro de téléphone valide</p>
                     </div>
                 </div>

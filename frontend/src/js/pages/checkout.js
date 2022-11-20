@@ -7,10 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var _a;
-// @ts-nocheck
+var _a, _b;
 import { getCookie } from "../utils/functions.js";
 const token = (_a = document.querySelector("[data-token]")) === null || _a === void 0 ? void 0 : _a.getAttribute("data-token");
+if (token == null) {
+    throw new Error("stripe api token is undefined");
+}
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
 // Sign in to see your own test API key embedded in code samples.
@@ -18,7 +20,8 @@ const stripe = Stripe(token);
 const itemsJson = getCookie("productsToBasket");
 const deliveryOption = getCookie("deliveryOption");
 function warnUserAboutRedirection(message, request_uri, errorMessage) {
-    const baseUrl = document.querySelector('body').baseURI;
+    var _a;
+    const baseUrl = (_a = document.querySelector('body')) === null || _a === void 0 ? void 0 : _a.baseURI;
     alert(message);
     window.location.replace(baseUrl + request_uri);
     throw new Error(errorMessage);
@@ -26,10 +29,12 @@ function warnUserAboutRedirection(message, request_uri, errorMessage) {
 // si l'utilisateur a un panier vide, on le redirige vers la page des produits
 if (itemsJson === null || itemsJson === '' || itemsJson === '[]') {
     warnUserAboutRedirection("Votre panier est vide. Vous allez être redirigé vers les créations Jegwell !", "/creations", "productsToBasket cookie missing");
+    throw new Error("The user basket is undefined/empty");
 }
 // // si l'utilisateur n'a pas de méthode de récupération, on le redirige vers la page de livraison
 if (deliveryOption === null || deliveryOption === '') {
     warnUserAboutRedirection("Nous ne trouvons pas votre méthode de récupération. Vous allez être redirigé vers la page de livraison !", "/panier/livraison", "deliveryOption cookie missing");
+    throw new Error("The user delivery option is undefined/empty");
 }
 // The items the customer wants to buy
 const items = JSON.parse(itemsJson);
@@ -38,27 +43,39 @@ const orderStringified = JSON.stringify(order);
 let elements;
 initialize();
 checkStatus();
-document
-    .querySelector("#payment-form")
-    .addEventListener("submit", handleSubmit);
+(_b = document.querySelector("#payment-form")) === null || _b === void 0 ? void 0 : _b.addEventListener("submit", handleSubmit);
 // Fetches a payment intent and captures the client secret
 function initialize() {
     return __awaiter(this, void 0, void 0, function* () {
+        let responseClone;
         const { clientSecret, totalPriceInCents, error } = yield fetch("./src/components/create.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: orderStringified,
-        }).then((r) => r.json()); // retourner la reponseJson parsed pour pouvoir récupérer clientSecret et totalPriceInCents /!\
-        if (error || totalPriceInCents < 100) {
-            console.log("error", error);
+        }).then((r) => {
+            responseClone = r.clone();
+            return r.json();
+        }).then((data) => { return data; }, (rejectionReason) => {
+            console.log('Error parsing JSON from response:', rejectionReason, responseClone); // 4
+            responseClone.text() // 5
+                .then(function (bodyText) {
+                console.log('Received the following instead of valid JSON:', bodyText); // 6
+            });
+        }); // retourner la reponseJson parsed pour pouvoir récupérer clientSecret et totalPriceInCents /!\
+        if (error || totalPriceInCents == null || (totalPriceInCents != null && totalPriceInCents < 100)) {
+            console.error(error);
             alert("Oups, une erreur est survenue !");
+            throw new Error("error || (totalPriceInCents != null && totalPriceInCents < 100)");
         }
+        // @ts-ignore
         elements = stripe.elements({ clientSecret });
         const paymentElement = elements.create("payment");
         paymentElement.mount("#payment-element");
         const payButton = document.querySelector('#button-text');
         const totalPriceInEuros = totalPriceInCents / 100;
-        payButton.textContent = `Payer ${totalPriceInEuros} € TTC`;
+        if (payButton) {
+            payButton.textContent = `Payer ${totalPriceInEuros} € TTC`;
+        }
     });
 }
 function handleSubmit(e) {
@@ -67,6 +84,7 @@ function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
         const success_url = (_a = document.querySelector('[data-success-url')) === null || _a === void 0 ? void 0 : _a.getAttribute("data-success-url");
+        // @ts-ignore
         const { error } = yield stripe.confirmPayment({
             elements,
             confirmParams: {
@@ -96,7 +114,7 @@ function checkStatus() {
             return;
         }
         const { paymentIntent } = yield stripe.retrievePaymentIntent(clientSecret);
-        switch (paymentIntent.status) {
+        switch (paymentIntent === null || paymentIntent === void 0 ? void 0 : paymentIntent.status) {
             case "succeeded":
                 showMessage("Payment succeeded!");
                 break;
@@ -115,24 +133,36 @@ function checkStatus() {
 // ------- UI helpers -------
 function showMessage(messageText) {
     const messageContainer = document.querySelector("#payment-message");
-    messageContainer.classList.remove("hidden");
-    messageContainer.textContent = messageText;
-    setTimeout(function () {
-        messageContainer.classList.add("hidden");
-        messageContainer.textContent = "";
-    }, 4000);
+    if (messageContainer) {
+        messageContainer.classList.remove("hidden");
+        messageContainer.textContent = messageText;
+        setTimeout(function () {
+            messageContainer.classList.add("hidden");
+            messageContainer.textContent = "";
+        }, 4000);
+    }
+    else {
+        console.error("messageContainer is undefined");
+    }
 }
 // Show a spinner on payment submission
 function setLoading(isLoading) {
+    var _a, _b, _c, _d;
     if (isLoading) {
         // Disable the button and show a spinner
-        document.querySelector("#submit").disabled = true;
-        document.querySelector("#spinner").classList.remove("hidden");
-        document.querySelector("#button-text").classList.add("hidden");
+        const submit = document.querySelector("#submit");
+        if (submit) {
+            submit.disabled = true;
+        }
+        (_a = document.querySelector("#spinner")) === null || _a === void 0 ? void 0 : _a.classList.remove("hidden");
+        (_b = document.querySelector("#button-text")) === null || _b === void 0 ? void 0 : _b.classList.add("hidden");
     }
     else {
-        document.querySelector("#submit").disabled = false;
-        document.querySelector("#spinner").classList.add("hidden");
-        document.querySelector("#button-text").classList.remove("hidden");
+        const submit = document.querySelector("#submit");
+        if (submit) {
+            submit.disabled = false;
+        }
+        (_c = document.querySelector("#spinner")) === null || _c === void 0 ? void 0 : _c.classList.add("hidden");
+        (_d = document.querySelector("#button-text")) === null || _d === void 0 ? void 0 : _d.classList.remove("hidden");
     }
 }

@@ -28,8 +28,8 @@ include '../components/header.php'; // contient le code pour lire les variables 
                     foreach ($products_to_basket as $wanted_product) {
                         $wanted_id = $wanted_product->id;
 
-                        if (str_contains($wanted_ids, $wanted_id) == false) {
-                            $previous_ids = $wanted_ids === '' ? '' : ", $wanted_id";
+                        if (str_contains($wanted_ids, $wanted_id) === false) {
+                            $previous_ids = $wanted_ids === '' ? '' : ", $wanted_ids";
                             $wanted_ids = "'$wanted_id' $previous_ids";
                         }
                     }
@@ -56,6 +56,7 @@ include '../components/header.php'; // contient le code pour lire les variables 
                                 },
                             }
                         ";
+
                     //  sanity doc: https://www.sanity.io/docs/reference-type
 
                     $products = $sanity->fetch($query);
@@ -67,13 +68,11 @@ include '../components/header.php'; // contient le code pour lire les variables 
                         $option_image_alternative = "$product[name]";
 
                         // generate options modal
-                        echo createOptionsModal($product['id'], $product['image_url'], $product['options'], $option_image_alternative, $svgs_sprite_url);
+                        echo createOptionsModal($product['id'], $product['image_url'], $product['options'] ?? [], $option_image_alternative, $svgs_sprite_url);
 
                         foreach ($products_to_basket as $basket_product) {
                             // récupère la position des objets dans le panier contenant l'id du produit
                             if ($basket_product->id === $product['id']) {
-
-
 
                                 // ajoute la quantité trouvé dans les cookies aux produits retournés par sanity
                                 $quantity = $basket_product->quantity;
@@ -82,13 +81,15 @@ include '../components/header.php'; // contient le code pour lire les variables 
 
 
                                 $option_index = null;
+                                if ($product['options']) {
 
-                                foreach ($product['options'] as $key => $option) {
+                                    foreach ($product['options'] as $key => $option) {
 
-                                    if ($option['name'] == $basket_product->option) {
-                                        $option_index = $key;
+                                        if ($option['name'] === $basket_product->option) {
+                                            $option_index = $key;
 
-                                        break;
+                                            break;
+                                        }
                                     }
                                 }
 

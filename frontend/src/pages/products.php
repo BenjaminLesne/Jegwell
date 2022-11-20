@@ -133,8 +133,7 @@ if (isset($_GET['trier'])) {
             $products = $sanity->fetch($query);
 
             foreach ($products as $product) {
-
-                $options_amount = count($product['options']);
+                $options_amount = $product['options'] ? count($product['options']) : 0;
                 $options_html = $options_amount > 0 ? "data-options='$options_amount'" : '';
                 $product_page_url = $_ENV['HOME_PAGE'] . '/creations/' . $product['slug'];
                 $image_url =  $product['image_url'];
@@ -165,9 +164,11 @@ if (isset($_GET['trier'])) {
     // bloc concernant la pagination
     $total_pages = ceil(count($products) / 10);
 
-    if ($total_pages > 1) {
+    if (false && $total_pages > 1) {
 
     ?>
+
+
         <div class="pagination">
             <?php
             $previous_page = 1;

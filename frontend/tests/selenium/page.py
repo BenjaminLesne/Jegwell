@@ -259,6 +259,29 @@ class ProductsPage(BasePage):
 
                 return result
 
+    def can_we_add_three_products(self):
+            add_to_basket_buttons = self.chrome_driver.find_elements(*ProductsPageLocators.ADD_TO_BASKET_BUTTON)
+
+            for index in range(3):
+                add_to_basket_buttons[index].click()
+
+            basket_cookies = self.chrome_driver.get_cookie("productsToBasket")
+
+            expected_value = 3
+            current_value = len(json.loads(basket_cookies['value']))
+
+            result = expected_value == current_value
+
+            if(result == False):
+                # debug purposes
+                print("expected_value :")
+                print(expected_value)
+                print("current_value :")
+                print(current_value)
+        
+            return result
+                
+
 
 class BasketPage(BasePage):
 
@@ -492,7 +515,17 @@ class BasketPage(BasePage):
             
 
 
-        return results   
+        return results
+
+    def are_three_products_displayed(self):
+        result = len(self.chrome_driver.find_elements(*BasketPageLocators.PRODUCT_ITEM)) == 3
+
+        if(result == False):
+            print("number of item displayed:")
+            print(len(self.chrome_driver.find_elements(*BasketPageLocators.PRODUCT_ITEM)))
+
+        return result
+        
 
         
 class CheckoutPage(BasePage):

@@ -21,6 +21,7 @@ class BasketPageLocators(object):
     QUANTITY_SETTER_VALUE_ELEMENT = (By.CSS_SELECTOR, ".quantity-setter__value")
     SUBTOTAL_PRICE_ELEMENT = (By.CSS_SELECTOR, ".subtotal__top-information > .price")
     ARTICLES_ELEMENT = (By.CSS_SELECTOR, '.subtotal__number-of-articles')
+    PRODUCT_ITEM = (By.CSS_SELECTOR, '.item')
 
 class DeliveryPageLocators(object):
     LASTNAME_INPUT = (By.CSS_SELECTOR, "#lastname")

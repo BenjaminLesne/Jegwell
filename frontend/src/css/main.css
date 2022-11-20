@@ -335,6 +335,7 @@ a,
   align-items: center;
   gap: 5px;
   padding: 15px;
+  max-width: 250px;
 }
 .product-option__image-wrapper {
   aspect-ratio: 1;
@@ -394,6 +395,9 @@ a,
 }
 .product__image {
   width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  height: 100%;
 }
 .product__information {
   display: flex;

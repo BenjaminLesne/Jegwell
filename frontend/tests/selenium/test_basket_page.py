@@ -14,17 +14,17 @@ class BasketPage(unittest.TestCase):
 
     def setUp(self):
         self.chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-        basket_page_url = config["HOME_PAGE"] + "/src/pages/basket.php"
-        products_page_url = config["HOME_PAGE"] + "/src/pages/products.php"
+        self.basket_page_url = config["HOME_PAGE"] + "/src/pages/basket.php"
+        self.products_page_url = config["HOME_PAGE"] + "/src/pages/products.php"
         self.basketPage = page.BasketPage(self.chrome_driver)
 
-        self.chrome_driver.get(products_page_url)
+        self.chrome_driver.get(self.products_page_url)
 
         productsPage = page.ProductsPage(self.chrome_driver)
         # ajoute un produit a notre panier
         productsPage.does_add_to_basket_create_right_cookie()
         
-        self.chrome_driver.get(basket_page_url)
+        self.chrome_driver.get(self.basket_page_url)
 
     def test_item_delete_button(self):
         item_is_deleted_properly = self.basketPage.does_item_gets_removed_properly()
@@ -64,6 +64,17 @@ class BasketPage(unittest.TestCase):
         # test la fermeture de la modal
         modal_closed = self.basketPage.does_options_modal_close()
         assert modal_closed
+
+    def test_three_items_added_to_basket(self):
+        self.chrome_driver.get(self.products_page_url)
+        productsPage = page.ProductsPage(self.chrome_driver)
+
+        productsPage.can_we_add_three_products()
+        self.chrome_driver.get(self.basket_page_url)
+
+        display_three_products = self.basketPage.are_three_products_displayed()
+
+        assert display_three_products
         
 
     def tearDown(self):
