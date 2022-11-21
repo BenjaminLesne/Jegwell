@@ -7,9 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var _a, _b;
+var _a, _b, _c;
 import { getCookie } from "../utils/functions.js";
 const token = (_a = document.querySelector("[data-token]")) === null || _a === void 0 ? void 0 : _a.getAttribute("data-token");
+const HOME_PATH = (_b = document.querySelector(".primary-header-wrapper[data-home-path]")) === null || _b === void 0 ? void 0 : _b.getAttribute("data-home-path");
+const ORIGIN = window.location.origin;
+console.log(`${ORIGIN}${HOME_PATH}src/components/create.php`);
 if (token == null) {
     throw new Error("stripe api token is undefined");
 }
@@ -43,12 +46,12 @@ const orderStringified = JSON.stringify(order);
 let elements;
 initialize();
 checkStatus();
-(_b = document.querySelector("#payment-form")) === null || _b === void 0 ? void 0 : _b.addEventListener("submit", handleSubmit);
+(_c = document.querySelector("#payment-form")) === null || _c === void 0 ? void 0 : _c.addEventListener("submit", handleSubmit);
 // Fetches a payment intent and captures the client secret
 function initialize() {
     return __awaiter(this, void 0, void 0, function* () {
         let responseClone;
-        const { clientSecret, totalPriceInCents, error } = yield fetch("./src/components/create.php", {
+        const { clientSecret, totalPriceInCents, error } = yield fetch(`${ORIGIN}${HOME_PATH}/src/components/create.php`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: orderStringified,
@@ -56,10 +59,9 @@ function initialize() {
             responseClone = r.clone();
             return r.json();
         }).then((data) => { return data; }, (rejectionReason) => {
-            console.log('Error parsing JSON from response:', rejectionReason, responseClone); // 4
-            responseClone.text() // 5
-                .then(function (bodyText) {
-                console.log('Received the following instead of valid JSON:', bodyText); // 6
+            console.log('Error parsing JSON from response:', rejectionReason, responseClone);
+            responseClone === null || responseClone === void 0 ? void 0 : responseClone.text().then(function (bodyText) {
+                console.log('Received the following instead of valid JSON:', bodyText);
             });
         }); // retourner la reponseJson parsed pour pouvoir récupérer clientSecret et totalPriceInCents /!\
         if (error || totalPriceInCents == null || (totalPriceInCents != null && totalPriceInCents < 100)) {
