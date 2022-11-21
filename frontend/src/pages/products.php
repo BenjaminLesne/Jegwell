@@ -132,16 +132,19 @@ if (isset($_GET['trier'])) {
 
             $products = $sanity->fetch($query);
 
-            foreach ($products as $product) {
-                $options_amount = $product['options'] ? count($product['options']) : 0;
-                $options_html = $options_amount > 0 ? "data-options='$options_amount'" : '';
-                $product_page_url = $_ENV['HOME_PAGE'] . '/creations/' . $product['slug'];
-                $image_url =  $product['image_url'];
-                $product_name = $product['name'];
-                $price = $product['price'];
-                $product_id = $product['_id'];
+            $products_amount = $products ? count($products) : 0;
+            if ($products_amount > 0) {
 
-                echo "<article class='product'>
+                foreach ($products as $product) {
+                    $options_amount = $product['options'] ? count($product['options']) : 0;
+                    $options_html = $options_amount > 0 ? "data-options='$options_amount'" : '';
+                    $product_page_url = $_ENV['HOME_PAGE'] . '/creations/' . $product['slug'];
+                    $image_url =  $product['image_url'];
+                    $product_name = $product['name'];
+                    $price = $product['price'];
+                    $product_id = $product['_id'];
+
+                    echo "<article class='product'>
                     <a class='product__image-wrapper' href='$product_page_url' $options_html>
                         <img class='product__image' src='$image_url' alt='$product_name'>
                     </a>
@@ -156,6 +159,13 @@ if (isset($_GET['trier'])) {
                         </button>
                     </div>
                   </article>";
+                }
+            } else {
+            ?>
+                <div class="no-product">
+                    <p class="no-product__message">Il n'y en a pas pour l'instant mais c'est pour bientôt !</p>
+                </div>
+            <?php
             }
             ?>
 

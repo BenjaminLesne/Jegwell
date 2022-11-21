@@ -1,6 +1,9 @@
 import { getCookie } from "../utils/functions.js";
 
 const token = document.querySelector("[data-token]")?.getAttribute("data-token");
+const HOME_PATH = document.querySelector(".primary-header-wrapper[data-home-path]")?.getAttribute("data-home-path");
+const ORIGIN = window.location.origin
+console.log(`${ORIGIN}${HOME_PATH}src/components/create.php`);
 
 if (token == null) {
     throw new Error("stripe api token is undefined");
@@ -54,7 +57,7 @@ document.querySelector("#payment-form")?.addEventListener("submit", handleSubmit
 // Fetches a payment intent and captures the client secret
 async function initialize() {
     let responseClone: any;
-    const { clientSecret, totalPriceInCents, error }: { clientSecret?: any, totalPriceInCents?: number, error?: any } = await fetch("./src/components/create.php", {
+    const { clientSecret, totalPriceInCents, error }: { clientSecret?: any, totalPriceInCents?: number, error?: any } = await fetch(`${ORIGIN}${HOME_PATH}/src/components/create.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: orderStringified,
@@ -62,10 +65,10 @@ async function initialize() {
         responseClone = r.clone()
         return r.json()
     }).then((data) => { return data }, (rejectionReason) => {
-        console.log('Error parsing JSON from response:', rejectionReason, responseClone); // 4
-        responseClone.text() // 5
+        console.log('Error parsing JSON from response:', rejectionReason, responseClone);
+        responseClone?.text()
             .then(function (bodyText: string) {
-                console.log('Received the following instead of valid JSON:', bodyText); // 6
+                console.log('Received the following instead of valid JSON:', bodyText);
             });
     }); // retourner la reponseJson parsed pour pouvoir récupérer clientSecret et totalPriceInCents /!\
 
