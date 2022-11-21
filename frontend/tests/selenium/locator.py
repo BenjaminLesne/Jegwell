@@ -30,6 +30,9 @@ class DeliveryPageLocators(object):
     EMAIL_INPUT = (By.CSS_SELECTOR, "#email")
     EMAIL_ERROR_MESSAGE = (By.CSS_SELECTOR, "#email + .form__error-message")
 
+    PHONENUMBER_INPUT = (By.CSS_SELECTOR, "#phoneNumber")
+    PHONENUMBER_ERROR_MESSAGE = (By.CSS_SELECTOR, "#phoneNumber + .form__error-message")
+
     DELIVERY_INPUT_WRAPPER = (By.CSS_SELECTOR, ".form__fieldset--radio")
     DELIVERY_INPUT_WRAPPER_ERROR_MESSAGE = (By.CSS_SELECTOR, ".form__fieldset--radio .form__error-message")
 

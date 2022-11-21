@@ -22,10 +22,6 @@ class CheckoutPage(unittest.TestCase):
 
         self.chrome_driver.get(products_page_url)
 
-        #                         # Get all available cookies
-        # print(self.chrome_driver.get_cookies())
-        # time.sleep(300)
-
         productsPage = page.ProductsPage(self.chrome_driver)
         # ajoute un produit a notre panier
         productsPage.does_add_to_basket_create_right_cookie()
