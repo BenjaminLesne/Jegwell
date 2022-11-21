@@ -96,3 +96,6 @@ main {
     max-width: 95%;
   }
 }
+.products {
+  grid-template-columns: repeat(3, minmax(8rem, 1fr));
+}
