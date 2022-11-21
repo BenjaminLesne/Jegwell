@@ -21,6 +21,7 @@ class BasketPageLocators(object):
     QUANTITY_SETTER_VALUE_ELEMENT = (By.CSS_SELECTOR, ".quantity-setter__value")
     SUBTOTAL_PRICE_ELEMENT = (By.CSS_SELECTOR, ".subtotal__top-information > .price")
     ARTICLES_ELEMENT = (By.CSS_SELECTOR, '.subtotal__number-of-articles')
+    PRODUCT_ITEM = (By.CSS_SELECTOR, '.item')
 
 class DeliveryPageLocators(object):
     LASTNAME_INPUT = (By.CSS_SELECTOR, "#lastname")
@@ -28,6 +29,9 @@ class DeliveryPageLocators(object):
 
     EMAIL_INPUT = (By.CSS_SELECTOR, "#email")
     EMAIL_ERROR_MESSAGE = (By.CSS_SELECTOR, "#email + .form__error-message")
+
+    PHONENUMBER_INPUT = (By.CSS_SELECTOR, "#phoneNumber")
+    PHONENUMBER_ERROR_MESSAGE = (By.CSS_SELECTOR, "#phoneNumber + .form__error-message")
 
     DELIVERY_INPUT_WRAPPER = (By.CSS_SELECTOR, ".form__fieldset--radio")
     DELIVERY_INPUT_WRAPPER_ERROR_MESSAGE = (By.CSS_SELECTOR, ".form__fieldset--radio .form__error-message")

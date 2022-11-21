@@ -259,6 +259,29 @@ class ProductsPage(BasePage):
 
                 return result
 
+    def can_we_add_three_products(self):
+            add_to_basket_buttons = self.chrome_driver.find_elements(*ProductsPageLocators.ADD_TO_BASKET_BUTTON)
+
+            for index in range(3):
+                add_to_basket_buttons[index].click()
+
+            basket_cookies = self.chrome_driver.get_cookie("productsToBasket")
+
+            expected_value = 3
+            current_value = len(json.loads(basket_cookies['value']))
+
+            result = expected_value == current_value
+
+            if(result == False):
+                # debug purposes
+                print("expected_value :")
+                print(expected_value)
+                print("current_value :")
+                print(current_value)
+        
+            return result
+                
+
 
 class BasketPage(BasePage):
 
@@ -492,7 +515,17 @@ class BasketPage(BasePage):
             
 
 
-        return results   
+        return results
+
+    def are_three_products_displayed(self):
+        result = len(self.chrome_driver.find_elements(*BasketPageLocators.PRODUCT_ITEM)) == 3
+
+        if(result == False):
+            print("number of item displayed:")
+            print(len(self.chrome_driver.find_elements(*BasketPageLocators.PRODUCT_ITEM)))
+
+        return result
+        
 
         
 class CheckoutPage(BasePage):
@@ -551,6 +584,9 @@ class DeliveryPage(BasePage):
         email_input = self.chrome_driver.find_element(*DeliveryPageLocators.EMAIL_INPUT)
         email_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.EMAIL_ERROR_MESSAGE)
 
+        phoneNumber_input = self.chrome_driver.find_element(*DeliveryPageLocators.PHONENUMBER_INPUT)
+        phoneNumber_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.PHONENUMBER_ERROR_MESSAGE)
+
         delivery_input_wrapper = self.chrome_driver.find_element(*DeliveryPageLocators.DELIVERY_INPUT_WRAPPER)
         delivery_input_wrapper_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.DELIVERY_INPUT_WRAPPER_ERROR_MESSAGE)
 
@@ -583,6 +619,7 @@ class DeliveryPage(BasePage):
 
         def checkAllErrorMessagesExist():
             lastname_error_message_visible = wait.until(expected_conditions.visibility_of(lastname_error_message))
+            phoneNumber_error_message_visible = wait.until(expected_conditions.visibility_of(phoneNumber_error_message))
             email_error_message_visible = wait.until(expected_conditions.visibility_of(email_error_message))
             delivery_input_wrapper_error_message = wait.until(expected_conditions.visibility_of(delivery_input_wrapper))
             address_line_1_error_message_visible = wait.until(expected_conditions.visibility_of(address_line_1_error_message))
@@ -599,6 +636,7 @@ class DeliveryPage(BasePage):
         ActionChains(self.chrome_driver)\
         .send_keys_to_element(lastname_input, "123")\
         .send_keys_to_element(email_input, "not an email")\
+        .send_keys_to_element(phoneNumber_input, "06 28  not a tel")\
         .perform()
 
         self.chrome_driver.execute_script('return arguments[0].scrollIntoView()', postal_code_input)
@@ -612,7 +650,7 @@ class DeliveryPage(BasePage):
         submit_button.click()
 
         invalid_inputs = self.chrome_driver.find_elements(By.CSS_SELECTOR, ".invalid")
-        results.append(len(invalid_inputs) == 6)
+        results.append(len(invalid_inputs) == 7)
 
         checkAllErrorMessagesExist()
 
@@ -625,6 +663,9 @@ class DeliveryPage(BasePage):
 
         email_input = self.chrome_driver.find_element(*DeliveryPageLocators.EMAIL_INPUT)
         email_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.EMAIL_ERROR_MESSAGE)
+
+        phoneNumber_input = self.chrome_driver.find_element(*DeliveryPageLocators.PHONENUMBER_INPUT)
+        phoneNumber_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.PHONENUMBER_ERROR_MESSAGE)
 
         delivery_input_wrapper = self.chrome_driver.find_element(*DeliveryPageLocators.DELIVERY_INPUT_WRAPPER)
         delivery_input_wrapper_error_message = self.chrome_driver.find_element(*DeliveryPageLocators.DELIVERY_INPUT_WRAPPER_ERROR_MESSAGE)
@@ -658,6 +699,7 @@ class DeliveryPage(BasePage):
         ActionChains(self.chrome_driver)\
         .send_keys_to_element(lastname_input, "Doe")\
         .send_keys_to_element(email_input, "ben35170@hotmail.fr")\
+        .send_keys_to_element(phoneNumber_input, "0606060606")\
         .click(express_input)\
         .perform()
 

@@ -17,11 +17,11 @@ $page_title = 'Jegwell | Paiement';
 include '../components/header.php'; // contient le code pour lire les variables d'environnement
 
 $stripe_publishable_key = $_ENV['ENV'] == 'development' ? $_ENV['STRIPE_PUBLISHABLE_TOKEN_DEV'] : $_ENV['STRIPE_PUBLISHABLE_TOKEN_PROD'];
-$required_inputs = array('lastname', 'email', 'delivery', 'addressLine1', 'country', 'postalCode', 'city');
+$required_inputs = array('lastname', 'email', 'delivery', 'addressLine1', 'country', 'postalCode', 'city', 'phoneNumber');
 $required_inputs_exists = true;
 $wrong_inputs = array();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' and empty($_POST) == false) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' and empty($_POST) === false) {
     foreach ($required_inputs as $name) {
         if (isset($_POST[$name]) == false) {
             $required_inputs_exists = false;

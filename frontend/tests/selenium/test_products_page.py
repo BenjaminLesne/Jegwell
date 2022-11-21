@@ -44,6 +44,11 @@ class ProductsPage(unittest.TestCase):
 
         increment_quantity_in_cookie = self.productsPage.does_add_to_basket_update_quantity_properly()
         assert increment_quantity_in_cookie
+
+    def test_add_three_products_to_basket(self):
+        add_three_items = self.productsPage.can_we_add_three_products()
+        assert add_three_items
+
     
       
 

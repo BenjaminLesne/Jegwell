@@ -8,6 +8,7 @@ use Sanity\Client as SanityClient;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+use stdClass;
 
 /** @desc this loads the composer autoload file */
 require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
@@ -104,6 +105,8 @@ function createProductsPageModal($modalId, $title, $items, $url_key)
  */
 function createOptionsModal($productId, $product_default_image_url, $productOptions, $alt, $svgs_sprite_url)
 {
+    $number_of_options = $productOptions ? count($productOptions) : 0;
+
     $first_part = "
     <dialog class=\"modal optionsModal\" data-product-id=\"$productId\">
         <button class=\"close-button close-button--modal\">
@@ -127,8 +130,10 @@ function createOptionsModal($productId, $product_default_image_url, $productOpti
             ";
 
     $second_part = "";
-    foreach ($productOptions as $option) {
-        $second_part = $second_part . "
+    if ($number_of_options > 0) {
+
+        foreach ($productOptions as $option) {
+            $second_part = $second_part . "
                 <li>
                     <button  class=\"product-option-wrapper\" data-product-option=\"$option[name]\" data-product-id=\"$productId\">
                         <article class=\"product-option\">
@@ -140,6 +145,8 @@ function createOptionsModal($productId, $product_default_image_url, $productOpti
                     </button>
                 </li>
                     ";
+        }
+        # code...
     }
     $third_part = "  
             </ul>
@@ -155,32 +162,35 @@ function createOptionsModal($productId, $product_default_image_url, $productOpti
  *
  * @param object $order 
  * 
- * @return int le montant total en centime d'euros
+ * @return int|object le montant total en centime d'euros ou l'erreur générée par le code
  */
-function calculateOrderAmountInCents($order, $ENV): int
+function calculateOrderAmountInCents($order, $ENV)
 {
-    $products_to_basket = $order->products;
+    try {
 
-    $wanted_ids = '';
 
-    foreach ($products_to_basket as $wanted_product) {
-        $wanted_id = $wanted_product->id;
+        $products_to_basket = $order->products;
 
-        if (str_contains($wanted_ids, $wanted_id) == false) {
-            $previous_ids = $wanted_ids === '' ? '' : ", $wanted_id";
-            $wanted_ids = "'$wanted_id' $previous_ids";
+        $wanted_ids = '';
+
+        foreach ($products_to_basket as $wanted_product) {
+            $wanted_id = $wanted_product->id;
+
+            if (str_contains($wanted_ids, $wanted_id) === false) {
+                $previous_ids = $wanted_ids === '' ? '' : ", $wanted_ids";
+                $wanted_ids = "'$wanted_id' $previous_ids";
+            }
         }
-    }
 
-    if ($wanted_ids !== '' and isset($order->deliveryOption)) {
-        $sanity = new SanityClient([
-            'projectId' => $ENV['SANITY_PROJECT_ID'],
-            'dataset' => 'production',
-            'apiVersion' => $ENV['SANITY_API_VERSION'],
-            'token' => $ENV['SANITY_TOKEN_TO_READ'],
-        ]);
+        if ($wanted_ids !== '' and isset($order->deliveryOption)) {
+            $sanity = new SanityClient([
+                'projectId' => $ENV['SANITY_PROJECT_ID'],
+                'dataset' => 'production',
+                'apiVersion' => $ENV['SANITY_API_VERSION'],
+                'token' => $ENV['SANITY_TOKEN_TO_READ'],
+            ]);
 
-        $query_products = "
+            $query_products = "
                 *[_id in [$wanted_ids]]{    
                     name,
                     price,
@@ -189,12 +199,9 @@ function calculateOrderAmountInCents($order, $ENV): int
                     'options': options[]{'name': name, 'image_url': image.asset->url},
                     'id': _id,
                     categories,
-                    'categories4': *[_type=='category' && _id==categories[]._ref]{ 
-                        name,
-                      }
                 }
             ";
-        $query_delivery_option = "
+            $query_delivery_option = "
                 *[_type == 'deliveryOption' && _id == '$order->deliveryOption']{    
                     price,
                     }
@@ -202,34 +209,37 @@ function calculateOrderAmountInCents($order, $ENV): int
 
 
 
-        $products = $sanity->fetch($query_products);
-        $delivery_option = $sanity->fetch($query_delivery_option);
+            $products = $sanity->fetch($query_products);
+            $delivery_option = $sanity->fetch($query_delivery_option);
 
-        $subtotal_price = 0;
-        $delivery_fee = $delivery_option[0]['price'];
+            $subtotal_price = 0;
+            $delivery_fee = $delivery_option[0]['price'];
 
 
-        foreach ($products as $product) {
+            foreach ($products as $product) {
 
-            foreach ($products_to_basket as $basket_product) {
-                // récupère la position des objets dans le panier contenant l'id du produit
-                if ($basket_product->id === $product['id']) {
+                foreach ($products_to_basket as $basket_product) {
+                    // récupère la position des objets dans le panier contenant l'id du produit
+                    if ($basket_product->id === $product['id']) {
 
-                    $quantity = $basket_product->quantity;
-                    // prix total = subtotal + frais de livraison
-                    $subtotal_price += ($product['price'] * $quantity);
+                        $quantity = $basket_product->quantity;
+                        // prix total = subtotal + frais de livraison
+                        $subtotal_price += ($product['price'] * $quantity);
+                    }
                 }
             }
-        }
-        if (gettype($subtotal_price) != 'integer' and gettype($delivery_fee) != 'integer') {
-            throw new Error('$subtotal_price or $delivery_fee is not an integer');
-        }
+            if (gettype($subtotal_price) != 'integer' and gettype($delivery_fee) != 'integer') {
+                return new Error('$subtotal_price or $delivery_fee is not an integer');
+            }
 
-        $total_price = $subtotal_price + $delivery_fee;
-        return ($total_price * 100);
-    };
-    $error_message = "calculateOrderAmount failed. deliveryOption: $order->deliveryOption | \$wanted_ids: $wanted_ids ";
-    throw new Error($error_message);
+            $total_price = $subtotal_price + $delivery_fee;
+            return ($total_price * 100);
+        };
+        $error_message = "calculateOrderAmount failed. deliveryOption: $order->deliveryOption | \$wanted_ids: $wanted_ids ";
+        return new Error($error_message);
+    } catch (\Throwable $th) {
+        return $th;
+    }
 }
 
 /**

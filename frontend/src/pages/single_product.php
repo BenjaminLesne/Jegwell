@@ -78,12 +78,15 @@ try {
         $main_image_alt = $categorie . ' ' . $product['name'];
         $total_slides = 1;
         $option_images_html = '';
+        $number_of_options = $product['options'] ? count($product['options']) : 0;
+        if ($number_of_options > 0) {
 
-        foreach ($product['options'] as $option) {
-            $total_slides += 1;
-            $option_images_html .= "<div class=\"media-element\" data-product-option=\"$option[name]\">
+            foreach ($product['options'] as $option) {
+                $total_slides += 1;
+                $option_images_html .= "<div class=\"media-element\" data-product-option=\"$option[name]\">
                 <img src=\"$option[image_url]\" alt=\"$categorie $product[name] option $option[name]\">
             </div>";
+            }
         }
 
         $option_image_alternative = $categorie . $product['name'];
@@ -166,7 +169,8 @@ try {
                 </div>
             </div>
             <?php
-            if (count($product['cross_sells']) > 0) {
+            $number_of_cross = $product['cross_sells'] ? $product['cross_sells'] : 0;
+            if ($number_of_cross > 0) {
 
             ?>
                 <section class="cross-sells section">
@@ -175,20 +179,21 @@ try {
                         <?php
                         foreach ($product['cross_sells'] as $cross_product) {
                             $cross_product_link = $_ENV['HOME_PAGE'] . '/creations/' . $cross_product['slug'];
-                            $cross_product_options_amount = count($cross_product['options']);
+                            $cross_product_options_amount = $cross_product['options'] ? count($cross_product['options']) : 0;
                             $cross_product_image_alt = $cross_product['categories'][0]['name'] . ' ' . $cross_product['name'];
+                            $dataOptionHtml = $cross_product_options_amount > 0 ? "data-options='$cross_product_options_amount'" : '';
                         ?>
                             <li class="cross-sells__product-wrapper">
                                 <article class="product cross-sells__product">
-                                    <a class="product__image-wrapper" href="<?php echo $cross_product_link ?>" data-options="<?php echo $cross_product_options_amount ?>">
-                                        <img class="product__image" src="<?php echo $product['image_url'] ?>" alt="<?php echo $cross_product_image_alt ?>">
+                                    <a class="product__image-wrapper" href="<?php echo $cross_product_link ?>" <?php echo $dataOptionHtml ?>>
+                                        <img class="product__image" src="<?php echo $cross_product['image_url'] ?>" alt="<?php echo $cross_product_image_alt ?>">
                                     </a>
                                     <div class="product__information">
-                                        <a class="product__name" href="<?php echo $_ENV['HOME_PAGE'] ?>/creations/meziere-bleu">
-                                            <span><?php echo $product['name'] ?></span>
+                                        <a class="product__name" href="<?php echo $_ENV['HOME_PAGE'] . '/creations/' . $cross_product['slug'] ?>">
+                                            <span><?php echo $cross_product['name'] ?></span>
                                         </a>
-                                        <span class="product__price"><?php echo $product['price'] ?> €</span>
-                                        <button class="product__call-to-action-wrapper" data-product-id="<?php echo $product['id'] ?>" data-product-option="default">
+                                        <span class="product__price"><?php echo $cross_product['price'] ?> €</span>
+                                        <button class="product__call-to-action-wrapper" data-product-id="<?php echo $cross_product['id'] ?>" data-product-option="default">
                                             <span class="product__call-to-action">Ajouter au panier<span class="product__success-message">Ajouté ✓</span></span>
                                         </button>
                                     </div>

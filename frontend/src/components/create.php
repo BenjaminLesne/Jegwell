@@ -11,10 +11,12 @@ $dotenv->load();
 use function Jegwell\functions\calculateOrderAmountInCents;
 use Sanity\Client as SanityClient;
 
+$api_key = $_ENV['ENV'] === 'development' ? $_ENV['STRIPE_API_KEY_DEV'] : $_ENV['STRIPE_API_KEY_PROD'];
+
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
 // Sign in to see your own test API key embedded in code samples.
-\Stripe\Stripe::setApiKey('sk_test_VePHdqKTYQjKNInc7u56JBrQ');
+\Stripe\Stripe::setApiKey($api_key);
 
 
 header('Content-Type: application/json');
