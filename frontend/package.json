@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "tests": "cd tests/selenium; python -m unittest; cd -",
+    "tests": "cd tests/selenium; python -m unittest; cd -; ./vendor/bin/phpunit --verbose --debug --coverage-html tests/PHPunit/coverage tests/PHPunit/tests",
     "single_test": "cd tests/selenium; python -m unittest $FILE; cd -;"
   },
   "devDependencies": {
