@@ -15,6 +15,7 @@
     $height: calc($imageHeightWrapper - 20px);
     height: $height;
     width: $height;
+    object-fit: cover;
   }
 
   &__information {
