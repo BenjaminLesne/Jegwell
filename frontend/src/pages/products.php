@@ -120,7 +120,7 @@ if (isset($_GET['trier'])) {
             $sortFilter = $sortValue == '' ? '' : " | order($sortValue)";
 
             $query = "
-                    *[_type == 'product' $categoriesFilter] $sortFilter{    
+                    *[_type == 'product' && !(_id in path('drafts.**')) $categoriesFilter] $sortFilter{    
                         name,
                         'slug': slug.current,
                         'image_url': image.asset->url,
