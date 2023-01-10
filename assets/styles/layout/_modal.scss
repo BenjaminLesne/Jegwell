@@ -1,0 +1,48 @@
+@import "../components/quantity-setter";
+@import "../components/plus";
+@import "../components/minus";
+
+.modal {
+  border-style: none;
+  border-radius: 5px;
+
+  max-width: clamp(250px, 80vw, 500px);
+  max-height: 60vh;
+
+  min-width: 250px;
+  min-height: 250px;
+
+  padding: 70px 20px 20px 20px;
+
+  &__title {
+    font-size: convertToRem(24px);
+    font-weight: 500;
+    font-family: "secondary font";
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  &__item {
+    position: relative;
+
+    &::after {
+      content: "";
+      width: 7em;
+      height: 1px;
+      background-color: rgb(var(--neutral-color));
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+    }
+
+    &:last-child::after {
+      content: none;
+    }
+  }
+
+  &__link {
+    color: rgb(var(--primary-color));
+    margin-inline: auto;
+  }
+}

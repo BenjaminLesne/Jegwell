@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}créations
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('products') }}
+
+{% endblock %}
+
+
+{% block body %}
+
+	<main>
+		<section class="section">
+			<h1 class="section__h2">NOS CRÉATIONS</h1>
+			<div class="filters">
+				<button class="input-wrapper filter" id="categoriesButton" data-modal="categoriesModal">
+					<div class="input filter__content-wrapper" data-label="Catégories">
+						<span class="filter__text">current catégorie</span>
+						<div class="caret"></div>
+					</div>
+				</button>
+
+				<button class="input-wrapper filter" id="sort" data-modal="sortModal">
+					<div class="input filter__content-wrapper" data-label="Trier">
+						<span class="filter__text">trie courant</span>
+						<div class="caret"></div>
+					</div>
+				</button>
+			</div>
+
+			<div class="products">
+				<article class='product'>
+					<a class='product__image-wrapper' href='#'>
+						<img class='product__image' src='https://picsum.photos/200/300' alt=''>
+					</a>
+					<div class='product__information'>
+						<a class='product__name' href='#'>
+							<span>Brocéliande Vert</span>
+						</a>
+						<span class='product__price'>39.99 €</span>
+						<button class='product__call-to-action-wrapper'>
+							<span class='product__call-to-action'>Ajouter au panier<span class='product__success-message'>Ajouté &#10003;</span>
+							</span>
+
+						</button>
+					</div>
+				</article>
+			</section>
+		{% endblock %}

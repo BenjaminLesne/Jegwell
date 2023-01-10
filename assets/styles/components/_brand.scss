@@ -1,0 +1,32 @@
+.brand-wrapper {
+  margin: 0 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(var(--primary-color));
+}
+
+.brand {
+  display: flex;
+  gap: 4px;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    font-family: "ternary font", sans-serif;
+    // width: convertToRem(87px);
+  }
+
+  &__name {
+    text-decoration: none;
+    border-top-style: solid;
+    border-top-width: 1px;
+    white-space: nowrap;
+    $fontSize: 25px;
+    font-size: convertToRem($fontSize);
+
+    &--slogan {
+      font-size: convertToRem(calc(11 / 25 * $fontSize));
+    }
+  }
+}

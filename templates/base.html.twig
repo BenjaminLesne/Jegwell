@@ -1,19 +1,76 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+		<title>
+			Jegwell |
+			{% block title %}{% endblock %}
+		</title>
+		<link rel="icon" type="image/x-icon" href="{{ asset('build/favicon.ico') }}">
+		<link rel="stylesheet" href="{{asset('build/desktop.css')}}" media="(min-width: 500px)">
+
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+	</head>
+	<body id="topOfThePage">
+		<header class="primary-header-wrapper {{ app.request.get('_route') == 'app_home' ? 'primary-header-wrapper--home' }}">
+			<nav class="primary-header" aria-labelledby="primary-navigation">
+				<div class="main-menu" id="main-menu">
+					<button class="close-button" id="main-menu-close-button" value="default">
+						<svg class="close-button__cross-icon">
+							<use href="{{asset('build/svgs-sprite.svg')}}#cross"/>
+						</svg>
+					</button>
+					<ul class="main-menu__list">
+						<li class="main-menu__item {{ (app.request.get('_route') is same as('app_home')) ? 'main-menu__item--active' }}" data-request-uri='/'>
+							<a class='main-menu__link' href='{{ path('app_home') }}'>accueil</a>
+						</li>
+						<li class="main-menu__item {{ (app.request.get('_route') is same as('app_products')) ? 'main-menu__item--active' }}" data-request-uri='/creations'>
+							<a class='main-menu__link' href='{{ path('app_products') }}'>Nos créations</a>
+						</li>
+						<li class="main-menu__item" data-request-uri='/#categories'>
+							<a class='main-menu__link' href='{{ path('app_home') }}#categories'>catégories</a>
+						</li>
+						<li class="main-menu__item" data-request-uri='/panier'>
+							<a class='main-menu__link' href="{{ path('app_basket') }}">Panier</a>
+						</li>
+					</ul>
+				</div>
+				<button class="burger-button" id="burger-button">
+					<span class="burger-button__slice"></span>
+					<span class="burger-button__slice"></span>
+					<span class="burger-button__slice"></span>
+				</button>
+				<a class="brand-wrapper" href="{{ path('app_home') }}">
+					<div class="brand">
+						<div class="logo">
+							<div class="logo__image">
+								<svg class="logo__svg">
+									<use href="{{asset('build/svgs-sprite.svg')}}#rings"/>
+								</svg>
+							</div>
+						</div>
+						<div class="brand__text">
+							<span class="brand__name">JEGWELL</span>
+							<span class="brand__name brand__name--slogan">BIJOUX FAITS-MAIN</span>
+						</div>
+					</div>
+				</a>
+				<a class="basket-icon-wrapper" href='{{ path('app_basket') }}'>
+					<svg class="basket-icon">
+						<use href="{{ asset('build/svgs-sprite.svg') }}#basket"/>
+					</svg>
+				</a>
+			</nav>
+		</header>
+
+		{% block body %}{% endblock %}
+	</body>
 </html>

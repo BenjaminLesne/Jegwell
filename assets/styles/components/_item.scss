@@ -1,0 +1,50 @@
+.item {
+  &__main {
+    display: flex;
+    gap: 19px;
+  }
+  $imageHeightWrapper: calc(3 * 48px + 8px * 2);
+  &__image-wrapper {
+    height: $imageHeightWrapper;
+    display: flex;
+    align-items: center;
+  }
+
+  &__image {
+    border-radius: var(--border-radius);
+    $height: calc($imageHeightWrapper - 20px);
+    height: $height;
+    width: $height;
+    object-fit: cover;
+  }
+
+  &__information {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: calc(100% - $imageHeightWrapper);
+  }
+
+  &__top-information {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__name {
+    font-size: convertToRem(20px);
+    font-family: "secondary font";
+    font-weight: lighter;
+  }
+
+  &__remove {
+    margin: unset;
+    justify-content: flex-end;
+  }
+
+  &__price {
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+  }
+}

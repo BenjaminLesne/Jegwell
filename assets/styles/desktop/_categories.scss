@@ -1,0 +1,9 @@
+.categories {
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  &__item {
+    width: 500px;
+  }
+}
