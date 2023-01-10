@@ -9,11 +9,12 @@
 			{% block title %}{% endblock %}
 		</title>
 		<link rel="icon" type="image/x-icon" href="{{ asset('build/favicon.ico') }}">
-		<link rel="stylesheet" href="{{asset('build/desktop.css')}}" media="(min-width: 500px)">
 
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
 		{% endblock %}
+
+		<link rel="stylesheet" href="{{asset('build/desktop.css')}}" media="(min-width: 500px)">
 
 		{% block javascripts %}
 			{{ encore_entry_script_tags('app') }}
@@ -53,7 +54,7 @@
 						<div class="logo">
 							<div class="logo__image">
 								<svg class="logo__svg">
-									<use href="{{asset('build/svgs-sprite.svg')}}#rings"/>
+									<use href="{{ asset('build/svgs-sprite.svg') }}#rings"/>
 								</svg>
 							</div>
 						</div>
@@ -72,5 +73,37 @@
 		</header>
 
 		{% block body %}{% endblock %}
+
+		<a class="backToTopWrapper clickable" href="javascript:window.scrollTo(0, 0);">
+			<svg class="backToTop">
+				<use href="{{ asset('build/svgs-sprite.svg') }}#arrow-up"/>
+			</svg>
+		</a>
+
+		<footer class="footer">
+			<div class="footer__content-wrapper">
+				<h2 class="footer__heading">RÉSEAUX SOCIAUX</h2>
+				<ul class="footer__list">
+					<li class="footer__items">
+						<a class="footer__links" href="https://www.instagram.com/jegwell/">Instagram</a>
+					</li>
+					<li class="footer__items">
+						<a class="footer__links" href="https://www.tiktok.com/@jegwell">TikTok</a>
+					</li>
+					<li class="footer__items">
+						<a class="footer__links" href="https://www.facebook.com/jegwell">Facebook</a>
+					</li>
+				</ul>
+
+				<!-- <h2 class="footer__heading">À PROPOS</h2>
+																												        <ul class="footer__list">
+																												            <li class="footer__items"><a class="footer__links" href="#">CGV</a></li>
+																												        <li class="footer__items"><a class="footer__links" href="#">Mentions Légales</a></li>
+																												            <li class="footer__items"><a class="footer__links" href="#">Livraison</a></li>
+																												            <li class="footer__items"><a class="footer__links" href="#">Contact</a></li>
+																												
+																												        </ul> -->
+			</div>
+		</footer>
 	</body>
 </html>

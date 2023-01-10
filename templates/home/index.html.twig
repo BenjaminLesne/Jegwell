@@ -1,20 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Accueil
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('home') }}
+
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<main>
+		<div class="hero">
+			<img class="hero__image" src="{{asset('build/hero.webp')}}" alt="">
+			<div class="hero__text">
+				<h1 class="hero__slogan">BIJOUX FAITS-MAIN</h1>
+				<a class="hero__link" href="{{ path('app_products') }}">
+					<span class="hero__call-to-action">DÉCOUVRIR</span>
+				</a>
+			</div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+		</div>
+		<section class="section about-us">
+			<h2 class="section__h2">QUE FAISONS-NOUS ?</h2>
+			<p class="about-us__text about-us__text--first">Nous créons nos bijoux à Paris avec de l'acier inoxydable argenté, doré ou doré rose. Ils sont anti-allergéniques, ne noircissent pas la peau, sont insensibles à la rouille et l'eau.</p>
+			<p class="about-us__text about-us__text--last">Le dîtes à personne mais nous faisons des commandes sur-mesure également 😉</p>
+			<svg class="about-us__svg">
+				<use href="{{ asset('build/svgs-sprite.svg') }}#rings"/>
+			</svg>
+		</section>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/opt/lampp/htdocs/trying_symfony_6/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/opt/lampp/htdocs/trying_symfony_6/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-</div>
+		<section class="section" id="categories">
+			<h2 class="section__h2">NOS CATÉGORIES</h2>
+			<ul class="categories">
+				<li class="categories__item">
+					<a class="categories__link" href="$category_url">
+						<figure class="categories__content">
+							<img class="categories__image" src="$picture_url" alt="$name">
+							<figcaption class="categories__description">$name</figcaption>
+						</figure>
+					</a>
+				</li>
+				<li class="categories__item">
+					<a class="categories__link" href="$category_url">
+						<figure class="categories__content">
+							<img class="categories__image" src="$picture_url" alt="$name">
+							<figcaption class="categories__description">$name</figcaption>
+						</figure>
+					</a>
+				</li>
+				<li class="categories__item">
+					<a class="categories__link" href="$category_url">
+						<figure class="categories__content">
+							<img class="categories__image" src="$picture_url" alt="$name">
+							<figcaption class="categories__description">$name</figcaption>
+						</figure>
+					</a>
+				</li>
+				<li class="categories__item">
+					<a class="categories__link" href="$category_url">
+						<figure class="categories__content">
+							<img class="categories__image" src="$picture_url" alt="$name">
+							<figcaption class="categories__description">$name</figcaption>
+						</figure>
+					</a>
+				</li>
+
+			</ul>
+		</section>
+
+	</main>
 {% endblock %}

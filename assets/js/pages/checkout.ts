@@ -1,3 +1,4 @@
+import "../../styles/pages/checkout.scss";
 import { getCookie } from "../utils/functions";
 
 const token = document

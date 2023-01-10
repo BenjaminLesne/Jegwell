@@ -1,20 +1,115 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BasketController!{% endblock %}
+{% block title %}Hello BasketController!
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('basket') }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('basket') }}
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<main>
+		<section class="section section--basket">
+			<h1 class="section__h2">VOTRE PANIER</h1>
+			<section>
+				<h2 class="screenreader">VOS ITEMS</h2>
+				<ul class="basket">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+					<li>
+						<article class="item">
+							<div class="item__main">
+								<div class="item__image-wrapper">
+									<img class="item__image" src="$image" loading="lazy" alt="$product_random_category $product[name]">
+								</div>
+								<div class="item__information">
+									<div class="item__top-information">
+										<h3 class="item__name">$product[name]</h3>
+										<button class="item__remove" data-product-id="$product[id]" data-product-option="$option_selected[name]">";
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/opt/lampp/htdocs/trying_symfony_6/src/Controller/BasketController.php'|file_link(0) }}">src/Controller/BasketController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/opt/lampp/htdocs/trying_symfony_6/templates/basket/index.html.twig'|file_link(0) }}">templates/basket/index.html.twig</a></code></li>
-    </ul>
-</div>
-{% endblock %}
+											<svg class="close-button__cross-icon close-button__cross-icon--small">
+												<use href=" echo $svgs_sprite_url . '#cross' "/>
+											</svg>
+
+										</button>
+									</div>
+									<button class="setting setting--option" data-product-id='$product[id]' data-product-option='$option_selected[name]'>
+										<span class="setting__key">Option:</span>
+										<div class="setting__value">
+											<span>$option_name</span>
+											<div class="caret caret--basket"></div>
+										</div>
+									</button>
+									<button class="setting setting--quantity" data-quantity='$quantity' data-product-id='$product[id]' data-product-option='$option_selected[name]'>
+										<span class="setting__key">Quantité:</span>
+										<div class="setting__value">
+											<span>$quantity</span>
+											<div class="caret caret--basket"></div>
+										</div>
+									</button>
+								</div>
+							</div>
+							<span class="item__price price">
+								$price_html
+							</span>
+						</article>
+					</li>
+
+				</ul>
+			</section>
+
+			<section class="subtotal">
+				<div class="subtotal__top-information">
+					<h2 class="subtotal__heading">sous-total</h2>
+
+
+					<span class="price">
+						$subtotal_price_html
+					</span>
+				</div>
+				<span class="subtotal__number-of-articles">($total_quantity articles)</span>
+
+
+			</section>
+			<a href="{{ path('app_delivery') }}" class="main-call-to-action">Passer la commande</a>
+
+
+			<div class="center-content">
+				<span>Vous n'avez pas d'article dans votre panier.</span>
+				<a href="$products_url">Cliquez-ici pour voir nos créations !</a>
+			</div>
+
+
+		</main>
+		<dialog class="modal" id="quantityModal">
+			<button class="close-button close-button--modal">
+				<svg class="close-button__cross-icon close-button__cross-icon--modal">
+					<use href=" echo $svgs_sprite_url . '#cross' "/>
+				</svg>
+			</button>
+			<section>
+				<h2 class="modal__title">Choisissez votre quantité:</h2>
+				<div class="quantity-setter">
+					<button>
+						<div class="quantity-setter__button">
+							<div class="minus"></div>
+						</div>
+					</button>
+					<span class="quantity-setter__value" data-quantity="1">1</span>
+					<button>
+						<div class="quantity-setter__button">
+							<svg class="close-button__cross-icon close-button__cross-icon--modal plus">
+								<use href=" echo $svgs_sprite_url . '#cross' "/>
+							</svg>
+						</div>
+					</button>
+				</div>
+				<button class="main-call-to-action">Confirmer</button>
+			</section>
+		</dialog>
+	{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('checkout') }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('checkout') }}
+{% endblock %}
+
+{% block body %}
+	<main>
+		<section class="section">
+			<h1 class="section__h2">PAIEMENT</h1>
+			<!-- Display a payment form -->
+			<form id="payment-form">
+				<div
+					id="payment-element"><!--Stripe.js injects the Payment Element-->
+				</div>
+				<button id="submit" class="main-call-to-action" data-token="<?php echo $stripe_publishable_key ?>" data-success-url="<?php echo $_ENV['HOME_PAGE'] . '/panier/livraison/paiement/reussi' ?>">
+					<div class="spinner hidden" id="spinner"></div>
+					<span id="button-text">Chargement en cours</span>
+				</button>
+				<div id="payment-message" class="hidden"></div>
+			</form>
+		</section>
+
+
+		<p class="" style="margin: 40px auto 0 auto; text-align: center;width:100%">Nous manquons d'information vous concernant pour effectuer le paiement !</p>
+		<a href="<?php echo $_ENV['HOME_PAGE'] . '/panier/livraison' ?>" style="margin: 40px auto 0 auto; text-align: center;width:100%" class="">Cliquez ici pour revenir au formulaire.</a>
+
+
+	</main>
+
+{% endblock %}
