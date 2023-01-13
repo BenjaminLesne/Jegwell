@@ -12,4 +12,4 @@
 The website should be available in :
 http://localhost:8000/
 
-don't forget to run your local db server
+if you use xampp don't forget to launch it

@@ -32,21 +32,26 @@
 			</div>
 
 			<div class="products">
-				<article class='product'>
-					<a class='product__image-wrapper' href='#'>
-						<img class='product__image' src='https://picsum.photos/200/300' alt=''>
-					</a>
-					<div class='product__information'>
-						<a class='product__name' href='#'>
-							<span>Brocéliande Vert</span>
-						</a>
-						<span class='product__price'>39.99 €</span>
-						<button class='product__call-to-action-wrapper'>
-							<span class='product__call-to-action'>Ajouter au panier<span class='product__success-message'>Ajouté &#10003;</span>
-							</span>
+				{% for product in products %}
 
-						</button>
-					</div>
-				</article>
+					<article class='product'>
+						<a class='product__image-wrapper' href='#'>
+							<img class='product__image' src='{{ product.image }}' alt='{{ product.name }}'>
+						</a>
+						<div class='product__information'>
+							<a class='product__name' href='#'>
+								<span>{{ product.name }}</span>
+							</a>
+							<span class='product__price'>
+								{{ (product.price / 100)|format_currency('EUR', locale='fr')|replace({",00": ""}) }}
+							</span>
+							<button class='product__call-to-action-wrapper'>
+								<span class='product__call-to-action'>Ajouter au panier<span class='product__success-message'>Ajouté &#10003;</span>
+								</span>
+
+							</button>
+						</div>
+					</article>
+				{% endfor %}
 			</section>
 		{% endblock %}
