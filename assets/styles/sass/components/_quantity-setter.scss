@@ -1,0 +1,29 @@
+.quantity-setter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: convertToRem(40px);
+  margin-bottom: 40px;
+
+  &__button {
+    background-color: rgb(var(--secondary-color));
+    border-style: solid;
+    border-color: rgb(var(--primary-color));
+    border-width: 1px;
+    border-radius: var(--border-radius);
+
+    $width: convertToRem(33px);
+    width: $width;
+    height: $width;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > * {
+      $width: convertToRem(18px);
+      width: $width;
+      height: $width;
+      fill: rgb(var(--primary-color));
+    }
+  }
+}

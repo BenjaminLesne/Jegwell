@@ -1,0 +1,17 @@
+:root {
+  --primary-color: 172, 140, 48;
+  --secondary-color: 248, 239, 230;
+  --ternary-color: 51, 51, 51;
+  --neutral-color: 128, 128, 128;
+  --error-color: 179, 38, 30;
+  --primary-background-color: 255, 255, 255;
+  --page-padding: var(--page-padding-top) var(--page-padding-right)
+    var(--page-padding-bottom) var(--page-padding-left);
+  --page-padding-top: 49px;
+  --page-padding-right: 19px;
+  --page-padding-bottom: 49px;
+  --page-padding-left: 19px;
+  --box-shadow-values: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  --border-radius: 5px;
+  --desktop-width: 1200px;
+}

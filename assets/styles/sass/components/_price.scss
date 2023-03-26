@@ -1,0 +1,10 @@
+.price {
+  font-family: "secondary font";
+  font-weight: bolder;
+
+  font-size: convertToRem(20px);
+
+  &__decimal {
+    font-size: calc(15 / 20 * 1em);
+  }
+}

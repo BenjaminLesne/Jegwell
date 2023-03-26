@@ -1,0 +1,44 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Jegwell | Accueil{% endblock %}
+
+{% block body %}
+
+<main>
+    <div class="hero">
+        <img class="hero__image" src="$hero_img_url" alt="" srcset="">
+        <div class="hero__text">
+            <h1 class="hero__slogan">BIJOUX FAITS-MAIN</h1>
+            <a class="hero__link" href="{{ path(constant('App\\Constants\\Routes::PRODUCTS')) }}"><span class="hero__call-to-action">DÉCOUVRIR</span></a>
+        </div>
+
+    </div>
+    <section class="section about-us">
+        <h2 class="section__h2">QUE FAISONS-NOUS ?</h2>
+        <p class="about-us__text about-us__text--first">Nous créons nos bijoux à Paris avec de l'acier inoxydable argenté, doré ou doré rose. Ils sont anti-allergéniques, ne noircissent pas la peau, sont insensibles à la rouille et l'eau.</p>
+        <p class="about-us__text about-us__text--last">Le dîtes à personne mais nous faisons des commandes sur-mesure également</p>
+        <svg class="about-us__svg">
+            <use href="<?php echo $svgs_sprite_url . '#rings' ?>" />
+        </svg>
+    </section>
+
+    <section class="section" id="catégories">
+        <h2 class="section__h2">NOS CATÉGORIES</h2>
+        <ul class="categories">
+    {% for category in categories %}
+                  <li class="categories__item">
+                        <a class="categories__link" href="{{category.url}}">
+                        <figure class="categories__content">
+                            <img class="categories__image" src="{{category.image_location}}" alt="{{category.name}}">
+                            <figcaption class="categories__description">{{category.name}}</figcaption>
+                        </figure>
+                        </a>
+                     </li>
+    {% endfor %}
+        </ul>
+    </section>
+
+</main>
+
+{% endblock %}

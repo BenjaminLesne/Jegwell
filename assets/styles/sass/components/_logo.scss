@@ -1,0 +1,36 @@
+// NEW
+.logo {
+  position: relative;
+
+  $brandFontSize: 25px;
+  $width: convertToRem(calc(37 / 20 * $brandFontSize));
+  width: $width;
+  height: $width;
+
+  border-style: solid;
+  border-width: calc(1px / 41px * $width);
+  border-color: rgb(var(--primary-color));
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  fill: rgb(var(--primary-color));
+
+  &::after {
+    z-index: 1;
+    content: "";
+    position: absolute;
+    inset: calc(2px / 41px * $width);
+    background-color: rgb(var(--secondary-color));
+  }
+
+  &__image {
+    z-index: 2;
+    width: calc(24.5px / 41px * $width);
+    height: calc(18px / 41px * $width);
+  }
+
+  &__svg {
+    width: 100%;
+  }
+}

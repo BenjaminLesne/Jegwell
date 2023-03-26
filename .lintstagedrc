@@ -1,0 +1,4 @@
+{
+  "*.{ts,tsx}": ["eslint","pnpx prettier --write"],
+  "*.{md,html,css,json}": "pnpx prettier --write"
+}

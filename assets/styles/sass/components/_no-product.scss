@@ -1,0 +1,7 @@
+.no-product {
+  &__message {
+    width: calc(100vw - (var(--page-padding-right) * 2));
+    max-width: calc(1200px - (var(--page-padding-right) * 2));
+    text-align: center;
+  }
+}

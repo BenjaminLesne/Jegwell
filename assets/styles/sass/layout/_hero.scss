@@ -1,0 +1,54 @@
+.hero {
+  position: relative;
+  &__image {
+    width: 100%;
+  }
+  $text-color: white;
+  &__text {
+    position: absolute;
+    left: 0;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: $text-color;
+    font-weight: bold;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: convertToRem(20px);
+  }
+
+  &__slogan {
+    letter-spacing: 0.05em;
+    font-size: 1em;
+  }
+
+  // &__link {
+  //   color: $text-color;
+  //   border-radius: 5px;
+  //   border-style: solid;
+  //   border-width: 2px;
+  //   font-size: calc(14px / 20px * 1em);
+  // }
+
+  &__call-to-action {
+    color: $text-color;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 2px;
+    font-size: calc(14px / 20px * 1em);
+    padding: 5px 20px;
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+}
+
+@media screen and (min-width: 500px) {
+.hero {
+  height: 400px;
+  &__image {
+    object-fit: cover;
+  }
+}
+
+}

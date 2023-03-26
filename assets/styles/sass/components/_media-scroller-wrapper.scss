@@ -1,0 +1,58 @@
+
+@media screen and (min-width: 500px) {
+.media-scroller-wrapper {
+  max-width: 500px;
+  max-height: 500px;
+  margin-inline: auto;
+
+  flex: 2;
+
+  &__buttons {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: space-between;
+    max-width: calc(100vw - 20px);
+    width: 650px;
+  }
+
+  &__button {
+    background-color: rgb(var(--primary-background-color));
+    border-radius: 100%;
+    padding: 6px 10px;
+    margin: 0;
+
+    $inlineMargin: 0;
+
+    &--left {
+      left: $inlineMargin;
+    }
+    &--right {
+      right: $inlineMargin;
+    }
+  }
+}
+
+.media-scroller {
+  border-radius: 0 0 5px 5px;
+}
+
+@media screen and (min-width: 950px) {
+  .content {
+    display: flex;
+    gap: 80px;
+  }
+
+  .media-scroller-wrapper {
+    margin-right: 0;
+    margin-left: 75px;
+
+    &__buttons {
+      max-width: 95%;
+    }
+  }
+}
+
+}
