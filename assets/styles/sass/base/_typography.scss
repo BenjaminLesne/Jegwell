@@ -1,0 +1,48 @@
+// @include font-face('primary font', '../../fonts/Roboto-regular', 400, null, woff2);
+// @include font-face('primary font light', '../../fonts/Roboto-light', 300, null, woff2);
+// @include font-face('primary font bold', '../../fonts/Roboto-bold', 700, null, woff2);
+// @include font-face('secondary font', '../../fonts/Alegreya-regular', 400, null, woff2);
+// @include font-face('ternary font', '../../fonts/Cinzel-regular', 400, null, woff2);
+@font-face {
+  font-family: "primary font";
+  font-style: normal;
+  font-weight: 400;
+  src: local("primary font"), local("Roboto"), local("Roboto-regular"),
+    local("Roboto regular"),
+    url("../../fonts/Roboto-regular.woff2") format("woff2");
+}
+
+
+@font-face {
+  font-family: "primary font light";
+  font-style: normal;
+  font-weight: 300;
+  src: local("primary font light"), local("Roboto light"), local("Roboto-light"),
+    url("../../fonts/Roboto-light.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "primary font bold";
+  font-style: normal;
+  font-weight: 700;
+  src: local("primary font bold"), local("Roboto bold"), local("Roboto-bold"),
+    url("../../fonts/Roboto-bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "secondary font";
+  font-style: normal;
+  font-weight: 400;
+  src: local("secondary font"), local("Alegreya"), local("Alegreya-regular"),
+    local("Alegreya regular"),
+    url("../../fonts/Alegreya-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "ternary font";
+  font-style: normal;
+  font-weight: 400;
+  src: local("ternary font"), local("Cinzel"), local("Cinzel-regular"),
+    local("Cinzel regular"),
+    url("../../fonts/Cinzel-regular.woff2") format("woff2");
+}

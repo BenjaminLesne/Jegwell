@@ -1,0 +1,28 @@
+.filters {
+  display: flex;
+  padding-bottom: var(--page-padding-top);
+  gap: 16px;
+}
+
+.filter {
+  &__content-wrapper {
+    width: calc(100% - 16px * 2);
+  }
+  &__text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
+  }
+}
+
+@media screen and (min-width: 500px) {
+.filters {
+  max-width: 500px;
+  margin-inline: auto;
+}
+
+}

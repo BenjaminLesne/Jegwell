@@ -1,0 +1,31 @@
+.primary-header-wrapper {
+  z-index: 1;
+  height: convertToRem(70px);
+  width: 100%;
+  box-shadow: var(--box-shadow-values);
+  background-color: rgb(var(--primary-background-color));
+  color: rgb(var(--primary-background-color));
+  position: relative;
+
+  &--home {
+    background-color: rgba(var(--primary-background-color), 0.75);
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+.primary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+@media screen and (min-width: 500px) {
+.primary-header {
+  max-width: var(--desktop-width);
+  margin-inline: auto;
+}
+
+}

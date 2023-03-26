@@ -13,7 +13,83 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
+    <header class="primary-header-wrapper {{ home_class ? 'primary-header-wrapper--home' : '' }}">
+        <nav class="primary-header" aria-labelledby="primary-navigation">
+            <div class="main-menu" id="main-menu">
+                <button class="close-button" id="main-menu-close-button" value="default">
+                    <svg class="close-button__cross-icon">
+                        <use href="<?php echo $svgs_sprite_url . '#cross' ?>" />
+                    </svg>
+                </button>
+                <ul class="main-menu__list">
+                    <li class='main-menu__item' data-request-uri='/'>
+                        <a class='main-menu__link' href='<?php echo $home_url ?>'>accueil</a>
+                    </li>
+                    <li class='main-menu__item' data-request-uri='/creations'>
+                        <a class='main-menu__link' href='<?php echo $products_url ?>'>Nos créations</a>
+                    </li>
+                    <li class='main-menu__item' data-request-uri='/#categories'>
+                        <a class='main-menu__link' href='<?php echo $categories_url ?>'>catégories</a>
+                    </li>
+
+                    <li class='main-menu__item' data-request-uri='/panier'>
+                        <a class='main-menu__link' href='<?php echo $basket_url ?>'>Panier</a>
+                    </li>
+                </ul>
+            </div>
+            <button class="burger-button" id="burger-button">
+                <span class="burger-button__slice"></span>
+                <span class="burger-button__slice"></span>
+                <span class="burger-button__slice"></span>
+            </button>
+            <a class="brand-wrapper" href='<?php echo $home_url ?>'>
+                <div class="brand">
+                    <div class="logo">
+                        <div class="logo__image">
+                            <svg class="logo__svg">
+                                <use href="<?php echo $svgs_sprite_url . '#rings' ?>" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="brand__text">
+                        <span class="brand__name">JEGWELL</span>
+                        <span class="brand__name brand__name--slogan">BIJOUX FAITS-MAIN</span>
+                    </div>
+                </div>
+            </a>
+            <a class="basket-icon-wrapper" href='<?php echo $_ENV['HOME_PAGE'] ?>/panier'>
+                <svg class="basket-icon">
+                    <use href="<?php echo $svgs_sprite_url . '#basket' ?>" />
+                </svg>
+            </a>
+        </nav>
+    </header>
     <body>
         {% block body %}{% endblock %}
     </body>
+<a class="backToTopWrapper clickable" href="javascript:window.scrollTo(0, 0);">
+    <svg class="backToTop">
+        <use href="<?php echo $svgs_sprite_url . '#arrow-up' ?>" />
+    </svg>
+</a>
+
+<footer class="footer">
+    <div class="footer__content-wrapper">
+        <h2 class="footer__heading">RÉSEAUX SOCIAUX</h2>
+        <ul class="footer__list">
+            <li class="footer__items"><a class="footer__links" href="<?php echo $instagramUrl ?>">Instagram</a></li>
+            <li class="footer__items"><a class="footer__links" href="<?php echo $tikTokUrl ?>">TikTok</a></li>
+            <li class="footer__items"><a class="footer__links" href="<?php echo $facebookUrl ?>">Facebook</a></li>
+        </ul>
+
+        <!-- <h2 class="footer__heading">À PROPOS</h2>
+        <ul class="footer__list">
+            <li class="footer__items"><a class="footer__links" href="#">CGV</a></li>
+        <li class="footer__items"><a class="footer__links" href="#">Mentions Légales</a></li>
+            <li class="footer__items"><a class="footer__links" href="#">Livraison</a></li>
+            <li class="footer__items"><a class="footer__links" href="#">Contact</a></li>
+
+        </ul> -->
+    </div>
+</footer>
 </html>

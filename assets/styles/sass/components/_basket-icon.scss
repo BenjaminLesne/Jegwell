@@ -1,0 +1,16 @@
+.basket-icon-wrapper {
+  height: 100%;
+  margin: 0 0 0 8px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.basket-icon {
+  width: convertToRem(35px);
+  padding-inline: var(--page-padding-right);
+
+  stroke-width: 20;
+  stroke: rgb(var(--primary-color));
+  fill: transparent;
+}

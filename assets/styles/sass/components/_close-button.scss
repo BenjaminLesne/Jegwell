@@ -1,0 +1,24 @@
+.close-button {
+  position: absolute;
+  top: 0;
+  right: 0%;
+
+  &__cross-icon {
+    fill: rgb(var(--neutral-color));
+    $width: convertToRem(25px);
+    width: $width;
+    height: $width;
+
+    &--modal {
+      $width: convertToRem(20px);
+      width: $width;
+      height: $width;
+    }
+
+    &--small {
+      $width: convertToRem(15px);
+      width: $width;
+      height: $width;
+    }
+  }
+}

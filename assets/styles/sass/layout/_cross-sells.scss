@@ -1,0 +1,11 @@
+.cross-sells {
+  margin-top: 40px;
+  &__heading {
+    text-align: left;
+  }
+
+  &__product {
+    margin-inline: unset;
+    max-width: 155px;
+  }
+}

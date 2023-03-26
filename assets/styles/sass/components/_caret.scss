@@ -1,0 +1,19 @@
+.caret {
+  $caret-width: 8px;
+  width: $caret-width;
+  height: $caret-width;
+  border-style: solid;
+  $borderWidth: 2px;
+  border-width: 0 $borderWidth $borderWidth 0;
+  border-color: rgb(var(--neutral-color));
+  transform: rotate(45deg);
+  margin-right: 4px;
+  margin-block: auto;
+
+  &--basket {
+    border-color: black;
+    $caret-width: 5px;
+    width: $caret-width;
+    height: $caret-width;
+  }
+}
