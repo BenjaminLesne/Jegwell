@@ -1,0 +1,3 @@
+- add all the front technologies from my react template
+- add phpunit, find a list of technologies to use based on what has been done with jegwell before
+- add css to homepage, (use one big css file for the whole websit like grafikart?)
