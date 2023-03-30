@@ -13,7 +13,7 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <header class="primary-header-wrapper {{ home_class ? 'primary-header-wrapper--home' : '' }}">
+    <header class="primary-header-wrapper {% if home_class is defined %}primary-header-wrapper--home{% endif %}">
         <nav class="primary-header" aria-labelledby="primary-navigation">
             <div class="main-menu" id="main-menu">
                 <button class="close-button" id="main-menu-close-button" value="default">

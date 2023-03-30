@@ -1,4 +1,2 @@
-- add all the front technologies from my react template
-- add phpunit, find a list of technologies to use based on what has been done with jegwell before
-- add css to homepage, (use one big css file for the whole websit like grafikart?)
-- figure out how and where to create function in twig like {{ icon('email') }}, or anything to get my images urls
+- add prettier like for php files in git hooks
+- figure out how typescript work with Symfony, i can't make pnpm dev work because it expect javascript file and not typescript

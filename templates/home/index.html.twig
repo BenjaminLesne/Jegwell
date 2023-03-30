@@ -7,7 +7,7 @@
 
 <main>
     <div class="hero">
-        <img class="hero__image" src="$hero_img_url" alt="" srcset="">
+        <img class="hero__image" src="{{ asset('images/hero.webp') }}" alt="" srcset="">
         <div class="hero__text">
             <h1 class="hero__slogan">BIJOUX FAITS-MAIN</h1>
             <a class="hero__link" href="{{ path(constant('App\\Constants\\Routes::PRODUCTS')) }}"><span class="hero__call-to-action">DÉCOUVRIR</span></a>
@@ -19,7 +19,7 @@
         <p class="about-us__text about-us__text--first">Nous créons nos bijoux à Paris avec de l'acier inoxydable argenté, doré ou doré rose. Ils sont anti-allergéniques, ne noircissent pas la peau, sont insensibles à la rouille et l'eau.</p>
         <p class="about-us__text about-us__text--last">Le dîtes à personne mais nous faisons des commandes sur-mesure également</p>
         <svg class="about-us__svg">
-            <use href="<?php echo $svgs_sprite_url . '#rings' ?>" />
+            <use href="{{ asset('svgs/svgs-sprite.svg') }}#rings" />
         </svg>
     </section>
 
