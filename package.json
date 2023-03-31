@@ -29,6 +29,6 @@
     "watch": "encore dev --watch",
     "build": "encore production --progress",
     "prepare": "husky install",
-    "test": "tsc && playwright test && ./vendor/bin/phpunit"
+    "test": "tsc --noEmit && playwright test && php bin/phpunit"
   }
 }
