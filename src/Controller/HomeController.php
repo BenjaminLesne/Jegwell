@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Constants\Routes; 
 
 class Category {
     public $name;
@@ -19,7 +20,7 @@ class Category {
 }
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+    #[Route('/', name: Routes::HOME)]
     public function index(): Response
     {
         $categories = [

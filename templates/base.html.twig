@@ -18,22 +18,22 @@
             <div class="main-menu" id="main-menu">
                 <button class="close-button" id="main-menu-close-button" value="default">
                     <svg class="close-button__cross-icon">
-                        <use href="<?php echo $svgs_sprite_url . '#cross' ?>" />
+                        <use href="{{ asset('build/images/svgs-sprite.svg') }}#cross" />
                     </svg>
                 </button>
                 <ul class="main-menu__list">
                     <li class='main-menu__item' data-request-uri='/'>
-                        <a class='main-menu__link' href='<?php echo $home_url ?>'>accueil</a>
+                        <a class='main-menu__link' href='{{ path(constant('App\\Constants\\Routes::HOME')) }}'>accueil</a>
                     </li>
                     <li class='main-menu__item' data-request-uri='/creations'>
-                        <a class='main-menu__link' href='<?php echo $products_url ?>'>Nos créations</a>
+                        <a class='main-menu__link' href='{{ path(constant('App\\Constants\\Routes::PRODUCTS')) }}'>Nos créations</a>
                     </li>
                     <li class='main-menu__item' data-request-uri='/#categories'>
-                        <a class='main-menu__link' href='<?php echo $categories_url ?>'>catégories</a>
+                        <a class='main-menu__link' href='{{ path(constant('App\\Constants\\Routes::HOME')) }}#categories'>catégories</a>
                     </li>
 
                     <li class='main-menu__item' data-request-uri='/panier'>
-                        <a class='main-menu__link' href='<?php echo $basket_url ?>'>Panier</a>
+                        <a class='main-menu__link' href='{{ path(constant('App\\Constants\\Routes::BASKET')) }}'>Panier</a>
                     </li>
                 </ul>
             </div>
@@ -42,12 +42,12 @@
                 <span class="burger-button__slice"></span>
                 <span class="burger-button__slice"></span>
             </button>
-            <a class="brand-wrapper" href='<?php echo $home_url ?>'>
+            <a class="brand-wrapper" href='{{ path(constant('App\\Constants\\Routes::HOME')) }}'>
                 <div class="brand">
                     <div class="logo">
                         <div class="logo__image">
                             <svg class="logo__svg">
-                                <use href="<?php echo $svgs_sprite_url . '#rings' ?>" />
+                                <use href="{{ asset('build/images/svgs-sprite.svg') }}#rings" />
                             </svg>
                         </div>
                     </div>
@@ -57,9 +57,9 @@
                     </div>
                 </div>
             </a>
-            <a class="basket-icon-wrapper" href='<?php echo $_ENV['HOME_PAGE'] ?>/panier'>
+            <a class="basket-icon-wrapper" href='{{ path(constant('App\\Constants\\Routes::BASKET')) }}'>
                 <svg class="basket-icon">
-                    <use href="<?php echo $svgs_sprite_url . '#basket' ?>" />
+                    <use href="{{ asset('build/images/svgs-sprite.svg') }}#basket" />
                 </svg>
             </a>
         </nav>
@@ -69,7 +69,7 @@
     </body>
 <a class="backToTopWrapper clickable" href="javascript:window.scrollTo(0, 0);">
     <svg class="backToTop">
-        <use href="<?php echo $svgs_sprite_url . '#arrow-up' ?>" />
+        <use href="{{ asset('build/images/svgs-sprite.svg') }}#arrow-up" />
     </svg>
 </a>
 
@@ -77,9 +77,9 @@
     <div class="footer__content-wrapper">
         <h2 class="footer__heading">RÉSEAUX SOCIAUX</h2>
         <ul class="footer__list">
-            <li class="footer__items"><a class="footer__links" href="<?php echo $instagramUrl ?>">Instagram</a></li>
-            <li class="footer__items"><a class="footer__links" href="<?php echo $tikTokUrl ?>">TikTok</a></li>
-            <li class="footer__items"><a class="footer__links" href="<?php echo $facebookUrl ?>">Facebook</a></li>
+            <li class="footer__items"><a class="footer__links" href="{{ constant('App\\Constants\\SocialMedia::INSTAGRAM') }}">Instagram</a></li>
+            <li class="footer__items"><a class="footer__links" href="{{ constant('App\\Constants\\SocialMedia::TIKTOK') }}">TikTok</a></li>
+            <li class="footer__items"><a class="footer__links" href="{{ constant('App\\Constants\\SocialMedia::FACEBOOK') }}">Facebook</a></li>
         </ul>
 
         <!-- <h2 class="footer__heading">À PROPOS</h2>
