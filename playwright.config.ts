@@ -37,6 +37,8 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
+    // Viewport used for all pages in the context, it uses an iphone 11 Pro dimensions.
+    viewport: { width: 375, height: 812 },
   },
 
   /* Configure projects for major browsers */

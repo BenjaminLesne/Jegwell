@@ -2,17 +2,19 @@
 
 namespace App\Controller;
 
+use App\Constants\Routes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Constants\Routes; 
 
-class Category {
+class Category
+{
     public $name;
     public $url;
     public $image_location;
 
-    public function __construct($name, $url, $image_location) {
+    public function __construct($name, $url, $image_location)
+    {
         $this->name = $name;
         $this->url = $url;
         $this->image_location = $image_location;
@@ -25,15 +27,11 @@ class HomeController extends AbstractController
     {
         $categories = [
             new Category('Books', 'books', '/images/books.png'),
-            new Category('Movies','movies', '/images/movies.png'),
-            new Category('Music','music', '/images/music.png'),
+            new Category('Movies', 'movies', '/images/movies.png'),
+            new Category('Music', 'music', '/images/music.png'),
             new Category('Food', 'food', '/images/food.png'),
             new Category('Travel', 'travel', '/images/travel.png'),
             new Category('Family', 'family', '/images/family.png'),
-            new Category('Sports','sports', '/images/sports.png'),
-            new Category('Electronics', 'electronics', '/images/electronics.png'),
-            new Category('Entertainment', 'entertainment', '/images/entertainment.png'),
-            new Category('Entertainment', 'entertainment', '/images/entertainment')
         ];
 
         return $this->render('home/index.html.twig', [

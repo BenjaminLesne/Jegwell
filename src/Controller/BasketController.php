@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
+use App\Constants\Routes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-use App\Constants\Routes; 
 class BasketController extends AbstractController
 {
-    #[Route('/basket', name: Routes::BASKET)]
+    #[Route('/panier', name: Routes::BASKET)]
     public function index(): Response
     {
         return $this->render('basket/index.html.twig', [

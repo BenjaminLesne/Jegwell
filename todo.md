@@ -1,3 +1,3 @@
-- add prettier like for php files in git hooks
 - find a validation form library (zod? yup?)
 - make e2e test for homepage
+  => mobile oriented test +++
