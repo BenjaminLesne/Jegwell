@@ -1,2 +1,4 @@
 - add prettier like for php files in git hooks
-- figure out how typescript work with Symfony, i can't make pnpm dev work because it expect javascript file and not typescript
+- make header burger button work on click
+  => js not running?
+- find a validation form library (zod? yup?)

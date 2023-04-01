@@ -78,6 +78,7 @@ Encore
          // if versioning is enabled, add the file hash too
          //to: 'images/[path][name].[hash:8].[ext]',
      })
+    .cleanupOutputBeforeBuild(['*.js']) 
 ;
 
 module.exports = Encore.getWebpackConfig();

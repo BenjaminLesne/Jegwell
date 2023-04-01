@@ -10,3 +10,11 @@ import "./styles/app.scss";
 
 // start the Stimulus application
 import "./bootstrap";
+
+// javascript
+import "./ts/basket";
+// import "./ts/checkout"
+import "./ts/delivery";
+import "./ts/index";
+import "./ts/products";
+import "./ts/single_product";
