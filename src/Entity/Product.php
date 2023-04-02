@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,22 +14,32 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private string $name;
 
-    #[ORM\Column]
-    private ?int $price = null;
-
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;
+    private string $slug;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    #[ORM\ManyToMany(targetEntity: category::class, inversedBy: 'products')]
+    private Collection $categories;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: option::class, orphanRemoval: true)]
+    private Collection $options;
+
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'relatedProducts')]
+    private Collection $relatedProducts;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+        $this->options = new ArrayCollection();
+        $this->relatedProducts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -46,24 +58,12 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?int
-    {
-        return $this->price;
-    }
-
-    public function setPrice(int $price): self
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -82,14 +82,80 @@ class Product
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    /**
+     * @return Collection<int, category>
+     */
+    public function getCategories(): Collection
     {
-        return $this->created_at;
+        return $this->categories;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function addCategory(category $category): self
     {
-        $this->created_at = $created_at;
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(category $category): self
+    {
+        $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, option>
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(option $option): self
+    {
+        if (!$this->options->contains($option)) {
+            $this->options->add($option);
+            $option->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(option $option): self
+    {
+        if ($this->options->removeElement($option)) {
+            // set the owning side to null (unless already changed)
+            if ($option->getProduct() === $this) {
+                $option->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getRelatedProducts(): Collection
+    {
+        return $this->relatedProducts;
+    }
+
+    public function addRelatedProduct(self $relatedProduct): self
+    {
+        if (!$this->relatedProducts->contains($relatedProduct)) {
+            $this->relatedProducts->add($relatedProduct);
+        }
+
+        return $this;
+    }
+
+    public function removeRelatedProduct(self $relatedProduct): self
+    {
+        $this->relatedProducts->removeElement($relatedProduct);
 
         return $this;
     }
