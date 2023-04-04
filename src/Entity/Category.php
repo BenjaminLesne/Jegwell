@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Helper\SlugHelper;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,7 +25,7 @@ class Category
     #[ORM\Column(length: 255)]
     private string $slug;
 
-    #[Vich\UploadableField(mapping: 'options', fileNameProperty: 'imageName')]
+    #[Vich\UploadableField(mapping: 'categories', fileNameProperty: 'imageName')]
     private File $imageFile;
 
     #[ORM\Column]
@@ -54,18 +55,19 @@ class Category
     public function setName(string $name): self
     {
         $this->name = $name;
+        $this->setSlug($name);
 
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
     public function setSlug(string $slug): self
     {
-        $this->slug = $slug;
+        $this->slug = SlugHelper::getSlug($slug);
 
         return $this;
     }
@@ -79,7 +81,7 @@ class Category
      *
      * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
      */
-    public function setImageFile(?File $imageFile = null): void
+    public function setImageFile(?File $imageFile = null): self
     {
         $this->imageFile = $imageFile;
 
@@ -88,6 +90,8 @@ class Category
             // otherwise the event listeners won't be called and the file is lost
             $this->updatedAt = new \DateTimeImmutable();
         }
+
+        return $this;
     }
 
     public function getImageFile(): ?File
@@ -95,9 +99,11 @@ class Category
         return $this->imageFile;
     }
 
-    public function setImageName(?string $imageName): void
+    public function setImageName(?string $imageName): self
     {
         $this->imageName = $imageName;
+
+        return $this;
     }
 
     public function getImageName(): ?string

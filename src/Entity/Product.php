@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Helper\SlugHelper;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,10 +26,10 @@ class Product
     #[ORM\Column(length: 255)]
     private string $slug;
 
-    #[ORM\ManyToMany(targetEntity: category::class, inversedBy: 'products')]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     private Collection $categories;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: option::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Option::class, orphanRemoval: true)]
     private Collection $options;
 
     #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'relatedProducts')]
@@ -54,6 +55,7 @@ class Product
     public function setName(string $name): self
     {
         $this->name = $name;
+        $this->setSlug($name);
 
         return $this;
     }
@@ -77,7 +79,7 @@ class Product
 
     public function setSlug(string $slug): self
     {
-        $this->slug = $slug;
+        $this->slug = SlugHelper::getSlug($slug);
 
         return $this;
     }

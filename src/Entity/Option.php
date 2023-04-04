@@ -58,6 +58,11 @@ class Option
         return $this->price;
     }
 
+    public function getFormattedPrice(): string
+    {
+        return number_format($this->price / 100, 2, ',', ' ');
+    }
+
     public function setPrice(int $price): self
     {
         $this->price = $price;
@@ -74,7 +79,7 @@ class Option
      *
      * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
      */
-    public function setImageFile(?File $imageFile = null): void
+    public function setImageFile(?File $imageFile = null): self
     {
         $this->imageFile = $imageFile;
 
@@ -83,6 +88,8 @@ class Option
             // otherwise the event listeners won't be called and the file is lost
             $this->updatedAt = new \DateTimeImmutable();
         }
+
+        return $this;
     }
 
     public function getImageFile(): ?File
@@ -90,19 +97,23 @@ class Option
         return $this->imageFile;
     }
 
-    public function setImageName(?string $imageName): void
+    public function setImageName(string $imageName): self
     {
         $this->imageName = $imageName;
+
+        return $this;
     }
 
-    public function getImageName(): ?string
+    public function getImageName(): string
     {
         return $this->imageName;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     public function getUpdatedAt(): \DateTimeImmutable

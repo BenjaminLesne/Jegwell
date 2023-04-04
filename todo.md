@@ -8,3 +8,11 @@
 - optimize imags
   => see liip/imagine-bundle, https://youtu.be/OZBVd4ZTIqk?t=899
 - what type of extension I accept for images ? (jpeg? webp? png?)
+- create the admin page with the form to add a category. this video might help: https://www.youtube.com/watch?v=6Ryu7-VSV5k&list=PLjwdMgw5TTLX7wmorGgfrqI9TcA8nMb29&index=4
+- don't forget phpunit, vitest, and playwright tests
+- to style symfony form: https://youtu.be/6Ryu7-VSV5k?t=659
+- figure out how to use the translation in symfony to auto translate form labels and prepare possible english version of jegwell
+
+what I was doing:
+made a category form to add a category to database
+now, update product form to select categories (they should be fetched and displayed in form with ChoicesType)
