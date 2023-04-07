@@ -1,46 +1,87 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminProductController!{% endblock %}
+{% block title %}Hello AdminProductController!
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<style>
+		.example-wrapper {
+			margin: 1em auto;
+			max-width: 800px;
+			width: 95%;
+			font: 18px / 1.5 sans-serif;
+		}
+		.example-wrapper code {
+			background: #F5F5F5;
+			padding: 2px 6px;
+		}
+	</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+	<div class="example-wrapper">
+		<h1>Hello
+			{{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/benjamin/code/jegwell/src/Controller/AdminProductController.php'|file_link(0) }}">src/Controller/AdminProductController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/benjamin/code/jegwell/templates/admin_product/index.html.twig'|file_link(0) }}">templates/admin_product/index.html.twig</a></code></li>
-    </ul>
-    <table>
-    <thead>
-    <tr>
-    <th>Nom</th>
-    <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-{% for product in products %}
-    <tr>
-    <td>{{product.name}}</td>
-    <td><a href="{{path(constant('App\\Constants\\Routes::ADMIN_PRODUCT_EDIT'), {id: product.id})}}">Editer</a></td>
-    </tr>
-{% endfor %}
+		This friendly message is coming from:
+		<ul>
+			<li>Your controller at
+				<code>
+					<a href="{{ '/home/benjamin/code/jegwell/src/Controller/AdminProductController.php'|file_link(0) }}">src/Controller/AdminProductController.php</a>
+				</code>
+			</li>
+			<li>Your template at
+				<code>
+					<a href="{{ '/home/benjamin/code/jegwell/templates/admin_product/index.html.twig'|file_link(0) }}">templates/admin_product/index.html.twig</a>
+				</code>
+			</li>
+		</ul>
+		<table>
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for product in products %}
+					<tr>
+						<td>{{product.name}}</td>
+						<td>
+							<a href="{{path(constant('App\\Constants\\Routes::ADMIN_PRODUCT_EDIT'), {id: product.id})}}">Editer</a>
+						</td>
+					</tr>
+				{% endfor %}
 
-{{ form_start(productForm) }}
-{{ form_widget(productForm) }}
-<button>Ajouter</button>
-{{ form_end(productForm)}}
+				{{ form_start(productForm) }}
+{{ form_label(productForm.options) }}
+				<ul class="options" data-index="{{ productForm.options|length > 0 ? productForm.options|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(productForm.options.vars.prototype)|e('html_attr') }}"></ul>
+				<button type="button" class="add_item_link" data-collection-holder-class="options">Add an option</button>
 
-{{ form_start(categoryForm) }}
-{{ form_widget(categoryForm) }}
-<button>Ajouter</button>
-{{ form_end(categoryForm)}}
-</tbody>
-    </table>
-</div>
+        {{ form_rest(productForm) }}
+				<button>Ajouter</button>
+				{{ form_end(productForm)}}
+
+				{{ form_start(categoryForm) }}
+				{{ form_widget(categoryForm) }}
+				<button>Ajouter</button>
+				{{ form_end(categoryForm)}}
+			</tbody>
+		</table>
+	</div>
+	<script>
+		const addFormToCollection = (e) => {
+const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+const item = document.createElement('li');
+
+item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+
+collectionHolder.appendChild(item);
+
+collectionHolder.dataset.index ++;
+};
+
+document.querySelectorAll('.add_item_link').forEach(btn => {
+btn.addEventListener("click", addFormToCollection)
+});
+	</script>
 {% endblock %}

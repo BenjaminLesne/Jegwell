@@ -13,9 +13,13 @@
     <h1>Editer le produit</h1>
 {{ form_start(form) }}
 {{ form_widget(form) }}
+
+{# <ul class=""
+    data-index="{{ form.options|length > 0 ? form.options|last.vars.name + 1 : 0 }}"
+    data-prototype="{{ form_widget(form.options.vars.prototype)|e('html_attr') }}"
+></ul> #}
 <button>editer</button>
 {{ form_end(form)}}
-
 
 </div>
 {% endblock %}

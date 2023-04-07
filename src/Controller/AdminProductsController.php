@@ -41,7 +41,6 @@ class AdminProductsController extends AbstractController
         }
         if ($categoryForm->isSubmitted() && $categoryForm->isValid()) {
             $newCategory = $categoryForm->getData();
-            // dd($newCategory);
             $this->em->persist($newCategory);
             $this->em->flush();
         }
@@ -55,12 +54,21 @@ class AdminProductsController extends AbstractController
     }
 
     #[Route('/admin/produits/{id}', name: Routes::ADMIN_PRODUCT_EDIT)]
-    public function edit(Product $product): Response
+    public function edit(Request $request, Product $product): Response
     {
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductType::class, $product, [
+            'categories' => $product->getCategories()->toArray(),
+        ]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $modifiedProduct = $form->getData();
+            $this->em->persist($modifiedProduct);
+            $this->em->flush();
+        }
 
         return $this->render('admin_products/edit.html.twig', [
-            'products' => $product,
+            'product' => $product,
             'form' => $form->createView(),
         ]);
     }
