@@ -24,17 +24,17 @@
     </tr>
     </thead>
     <tbody>
-{# {% for product in products %}
+{% for product in products %}
     <tr>
     <td>{{product.name}}</td>
     <td><a href="{{path(constant('App\\Constants\\Routes::ADMIN_PRODUCT_EDIT'), {id: product.id})}}">Editer</a></td>
     </tr>
-{% endfor %} #}
+{% endfor %}
 
-{# {{ form_start(productForm) }}
+{{ form_start(productForm) }}
 {{ form_widget(productForm) }}
 <button>Ajouter</button>
-{{ form_end(productForm)}} #}
+{{ form_end(productForm)}}
 
 {{ form_start(categoryForm) }}
 {{ form_widget(categoryForm) }}

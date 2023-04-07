@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Constants\Routes;
-use App\Entity\Category;
 use App\Entity\Product;
 use App\Form\CategoryType;
 use App\Form\ProductType;
@@ -28,28 +27,30 @@ class AdminProductsController extends AbstractController
     #[Route('/admin/produits', name: Routes::ADMIN_PRODUCT)]
     public function index(Request $request): Response
     {
-        // $products = $this->repository->findAll();
+        $products = $this->repository->findAll();
 
         $productForm = $this->createForm(ProductType::class);
         $categoryForm = $this->createForm(CategoryType::class);
         $categoryForm->handleRequest($request);
+        $productForm->handleRequest($request);
+
+        if ($productForm->isSubmitted() && $productForm->isValid()) {
+            $newProduct = $productForm->getData();
+            $this->em->persist($newProduct);
+            $this->em->flush();
+        }
         if ($categoryForm->isSubmitted() && $categoryForm->isValid()) {
             $newCategory = $categoryForm->getData();
+            // dd($newCategory);
             $this->em->persist($newCategory);
-            //  dd($data);
-//             $newCategory = new Category();
-//             $newCategory
-//             ->setImageName('test')
-//             ->setName($data->name)
-//             ->setImageFile($data->imageFile);
             $this->em->flush();
         }
 
         return $this->render('admin_products/index.html.twig', [
             'controller_name' => 'AdminProductController',
-            // 'products' => $products,
-            // 'productForm' => $productForm->createView(),
+            'products' => $products,
             'categoryForm' => $categoryForm->createView(),
+            'productForm' => $productForm->createView(),
         ]);
     }
 

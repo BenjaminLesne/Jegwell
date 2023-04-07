@@ -28,9 +28,9 @@
         <ul class="categories">
     {% for category in categories %}
                   <li class="categories__item">
-                        <a class="categories__link" href="{{category.url}}">
+                        <a class="categories__link" href="{{category.name}}">
                         <figure class="categories__content">
-                            <img class="categories__image" src="{{category.image_location}}" alt="{{category.name}}">
+                            <img class="categories__image" src="{{vich_uploader_asset(category, 'imageFile')}}" alt="{{category.name}}">
                             <figcaption class="categories__description">{{category.name}}</figcaption>
                         </figure>
                         </a>
