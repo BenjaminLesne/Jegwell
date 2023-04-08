@@ -1,25 +1,37 @@
-
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminProductController and the edit function!{% endblock %}
+{% block title %}Hello AdminProductController and the edit function!
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<style>
+		.example-wrapper {
+			margin: 1em auto;
+			max-width: 800px;
+			width: 95%;
+			font: 18px / 1.5 sans-serif;
+		}
+		.example-wrapper code {
+			background: #F5F5F5;
+			padding: 2px 6px;
+		}
+	</style>
 
-<div class="example-wrapper">
-    <h1>Editer le produit</h1>
-{{ form_start(form) }}
-{{ form_widget(form) }}
+	<div class="example-wrapper">
+		<h1>Editer le produit</h1>
 
-{# <ul class=""
-    data-index="{{ form.options|length > 0 ? form.options|last.vars.name + 1 : 0 }}"
-    data-prototype="{{ form_widget(form.options.vars.prototype)|e('html_attr') }}"
-></ul> #}
-<button>editer</button>
-{{ form_end(form)}}
+				{{ form_start(productForm) }}
+				<label>{{ form_label(productForm.options) }}</label>
+				<ul class="options" data-index="{{ productForm.options|length > 0 ? productForm.options|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(productForm.options.vars.prototype)|e('html_attr') }}"></ul>
+				<div class="form-group{% if productForm.options.vars.errors|length > 0 %} has-error{% endif %}">
+					{{ form_widget(productForm.options) }}
+					{{ form_errors(productForm.options) }}
+				</div>
+				<button type="button" class="add_item_link" data-collection-holder-class="options">Add an option</button>
 
-</div>
+				{{ form_rest(productForm) }}
+				<button>Ajouter</button>
+				{{ form_end(productForm)}}
+
+	</div>
 {% endblock %}

@@ -29,7 +29,7 @@ class Product
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     private Collection $categories;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Option::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Option::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $options;
 
     #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'relatedProducts')]

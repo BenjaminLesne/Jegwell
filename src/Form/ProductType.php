@@ -45,6 +45,7 @@ class ProductType extends AbstractType
                 'label' => 'options',
                 'allow_add' => true,
                 'allow_delete' => true,
+'by_reference' => false,
             ])
             ->add('relatedProducts', null, [
                 'label' => 'produits associés',

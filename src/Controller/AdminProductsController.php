@@ -69,7 +69,7 @@ class AdminProductsController extends AbstractController
 
         return $this->render('admin_products/edit.html.twig', [
             'product' => $product,
-            'form' => $form->createView(),
+            'productForm' => $form->createView(),
         ]);
     }
 }
