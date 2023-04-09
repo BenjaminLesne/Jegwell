@@ -63,6 +63,7 @@ class AdminProductsController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $modifiedProduct = $form->getData();
+            // dd($modifiedProduct);
             $this->em->persist($modifiedProduct);
             $this->em->flush();
         }

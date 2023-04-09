@@ -15,13 +15,9 @@ class OptionType extends AbstractType
         $builder
             ->add('name')
             ->add('price')
-            ->add('imageName', null, [
-                'label' => 'nom image',
-            ])
             ->add('imageFile', FileType::class, [
                 'label' => 'image',
             ])
-            ->add('updatedAt')
             ->add('product')
         ;
     }

@@ -1,0 +1,16 @@
+{{ form_start(productForm) }}
+
+{{ form_row(productForm.name) }}
+
+<label>{{ form_label(productForm.options) }}</label>
+<ul class="options" data-index="{{ productForm.options|length > 0 ? productForm.options|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(productForm.options.vars.prototype)|e('html_attr') }}"></ul>
+<div class="form-group{% if productForm.options.vars.errors|length > 0 %} has-error{% endif %}">
+	{{ form_widget(productForm.options) }}
+	{{ form_errors(productForm.options) }}
+</div>
+<button type="button" class="add_item_link" data-collection-holder-class="options">Add an option</button>
+
+{{ form_rest(productForm) }}
+<button>Ajouter</button>
+
+{{ form_end(productForm)}}

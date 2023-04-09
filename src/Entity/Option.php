@@ -79,15 +79,11 @@ class Option
      *
      * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
      */
-    public function setImageFile(?File $imageFile = null): self
+    public function setImageFile(File $imageFile): self
     {
         $this->imageFile = $imageFile;
-
-        if (null !== $imageFile) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTimeImmutable();
-        }
+        $this->setImageName($imageFile->getFilename());
+        $this->updatedAt = new \DateTimeImmutable();
 
         return $this;
     }
@@ -97,9 +93,9 @@ class Option
         return $this->imageFile;
     }
 
-    public function setImageName(string $imageName): self
+    public function setImageName(?string $imageName): self
     {
-        $this->imageName = $imageName;
+        $this->imageName = $imageName ?? $this->getName() ?? bin2hex(random_bytes(6));
 
         return $this;
     }
