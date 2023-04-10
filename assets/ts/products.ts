@@ -38,3 +38,15 @@ const addFormToCollection = (e: Event) => {
 document.querySelectorAll(".add_item_link").forEach((btn) => {
   btn.addEventListener("click", addFormToCollection);
 });
+
+const categorySelect = document.getElementById("category");
+const inputs = [categorySelect];
+
+inputs.forEach((input) => {
+  input?.addEventListener("change", (event) => {
+    const currentTarget = event.currentTarget;
+    if (currentTarget instanceof HTMLElement) {
+      currentTarget?.closest("form")?.submit();
+    }
+  });
+});

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Constants\Routes;
 use App\Repository\CategoryRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,12 +24,10 @@ class Category
 class HomeController extends AbstractController
 {
     private $repository;
-    private $em;
 
-    public function __construct(CategoryRepository $repository, EntityManagerInterface $em)
+    public function __construct(CategoryRepository $repository)
     {
         $this->repository = $repository;
-        $this->em = $em;
     }
 
     #[Route('/', name: Routes::HOME)]
