@@ -44,9 +44,33 @@ class ProductRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('product');
         $categorySearched = $search->getCategory();
+        $sortWanted = $search->getSort();
+
         if ($categorySearched) {
             $query->andWhere(':category MEMBER OF product.categories')
                 ->setParameter('category', $categorySearched);
+        }
+
+        if ($sortWanted) {
+            switch ($sortWanted) {
+                case 'name DESC':
+                    $query->orderBy('product.name', 'DESC');
+                    break;
+                case 'price ASC':
+                    $query->leftJoin('product.options', 'option')
+                        ->addSelect('option')
+                        ->orderBy('option.price', 'ASC');
+                    break;
+                case 'price DESC':
+                    $query->leftJoin('product.options', 'option')
+                        ->addSelect('option')
+                        ->orderBy('option.price', 'DESC');
+                    break;
+                default:
+                case 'name ASC':
+                    $query->orderBy('product.name', 'ASC');
+                    break;
+            }
         }
 
         return $query->getQuery();

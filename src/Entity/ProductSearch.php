@@ -29,7 +29,7 @@ class ProductSearch
         return $this;
     }
 
-    public function getSort(): string
+    public function getSort(): ?string
     {
         return $this->sort;
     }

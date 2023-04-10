@@ -40,13 +40,18 @@ document.querySelectorAll(".add_item_link").forEach((btn) => {
 });
 
 const categorySelect = document.getElementById("category");
-const inputs = [categorySelect];
+const sortSelect = document.getElementById("sort");
+const inputs = [categorySelect, sortSelect];
 
 inputs.forEach((input) => {
+  console.log(input);
   input?.addEventListener("change", (event) => {
     const currentTarget = event.currentTarget;
+    console.log("change");
+
     if (currentTarget instanceof HTMLElement) {
       currentTarget?.closest("form")?.submit();
+      console.log("inside condition");
     }
   });
 });

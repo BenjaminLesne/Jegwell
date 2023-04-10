@@ -25,13 +25,13 @@ class ProductSearchType extends AbstractType
 
     ->add('sort', ChoiceType::class, [
         'choices' => [
-            'Nom A-Z' => 'name ASC',
             'Nom Z-A' => 'name DESC',
             'prix le + bas' => 'price ASC',
             'prix le + haut' => 'price DESC',
         ],
         'required' => false,
         'label' => 'Trier par:',
+                'placeholder' => 'Nom A-Z',
     ])
         ;
     }
