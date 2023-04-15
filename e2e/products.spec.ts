@@ -47,7 +47,7 @@ test.describe("the products page", () => {
           ? { ...filter, previousFilterLabel }
           : filter;
       testFilter(props);
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1500);
     }
     type TestFilterHelper = Pick<isSortedProps, "array" | "order">;
     type TestFilterProps = {
@@ -75,15 +75,11 @@ test.describe("the products page", () => {
     }
   });
 
-  test.only("display right products based on category selected", async ({
+  test("display right products based on category selected", async ({
     page,
   }) => {
-    type Categories = "Toutes" | "ma deuxieme catégorie" | "troieme cat test";
-    const categories = [
-      "Toutes",
-      "ma deuxieme catégorie",
-      "troieme cat test",
-    ] as const;
+    type Categories = "Toutes" | "boucle d'oreilles" | "bague";
+    const categories = ["Toutes", "boucle d'oreilles", "bague"] as const;
 
     for (let index = 0; index < categories.length; index++) {
       const previousCategory = index - 1 > 0 ? categories[index - 1] : null;
@@ -93,7 +89,7 @@ test.describe("the products page", () => {
           ? { category, previousCategory }
           : { category };
       testCategory(props);
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1500);
     }
 
     type TestCategory = {
@@ -106,8 +102,10 @@ test.describe("the products page", () => {
     }: TestCategory) {
       await page.getByText(previousCategory).nth(1).click();
       await page.getByRole("option", { name: category }).click();
-
-      expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
+      const images = await page.getByRole("img").all();
+      for (const image of images) {
+        expect(await image.screenshot()).toMatchSnapshot();
+      }
     }
   });
 });

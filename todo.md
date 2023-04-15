@@ -13,10 +13,10 @@
 
 what I was doing:
 
-- test end to end products page
-  => how to test filters? fake database?
-  => use a specific server for test with a special database. I think we can start server in test mode with symfony and get a specific database with it.
+- git push automatic test fails, I don't know why.
 
-1- create the test database
-https://symfony.com/doc/current/testing.html#configuring-a-database-for-tests
-2- change playwright setting to run its own server in test mode with the test database
+Ne pas oublier de lancer la base de donnée SQL avec:
+
+```
+sudo xampp start
+```

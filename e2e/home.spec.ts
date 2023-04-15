@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
-import { BASE_URL } from "./constants";
+import { HOME_PAGE_URL } from "./constants";
 
 test.describe("the header navigation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(BASE_URL);
+    await page.goto(HOME_PAGE_URL);
   });
   test("home match snapshot", async ({ page }) => {
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
