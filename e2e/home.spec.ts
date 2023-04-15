@@ -9,7 +9,7 @@ test.describe("the header navigation", () => {
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
   });
 
-  test.only("categories cards have right links", async ({ page }) => {
+  test("categories cards have right links", async ({ page }) => {
     const links = [{ name: "boucle d'oreilles", href: "boucle d'oreilles" }];
     for (const link of links) {
       const { name, href } = link;

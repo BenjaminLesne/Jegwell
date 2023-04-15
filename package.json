@@ -35,7 +35,8 @@
     "build": "encore production --progress",
     "prepare": "husky install",
     "test": "tsc --noEmit && playwright test --forbid-only && php bin/phpunit",
-    "start": "pnpm watch & symfony server:start",
-    "testServer": "pnpm run dev && APP_ENV=test symfony server:start --port=8001"
+    "start": "pnpm watch & symfony server:start --port=8000",
+    "testServer": "pnpm run dev && APP_ENV=test symfony server:start --port=8001 --quiet",
+    "devTest": "pnpm playwright test --headed --project='Google Chrome'"
   }
 }

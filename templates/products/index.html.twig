@@ -38,9 +38,9 @@
 							</a>
 							<div class='product__information'>
 								<a class='product__name' href='{{ productUrl }}'>
-									<span>{{ product.name }}</span>
+									<span data-testid='p.name'>{{ product.name }}</span>
 								</a>
-								<span class='product__price'>{{ product.options[0].price }}
+								<span class='product__price' data-testid='price'>{{ product.options[0].price }}
 									€</span>
 								<button class='product__call-to-action-wrapper' data-product-id="\" $product_id\"" data-product-option="\" default\"">
 									<span class='product__call-to-action'>Ajouter au panier<span class='product__success-message'>Ajouté &#10003;</span>
