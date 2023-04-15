@@ -1,0 +1,6 @@
+@mixin border {
+  border-style: solid;
+  border-color: rgb(var(--neutral-color));
+  border-width: 1px;
+  border-radius: 5px;
+}

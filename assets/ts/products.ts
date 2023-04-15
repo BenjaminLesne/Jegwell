@@ -1,3 +1,5 @@
+import TomSelect from "tom-select";
+
 const buttonsTriggeringModals = document.querySelectorAll(".input-wrapper");
 
 buttonsTriggeringModals?.forEach((button) => {
@@ -44,14 +46,18 @@ const sortSelect = document.getElementById("sort");
 const inputs = [categorySelect, sortSelect];
 
 inputs.forEach((input) => {
-  console.log(input);
   input?.addEventListener("change", (event) => {
     const currentTarget = event.currentTarget;
-    console.log("change");
 
     if (currentTarget instanceof HTMLElement) {
       currentTarget?.closest("form")?.submit();
-      console.log("inside condition");
     }
+  });
+  if (input?.id == null) return;
+
+  new TomSelect("#" + input.id, {
+    hideSelected: true,
+    closeAfterSelect: true,
+    allowEmptyOption: true,
   });
 });

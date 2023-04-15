@@ -1,7 +1,22 @@
 .filters {
   display: flex;
+  flex-direction: column;
   padding-bottom: var(--page-padding-top);
   gap: 16px;
+justify-content: center;
+
+&__filter {
+  min-width: 200px;
+}
+
+    @media screen and (min-width: 450px) {
+        flex-direction: row;
+    }
+}
+
+.filters label {
+    text-transform: capitalize;
+
 }
 
 .filter {

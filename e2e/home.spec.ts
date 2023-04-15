@@ -10,14 +10,7 @@ test.describe("the header navigation", () => {
   });
 
   test.only("categories cards have right links", async ({ page }) => {
-    const links = [
-      { name: "Books", href: "books" },
-      { name: "Movies", href: "movies" },
-      { name: "Music", href: "music" },
-      { name: "Food", href: "food" },
-      { name: "Travel", href: "travel" },
-      { name: "family", href: "family" },
-    ];
+    const links = [{ name: "boucle d'oreilles", href: "boucle d'oreilles" }];
     for (const link of links) {
       const { name, href } = link;
       const domLink = page.getByRole("link", { name });

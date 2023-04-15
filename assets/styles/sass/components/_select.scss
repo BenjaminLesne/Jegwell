@@ -1,0 +1,64 @@
+.tomselected {
+  display: none !important;
+}
+
+.ts-wrapper{
+    position: relative;
+}
+.ts-control {
+    & > input {
+        display: none;
+
+    }
+    & .item {
+
+  border-style: solid;
+  border-color: rgb(var(--neutral-color));
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 11px $padding-inline;
+  font-size: convertToRem(16px);
+  font-weight: 500;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+    }
+}
+
+.ts-dropdown{
+@include border;
+$borderWidth: 1px;
+position: absolute;
+width: calc(100% - $borderWidth * 2);
+z-index: 10;
+background-color: white;
+right: 0;
+
+& .option {
+        $paddingInline: 10px;
+        padding: 5px $paddingInline;
+        cursor: pointer;
+&[aria-selected="true"]{
+    background-color: rgb(var(--secondary-color));
+}
+    @media screen and (min-width: 500px) {
+      &:hover{
+        background-color: rgb(var(--secondary-color));
+      }
+    }
+    }
+}
+
+.plugin-dropdown_input .items-placeholder {
+    display: none;
+}
+
+.dropdown-input-wrap{
+display: flex;}
+.dropdown-input{
+    flex: 1;
+}
+
+

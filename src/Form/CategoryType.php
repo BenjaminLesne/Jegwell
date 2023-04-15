@@ -16,10 +16,6 @@ class CategoryType extends AbstractType
             ->add('name', null, [
                 'label' => 'nom',
             ])
-
-            ->add('imageName', null, [
-                'label' => 'nom image',
-            ])
             ->add('imageFile', FileType::class, [
                 'label' => 'image',
             ])

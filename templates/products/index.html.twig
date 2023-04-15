@@ -7,24 +7,24 @@
 	<main>
 		<section class="section">
 			<h1 class="section__h2">NOS CRÉATIONS</h1>
-			<div
-				class="filters">{# <button class="input-wrapper filter" id="categoriesButton" data-modal="categoriesModal">
-					                <div class="input filter__content-wrapper" data-label="Catégories">
-					                    <span class="filter__text"><?php echo $current_categorie; ?></span>
-					                    <div class="caret"></div>
-					                </div>
-					            </button>
-					
-					            <button class="input-wrapper filter" id="sort" data-modal="sortModal">
-					                <div class="input filter__content-wrapper" data-label="Trier">
-					                    <span class="filter__text"><?php echo $current_sort; ?></span>
-					                    <div class="caret"></div>
-					                </div>
-					            </button> #}
+				{# <button class="input-wrapper filter" id="categoriesButton" data-modal="categoriesModal">
+					<div class="input filter__content-wrapper" data-label="Catégories">
+						<span class="filter__text"><?php echo $current_categorie; ?></span>
+						<div class="caret"></div>
+					</div>
+				</button>
 
-				{{form_start(form)}}
+				<button class="input-wrapper filter" id="sort" data-modal="sortModal">
+					<div class="input filter__content-wrapper" data-label="Trier">
+						<span class="filter__text"><?php echo $current_sort; ?></span>
+						<div class="caret"></div>
+					</div>
+				</button> #}
+
+				{{form_start(form, {'attr': {'class': 'filters'}}) }}
+				{{form_row(form.category, {'attr': {'class': 'filters__filter'}})}}
+				{{form_row(form.sort, {'attr': {'class': 'filters__filter'}})}}
 				{{form_end(form)}}
-			</div>
 
 			<div class="products">
 				{% if products|length > 0 %}
@@ -42,7 +42,7 @@
 								</a>
 								<span class='product__price'>{{ product.options[0].price }}
 									€</span>
-								<button class='product__call-to-action-wrapper' data-product-id="\"$product_id\"" data-product-option="\"default\"">
+								<button class='product__call-to-action-wrapper' data-product-id="\" $product_id\"" data-product-option="\" default\"">
 									<span class='product__call-to-action'>Ajouter au panier<span class='product__success-message'>Ajouté &#10003;</span>
 									</span>
 
