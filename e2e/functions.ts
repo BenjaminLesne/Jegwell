@@ -14,7 +14,8 @@ export const getNames = (namesElement: (SVGElement | HTMLElement)[]) =>
 
     return name;
   });
-type isSortedProps = {
+
+export type isSortedProps = {
   array: (string | number)[];
   order: "asc" | "desc";
 };

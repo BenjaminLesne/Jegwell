@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { PRODUCTS_PAGE_URL } from "./constants";
-import { getNames, getPrices, isSorted } from "./functions";
+import { getNames, getPrices, isSorted, isSortedProps } from "./functions";
 
 test.describe("the products page", () => {
   test.beforeEach(async ({ page }) => {
@@ -10,28 +10,104 @@ test.describe("the products page", () => {
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
   });
 
-  test.only("sort the products", async ({ page }) => {
-    const names = await page.getByTestId("p.name").evaluateAll(getNames);
-    const areNamesSorted = isSorted({ array: names, order: "asc" });
-    expect(areNamesSorted).toBe(true);
+  test("sort the products", async ({ page }) => {
+    const filters = [
+      {
+        filterLabel: "Nom A-Z",
+        elementTestId: "p.name",
+        getFn: getNames,
+        order: "asc",
+      },
+      {
+        filterLabel: "Nom Z-A",
+        elementTestId: "p.name",
+        getFn: getNames,
+        order: "desc",
+      },
+      {
+        filterLabel: "prix le + bas",
+        elementTestId: "price",
+        getFn: getPrices,
+        order: "asc",
+      },
+      {
+        filterLabel: "prix le + haut",
+        elementTestId: "price",
+        getFn: getPrices,
+        order: "desc",
+      },
+    ] as const;
 
-    await page.getByText("Nom A-Z").nth(1).click();
-    const ascPricesLabel = "prix le + bas";
-    await page.getByRole("option", { name: ascPricesLabel }).click();
-    const prices1 = await page.getByTestId("price").evaluateAll(getPrices);
+    for (let index = 0; index < filters.length; index++) {
+      const previousFilter = index - 1 > 0 ? filters[index - 1] : null;
+      const previousFilterLabel = previousFilter?.filterLabel;
+      const filter = filters[index];
+      const props =
+        typeof previousFilterLabel === "string"
+          ? { ...filter, previousFilterLabel }
+          : filter;
+      testFilter(props);
+      await page.waitForTimeout(500);
+    }
+    type TestFilterHelper = Pick<isSortedProps, "array" | "order">;
+    type TestFilterProps = {
+      filterLabel: string;
+      previousFilterLabel?: string;
+      elementTestId: string;
+      getFn: (
+        elements: (SVGElement | HTMLElement)[]
+      ) => TestFilterHelper["array"];
+      order: TestFilterHelper["order"];
+    };
+    async function testFilter({
+      filterLabel,
+      previousFilterLabel = "Nom A-Z",
+      elementTestId,
+      getFn,
+      order,
+    }: TestFilterProps) {
+      await page.getByText(previousFilterLabel).nth(1).click();
+      await page.getByRole("option", { name: filterLabel }).click();
+      const array = await page.getByTestId(elementTestId).evaluateAll(getFn);
 
-    const arePrices1Sorted = isSorted({ array: prices1, order: "asc" });
-    expect(arePrices1Sorted).toBe(true);
-
-    // await page.pause;
-    // i see repetition, function time :clap
-    await page.getByText(ascPricesLabel).nth(1).click();
-    await page.getByRole("option", { name: "prix le + haut" }).click();
-    const prices2 = await page.getByTestId("price").evaluateAll(getPrices);
-
-    const arePrices2Sorted = isSorted({ array: prices2, order: "desc" });
-    expect(arePrices2Sorted).toBe(true);
+      const isArraySorted = isSorted({ array, order });
+      expect(isArraySorted).toBe(true);
+    }
   });
 
-  // test.only("display right products based on filter selected", async ({
+  test.only("display right products based on category selected", async ({
+    page,
+  }) => {
+    type Categories = "Toutes" | "ma deuxieme catégorie" | "troieme cat test";
+    const categories = [
+      "Toutes",
+      "ma deuxieme catégorie",
+      "troieme cat test",
+    ] as const;
+
+    for (let index = 0; index < categories.length; index++) {
+      const previousCategory = index - 1 > 0 ? categories[index - 1] : null;
+      const category = categories[index];
+      const props =
+        typeof previousCategory === "string"
+          ? { category, previousCategory }
+          : { category };
+      testCategory(props);
+      await page.waitForTimeout(500);
+    }
+
+    type TestCategory = {
+      category: Categories;
+      previousCategory?: Categories;
+    };
+    async function testCategory({
+      previousCategory = categories[0],
+      category,
+    }: TestCategory) {
+      await page.getByText(previousCategory).nth(1).click();
+      await page.getByRole("option", { name: category }).click();
+
+      expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
+    }
+  });
 });
