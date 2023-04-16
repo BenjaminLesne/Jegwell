@@ -24,3 +24,9 @@ When you are creating a test, usually you run:
 ```
 pnpm playwright test --headed --project="Google Chrome"
 ```
+
+Ne pas oublier de lancer la base de donnée SQL avec:
+
+```
+sudo xampp start
+```
