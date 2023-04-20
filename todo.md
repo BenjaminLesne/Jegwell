@@ -17,4 +17,10 @@
 
 what I was doing:
 
-- switch from git hooks to github actions? see what grafikart do
+- git push automatic test fails, I don't know why.
+
+Ne pas oublier de lancer la base de donnée SQL avec:
+
+```
+sudo xampp start
+```
