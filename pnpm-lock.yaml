@@ -44,7 +44,7 @@ devDependencies:
     version: 6.2.0(webpack@5.76.3)
   husky:
     specifier: ^8.0.0
-    version: 8.0.3
+    version: 8.0.0
   lint-staged:
     specifier: ^13.2.0
     version: 13.2.0
@@ -3547,8 +3547,8 @@ packages:
     engines: {node: '>=14.18.0'}
     dev: true
 
-  /husky@8.0.3:
-    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
+  /husky@8.0.0:
+    resolution: {integrity: sha512-4qbE/5dzNDNxFEkX9MNRPKl5+omTXQzdILCUWiqG/lWIAioiM5vln265/l6I2Zx8gpW8l1ukZwGQeCFbBZ6+6w==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true

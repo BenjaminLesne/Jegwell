@@ -12,15 +12,8 @@
 - how do I manage the image files with the test? they are all saved in the same images folder
 - switch from git hooks to github actions? see what grafikart do
   => add a deploy job to build and deploy on production server website
-- mettre en place la commande pour build front (et back?)
-  => ET deployer (github workflow?)
 
 what I was doing:
+- mettre en place la commande pour build front (et back?)
+=> me lint fonctionne pas dans le pipelines. Comment ça fonctionne, ca lint le code dans le repo ou juste dans le vm?
 
-- git push automatic test fails, I don't know why.
-
-Ne pas oublier de lancer la base de donnée SQL avec:
-
-```
-sudo xampp start
-```
