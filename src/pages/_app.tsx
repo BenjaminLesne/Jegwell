@@ -10,7 +10,6 @@ import { BRAND_NAME} from "~/utils/constants";
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <ClerkProvider {...pageProps}>
-
       <Head>
         <title>{BRAND_NAME}</title>
       </Head>
