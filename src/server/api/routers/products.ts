@@ -1,16 +1,10 @@
-import { z } from "zod";
-
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { PARAMS_QUERY_SCHEMA } from "~/utils/constants";
 
 export const productsRouter = createTRPCRouter({
   getAll: publicProcedure
-    .input(
-      z.object({
-          select: z.record( z.string(), z.boolean() ).optional(),
-          include: z.record( z.string(), z.boolean() ).optional(),
-        }).optional()
-    )
+    .input(PARAMS_QUERY_SCHEMA)
     .query(({ ctx, input = {} }) => {
-       return ctx.prisma.product.findMany(input);
+      return ctx.prisma.product.findMany(input);
     }),
 });
