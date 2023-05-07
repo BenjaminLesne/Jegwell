@@ -7,7 +7,7 @@ import { ProductCard } from "~/components/ProductCard/ProductCard";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  const {data: products} = api.products.getAll.useQuery();
+  const {data: products} = api.products.getAll.useQuery({select: {name: true}});
 
   return (
     <>
