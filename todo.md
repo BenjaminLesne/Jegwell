@@ -16,5 +16,9 @@ async function uploadImage(image) {
   });
 }
 
-looking for a way to pass includes and select argument to the useQuery function into the prisma function so we fetch only what we need.
-check this as reference: https://github.com/trpc/examples-next-prisma-starter/blob/main/src/server/routers/post.ts 
+passer en Next 13.4 et utilise le app router au lieu du pages
+mais d'abord finir la home page
+
+
+
+remove ²cdn2.hubspot.net" from next config

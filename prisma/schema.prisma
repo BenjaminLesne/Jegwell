@@ -55,6 +55,6 @@ model Image {
   id       String     @id @default(cuid())
   name     String     @db.VarChar(255)
   url      String     @db.Text
-  Product  Product[]
-  Category Category[]
+  Products  Product[]
+  Categories Category[]
 }
