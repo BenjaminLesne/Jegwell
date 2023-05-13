@@ -53,7 +53,7 @@ const Home: NextPage = () => {
           </p>
           <Rings className="mx-auto mt-5" />
         </Section>
-        <Section id="catégories">
+        <Section id="categories">
           <Title component="h2">NOS CATÉGORIES</Title>
           <ul className="flex flex-col flex-wrap gap-6 md:flex-row md:justify-center">
             {categories &&

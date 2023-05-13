@@ -1,5 +1,9 @@
 import React from "react";
-export function Rings({ className: customClasses }: { className: string }) {
+export function Rings({
+  className: customClasses = "",
+}: {
+  className?: string;
+}) {
   return (
     <svg
       className={`h-6 w-8 fill-primary ${customClasses}`}
