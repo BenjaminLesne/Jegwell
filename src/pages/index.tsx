@@ -55,28 +55,28 @@ const Home: NextPage = () => {
         </Section>
         <Section id="categories">
           <Title component="h2">NOS CATÉGORIES</Title>
-          <ul className="flex flex-col flex-wrap gap-6 md:flex-row md:justify-center">
+          <ul className="flex flex-col flex-wrap items-center gap-6 md:flex-row md:justify-center">
             {categories &&
               [...categories, ...categories]?.map((category, index) => (
-                <li key={crypto.randomUUID()} className="sm:w-[500px]">
+                <li key={crypto.randomUUID()} className="max-w-full">
                   <Link
                     className="m-0 w-full"
                     href={`${PRODUCTS_ROUTE}?category=${category.name}`}
                   >
                     <figure
-                      className={`aspect-w-2 flex w-full overflow-hidden rounded-md ${
+                      className={`flex aspect-[2/1] w-full overflow-hidden rounded-md ${
                         index % 2 ? "flex-row-reverse" : ""
                       }`}
                     >
                       <Image
-                        className="flex-1"
+                        className="w-1/2"
                         // src={category.image.url}
                         src={"/hero.webp"}
                         alt={"Bijou " + category.name}
                         width="200"
                         height="200"
                       />
-                      <figcaption className="flex flex-1 items-center justify-center bg-secondary  text-xl text-primary">
+                      <figcaption className="flex w-1/2 items-center justify-center bg-secondary  text-xl text-primary">
                         <span className="first-letter:uppercase">
                           {category.name}
                         </span>
