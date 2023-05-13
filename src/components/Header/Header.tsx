@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useReducer } from "react";
-import { Basket, Rings, Cross } from "~/assets/svg/svg";
+import { Basket } from "~/assets/svg/Basket";
+import { Cross } from "~/assets/svg/Cross";
+import { Rings } from "~/assets/svg/Rings";
 import { BASKET_ROUTE, HOME_ROUTE, PRODUCTS_ROUTE } from "~/utils/constants";
 
 export const Header = () => {

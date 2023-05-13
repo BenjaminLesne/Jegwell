@@ -7,6 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import Head from "next/head";
 import { BRAND_NAME} from "~/utils/constants";
 import { Header } from "~/components/Header/Header";
+import { Footer } from "~/components/Footer/Footer";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -16,6 +17,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       </Head>
       <Header />
       <Component {...pageProps} />
+      <Footer />
     </ClerkProvider>
   );
 };
