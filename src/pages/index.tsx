@@ -57,7 +57,15 @@ const Home: NextPage = () => {
           <Title component="h2">NOS CATÉGORIES</Title>
           <ul className="flex flex-col flex-wrap items-center gap-6 md:flex-row md:justify-center">
             {categories &&
-              [...categories, ...categories]?.map((category, index) => (
+              [
+                ...categories,
+                ...categories,
+                ...categories,
+                ...categories,
+                ...categories,
+                ...categories,
+                ...categories,
+              ]?.map((category, index) => (
                 <li key={crypto.randomUUID()} className="max-w-full">
                   <Link
                     className="m-0 w-full"

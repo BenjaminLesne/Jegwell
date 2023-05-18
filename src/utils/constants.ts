@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
 // routes start
@@ -15,5 +13,5 @@ export const FACEBOOK = "https://www.facebook.com/jegwell";
 // social media end
 
 // styles start
-export const desktopWidth = "1200px"
+export const DESKTOP_MAX_WIDTH = "lg:max-w-[1200px]";
 // styles end

@@ -48,12 +48,11 @@ export const Header = () => {
         aria-labelledby="primary-navigation"
       >
         <div
-          className={`text-primary-color fixed inset-0 z-10 flex h-screen max-h-screen 
-          w-full translate-x-${
-            isOpen ? "0" : "full"
-          } flex-col overscroll-contain border-none 
-          bg-white p-0 capitalize transition-transform duration-500 
-          ease-in-out after:flex-1 after:content-['']`}
+          className={`text-primary-color fixed inset-0 z-10 flex h-screen max-h-screen ${
+            isOpen ? "translate-x-0" : "translate-x-full"
+          } flex-col overscroll-contain
+           border-none bg-white p-0 capitalize transition-transform duration-500
+            ease-in-out after:flex-1 after:content-['']`}
           id="main-menu"
         >
           <button
