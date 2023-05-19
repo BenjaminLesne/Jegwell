@@ -17,3 +17,4 @@ export const DESKTOP_MAX_WIDTH = "lg:max-w-[1200px]";
 // /styles
 
 export const CATEGORY = "catégorie"
+export const ALL_CATEGORIES = "Toutes";

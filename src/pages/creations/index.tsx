@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 
-import { CATEGORY, TAB_BASE_TITLE } from "~/utils/constants";
+import { ALL_CATEGORIES, CATEGORY, TAB_BASE_TITLE } from "~/utils/constants";
 
 import heroImage from "../../assets/images/hero.webp";
 import { Section } from "~/components/Section/Section";
@@ -20,28 +20,39 @@ import { useEffect, useState } from "react";
 import { type NextRouter, useRouter } from "next/router";
 import { api } from "~/utils/api";
 
-const categories = ["Toutes", "Boucle d'oreilles", "Bagues", ""];
+// const categories = ["Toutes", "Boucle d'oreilles", "Bagues", ""];
 const Home: NextPage = () => {
   const router = useRouter();
+  const categoryQuery = router.query["catégorie"];
+  const category =
+    categoryQuery == null || Array.isArray(categoryQuery)
+      ? ALL_CATEGORIES
+      : categoryQuery;
   const [chosenCategory, setChosenCategory] = useState();
 
-  const { data: categories, isLoading } = api.categories.getAll.useQuery({
-    select: { name: true, id: true },
-  });
+  const { data: categories, isLoading: categoriesAreLoading } =
+    api.categories.getAll.useQuery({
+      select: { name: true, id: true },
+    });
 
-  if (isLoading) return <div>Chargement...</div>;
-  if (!categories) return <div>Une erreur est survenue.</div>;
+  const { data: products, isLoading: productsAreLoading } =
+    api.products.getAll.useQuery({ fields: ["id"], category });
+
+  if (categoriesAreLoading || productsAreLoading) {
+    return <div>Chargement...</div>;
+  }
+  if (!categories || !products) return <div>Une erreur est survenue.</div>;
 
   const categoryLabelId = "categoryLabelId";
-  const products = [
-    {
-      name: "Bruz",
-      options: [{ price: 9999 }],
-      image: {
-        url: "url/de/test",
-      },
-    },
-  ];
+  // const products = [
+  //   {
+  //     name: "Bruz",
+  //     options: [{ price: 9999 }],
+  //     image: {
+  //       url: "url/de/test",
+  //     },
+  //   },
+  // ];
 
   type UpdateQueryParamsProps = {
     key: string;
