@@ -15,8 +15,8 @@ const Home: NextPage = () => {
     select: { name: true, image: { select: { url: true } } },
   });
 
-  if (isLoading) <div>Chargement...</div>;
-  if (!categories) <div>Une erreur est survenue.</div>;
+  if (isLoading) return <div>Chargement...</div>;
+  if (!categories) return <div>Une erreur est survenue.</div>;
 
   return (
     <>

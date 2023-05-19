@@ -1,17 +1,19 @@
 export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
-// routes start
+// routes
 export const HOME_ROUTE = "/";
 export const PRODUCTS_ROUTE = "/creations";
 export const BASKET_ROUTE = "/panier";
-// routes end
+// /routes
 
-// social media start
+// social media
 export const INSTAGRAM = "https://www.instagram.com/jegwell/";
 export const TIKTOK = "https://www.tiktok.com/@jegwell";
 export const FACEBOOK = "https://www.facebook.com/jegwell";
-// social media end
+// /social media
 
-// styles start
+// styles
 export const DESKTOP_MAX_WIDTH = "lg:max-w-[1200px]";
-// styles end
+// /styles
+
+export const CATEGORY = "catégorie"
