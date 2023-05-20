@@ -147,14 +147,19 @@ const Home: NextPage = () => {
             </div>
           </button>
 
-          <ul className="products">
+          <ul className="mb-10 grid grid-cols-3 gap-4">
             {products?.length > 0 ? (
               products.map((product) => (
                 <li key={product.id}>
-                  <article className="product">
+                  <article className="mx-auto flex max-w-[250px] flex-col">
                     <Link
-                      className="product__image-wrapper"
-                      href="{{ productUrl }}"
+                      className="relative m-0 aspect-square w-full overflow-hidden rounded-md object-cover shadow-md"
+                      href={product.image?.url ?? "#"}
+                      data-options={
+                        product.options.length > 1
+                          ? product.options.length
+                          : undefined
+                      }
                     >
                       <Image
                         className="product__image"
@@ -182,14 +187,18 @@ const Home: NextPage = () => {
                         </span>
                       </button>
                     </div>
+                    {product.options.length > 2 && (
+                      <div className="border-1 absolute bottom-1 left-1/2 translate-x-1/2 whitespace-nowrap rounded-md border-solid bg-black bg-opacity-25 px-[2px] py-[10px] text-[10px] font-extralight text-white ">
+                        {product.options.length} options
+                      </div>
+                    )}
                   </article>
                 </li>
               ))
             ) : (
               <div className="no-product">
                 <p className="no-product__message">
-                  Il n&apos;y en a pas pour l&apos;instant mais c&apos;est pour
-                  bientôt !
+                  Il n&apos;y en a pas pour l&apos;instant !
                 </p>
               </div>
             )}
