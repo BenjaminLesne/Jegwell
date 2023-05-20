@@ -12,49 +12,49 @@ datasource db {
 }
 
 model Product {
-  id          String     @id @default(cuid())
+  id          Int     @id @default(autoincrement())
   createdAt   DateTime   @default(now())
   name        String
   description String?
-  slug        String
   categories  Category[]
   options     Option[]
   productId   String?
   relateTo    Product[]  @relation("RelatedProducts")
   relatedBy   Product[]  @relation("RelatedProducts")
   image       Image?     @relation(fields: [imageId], references: [id])
-  imageId     String?
+  imageId     Int?
 
   @@index([imageId])
 }
 
 model Category {
-  id        String    @id @default(cuid())
+  id        Int    @id @default(autoincrement())
   name      String
-  imageName String
-  slug      String
   products  Product[]
   image     Image     @relation(fields: [imageId], references: [id])
-  imageId   String
+  imageId   Int
 
   @@index([imageId])
 }
 
 model Option {
-  id        String  @id @default(cuid())
+  id        Int  @id @default(autoincrement())
   name      String
   price     Int
-  imageName String
+  image     Image     @relation(fields: [imageId], references: [id])
+  imageId   Int
   product   Product @relation(fields: [productId], references: [id])
-  productId String
+  productId Int
 
   @@index([productId])
+  @@index([imageId])
 }
 
 model Image {
-  id       String     @id @default(cuid())
+  id       Int     @id @default(autoincrement())
   name     String     @db.VarChar(255)
   url      String     @db.Text
   Products  Product[]
   Categories Category[]
+  Options Option[]
 }

@@ -20,15 +20,18 @@ import { useEffect, useState } from "react";
 import { type NextRouter, useRouter } from "next/router";
 import { api } from "~/utils/api";
 
-// const categories = ["Toutes", "Boucle d'oreilles", "Bagues", ""];
+const categories = [
+  { name: "Toutes", id: "Toutes" },
+  { name: "Boucles d'oreilles", id: 1 },
+];
 const Home: NextPage = () => {
   const router = useRouter();
-  const categoryQuery = router.query["catégorie"];
+  const categoryQuery = router.query[CATEGORY];
   const category =
     categoryQuery == null || Array.isArray(categoryQuery)
       ? ALL_CATEGORIES
       : categoryQuery;
-  const [chosenCategory, setChosenCategory] = useState();
+  const [chosenCategory, setChosenCategory] = useState(category);
 
   const { data: categories, isLoading: categoriesAreLoading } =
     api.categories.getAll.useQuery({
@@ -36,13 +39,13 @@ const Home: NextPage = () => {
     });
 
   const { data: products, isLoading: productsAreLoading } =
-    api.products.getAll.useQuery({ fields: ["id"], category });
+    api.products.getAll.useQuery({ category: chosenCategory });
 
   if (categoriesAreLoading || productsAreLoading) {
     return <div>Chargement...</div>;
   }
   if (!categories || !products) return <div>Une erreur est survenue.</div>;
-
+  console.log(products);
   const categoryLabelId = "categoryLabelId";
   // const products = [
   //   {
@@ -54,15 +57,15 @@ const Home: NextPage = () => {
   //   },
   // ];
 
+  function slugify(value: string) {
+    return decodeURIComponent(encodeURIComponent(value));
+  }
+
   type UpdateQueryParamsProps = {
     key: string;
     value: string;
     nextRouter: NextRouter;
   };
-
-  function slugify(value: string) {
-    return decodeURIComponent(encodeURIComponent(value));
-  }
 
   function updateQueryParams({
     key,
@@ -89,7 +92,8 @@ const Home: NextPage = () => {
 
   function handleFilter({ event, key }: HandleFilterProps) {
     const { target } = event;
-    const { value } = target;
+    let { value } = target;
+    value = value.toString();
     const props = {
       key,
       value,
@@ -118,9 +122,12 @@ const Home: NextPage = () => {
               id="categorySelect"
               onChange={(event) => handleFilter({ event, key: CATEGORY })}
             >
+              <MenuItem value={ALL_CATEGORIES} selected>
+                {ALL_CATEGORIES}
+              </MenuItem>
               {categories.map((item) => (
-                <MenuItem value={item} key={item}>
-                  {item}
+                <MenuItem value={item.id} key={item.id}>
+                  {item.name}
                 </MenuItem>
               ))}
             </Select>

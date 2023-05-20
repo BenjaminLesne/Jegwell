@@ -6,7 +6,7 @@ const authorizedFields = ["id"] as const;
 
 export const GETALL_INPUT_SCHEMA = z
   .object({
-    category: z.string(),
+    category: z.number(),
     fields: z.array(z.enum(authorizedFields)).optional(),
   })
   .optional();
@@ -20,7 +20,12 @@ export const productsRouter = createTRPCRouter({
       const selectFields = {
         name: true,
         image: { select: { url: true } },
-        id: false,
+        id: true,
+        options: {
+          select: {
+            price: true,
+          },
+        },
       };
 
       authorizedFields.forEach((field) => {
@@ -30,19 +35,19 @@ export const productsRouter = createTRPCRouter({
       type Where = {
         categories?: {
           some: {
-            name: string;
+            id: number;
           };
         };
       };
       const where: Where = {
         categories: {
           some: {
-            name: category,
+            id: category,
           },
         },
       };
 
-      if (where.categories?.some.name === ALL_CATEGORIES) {
+      if (category === ALL_CATEGORIES) {
         delete where.categories;
       }
 
