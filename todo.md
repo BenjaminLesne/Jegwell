@@ -1,24 +1,11 @@
-handle file uploads (should we make a function uploadFile(image) ?. then.. what model do we need in the database?)
-const { cloudinary } = require('../config/cloudinary');
-const prisma = require('../config/prisma');
+- mettre en place des test unitaire (vitest? jest?)
 
-async function uploadImage(image) {
-  const { createReadStream } = await image;
-  const stream = createReadStream();
-  const result = await cloudinary.uploader.upload(stream, {
-    folder: 'your_folder_name',
-  });
-  return await prisma.image.create({
-    data: {
-      name: result.original_filename,
-      url: result.secure_url,
-    },
-  });
-}
+- pourquoi on utilise pas i18n?
+car les descriptions des produits doivent etre traduite aussi. Et le client n'a pas le temps pour ca. Donc pour l'instant que du français.
 
-passer en Next 13.4 et utilise le app router au lieu du pages
-mais d'abord finir la home page
+- créer un Jira avec les templates de story et bug (en français pour que Solène puisse les remplir?)
+- create templates for merge requests (take those from work and remove they unsued part of it
 
 
-
-remove ²cdn2.hubspot.net" from next config
+Doing:
+- create an helper to generate prisma inputSchema to filter, select what we want.

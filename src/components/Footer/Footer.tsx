@@ -1,6 +1,11 @@
 import Link from "next/link";
 import React from "react";
-import { FACEBOOK, INSTAGRAM, TIKTOK, desktopWidth } from "~/utils/constants";
+import {
+  DESKTOP_MAX_WIDTH,
+  FACEBOOK,
+  INSTAGRAM,
+  TIKTOK,
+} from "~/utils/constants";
 
 export function Footer() {
   const links = [
@@ -10,7 +15,7 @@ export function Footer() {
   ];
   return (
     <footer className="bg-secondary px-5 py-10 text-ternary">
-      <div className={`sm:max-w-[${desktopWidth}] sm:m-auto`}>
+      <div className={`${DESKTOP_MAX_WIDTH} lg:m-auto`}>
         <h2 className="relative text-xs font-bold after:absolute after:-bottom-[6px] after:left-0 after:w-full after:border-b-[1px] after:border-solid after:content-['']">
           RÉSEAUX SOCIAUX
         </h2>

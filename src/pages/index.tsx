@@ -15,8 +15,8 @@ const Home: NextPage = () => {
     select: { name: true, image: { select: { url: true } } },
   });
 
-  if (isLoading) <div>Chargement...</div>;
-  if (!categories) <div>Une erreur est survenue.</div>;
+  if (isLoading) return <div>Chargement...</div>;
+  if (!categories) return <div>Une erreur est survenue.</div>;
 
   return (
     <>
@@ -57,7 +57,15 @@ const Home: NextPage = () => {
           <Title component="h2">NOS CATÉGORIES</Title>
           <ul className="flex flex-col flex-wrap items-center gap-6 md:flex-row md:justify-center">
             {categories &&
-              [...categories, ...categories]?.map((category, index) => (
+              [
+                ...categories,
+                ...categories,
+                ...categories,
+                ...categories,
+                ...categories,
+                ...categories,
+                ...categories,
+              ]?.map((category, index) => (
                 <li key={crypto.randomUUID()} className="max-w-full">
                   <Link
                     className="m-0 w-full"
