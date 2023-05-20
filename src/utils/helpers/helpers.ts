@@ -1,12 +1,16 @@
+import { Prisma } from "@prisma/client";
+
 type GetSelectFieldsProps = {
   fields: string[];
   authorizedFields: readonly string[];
 };
+type SelectField = { [k: string]: SelectField | boolean };
+
 export function getSelectFields({
   fields,
   authorizedFields,
 }: GetSelectFieldsProps) {
-  const selectFields: Record<string, boolean | object> = {};
+  const selectFields: SelectField = {};
 
   fields.forEach((field) => {
     if (!authorizedFields.includes(field)) return;

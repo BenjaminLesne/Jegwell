@@ -16,14 +16,10 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { type NextRouter, useRouter } from "next/router";
 import { api } from "~/utils/api";
 
-const categories = [
-  { name: "Toutes", id: "Toutes" },
-  { name: "Boucles d'oreilles", id: 1 },
-];
 const Home: NextPage = () => {
   const router = useRouter();
   const categoryQuery = router.query[CATEGORY];
@@ -47,15 +43,6 @@ const Home: NextPage = () => {
   if (!categories || !products) return <div>Une erreur est survenue.</div>;
   console.log(products);
   const categoryLabelId = "categoryLabelId";
-  // const products = [
-  //   {
-  //     name: "Bruz",
-  //     options: [{ price: 9999 }],
-  //     image: {
-  //       url: "url/de/test",
-  //     },
-  //   },
-  // ];
 
   function slugify(value: string) {
     return decodeURIComponent(encodeURIComponent(value));
@@ -75,10 +62,13 @@ const Home: NextPage = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { [key]: targetParam, ...remainingParams } = nextRouter.query;
 
-    const queryParams = {
-      ...remainingParams,
-      [slugify(key)]: slugify(value.toString()),
-    };
+    const queryParams =
+      value === ALL_CATEGORIES
+        ? remainingParams
+        : {
+            ...remainingParams,
+            [slugify(key)]: slugify(value.toString()),
+          };
 
     void nextRouter.push({
       pathname: nextRouter.pathname,
@@ -99,9 +89,10 @@ const Home: NextPage = () => {
     };
     updateQueryParams(props);
 
-    if (key === CATEGORY) setChosenCategory(parseInt(value));
+    const newChosenCategory =
+      typeof value === "number" ? value : parseInt(value);
 
-    // TODO: fetch products based on chosen filter
+    if (key === CATEGORY) setChosenCategory(newChosenCategory);
   }
 
   return (
@@ -159,7 +150,7 @@ const Home: NextPage = () => {
           <ul className="products">
             {products?.length > 0 ? (
               products.map((product) => (
-                <li key={crypto.randomUUID()}>
+                <li key={product.id}>
                   <article className="product">
                     <Link
                       className="product__image-wrapper"
@@ -176,7 +167,11 @@ const Home: NextPage = () => {
                         <span data-testid="p.name">{product.name}</span>
                       </Link>
                       <span className="product__price" data-testid="price">
-                        {product.options[0]?.price}€
+                        {
+                          product.options.find((option) => option != null)
+                            ?.price
+                        }
+                        €
                       </span>
                       <button className="product__call-to-action-wrapper">
                         <span className="product__call-to-action">
@@ -205,29 +200,5 @@ const Home: NextPage = () => {
   );
 };
 
-export const getServerSideProps = async () => {
-  try {
-    // https://trpc.io/docs/nextjs/ssr
-    // figureout how to fetch categories with ssr then give it to client side component as props and set the chosenCategory state to "Toutes"
-    // => pas besoin de fetch pour set "Toutes" ... A réfléchir
-
-    const { data: categories } = await api.categories.getAll.useQuery({
-      select: { name: true, id: true },
-    });
-
-    return {
-      props: {
-        categories,
-      },
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      props: {
-        categories: null,
-      },
-    };
-  }
-};
 
 export default Home;

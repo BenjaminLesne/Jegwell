@@ -8,4 +8,5 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 
 
 Doing:
-- create an helper to generate prisma inputSchema to filter, select what we want.
+- update the getSelect helpers to take an argument so we can have typesafety with Prisma.select<chosenModel>. This would avoid the never type we receive client side with products
+- on nuk tout et on fait un enpoint sur mesure plutot que d'essayer de faire un endpoint polyvalent pour au final n'avoir besoin de cette polyvalence que dans mille ans?
