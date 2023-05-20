@@ -1,3 +1,8 @@
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+
 import { type AppType } from "next/app";
 
 import { api } from "~/utils/api";
@@ -5,7 +10,7 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Head from "next/head";
-import { BRAND_NAME} from "~/utils/constants";
+import { BRAND_NAME } from "~/utils/constants";
 import { Header } from "~/components/Header/Header";
 import { Footer } from "~/components/Footer/Footer";
 
