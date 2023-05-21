@@ -15,10 +15,18 @@ import {
   type SelectChangeEvent,
   InputLabel,
   FormControl,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+  Grid,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { type NextRouter, useRouter } from "next/router";
 import { api } from "~/utils/api";
+import { formatPrice } from "~/utils/helpers/helpers";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -28,6 +36,7 @@ const Home: NextPage = () => {
       ? ALL_CATEGORIES
       : parseInt(categoryQuery);
   const [chosenCategory, setChosenCategory] = useState(category);
+  const [animationKey, setAnimationKey] = useState(0);
 
   const { data: categories, isLoading: categoriesAreLoading } =
     api.categories.getAll.useQuery({
@@ -41,7 +50,6 @@ const Home: NextPage = () => {
     return <div>Chargement...</div>;
   }
   if (!categories || !products) return <div>Une erreur est survenue.</div>;
-  console.log(products);
   const categoryLabelId = "categoryLabelId";
 
   function slugify(value: string) {
@@ -95,6 +103,9 @@ const Home: NextPage = () => {
     if (key === CATEGORY) setChosenCategory(newChosenCategory);
   }
 
+  const triggerAnimation = () => {
+    setAnimationKey((prevKey) => prevKey + 1);
+  };
   return (
     <>
       <Head>
@@ -103,7 +114,7 @@ const Home: NextPage = () => {
       <main>
         <Section>
           <Title>NOS CRÉATIONS</Title>
-          <FormControl>
+          <FormControl sx={{ marginBottom: "38px" }}>
             <InputLabel id={categoryLabelId}>{capitalize(CATEGORY)}</InputLabel>
             <Select
               value={chosenCategory}
@@ -147,54 +158,86 @@ const Home: NextPage = () => {
             </div>
           </button>
 
-          <ul className="mb-10 grid grid-cols-3 gap-4">
+          <Grid container component="ul" spacing={2}>
             {products?.length > 0 ? (
-              products.map((product) => (
-                <li key={product.id}>
-                  <article className="mx-auto flex max-w-[250px] flex-col">
-                    <Link
-                      className="relative m-0 aspect-square w-full overflow-hidden rounded-md object-cover shadow-md"
-                      href={product.image?.url ?? "#"}
-                      data-options={
-                        product.options.length > 1
-                          ? product.options.length
-                          : undefined
-                      }
+              [
+                ...products,
+                ...products,
+                ...products,
+                ...products,
+                ...products,
+                ...products,
+              ].map((product) => {
+                const priceInCents = product.options.find(
+                  (option) => option != null
+                )?.price;
+
+                if (priceInCents == null) return undefined;
+
+                const priceInEuros = priceInCents / 100;
+                const formattedPrice = formatPrice({ price: priceInEuros });
+
+                return (
+                  <Grid item component="li" key={product.id} xs={12} sm={4}>
+                    <Card
+                      className="mx-auto max-w-[250px]"
+                      sx={{ boxShadow: "none" }}
                     >
-                      <Image
-                        className="product__image"
-                        src={heroImage}
-                        alt={product.name}
-                      />
-                    </Link>
-                    <div className="product__information">
-                      <Link className="product__name" href="{{ productUrl }}">
-                        <span data-testid="p.name">{product.name}</span>
+                      <Link href={product.image?.url ?? "#"}>
+                        <div className="relative m-0 aspect-square w-full overflow-hidden rounded-md object-cover shadow-md">
+                          <CardMedia
+                            image="/hero.webp"
+                            title={product.name}
+                            className="h-full"
+                          />
+                          {product.options.length > 2 && (
+                            <div className="border-1 absolute bottom-1 left-1/2 translate-x-1/2 whitespace-nowrap rounded-md border-solid bg-black bg-opacity-25 px-[2px] py-[10px] text-[10px] font-extralight text-white ">
+                              {product.options.length} options
+                            </div>
+                          )}
+                        </div>
                       </Link>
-                      <span className="product__price" data-testid="price">
-                        {
-                          product.options.find((option) => option != null)
-                            ?.price
-                        }
-                        €
-                      </span>
-                      <button className="product__call-to-action-wrapper">
-                        <span className="product__call-to-action">
-                          Ajouter au panier
-                          <span className="product__success-message">
-                            Ajouté &#10003;
+                      <CardContent className="flex flex-col items-center">
+                        <Link href={product.image?.url ?? "#"}>
+                          <span
+                            data-testid="p.name"
+                            className="min-h-[28px] px-[10px] text-sm"
+                          >
+                            {product.name}
                           </span>
+                        </Link>
+
+                        <span
+                          className="mt-2 text-sm font-medium"
+                          data-testid="price"
+                        >
+                          {formattedPrice}
                         </span>
-                      </button>
-                    </div>
-                    {product.options.length > 2 && (
-                      <div className="border-1 absolute bottom-1 left-1/2 translate-x-1/2 whitespace-nowrap rounded-md border-solid bg-black bg-opacity-25 px-[2px] py-[10px] text-[10px] font-extralight text-white ">
-                        {product.options.length} options
-                      </div>
-                    )}
-                  </article>
-                </li>
-              ))
+                      </CardContent>
+                      <CardActions className="flex items-center justify-center">
+                        <Button
+                          size="small"
+                          className="relative"
+                          onClick={triggerAnimation}
+                        >
+                          <span className="relative border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black">
+                            Ajouter au panier
+                            <span
+                              key={animationKey}
+                              className={
+                                "absolute inset-0 flex items-center justify-center bg-secondary opacity-0 " +
+                                (animationKey > 0 ? "animate-fadeIn" : "")
+                              }
+                            >
+                              Ajouté &#10003;
+                            </span>
+                          </span>
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                );
+              })
             ) : (
               <div className="no-product">
                 <p className="no-product__message">
@@ -202,7 +245,7 @@ const Home: NextPage = () => {
                 </p>
               </div>
             )}
-          </ul>
+          </Grid>
         </Section>
       </main>
     </>

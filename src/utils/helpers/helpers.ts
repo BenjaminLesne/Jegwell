@@ -1,5 +1,3 @@
-import { Prisma } from "@prisma/client";
-
 type GetSelectFieldsProps = {
   fields: string[];
   authorizedFields: readonly string[];
@@ -38,4 +36,14 @@ export function getSelectFields({
   });
 
   return selectFields;
+}
+
+type FormatPriceProps = {
+  price: number;
+};
+export function formatPrice({ price }: FormatPriceProps) {
+  return new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: "EUR",
+  }).format(price);
 }
