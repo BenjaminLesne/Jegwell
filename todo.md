@@ -7,5 +7,4 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - create templates for merge requests (take those from work and remove they unsued part of it
 
 Doing:
-- update the getSelect helpers to take an argument so we can have typesafety with Prisma.select<chosenModel>. This would avoid the never type we receive client side with products
-- on nuk tout et on fait un enpoint sur mesure plutot que d'essayer de faire un endpoint polyvalent pour au final n'avoir besoin de cette polyvalence que dans mille ans?
+- how do I order by price ? the database doesn't understand when I say order by the first option price of a product. Should I put a price in the Product Model? if I do, should I add an image to it aswell? what about the options? do they reprensent the same thing no? or is it actualy options? 

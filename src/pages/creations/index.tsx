@@ -3,7 +3,13 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 
-import { ALL_CATEGORIES, CATEGORY, TAB_BASE_TITLE } from "~/utils/constants";
+import {
+  ALL_CATEGORIES,
+  CATEGORY,
+  DEFAULT_SORT,
+  SORT,
+  TAB_BASE_TITLE,
+} from "~/utils/constants";
 
 import heroImage from "../../assets/images/hero.webp";
 import { Section } from "~/components/Section/Section";
@@ -31,27 +37,49 @@ import { formatPrice } from "~/utils/helpers/helpers";
 const Home: NextPage = () => {
   const router = useRouter();
   const categoryQuery = router.query[CATEGORY];
-  const category =
-    categoryQuery == null || Array.isArray(categoryQuery)
-      ? ALL_CATEGORIES
-      : parseInt(categoryQuery);
-  const [chosenCategory, setChosenCategory] = useState(category);
-  const [animationKey, setAnimationKey] = useState(0);
+  const sortQuery = router.query[SORT];
+  const category = cleanQueryParam({
+    queryValue: categoryQuery,
+    defaultValue: ALL_CATEGORIES,
+  });
+  const sort = cleanQueryParam({
+    queryValue: sortQuery,
+    defaultValue: DEFAULT_SORT,
+  });
 
+  const [chosenCategory, setChosenCategory] = useState(category);
+  const [chosenSort, setChosenSort] = useState(sort);
+
+  const [animationKey, setAnimationKey] = useState(0);
+  type CleanQueryParamProps = {
+    queryValue: string | string[] | undefined;
+    defaultValue: number | string;
+  };
+  function cleanQueryParam({ queryValue, defaultValue }: CleanQueryParamProps) {
+    return queryValue == null || Array.isArray(queryValue)
+      ? defaultValue
+      : parseInt(queryValue);
+  }
   const { data: categories, isLoading: categoriesAreLoading } =
     api.categories.getAll.useQuery({
       select: { name: true, id: true },
     });
 
   const { data: products, isLoading: productsAreLoading } =
-    api.products.getAll.useQuery({ category: chosenCategory });
+    api.products.getAll.useQuery({
+      category: chosenCategory as number,
+      sortType: chosenSort as string,
+    });
 
   if (categoriesAreLoading || productsAreLoading) {
     return <div>Chargement...</div>;
   }
+  console.log("products", products);
+  console.log("categories", categories);
+
   if (!categories || !products) return <div>Une erreur est survenue.</div>;
   const categoryLabelId = "categoryLabelId";
-
+  const sortLabelId = "sortLabelId";
   function slugify(value: string) {
     return decodeURIComponent(encodeURIComponent(value));
   }
@@ -97,10 +125,10 @@ const Home: NextPage = () => {
     };
     updateQueryParams(props);
 
-    const newChosenCategory =
-      typeof value === "number" ? value : parseInt(value);
+    const newChosenValue = typeof value === "number" ? value : parseInt(value);
 
-    if (key === CATEGORY) setChosenCategory(newChosenCategory);
+    if (key === CATEGORY) setChosenCategory(newChosenValue);
+    if (key === SORT) setChosenSort(newChosenValue);
   }
 
   const triggerAnimation = () => {
@@ -122,6 +150,23 @@ const Home: NextPage = () => {
               labelId={categoryLabelId}
               id="categorySelect"
               onChange={(event) => handleFilter({ event, key: CATEGORY })}
+            >
+              <MenuItem value={ALL_CATEGORIES} selected>
+                Toutes
+              </MenuItem>
+              {categories.map((item) => (
+                <MenuItem value={item.id} key={item.id}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </Select>
+            <InputLabel id={sortLabelId}>{capitalize(CATEGORY)}</InputLabel>
+            <Select
+              value={chosenCategory}
+              label={SORT}
+              labelId={sortLabelId}
+              id="sortSelect"
+              onChange={(event) => handleFilter({ event, key: SORT })}
             >
               <MenuItem value={ALL_CATEGORIES} selected>
                 Toutes
