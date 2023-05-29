@@ -44,3 +44,10 @@ export const SORT_OPTIONS = {
     },
   },
 } as Record<string, Prisma.ProductOrderByWithRelationInput>;
+
+export const SORT_OPTIONS_NAMES = {
+  nameAsc: "Nom A-Z",
+  nameDesc: "Nom Z-A",
+  priceDesc: "Prix décroissant",
+  priceAsc: "Prix croissant",
+}

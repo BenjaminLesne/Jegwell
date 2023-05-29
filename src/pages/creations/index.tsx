@@ -8,6 +8,7 @@ import {
   CATEGORY,
   DEFAULT_SORT,
   SORT,
+  SORT_OPTIONS_NAMES,
   TAB_BASE_TITLE,
 } from "~/utils/constants";
 
@@ -142,8 +143,8 @@ const Home: NextPage = () => {
       <main>
         <Section>
           <Title>NOS CRÉATIONS</Title>
-          <div className="flex justify-center">
-            <Select
+          <div className="flex justify-center gap-5">
+          <Select
               onValueChange={(value) => handleFilter({ value, key: CATEGORY })}
             >
               <SelectTrigger className="w-[180px]">
@@ -153,6 +154,20 @@ const Home: NextPage = () => {
                 {categories.map((category) => (
                   <SelectItem key={category.id} value={category.id.toString()}>
                     {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select
+              onValueChange={(value) => handleFilter({ value, key: SORT })}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder={"Trier"} />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(SORT_OPTIONS_NAMES).map(([value, name], index) => (
+                  <SelectItem key={index} value={value}>
+                    {name}
                   </SelectItem>
                 ))}
               </SelectContent>
