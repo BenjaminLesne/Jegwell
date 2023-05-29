@@ -277,21 +277,21 @@ const Home: NextPage = () => {
                       <CardFooter className="flex items-center justify-center">
                         <Button
                         variant="secondary"
-                          className="relative border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black"
+                          className="relative border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black overflow-hidden"
                           onClick={triggerAnimation}
                         >
-                          <span className="relative">
+                          <span>
                             Ajouter au panier
-                            <span
+                          </span>
+                          <span
                               key={animationKey}
                               className={
-                                "absolute inset-0 flex items-center justify-center bg-secondary opacity-0 " +
+                                "absolute inset-0 flex items-center justify-center opacity-0 bg-secondary " +
                                 (animationKey > 0 ? "animate-fadeIn" : "")
                               }
                             >
                               Ajouté &#10003;
                             </span>
-                          </span>
                         </Button>
                       </CardFooter>
                     </Card>
