@@ -34,6 +34,10 @@ import {
   CardTitle,
 } from "~/components/ui/Card/card";
 import { Button } from "~/components/ui/Button/button";
+import { capitalize } from "~/lib/utils";
+import { api } from "~/utils/api";
+import { Loading } from "~/components/Loading/Loading";
+import { Error } from "~/components/Error/Error";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -61,27 +65,26 @@ const Home: NextPage = () => {
       ? defaultValue
       : parseInt(queryValue);
   }
-  // const { data: categories, isLoading: categoriesAreLoading } =
-  //   api.categories.getAll.useQuery({
-  //     select: { name: true, id: true },
-  //   });
+  const { data: categories, isLoading: categoriesAreLoading } =
+    api.categories.getAll.useQuery({
+      select: { name: true, id: true },
+    });
 
-  const categories = fakeCategories;
+  // const categories = fakeCategories;
 
-  // const { data: products = fakeProducts, isLoading: productsAreLoading } =
-  //   api.products.getAll.useQuery({
-  //     category: parseInt(chosenCategory),
-  //     sortType: chosenSort.toString(),
-  //   });
-  const products = fakeProducts;
+  const { data: products = fakeProducts, isLoading: productsAreLoading } =
+    api.products.getAll.useQuery({
+      category: parseInt(chosenCategory.toString()),
+      sortType: chosenSort.toString(),
+    });
+  // const products = fakeProducts;
 
-  // if (categoriesAreLoading || productsAreLoading) {
-  //   return <div>Chargement...</div>;
-  // }
+  if (categoriesAreLoading || productsAreLoading) {
+    return <Loading />;
+  }
 
-  if (!categories || !products) return <div>Une erreur est survenue.</div>;
-  const categoryLabelId = "categoryLabelId";
-  const sortLabelId = "sortLabelId";
+  if (!categories || !products) return <Error message="Une erreur est survenue."/>;
+
   function slugify(value: string) {
     return decodeURIComponent(encodeURIComponent(value));
   }
@@ -148,7 +151,7 @@ const Home: NextPage = () => {
               onValueChange={(value) => handleFilter({ value, key: CATEGORY })}
             >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={CATEGORY} />
+                <SelectValue placeholder={capitalize(CATEGORY)} />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((category) => (
