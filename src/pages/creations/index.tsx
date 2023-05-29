@@ -221,7 +221,7 @@ const Home: NextPage = () => {
             </div>
           </button>
 
-          <ul>
+          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             {products?.length > 0 ? (
               [
                 ...products,
@@ -276,22 +276,20 @@ const Home: NextPage = () => {
                       </CardContent>
                       <CardFooter className="flex items-center justify-center">
                         <Button
-                        variant="secondary"
-                          className="relative border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black overflow-hidden"
+                          variant="secondary"
+                          className="relative overflow-hidden border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black"
                           onClick={triggerAnimation}
                         >
-                          <span>
-                            Ajouter au panier
-                          </span>
+                          <span>Ajouter au panier</span>
                           <span
-                              key={animationKey}
-                              className={
-                                "absolute inset-0 flex items-center justify-center opacity-0 bg-secondary " +
-                                (animationKey > 0 ? "animate-fadeIn" : "")
-                              }
-                            >
-                              Ajouté &#10003;
-                            </span>
+                            key={animationKey}
+                            className={
+                              "absolute inset-0 flex items-center justify-center bg-secondary opacity-0 " +
+                              (animationKey > 0 ? "animate-fadeIn" : "")
+                            }
+                          >
+                            Ajouté &#10003;
+                          </span>
                         </Button>
                       </CardFooter>
                     </Card>
