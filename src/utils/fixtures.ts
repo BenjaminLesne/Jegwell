@@ -6,6 +6,8 @@ export const fakeCategories = [
 export const fakeProducts = [
   {
     name: "Bagues",
+    price: 7777,
+    image: {url: "/hero.webp"},
     options: [
       { name: "Vert", price: 8888 },
       { name: "Bleu", price: 8888 },
@@ -14,6 +16,8 @@ export const fakeProducts = [
   },
   {
     name: "Bracelet",
+    price: 7777,
+    image: {url: "/hero.webp"},
     options: [
       { name: "Vert", price: 8888 },
       { name: "Bleu", price: 8888 },
@@ -22,6 +26,8 @@ export const fakeProducts = [
   },
   {
     name: "Boucles d'oreilles",
+    price: 7777,
+    image: {url: "/hero.webp"},
     options: [
       { name: "Vert", price: 8888 },
       { name: "Bleu", price: 8888 },

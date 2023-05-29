@@ -1,4 +1,4 @@
-import { GetServerSideProps, type NextPage } from "next";
+import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,17 +8,14 @@ import {
   CATEGORY,
   DEFAULT_SORT,
   SORT,
-  SORT_OPTIONS,
   TAB_BASE_TITLE,
 } from "~/utils/constants";
 
-import heroImage from "../../assets/images/hero.webp";
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 
-import { useEffect, useReducer, useState } from "react";
+import { useState } from "react";
 import { type NextRouter, useRouter } from "next/router";
-import { api } from "~/utils/api";
 import { formatPrice } from "~/utils/helpers/helpers";
 import {
   Select,
@@ -28,7 +25,14 @@ import {
   SelectValue,
 } from "~/components/ui/Select/select";
 import { fakeCategories, fakeProducts } from "~/utils/fixtures";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/Card/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/Card/card";
+import { Button } from "~/components/ui/Button/button";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -45,8 +49,8 @@ const Home: NextPage = () => {
 
   const [chosenCategory, setChosenCategory] = useState(category);
   const [chosenSort, setChosenSort] = useState(sort);
-
   const [animationKey, setAnimationKey] = useState(0);
+
   type CleanQueryParamProps = {
     queryValue: string | string[] | undefined;
     defaultValue: number | string;
@@ -61,20 +65,18 @@ const Home: NextPage = () => {
   //     select: { name: true, id: true },
   //   });
 
-    const categories = fakeCategories
+  const categories = fakeCategories;
 
   // const { data: products = fakeProducts, isLoading: productsAreLoading } =
   //   api.products.getAll.useQuery({
   //     category: parseInt(chosenCategory),
   //     sortType: chosenSort.toString(),
   //   });
-    const products = fakeProducts
-
+  const products = fakeProducts;
 
   // if (categoriesAreLoading || productsAreLoading) {
   //   return <div>Chargement...</div>;
   // }
-
 
   if (!categories || !products) return <div>Une erreur est survenue.</div>;
   const categoryLabelId = "categoryLabelId";
@@ -141,14 +143,20 @@ const Home: NextPage = () => {
         <Section>
           <Title>NOS CRÉATIONS</Title>
           <div className="flex justify-center">
-          <Select onValueChange={(value) => handleFilter({ value, key: CATEGORY })}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder={CATEGORY} />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map(category => <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>)}
-            </SelectContent>
-          </Select>
+            <Select
+              onValueChange={(value) => handleFilter({ value, key: CATEGORY })}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder={CATEGORY} />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((category) => (
+                  <SelectItem key={category.id} value={category.id.toString()}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* <FormControl sx={{ marginBottom: "38px" }}>
@@ -223,103 +231,40 @@ const Home: NextPage = () => {
                 ...products,
                 ...products,
               ].map((product) => {
-                const priceInCents = product.options.find(
-                  (option) => option != null
-                )?.price;
-
-                if (priceInCents == null) return undefined;
-
+                const priceInCents = product.price;
                 const priceInEuros = priceInCents / 100;
                 const formattedPrice = formatPrice({ price: priceInEuros });
 
                 return (
                   <li key={product.id}>
-                    <Card>
-  <CardHeader>
-  <Link href={product.image?.url ?? "#"}>
-                        <div className="relative m-0 aspect-square w-full overflow-hidden rounded-md object-cover shadow-md">
-                          <CardMedia
-                            image="/hero.webp"
-                            title={product.name}
-                            className="h-full"
-                          />
-                          {product.options.length > 2 && (
-                            <div className="border-1 absolute bottom-1 left-1/2 translate-x-1/2 whitespace-nowrap rounded-md border-solid bg-black bg-opacity-25 px-[2px] py-[10px] text-[10px] font-extralight text-white ">
-                              {product.options.length} options
-                            </div>
-                          )}
-                        </div>
-                      </Link>
-  </CardHeader>
-  <CardContent>
-    
-    <Link href={product.image?.url ?? "#"}>
-    <CardTitle>
-
-                          <span
-                            data-testid="p.name"
-                            className="min-h-[28px] px-[10px] text-sm"
-                            >
-                            {product.name}
-                          </span>
-                            </CardTitle>
+                    <Card className="mx-auto max-w-[250px]">
+                      <CardHeader>
+                        <Link href={product.image.url ?? "#"}>
+                          <div className="relative m-0 aspect-square w-full overflow-hidden rounded-md object-cover shadow-md">
+                            <Image
+                              src={product.image.url}
+                              alt={product.name}
+                              width={250}
+                              height={250}
+                            />
+                            {product.options.length > 2 && (
+                              <div className="border-1 absolute bottom-1 left-1/2 translate-x-1/2 whitespace-nowrap rounded-md border-solid bg-black bg-opacity-25 px-[2px] py-[10px] text-[10px] font-extralight text-white ">
+                                {product.options.length} options
+                              </div>
+                            )}
+                          </div>
                         </Link>
-
-                        <span
-                          className="mt-2 text-sm font-medium"
-                          data-testid="price"
-                        >
-                          {formattedPrice}
-                        </span>
-  </CardContent>
-  <CardFooter>
-  <Button
-                          size="small"
-                          className="relative"
-                          onClick={triggerAnimation}
-                        >
-                          <span className="relative border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black">
-                            Ajouter au panier
-                            <span
-                              key={animationKey}
-                              className={
-                                "absolute inset-0 flex items-center justify-center bg-secondary opacity-0 " +
-                                (animationKey > 0 ? "animate-fadeIn" : "")
-                              }
-                            >
-                              Ajouté &#10003;
-                            </span>
-                          </span>
-                        </Button>
-  </CardFooter>
-</Card>
-
-                    {/* <Card
-                      className="mx-auto max-w-[250px]"
-                      sx={{ boxShadow: "none" }}
-                    >
-                      <Link href={product.image?.url ?? "#"}>
-                        <div className="relative m-0 aspect-square w-full overflow-hidden rounded-md object-cover shadow-md">
-                          <CardMedia
-                            image="/hero.webp"
-                            title={product.name}
-                            className="h-full"
-                          />
-                          {product.options.length > 2 && (
-                            <div className="border-1 absolute bottom-1 left-1/2 translate-x-1/2 whitespace-nowrap rounded-md border-solid bg-black bg-opacity-25 px-[2px] py-[10px] text-[10px] font-extralight text-white ">
-                              {product.options.length} options
-                            </div>
-                          )}
-                        </div>
-                      </Link>
+                      </CardHeader>
                       <CardContent className="flex flex-col items-center">
                         <Link href={product.image?.url ?? "#"}>
-                          <span
-                            data-testid="p.name"
-                            className="min-h-[28px] px-[10px] text-sm"
-                          >
-                            {product.name}
-                          </span>
+                          <CardTitle>
+                            <span
+                              data-testid="p.name"
+                              className="min-h-[28px] px-[10px] text-sm"
+                            >
+                              {product.name}
+                            </span>
+                          </CardTitle>
                         </Link>
 
                         <span
@@ -329,13 +274,13 @@ const Home: NextPage = () => {
                           {formattedPrice}
                         </span>
                       </CardContent>
-                      <CardActions className="flex items-center justify-center">
+                      <CardFooter className="flex items-center justify-center">
                         <Button
-                          size="small"
-                          className="relative"
+                        variant="secondary"
+                          className="relative border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black"
                           onClick={triggerAnimation}
                         >
-                          <span className="relative border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black">
+                          <span className="relative">
                             Ajouter au panier
                             <span
                               key={animationKey}
@@ -348,8 +293,8 @@ const Home: NextPage = () => {
                             </span>
                           </span>
                         </Button>
-                      </CardActions>
-                    </Card> */}
+                      </CardFooter>
+                    </Card>
                   </li>
                 );
               })
