@@ -16,14 +16,16 @@ import { Footer } from "~/components/Footer/Footer";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <ClerkProvider {...pageProps}>
+    // <ClerkProvider {...pageProps}>
+    <>
       <Head>
         <title>{BRAND_NAME}</title>
       </Head>
       <Header />
       <Component {...pageProps} />
       <Footer />
-    </ClerkProvider>
+    </>
+    // </ClerkProvider>
   );
 };
 

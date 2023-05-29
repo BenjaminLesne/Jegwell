@@ -8,31 +8,27 @@ import {
   CATEGORY,
   DEFAULT_SORT,
   SORT,
+  SORT_OPTIONS,
   TAB_BASE_TITLE,
 } from "~/utils/constants";
 
 import heroImage from "../../assets/images/hero.webp";
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
-import {
-  MenuItem,
-  Select,
-  capitalize,
-  type SelectChangeEvent,
-  InputLabel,
-  FormControl,
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  CardActions,
-  Button,
-  Grid,
-} from "@mui/material";
+
 import { useEffect, useReducer, useState } from "react";
 import { type NextRouter, useRouter } from "next/router";
 import { api } from "~/utils/api";
 import { formatPrice } from "~/utils/helpers/helpers";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/Select/select";
+import { fakeCategories, fakeProducts } from "~/utils/fixtures";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/Card/card";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -60,22 +56,25 @@ const Home: NextPage = () => {
       ? defaultValue
       : parseInt(queryValue);
   }
-  const { data: categories, isLoading: categoriesAreLoading } =
-    api.categories.getAll.useQuery({
-      select: { name: true, id: true },
-    });
+  // const { data: categories, isLoading: categoriesAreLoading } =
+  //   api.categories.getAll.useQuery({
+  //     select: { name: true, id: true },
+  //   });
 
-  const { data: products, isLoading: productsAreLoading } =
-    api.products.getAll.useQuery({
-      category: chosenCategory as number,
-      sortType: chosenSort as string,
-    });
+    const categories = fakeCategories
 
-  if (categoriesAreLoading || productsAreLoading) {
-    return <div>Chargement...</div>;
-  }
-  console.log("products", products);
-  console.log("categories", categories);
+  // const { data: products = fakeProducts, isLoading: productsAreLoading } =
+  //   api.products.getAll.useQuery({
+  //     category: parseInt(chosenCategory),
+  //     sortType: chosenSort.toString(),
+  //   });
+    const products = fakeProducts
+
+
+  // if (categoriesAreLoading || productsAreLoading) {
+  //   return <div>Chargement...</div>;
+  // }
+
 
   if (!categories || !products) return <div>Une erreur est survenue.</div>;
   const categoryLabelId = "categoryLabelId";
@@ -112,12 +111,11 @@ const Home: NextPage = () => {
     });
   }
   type HandleFilterProps = {
-    event: SelectChangeEvent<string | number>;
+    value: string | number;
     key: "catégorie" | "trie";
   };
 
-  function handleFilter({ event, key }: HandleFilterProps) {
-    const value = event.target.value;
+  function handleFilter({ value, key }: HandleFilterProps) {
     const props = {
       key,
       value,
@@ -142,7 +140,18 @@ const Home: NextPage = () => {
       <main>
         <Section>
           <Title>NOS CRÉATIONS</Title>
-          <FormControl sx={{ marginBottom: "38px" }}>
+          <div className="flex justify-center">
+          <Select onValueChange={(value) => handleFilter({ value, key: CATEGORY })}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder={CATEGORY} />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map(category => <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          </div>
+
+          {/* <FormControl sx={{ marginBottom: "38px" }}>
             <InputLabel id={categoryLabelId}>{capitalize(CATEGORY)}</InputLabel>
             <Select
               value={chosenCategory}
@@ -177,7 +186,8 @@ const Home: NextPage = () => {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl> */}
+
           <button
             className="input-wrapper filter"
             id="categoriesButton"
@@ -203,7 +213,7 @@ const Home: NextPage = () => {
             </div>
           </button>
 
-          <Grid container component="ul" spacing={2}>
+          <ul>
             {products?.length > 0 ? (
               [
                 ...products,
@@ -223,8 +233,68 @@ const Home: NextPage = () => {
                 const formattedPrice = formatPrice({ price: priceInEuros });
 
                 return (
-                  <Grid item component="li" key={product.id} xs={12} sm={4}>
-                    <Card
+                  <li key={product.id}>
+                    <Card>
+  <CardHeader>
+  <Link href={product.image?.url ?? "#"}>
+                        <div className="relative m-0 aspect-square w-full overflow-hidden rounded-md object-cover shadow-md">
+                          <CardMedia
+                            image="/hero.webp"
+                            title={product.name}
+                            className="h-full"
+                          />
+                          {product.options.length > 2 && (
+                            <div className="border-1 absolute bottom-1 left-1/2 translate-x-1/2 whitespace-nowrap rounded-md border-solid bg-black bg-opacity-25 px-[2px] py-[10px] text-[10px] font-extralight text-white ">
+                              {product.options.length} options
+                            </div>
+                          )}
+                        </div>
+                      </Link>
+  </CardHeader>
+  <CardContent>
+    
+    <Link href={product.image?.url ?? "#"}>
+    <CardTitle>
+
+                          <span
+                            data-testid="p.name"
+                            className="min-h-[28px] px-[10px] text-sm"
+                            >
+                            {product.name}
+                          </span>
+                            </CardTitle>
+                        </Link>
+
+                        <span
+                          className="mt-2 text-sm font-medium"
+                          data-testid="price"
+                        >
+                          {formattedPrice}
+                        </span>
+  </CardContent>
+  <CardFooter>
+  <Button
+                          size="small"
+                          className="relative"
+                          onClick={triggerAnimation}
+                        >
+                          <span className="relative border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black">
+                            Ajouter au panier
+                            <span
+                              key={animationKey}
+                              className={
+                                "absolute inset-0 flex items-center justify-center bg-secondary opacity-0 " +
+                                (animationKey > 0 ? "animate-fadeIn" : "")
+                              }
+                            >
+                              Ajouté &#10003;
+                            </span>
+                          </span>
+                        </Button>
+  </CardFooter>
+</Card>
+
+                    {/* <Card
                       className="mx-auto max-w-[250px]"
                       sx={{ boxShadow: "none" }}
                     >
@@ -279,8 +349,8 @@ const Home: NextPage = () => {
                           </span>
                         </Button>
                       </CardActions>
-                    </Card>
-                  </Grid>
+                    </Card> */}
+                  </li>
                 );
               })
             ) : (
@@ -290,12 +360,11 @@ const Home: NextPage = () => {
                 </p>
               </div>
             )}
-          </Grid>
+          </ul>
         </Section>
       </main>
     </>
   );
 };
-
 
 export default Home;
