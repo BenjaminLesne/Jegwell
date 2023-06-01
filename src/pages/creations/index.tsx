@@ -25,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/Select/select";
-import { fakeCategories, fakeProducts } from "~/utils/fixtures";
 import {
   Card,
   CardContent,
@@ -70,20 +69,17 @@ const Home: NextPage = () => {
       select: { name: true, id: true },
     });
 
-  // const categories = fakeCategories;
-
-  const { data: products = fakeProducts, isLoading: productsAreLoading } =
+  const { data: products, isLoading: productsAreLoading } =
     api.products.getAll.useQuery({
       category: parseInt(chosenCategory.toString()),
       sortType: chosenSort.toString(),
     });
-  // const products = fakeProducts;
 
-  if (categoriesAreLoading || productsAreLoading) {
-    return <Loading />;
+  if (categoriesAreLoading || productsAreLoading) return <Loading />;
+
+  if (!categories || !products) {
+    return <Error message="Une erreur est survenue." />;
   }
-
-  if (!categories || !products) return <Error message="Une erreur est survenue."/>;
 
   function slugify(value: string) {
     return decodeURIComponent(encodeURIComponent(value));
@@ -138,6 +134,7 @@ const Home: NextPage = () => {
   const triggerAnimation = () => {
     setAnimationKey((prevKey) => prevKey + 1);
   };
+
   return (
     <>
       <Head>
@@ -147,18 +144,24 @@ const Home: NextPage = () => {
         <Section>
           <Title>NOS CRÉATIONS</Title>
           <div className="flex justify-center gap-5">
-          <Select
+            <Select
               onValueChange={(value) => handleFilter({ value, key: CATEGORY })}
             >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder={capitalize(CATEGORY)} />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id.toString()}>
-                    {category.name}
-                  </SelectItem>
-                ))}
+                {categories.map((category) => {
+                  if (category.id == null) return;
+                  return (
+                    <SelectItem
+                      key={category.id}
+                      value={category.id.toString()}
+                    >
+                      {category.name}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
             <Select
@@ -168,77 +171,16 @@ const Home: NextPage = () => {
                 <SelectValue placeholder={"Trier"} />
               </SelectTrigger>
               <SelectContent>
-                {Object.entries(SORT_OPTIONS_NAMES).map(([value, name], index) => (
-                  <SelectItem key={index} value={value}>
-                    {name}
-                  </SelectItem>
-                ))}
+                {Object.entries(SORT_OPTIONS_NAMES).map(
+                  ([value, name], index) => (
+                    <SelectItem key={index} value={value}>
+                      {name}
+                    </SelectItem>
+                  )
+                )}
               </SelectContent>
             </Select>
           </div>
-
-          {/* <FormControl sx={{ marginBottom: "38px" }}>
-            <InputLabel id={categoryLabelId}>{capitalize(CATEGORY)}</InputLabel>
-            <Select
-              value={chosenCategory}
-              label={CATEGORY}
-              labelId={categoryLabelId}
-              id="categorySelect"
-              onChange={(event) => handleFilter({ event, key: CATEGORY })}
-            >
-              <MenuItem value={ALL_CATEGORIES} selected>
-                Toutes
-              </MenuItem>
-              {categories.map((item) => (
-                <MenuItem value={item.id} key={item.id}>
-                  {item.name}
-                </MenuItem>
-              ))}
-            </Select>
-            <InputLabel id={sortLabelId}>{capitalize(CATEGORY)}</InputLabel>
-            <Select
-              value={chosenCategory}
-              label={SORT}
-              labelId={sortLabelId}
-              id="sortSelect"
-              onChange={(event) => handleFilter({ event, key: SORT })}
-            >
-              <MenuItem value={ALL_CATEGORIES} selected>
-                Toutes
-              </MenuItem>
-              {categories.map((item) => (
-                <MenuItem value={item.id} key={item.id}>
-                  {item.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl> */}
-
-          <button
-            className="input-wrapper filter"
-            id="categoriesButton"
-            data-modal="categoriesModal"
-          >
-            <div
-              className="input filter__content-wrapper"
-              data-label="Catégories"
-            >
-              <span className="filter__text">{}</span>
-              <div className="caret"></div>
-            </div>
-          </button>
-
-          <button
-            className="input-wrapper filter"
-            id="sort"
-            data-modal="sortModal"
-          >
-            <div className="input filter__content-wrapper" data-label="Trier">
-              <span className="filter__text">{}</span>
-              <div className="caret"></div>
-            </div>
-          </button>
-
           <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             {products?.length > 0 ? (
               [
@@ -257,15 +199,15 @@ const Home: NextPage = () => {
                   <li key={product.id}>
                     <Card className="mx-auto max-w-[250px]">
                       <CardHeader>
-                        <Link href={product.image.url ?? "#"}>
+                        <Link href={product.id.toString() ?? "#"}>
                           <div className="relative m-0 aspect-square w-full overflow-hidden rounded-md object-cover shadow-md">
                             <Image
-                              src={product.image.url}
+                              src={product.image?.url ?? "#"}
                               alt={product.name}
                               width={250}
                               height={250}
                             />
-                            {product.options.length > 2 && (
+                            {product.options?.length > 2 && (
                               <div className="border-1 absolute bottom-1 left-1/2 translate-x-1/2 whitespace-nowrap rounded-md border-solid bg-black bg-opacity-25 px-[2px] py-[10px] text-[10px] font-extralight text-white ">
                                 {product.options.length} options
                               </div>

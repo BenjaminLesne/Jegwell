@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { ALL_CATEGORIES, DEFAULT_SORT, SORT_OPTIONS } from "~/utils/constants";
+import { type Prisma } from "@prisma/client";
 
 const getAllInputSchema = z
   .object({
@@ -10,63 +11,38 @@ const getAllInputSchema = z
   .optional();
 
 export const productsRouter = createTRPCRouter({
-  getAll: publicProcedure.input(getAllInputSchema).query(({ ctx, input }) => {
-    const { category = ALL_CATEGORIES, sortType = DEFAULT_SORT } = input ?? {};
+  getAll: publicProcedure
+    .input(getAllInputSchema)
+    .query(({ ctx, input = {} }) => {
+      const { category = ALL_CATEGORIES, sortType = DEFAULT_SORT } = input;
 
-    type Arg = {
-      where?: {
-        categories: {
-          some: {
-            id: number;
-          };
-        };
-      };
-      select: {
-        name: boolean;
-        image: {
-          select: {
-            url: boolean;
-          };
-        };
-        id: boolean;
-        options: {
-          select: {
-            price: boolean;
-          };
-        };
-      };
-      orderBy?: (typeof SORT_OPTIONS)[keyof typeof SORT_OPTIONS];
-    };
-    const arg: Arg = {
-      where: {
-        categories: {
-          some: {
-            id: category,
+      const arg = {
+        where: {
+          categories: {
+            some: {
+              id: category === ALL_CATEGORIES ? undefined : category,
+            },
           },
         },
-      },
-      select: {
-        name: true,
-        image: {
-          select: {
-            url: true,
+        select: {
+          name: true,
+          image: {
+            select: {
+              url: true,
+            },
+          },
+          imageId: true,
+          id: true,
+          price: true,
+          options: {
+            select: {
+              price: true,
+            },
           },
         },
-        id: true,
-        options: {
-          select: {
-            price: true,
-          },
-        },
-      },
-      orderBy: SORT_OPTIONS[sortType],
-    };
+        orderBy: SORT_OPTIONS[sortType],
+      } satisfies Prisma.ProductFindManyArgs;
 
-    if (category === ALL_CATEGORIES) {
-      delete arg.where;
-    }
-    console.log("arg", arg);
-
-    return ctx.prisma.product.findMany(arg);
-  }),
+      return ctx.prisma.product.findMany(arg);
+    }),
 });

@@ -24,24 +24,16 @@ export const SORT = "trie";
 export const DEFAULT_SORT = "priceDesc";
 export const SORT_OPTIONS = {
   nameAsc: {
-    options: {
-      name: "asc",
-    },
+    name: "asc",
   },
   nameDesc: {
-    options: {
-      name: "desc",
-    },
+    name: "desc",
   },
   priceDesc: {
-    options: {
-      price: "desc",
-    },
+    price: "desc",
   },
   priceAsc: {
-    options: {
-      price: "asc",
-    },
+    price: "asc",
   },
 } as Record<string, Prisma.ProductOrderByWithRelationInput>;
 
