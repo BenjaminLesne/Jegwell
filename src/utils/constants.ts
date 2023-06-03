@@ -43,3 +43,5 @@ export const SORT_OPTIONS_NAMES = {
   priceDesc: "Prix décroissant",
   priceAsc: "Prix croissant",
 }
+
+export const DEFAULT_CATEGORY = undefined;

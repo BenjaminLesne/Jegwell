@@ -5,8 +5,10 @@ import { type Prisma } from "@prisma/client";
 
 const getAllInputSchema = z
   .object({
-    category: z.number(),
-    sortType: z.enum(Object.keys(SORT_OPTIONS) as [keyof typeof SORT_OPTIONS]),
+    category: z.number().optional(),
+    sortType: z
+      .enum(Object.keys(SORT_OPTIONS) as [keyof typeof SORT_OPTIONS])
+      .optional(),
   })
   .optional();
 
