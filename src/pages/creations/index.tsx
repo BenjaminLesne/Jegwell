@@ -189,13 +189,14 @@ const Home: NextPage = () => {
   const triggerAnimation = () => {
     setAnimationKey((prevKey) => prevKey + 1);
   };
+
   return (
     <>
       <Head>
         <title>{TAB_BASE_TITLE}créations</title>
       </Head>
       <main>
-        <Section>
+        <Section className="min-h-screen">
           <Title>NOS CRÉATIONS</Title>
           <div className="flex justify-center gap-5">
             {categoriesAreLoading ? (
@@ -211,7 +212,7 @@ const Home: NextPage = () => {
                         dispatchQueryOptions({ type: SET_CATEGORY, value }),
                     })
                   }
-                  defaultValue={queryOptions.category?.toString()}
+                  defaultValue={queryOptions.category?.toString() ?? ""}
                 >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder={capitalize(CATEGORY)} />
@@ -243,6 +244,7 @@ const Home: NextPage = () => {
                     })
                   }
                   defaultValue={DEFAULT_SORT}
+                  value={queryOptions.sort?.toString() ?? DEFAULT_SORT}
                 >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder={"Trier"} />

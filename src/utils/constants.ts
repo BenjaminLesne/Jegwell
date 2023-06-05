@@ -18,10 +18,14 @@ export const FACEBOOK = "https://www.facebook.com/jegwell";
 export const DESKTOP_MAX_WIDTH = "lg:max-w-[1200px]";
 // /styles
 
+// urls
+export const PRODUCTS_PAGE_URL = '/creations'
+// /urls
+
 export const CATEGORY = "catégorie";
 export const ALL_CATEGORIES = -1;
 export const SORT = "trie";
-export const DEFAULT_SORT = "priceDesc";
+export const DEFAULT_SORT = "priceAsc";
 export const SORT_OPTIONS = {
   nameAsc: {
     name: "asc",

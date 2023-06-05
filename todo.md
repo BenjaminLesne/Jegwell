@@ -7,5 +7,6 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - create templates for merge requests (take those from work and remove they unsued part of it
 - remove BenjaminLesneLica as collaborator on github
 - make playwright tests to products page (category button, sort button, snapshots products displayed reuse tests made in previous projects)
+- homepage idem
 
 Doing:
