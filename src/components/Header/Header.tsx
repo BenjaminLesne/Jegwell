@@ -37,7 +37,7 @@ export const Header = () => {
   }, [isOpen]);
   return (
     <header
-      className={`z-1 bg-primary-background-color text-primary-background-color shadow-box-shadow-values relative h-16 ${
+      className={`bg-primary-background-color text-primary-background-color shadow-box-shadow-values relative z-30 h-16 ${
         isHome
           ? "bg-primary-background-color absolute left-0 top-0 bg-opacity-75"
           : ""
