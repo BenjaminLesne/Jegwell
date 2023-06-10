@@ -20,6 +20,7 @@ export const DESKTOP_MAX_WIDTH = "lg:max-w-[1200px]";
 
 // urls
 export const PRODUCTS_PAGE_URL = '/creations'
+export const HOME_PAGE_URL = "/";
 // /urls
 
 export const CATEGORY = "catégorie";
@@ -46,6 +47,8 @@ export const SORT_OPTIONS_NAMES = {
   nameDesc: "Nom Z-A",
   priceDesc: "Prix décroissant",
   priceAsc: "Prix croissant",
-}
+};
 
 export const DEFAULT_CATEGORY = undefined;
+
+export const CATEGORY_TEST_ID = "category";

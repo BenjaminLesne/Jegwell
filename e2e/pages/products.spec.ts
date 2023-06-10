@@ -1,31 +1,10 @@
-// import { expect, test } from "@playwright/test";
-// import { PRODUCTS_PAGE_URL } from "~/utils/constants";
-
-// test.describe("products page", () => {
-//   test.beforeEach(async ({ page }) => {
-//     await page.goto(PRODUCTS_PAGE_URL);
-//   });
-//   test("products page snapshot", async ({ page }) => {
-//     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
-//   });
-//   test("we can sort products", async ({ page }) => {
-//     await page.pause();
-//     const names = await page
-//       .getByRole("link", { name: "test3" })
-//       .nth(1)
-//       .click();
-//     const prices = page.getByTestId("price").evaluateAll((item) => 1);
-
-//     await page.goto("http://localhost:3000/creations");
-//     await page.getByRole("option", { name: "Prix croissant" }).click();
-//     await page.getByRole("option", { name: "Prix croissant" }).click();
-//     await page.getByRole("option", { name: "Prix décroissant" }).click();
-//     await page.getByRole("option", { name: "Prix décroissant" }).click();
-//   });
-// });
-
 import { test, expect } from "@playwright/test";
-import { getNames, getPrices, isSorted, type isSortedProps } from "./functions";
+import {
+  getNames,
+  getPrices,
+  isSorted,
+  type isSortedProps,
+} from "~/utils/helpers/helpers";
 import { PRODUCTS_PAGE_URL } from "~/utils/constants";
 
 test.describe("the products page", () => {
@@ -36,7 +15,7 @@ test.describe("the products page", () => {
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
   });
 
-  test.only("sort the products", async ({ page }) => {
+  test("sort the products", async ({ page }) => {
     const filters = [
       {
         filterLabel: "Nom A-Z",
@@ -108,7 +87,7 @@ test.describe("the products page", () => {
     }
   });
 
-  test.only("display right products based on category selected", async ({
+  test("display right products based on category selected", async ({
     page,
   }) => {
     const categories = ["Toutes", "boucle d'oreilles", "bagues"] as const;

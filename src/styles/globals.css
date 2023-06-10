@@ -11,6 +11,8 @@ body {
   main {
     max-width: 1200px;
     margin-inline: auto;
+    min-height: 50dvh;
+    padding-bottom: 50px; 
   }
 }
 

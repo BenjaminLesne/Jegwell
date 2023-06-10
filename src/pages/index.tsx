@@ -3,20 +3,24 @@ import Head from "next/head";
 import Link from "next/link";
 import heroImage from "../assets/images/hero.webp";
 
-import { PRODUCTS_ROUTE, TAB_BASE_TITLE } from "~/utils/constants";
+import {
+  CATEGORY,
+  CATEGORY_TEST_ID,
+  PRODUCTS_ROUTE,
+  TAB_BASE_TITLE,
+} from "~/utils/constants";
 import Image from "next/image";
 import { Title } from "~/components/Title/Title";
 import { Section } from "~/components/Section/Section";
 import { Rings } from "../assets/svg/Rings";
 import { api } from "~/utils/api";
+import { Loading } from "~/components/Loading/Loading";
+import { Error } from "~/components/Error/Error";
 
 const Home: NextPage = () => {
-  const { data: categories, isLoading } = api.categories.getAll.useQuery({
-    select: { name: true, image: { select: { url: true } } },
-  });
+  const { data: categories, isLoading } = api.categories.getAll.useQuery();
 
-  if (isLoading) return <div>Chargement...</div>;
-  if (!categories) return <div>Une erreur est survenue.</div>;
+  if (!categories && !isLoading) return <Error />;
 
   return (
     <>
@@ -55,21 +59,19 @@ const Home: NextPage = () => {
         </Section>
         <Section id="categories">
           <Title component="h2">NOS CATÉGORIES</Title>
-          <ul className="flex flex-col flex-wrap items-center gap-6 md:flex-row md:justify-center">
-            {categories &&
-              [
-                ...categories,
-                ...categories,
-                ...categories,
-                ...categories,
-                ...categories,
-                ...categories,
-                ...categories,
-              ]?.map((category, index) => (
-                <li key={crypto.randomUUID()} className="max-w-full">
+          <ul className="relative flex flex-col flex-wrap items-center gap-6 md:flex-row md:justify-center">
+            {isLoading ? (
+              <Loading />
+            ) : (
+              categories?.map((category, index) => (
+                <li
+                  key={category.id}
+                  className="max-w-[500px] flex-1"
+                  data-testid={CATEGORY_TEST_ID}
+                >
                   <Link
                     className="m-0 w-full"
-                    href={`${PRODUCTS_ROUTE}?category=${category.name}`}
+                    href={`${PRODUCTS_ROUTE}?${CATEGORY}=${category.name}`}
                   >
                     <figure
                       className={`flex aspect-[2/1] w-full overflow-hidden rounded-md ${
@@ -78,8 +80,7 @@ const Home: NextPage = () => {
                     >
                       <Image
                         className="w-1/2"
-                        // src={category.image.url}
-                        src={"/hero.webp"}
+                        src={category.image.url}
                         alt={"Bijou " + category.name}
                         width="200"
                         height="200"
@@ -92,7 +93,8 @@ const Home: NextPage = () => {
                     </figure>
                   </Link>
                 </li>
-              ))}
+              ))
+            )}
           </ul>
         </Section>
       </main>

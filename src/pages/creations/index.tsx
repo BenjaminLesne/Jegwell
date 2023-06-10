@@ -41,9 +41,19 @@ import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 
 const Home: NextPage = () => {
+  const router = useRouter();
+  const categoryQuery = router.query[CATEGORY];
+  const sortQuery = router.query[SORT];
+  const sort = typeof sortQuery === "string" ? sortQuery : undefined;
+  const parsedIntCategoryQuery =
+    typeof categoryQuery === "string" ? parseInt(categoryQuery) : NaN;
+  const category = isNaN(parsedIntCategoryQuery)
+    ? undefined
+    : parsedIntCategoryQuery;
+
   const initialState = {
-    category: undefined,
-    sort: undefined,
+    category: category,
+    sort: sort,
   };
 
   type State = {
@@ -97,15 +107,6 @@ const Home: NextPage = () => {
   );
   const [animationKey, setAnimationKey] = useState(0);
 
-  const router = useRouter();
-  const categoryQuery = router.query[CATEGORY];
-  const sortQuery = router.query[SORT];
-  const sort = typeof sortQuery === "string" ? sortQuery : undefined;
-  const parsedIntCategoryQuery =
-    typeof categoryQuery === "string" ? parseInt(categoryQuery) : NaN;
-  const category = isNaN(parsedIntCategoryQuery)
-    ? undefined
-    : parsedIntCategoryQuery;
 
   useEffect(() => {
     if (categoryQuery) {
@@ -134,7 +135,12 @@ const Home: NextPage = () => {
       sortType: queryOptions.sort,
     });
 
-  if (categoriesAreLoading && productsAreLoading) return <Loading />;
+  if (categoriesAreLoading && productsAreLoading)
+    return (
+      <main>
+        <Loading />
+      </main>
+    );
 
   const nothingIsLoading = !categoriesAreLoading && !productsAreLoading;
   if (nothingIsLoading && (!categories || !products)) {
