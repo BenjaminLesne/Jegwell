@@ -4,6 +4,7 @@ import React, { useEffect, useReducer } from "react";
 import { Basket } from "~/assets/svg/Basket";
 import { Cross } from "~/assets/svg/Cross";
 import { Rings } from "~/assets/svg/Rings";
+import { capitalize, cn } from "~/lib/utils";
 import { BASKET_ROUTE, HOME_ROUTE, PRODUCTS_ROUTE } from "~/utils/constants";
 
 export const Header = () => {
@@ -44,15 +45,31 @@ export const Header = () => {
       }`}
     >
       <nav
-        className="mx-auto flex h-full items-center justify-between md:max-w-[1200px]"
+        className="mx-auto flex h-full items-center justify-between px-2 md:max-w-[1200px]"
         aria-labelledby="primary-navigation"
       >
         <div
-          className={`text-primary-color fixed inset-0 z-10 flex h-screen max-h-screen ${
-            isOpen ? "translate-x-0" : "translate-x-full"
-          } flex-col overscroll-contain
-           border-none bg-white p-0 capitalize transition-transform duration-500
-            ease-in-out after:flex-1 after:content-['']`}
+          className={cn(
+            "text-primary-color",
+            "fixed",
+            "inset-0",
+            "z-10",
+            "flex",
+            "h-screen",
+            "max-h-screen",
+            isOpen ? "translate-x-0" : "translate-x-full",
+            "flex-col",
+            "overscroll-contain",
+            "border-none",
+            "bg-white",
+            "p-0",
+            "capitalize",
+            "transition-transform",
+            "duration-500",
+            "ease-in-out",
+            "after:flex-1",
+            "after:content-['']"
+          )}
           id="main-menu"
         >
           <button
@@ -63,13 +80,17 @@ export const Header = () => {
             <Cross className="m-1" />
           </button>
           <ul className="flex-2 flex h-full flex-col justify-center">
-            {navigationLinks.map((link) => {
+            {navigationLinks.map((link, index) => {
               return (
                 <li
-                  key={crypto.randomUUID()}
-                  className={`relative my-8 w-full text-center ${
+                  key={index}
+                  className={cn(
+                    "relative",
+                    "my-8",
+                    "w-full",
+                    "text-center",
                     currentRoute === link.route ? "bg-secondary" : ""
-                  }`}
+                  )}
                   onClick={toggle}
                 >
                   <Link
@@ -84,7 +105,7 @@ export const Header = () => {
           </ul>
         </div>
         <button
-          className="mr-8 flex flex-col items-start justify-center gap-[5.6px] border-0 bg-transparent pl-5"
+          className="mr-8 flex flex-col items-start justify-center gap-[5.6px] border-0 bg-transparent pl-5 md:hidden"
           id="burger-button"
           onClick={toggle}
         >
@@ -110,11 +131,22 @@ export const Header = () => {
             </div>
           </div>
         </Link>
+        <ul className="hidden max-w-[500px] flex-1 justify-between md:flex">
+          {navigationLinks.map((link) => {
+            return (
+              <li key={link.text}>
+                <Link className="mx-auto text-primary" href={link.route}>
+                  {capitalize(link.text)}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
         <Link
-          className="mr-[8px] flex h-[100%] items-center justify-end"
+          className="flex h-[100%] items-center justify-end"
           href={BASKET_ROUTE}
         >
-          <Basket className=" mr-[19px] w-[35px] fill-transparent stroke-primary stroke-[20px]" />
+          <Basket className="w-[35px] fill-transparent stroke-primary stroke-[20px]" />
         </Link>
       </nav>
     </header>

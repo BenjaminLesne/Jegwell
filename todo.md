@@ -8,8 +8,9 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - remove BenjaminLesneLica as collaborator on github
 - make playwright tests to products page (category button, sort button, snapshots products displayed reuse tests made in previous projects)
 => homepage idem
-- retirer la navigation mobile sur desktop
 - créer une documentation (se renseigner sur les solutions, jira atlass?, elles font comment les librairies genre react?)
+- basket page
+- delivery page
 
 Doing:
-- home page e2e test, trying to click on each category on the page and check if where we get redirected is the right url (waitForUrl needed?) and check if the "combobox" has the value of the selected category
+- retirer la navigation mobile sur desktop
