@@ -5,7 +5,7 @@ import {
   FACEBOOK,
   INSTAGRAM,
   TIKTOK,
-} from "~/utils/constants";
+} from "~/lib/constants";
 
 export function Footer() {
   const links = [

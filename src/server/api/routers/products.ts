@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { ALL_CATEGORIES, DEFAULT_SORT, SORT_OPTIONS } from "~/utils/constants";
+import { ALL_CATEGORIES, DEFAULT_SORT, SORT_OPTIONS } from "~/lib/constants";
 import { type Prisma } from "@prisma/client";
 
 const getAllInputSchema = z

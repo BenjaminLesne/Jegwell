@@ -1,13 +1,19 @@
+import { useEffect, useState } from "react";
+import { LOCALE_STORAGE_BASKET_KEY } from "../constants";
+import { z } from "zod";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
 type GetSelectFieldsProps = {
   fields: string[];
   authorizedFields: readonly string[];
 };
-type SelectField = { [k: string]: SelectField | boolean };
 
 export function getSelectFields({
   fields,
   authorizedFields,
 }: GetSelectFieldsProps) {
+  type SelectField = { [k: string]: SelectField | boolean };
   const selectFields: SelectField = {};
 
   fields.forEach((field) => {
@@ -86,3 +92,55 @@ export function isSorted({ array, order }: isSortedProps) {
   return true;
 }
 
+export const useBasket = () => {
+  type OrderedProduct = {
+    id: string;
+    quantity: number;
+    optionId?: string;
+  };
+  const [basket, setBasket] = useState<OrderedProduct[]>([]);
+
+  useEffect(() => {
+    const orderedProductSchema = z.array(
+      z.object({
+        id: z.string(),
+        quantity: z.number(),
+        optionId: z.string().optional(),
+      })
+    );
+    const newBasketStringified = localStorage.getItem(
+      LOCALE_STORAGE_BASKET_KEY
+    );
+    if (newBasketStringified) {
+      const newBasket = orderedProductSchema.parse(newBasketStringified);
+      setBasket(newBasket);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(LOCALE_STORAGE_BASKET_KEY, JSON.stringify(basket));
+  }, [basket]);
+
+  const addToBasket = (product: OrderedProduct) => {
+    setBasket((prevBasket) => [...prevBasket, product]);
+  };
+
+  const removeFromBasket = (productId: string) => {
+    setBasket((prevBasket) => {
+      const updatedBasket = prevBasket.filter(
+        (product) => product.id !== productId
+      );
+      return updatedBasket;
+    });
+  };
+
+  return { basket, addToBasket, removeFromBasket };
+};
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

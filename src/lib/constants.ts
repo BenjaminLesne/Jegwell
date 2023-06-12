@@ -48,7 +48,6 @@ export const SORT_OPTIONS_NAMES = {
   priceDesc: "Prix décroissant",
   priceAsc: "Prix croissant",
 };
-
 export const DEFAULT_CATEGORY = undefined;
-
 export const CATEGORY_TEST_ID = "category";
+export const LOCALE_STORAGE_BASKET_KEY = "basket";

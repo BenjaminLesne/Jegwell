@@ -12,14 +12,14 @@ import {
   SORT_OPTIONS,
   SORT_OPTIONS_NAMES,
   TAB_BASE_TITLE,
-} from "~/utils/constants";
+} from "~/lib/constants";
 
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 
 import { useEffect, useReducer, useState } from "react";
 import { type NextRouter, useRouter } from "next/router";
-import { formatPrice } from "~/utils/helpers/helpers";
+import { formatPrice } from "~/lib/helpers/helpers";
 import {
   Select,
   SelectContent,
@@ -35,8 +35,8 @@ import {
   CardTitle,
 } from "~/components/ui/Card/card";
 import { Button } from "~/components/ui/Button/button";
-import { capitalize } from "~/lib/utils";
-import { api } from "~/utils/api";
+import { capitalize } from "~/lib/helpers/helpers";
+import { api } from "~/lib/api";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 

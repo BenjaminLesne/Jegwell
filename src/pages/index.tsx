@@ -8,12 +8,12 @@ import {
   CATEGORY_TEST_ID,
   PRODUCTS_ROUTE,
   TAB_BASE_TITLE,
-} from "~/utils/constants";
+} from "~/lib/constants";
 import Image from "next/image";
 import { Title } from "~/components/Title/Title";
 import { Section } from "~/components/Section/Section";
 import { Rings } from "../assets/svg/Rings";
-import { api } from "~/utils/api";
+import { api } from "~/lib/api";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 

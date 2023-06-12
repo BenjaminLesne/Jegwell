@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "~/lib/helpers/helpers";
 
 interface TitleProps {
   component?: keyof JSX.IntrinsicElements;
@@ -11,6 +12,13 @@ export const Title: React.FC<TitleProps> = ({
   children,
   className = "",
 }) => {
-  const classes = `text-2xl font-normal text-center py-12 ${className}`;
+  const classes = cn(
+    "text-2xl",
+    "font-normal",
+    "text-center",
+    "py-12",
+    className
+  );
+
   return React.createElement(component, { className: classes }, children);
 };

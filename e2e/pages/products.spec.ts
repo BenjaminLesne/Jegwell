@@ -4,8 +4,8 @@ import {
   getPrices,
   isSorted,
   type isSortedProps,
-} from "~/utils/helpers/helpers";
-import { PRODUCTS_PAGE_URL } from "~/utils/constants";
+} from "~/lib/helpers/helpers";
+import { PRODUCTS_PAGE_URL } from "~/lib/constants";
 
 test.describe("the products page", () => {
   test.beforeEach(async ({ page }) => {

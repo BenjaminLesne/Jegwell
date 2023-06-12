@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { CATEGORY, CATEGORY_TEST_ID, HOME_PAGE_URL } from "~/utils/constants";
+import { CATEGORY, CATEGORY_TEST_ID, HOME_PAGE_URL } from "~/lib/constants";
 
 test.describe("the header navigation", () => {
   test.beforeEach(async ({ page }) => {

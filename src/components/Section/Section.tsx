@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "~/lib/helpers/helpers";
 
 interface SectionProps {
   component?: keyof JSX.IntrinsicElements;
@@ -12,6 +13,6 @@ export const Section: React.FC<SectionProps> = ({
   className = "",
   id = "",
 }) => {
-  const classes = `py-5 ${className}`;
+  const classes = cn("py-5", className);
   return React.createElement("section", { className: classes, id }, children);
 };

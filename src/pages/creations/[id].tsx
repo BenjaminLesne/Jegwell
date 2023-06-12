@@ -3,8 +3,8 @@ import Head from "next/head";
 import Link from "next/link";
 import { ProductCard } from "~/components/ProductCard/ProductCard";
 
-import { api } from "~/utils/api";
-import { TAB_BASE_TITLE } from "~/utils/constants";
+import { api } from "~/lib/api";
+import { TAB_BASE_TITLE } from "~/lib/constants";
 
 const Products: NextPage = () => {
   const {data: products} = api.products.getAll.useQuery({select: {name: true}});

@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "~/lib/helpers/helpers";
 export function Rings({
   className: customClasses = "",
 }: {
@@ -6,7 +7,7 @@ export function Rings({
 }) {
   return (
     <svg
-      className={`h-6 w-8 fill-primary ${customClasses}`}
+      className={cn("h-6", "w-8", "fill-primary", customClasses)}
       width="236.44mm"
       height="175.7mm"
       version="1.1"

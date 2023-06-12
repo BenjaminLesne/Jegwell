@@ -6,7 +6,7 @@ export function Basket({
 }) {
   return (
     <svg
-      className={`${customClasses}`}
+      className={customClasses}
       width="596"
       height="531.98"
       version="1.1"

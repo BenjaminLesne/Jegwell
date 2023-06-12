@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "~/lib/helpers/helpers";
 export function Cross({
   className: customClasses = "",
 }: {
@@ -6,7 +7,7 @@ export function Cross({
 }) {
   return (
     <svg
-      className={`h-6 w-6 fill-primary ${customClasses}`}
+      className={cn("h-6", "w-6", "fill-primary", customClasses)}
       width="18"
       height="18"
       viewBox="0 0 18 18"
