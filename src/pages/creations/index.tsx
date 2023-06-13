@@ -276,7 +276,7 @@ const Home: NextPage = () => {
                 products.map((product) => {
                   const priceInCents = product.price;
                   const priceInEuros = priceInCents / 100;
-                  const formattedPrice = formatPrice({ price: priceInEuros });
+                  const formattedPrice = formatPrice(priceInEuros);
 
                   return (
                     <li key={product.id}>

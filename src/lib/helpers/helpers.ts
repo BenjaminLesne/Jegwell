@@ -44,14 +44,13 @@ export function getSelectFields({
   return selectFields;
 }
 
-type FormatPriceProps = {
-  price: number;
-};
-export function formatPrice({ price }: FormatPriceProps) {
+export function formatPrice(price: number) {
   return new Intl.NumberFormat("fr-FR", {
     style: "currency",
     currency: "EUR",
-  }).format(price);
+  })
+    .format(price)
+    .replace(/\D00(?=\D*$)/, "");
 }
 
 export const getPrices = (pricesElement: (SVGElement | HTMLElement)[]) =>

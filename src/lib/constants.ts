@@ -6,6 +6,7 @@ export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
 export const HOME_ROUTE = "/";
 export const PRODUCTS_ROUTE = "/creations";
 export const BASKET_ROUTE = "/panier";
+export const DELIVERY_ROUTE = "/livraison";
 // /routes
 
 // social media
