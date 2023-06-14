@@ -11,3 +11,4 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - delivery page
 
 Doing:
+- button option/quantity basket page with dialog
