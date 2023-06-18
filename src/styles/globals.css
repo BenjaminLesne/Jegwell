@@ -7,14 +7,12 @@ body {
   scroll-behavior: smooth;
 }
 
-@media screen and (min-width: 1200px) {
   main {
     max-width: 1200px;
     margin-inline: auto;
     min-height: calc(100vh - 100px);
     padding-bottom: 50px; 
   }
-}
 
 @layer base {
   :root {

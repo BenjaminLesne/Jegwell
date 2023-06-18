@@ -2,6 +2,7 @@ import { type Prisma } from "@prisma/client";
 
 export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
+export const DEVELOPMENT = "development";
 // routes
 export const HOME_ROUTE = "/";
 export const PRODUCTS_ROUTE = "/creations";
@@ -52,3 +53,16 @@ export const SORT_OPTIONS_NAMES = {
 export const DEFAULT_CATEGORY = undefined;
 export const CATEGORY_TEST_ID = "category";
 export const LOCALE_STORAGE_BASKET_KEY = "basket";
+
+// modals
+export const OPEN_TYPE = "open"
+export const CLOSE_TYPE = "close"
+// /modals
+
+export const BASKET_REDUCER_TYPE = {
+  ADD: 'add',
+  REMOVE: 'remove',
+  SET: 'set',
+  UPDATE_QUANTITY: 'update quantity',
+
+}

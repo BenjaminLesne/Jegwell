@@ -11,7 +11,7 @@ export const OrderItemModifier = React.forwardRef<
     <button
       {...props}
       ref={forwardRef}
-      className="relative m-0 flex w-full justify-between text-sm after:absolute after:bottom-[-4px] after:left-0 after:h-[1.5px] after:w-full after:bg-neutral-50 after:bg-opacity-25 after:content-['']"
+      className="relative m-0 flex h-12 w-full items-center justify-between text-sm"
     >
       <span>{capitalize(name ?? "")}:</span>
       <div className="flex gap-3">

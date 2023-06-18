@@ -1,5 +1,9 @@
-import { useEffect, useState } from "react";
-import { LOCALE_STORAGE_BASKET_KEY } from "../constants";
+import { useEffect, useReducer, useState } from "react";
+import {
+  BASKET_REDUCER_TYPE,
+  DEVELOPMENT,
+  LOCALE_STORAGE_BASKET_KEY,
+} from "../constants";
 import { z } from "zod";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -90,29 +94,96 @@ export function isSorted({ array, order }: isSortedProps) {
   }
   return true;
 }
+// BASET RELATED
+const orderedProductSchema = z.array(
+  z.object({
+    id: z.string(),
+    quantity: z.number(),
+    optionId: z.string(),
+  })
+);
+type BasketState = OrderedProduct[];
+type BasketAction = {
+  type: (typeof BASKET_REDUCER_TYPE)[keyof typeof BASKET_REDUCER_TYPE];
+  product?: OrderedProduct;
+  newBasket?: BasketState;
+  productId?: string;
+  quantity?: number;
+};
+
+export type OrderedProduct = {
+  id: string;
+  quantity: number;
+  optionId: string;
+};
+const basketReducer = (state: BasketState, action: BasketAction) => {
+  const { ADD, REMOVE, SET, UPDATE_QUANTITY } = BASKET_REDUCER_TYPE;
+
+  function removeFromBasket(
+    state: BasketState,
+    productId: BasketAction["productId"]
+  ) {
+    return state.filter((product) => product.id !== productId);
+  }
+
+  switch (action.type) {
+    case ADD:
+      if (action.product) return [...state, action.product];
+
+      consoleError("action.product is undefined");
+      break;
+
+    case UPDATE_QUANTITY:
+      if (action.quantity && action.quantity > 0 && action.productId) {
+        const updatedState = state.map((product) => {
+          if (action.quantity != null && product.id === action.productId) {
+            return { ...product, quantity: action.quantity };
+          }
+          return product;
+        });
+        return updatedState;
+      }
+      if (action.quantity === 0) {
+        return removeFromBasket(state, action.productId);
+      }
+
+      consoleError("quantity and/or productId is undefined");
+      break;
+
+    case REMOVE:
+      if (action.productId) {
+        return removeFromBasket(state, action.productId);
+      }
+      consoleError("action.productId is undefined");
+      break;
+
+    case SET:
+      if (action.newBasket) {
+        return action.newBasket;
+      }
+      consoleError("action.newBasket is undefined");
+      break;
+
+    default:
+      return state;
+  }
+
+  return state;
+};
 
 export const useBasket = () => {
-  type OrderedProduct = {
-    id: string;
-    quantity: number;
-    optionId?: string;
-  };
-  const [basket, setBasket] = useState<OrderedProduct[]>([]);
+  const initialState: BasketState = [];
+  const [basket, dispatchBasket] = useReducer(basketReducer, initialState);
 
   useEffect(() => {
-    const orderedProductSchema = z.array(
-      z.object({
-        id: z.string(),
-        quantity: z.number(),
-        optionId: z.string().optional(),
-      })
-    );
     const newBasketStringified = localStorage.getItem(
       LOCALE_STORAGE_BASKET_KEY
     );
     if (newBasketStringified) {
-      const newBasket = orderedProductSchema.parse(newBasketStringified);
-      setBasket(newBasket);
+      const newBasket = orderedProductSchema.parse(
+        JSON.parse(newBasketStringified)
+      );
+      dispatchBasket({ type: "SET", newBasket });
     }
   }, []);
 
@@ -120,21 +191,58 @@ export const useBasket = () => {
     localStorage.setItem(LOCALE_STORAGE_BASKET_KEY, JSON.stringify(basket));
   }, [basket]);
 
-  const addToBasket = (product: OrderedProduct) => {
-    setBasket((prevBasket) => [...prevBasket, product]);
-  };
-
-  const removeFromBasket = (productId: string) => {
-    setBasket((prevBasket) => {
-      const updatedBasket = prevBasket.filter(
-        (product) => product.id !== productId
-      );
-      return updatedBasket;
-    });
-  };
-
-  return { basket, addToBasket, removeFromBasket };
+  return { basket, dispatchBasket };
 };
+// /BASKET RELATED
+
+// export const useBasket = () => {
+//   type OrderedProduct = {
+//     id: string;
+//     quantity: number;
+//     optionId: string;
+//   };
+//   const [basket, setBasket] = useState<OrderedProduct[]>([]);
+
+//   useEffect(() => {
+//     const orderedProductSchema = z.array(
+//       z.object({
+//         id: z.string(),
+//         quantity: z.number(),
+//         optionId: z.string(),
+//       })
+//     );
+//     const newBasketStringified = localStorage.getItem(
+//       LOCALE_STORAGE_BASKET_KEY
+//     );
+//     if (newBasketStringified) {
+//       const newBasket = orderedProductSchema.parse(
+//         JSON.parse(newBasketStringified)
+//       );
+//       setBasket(newBasket);
+//     }
+//   }, []);
+
+//   useEffect(() => {
+//     localStorage.setItem(LOCALE_STORAGE_BASKET_KEY, JSON.stringify(basket));
+//   }, [basket]);
+
+//   const addToBasket = (product: OrderedProduct) => {
+//     setBasket((prevBasket) => [...prevBasket, product]);
+//   };
+
+//   const removeFromBasket = (productId: string) => {
+//     setBasket((prevBasket) => {
+//       const updatedBasket = prevBasket.filter(
+//         (product) => product.id !== productId
+//       );
+//       return updatedBasket;
+//     });
+//   };
+
+//   return { basket, addToBasket, removeFromBasket, setBasket };
+// };
+
+// ================================================
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -142,4 +250,10 @@ export function cn(...inputs: ClassValue[]) {
 
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function consoleError(...values: unknown[]) {
+  if (process.env.NODE_ENV === DEVELOPMENT) {
+    console.error(...values);
+  }
 }
