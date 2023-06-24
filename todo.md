@@ -20,3 +20,6 @@ Attention, quand on clique sur l'option ca ouvre la modal des quantité...
 on a un soucis, on modifie la quantité basé sur l'identifiant du produit OR on peut avoir deux orderedProduct avec le meme id mais pas la meme option !!
 
 je dois fetch les products based on basket. i should create the api.getById endpoint, early return if the ids given are empty array
+
+
+mergedProducts have the wrong type OrderedProducts[] in index panier l.115

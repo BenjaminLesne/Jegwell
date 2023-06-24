@@ -3,6 +3,7 @@ import {
   BASKET_REDUCER_TYPE,
   DEVELOPMENT,
   LOCALE_STORAGE_BASKET_KEY,
+  NO_OPTION,
 } from "../constants";
 import { z } from "zod";
 import { clsx, type ClassValue } from "clsx";
@@ -137,12 +138,18 @@ type UpdateOptionAction = {
   newOptionId: OptionId;
 };
 
+type IncrementAction = {
+  type: (typeof BASKET_REDUCER_TYPE)["INCREMENT"];
+  productId: ProductId;
+};
+
 export type BasketAction =
   | UpdateQuantityAction
   | SetAction
   | AddAction
   | RemoveAction
-  | UpdateOptionAction;
+  | UpdateOptionAction
+  | IncrementAction;
 
 export type OrderedProduct = {
   id: string;
@@ -168,7 +175,7 @@ function reportUndefinedOrNullVars(...variables: unknown[]) {
 }
 
 const basketReducer = (state: BasketState, action: BasketAction) => {
-  const { ADD, REMOVE, SET, UPDATE_QUANTITY, UPDATE_OPTION } =
+  const { ADD, REMOVE, SET, UPDATE_QUANTITY, UPDATE_OPTION, INCREMENT } =
     BASKET_REDUCER_TYPE;
 
   function removeFromBasket(
@@ -184,6 +191,20 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
 
       consoleError("action.product is undefined");
       break;
+
+    case INCREMENT: {
+      const product = state.find((item) => item.id === action.productId);
+      if (product?.quantity) {
+        return [...state, { ...product, quantity: product?.quantity + 1 }];
+      } else {
+        const newProduct = {
+          id: action.productId,
+          quantity: 1,
+          optionId: NO_OPTION,
+        };
+        return [...state, newProduct];
+      }
+    }
 
     case UPDATE_OPTION:
       if (action.optionId && action.productId && action.newOptionId) {

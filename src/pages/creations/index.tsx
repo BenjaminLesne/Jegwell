@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import {
   ALL_CATEGORIES,
+  BASKET_REDUCER_TYPE,
   CATEGORY,
   DEFAULT_CATEGORY,
   DEFAULT_SORT,
@@ -19,7 +20,7 @@ import { Title } from "~/components/Title/Title";
 
 import { useEffect, useReducer, useState } from "react";
 import { type NextRouter, useRouter } from "next/router";
-import { formatPrice } from "~/lib/helpers/helpers";
+import { formatPrice, useBasket } from "~/lib/helpers/helpers";
 import {
   Select,
   SelectContent,
@@ -39,6 +40,10 @@ import { capitalize } from "~/lib/helpers/helpers";
 import { api } from "~/lib/api";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
+
+const { INCREMENT } = BASKET_REDUCER_TYPE;
+const SET_CATEGORY = "SET_CATEGORY";
+const SET_SORT = "SET_SORT";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -65,9 +70,6 @@ const Home: NextPage = () => {
     type: typeof SET_CATEGORY | typeof SET_SORT;
     value: string | undefined;
   };
-
-  const SET_CATEGORY = "SET_CATEGORY";
-  const SET_SORT = "SET_SORT";
 
   const reducer = (state: State, action: Action) => {
     switch (action.type) {
@@ -105,8 +107,10 @@ const Home: NextPage = () => {
     reducer,
     initialState
   );
-  const [animationKey, setAnimationKey] = useState(0);
-
+  const { basket, dispatchBasket } = useBasket();
+  const [animationsKey, setAnimationsKey] = useState<{
+    [key: string]: string;
+  }>({});
 
   useEffect(() => {
     if (categoryQuery) {
@@ -192,8 +196,17 @@ const Home: NextPage = () => {
     callback?.(value);
   }
 
-  const triggerAnimation = () => {
-    setAnimationKey((prevKey) => prevKey + 1);
+  const triggerAnimation = (key: string) => {
+    setAnimationsKey((prev) => ({ ...prev, [key]: crypto.randomUUID() }));
+  };
+
+  type AddToBasketProps = {
+    key: string;
+    productId: string;
+  };
+  const addToBasket = ({ key, productId }: AddToBasketProps) => {
+    dispatchBasket({ type: INCREMENT, productId });
+    triggerAnimation(key);
   };
 
   return (
@@ -321,14 +334,23 @@ const Home: NextPage = () => {
                           <Button
                             variant="secondary"
                             className="relative overflow-hidden border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black"
-                            onClick={triggerAnimation}
+                            onClick={() =>
+                              addToBasket({
+                                key: product.id.toString(),
+                                productId: product.id.toString(),
+                              })
+                            }
                           >
                             <span>Ajouter au panier</span>
                             <span
-                              key={animationKey}
+                              key={animationsKey[product.id] ?? product.id}
                               className={
                                 "absolute inset-0 flex items-center justify-center bg-secondary opacity-0 " +
-                                (animationKey > 0 ? "animate-fadeIn" : "")
+                                (animationsKey[product.id] &&
+                                animationsKey[product.id] !==
+                                  product.id.toString()
+                                  ? "animate-fadeIn"
+                                  : "")
                               }
                             >
                               Ajouté &#10003;

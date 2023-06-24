@@ -14,7 +14,7 @@ import {
   type BasketAction,
   cn,
 } from "~/lib/helpers/helpers";
-import { BASKET_REDUCER_TYPE } from "~/lib/constants";
+import { BASKET_REDUCER_TYPE, NO_OPTION } from "~/lib/constants";
 import Image from "next/image";
 
 type Props = {
@@ -25,11 +25,9 @@ type Props = {
 };
 
 const { UPDATE_OPTION } = BASKET_REDUCER_TYPE;
-const NO_OPTION = "ORIGINAL";
 const IMAGE_WIDTH = 100;
 const IMAGE_HEIGHT = IMAGE_WIDTH;
 
-// function createOptionsModal($productId, $product_default_image_url, $productOptions, $alt, $svgs_sprite_url)
 export const OptionModal = ({
   open,
   closeModal,
@@ -89,7 +87,7 @@ export const OptionModal = ({
                     </article>
                   </button>
                 </li>
-                {options?.map((option) => (
+                {orderedProduct.?.map((option) => (
                   <li key={option.id}>
                     <button
                       className={cn(

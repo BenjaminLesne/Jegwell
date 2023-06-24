@@ -11,6 +11,7 @@ import { Price } from "~/components/Price/Price";
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 import { Button } from "~/components/ui/Button/button";
+import { api } from "~/lib/api";
 import {
   CLOSE_TYPE,
   DELIVERY_ROUTE,
@@ -100,8 +101,8 @@ const BasketPage: NextPage = () => {
   const { basket, dispatchBasket } = useBasket();
 
   const { data: products, isLoading: productsAreLoading } =
-    api.products.getById.useQuery({
-      id: basket.map((item) => item.id),
+    api.products.getByIds.useQuery({
+      ids: basket.map((item) => item.id),
     });
 
   if (productsAreLoading)
@@ -111,13 +112,26 @@ const BasketPage: NextPage = () => {
       </main>
     );
 
+  const mergedProducts = basket.map((item) => {
+    const product = products?.find(
+      (element) => element.id.toString() === item.id
+    );
+
+    if (product == null) return item;
+
+    const mergedProduct = { ...product, ...item };
+    return mergedProduct;
+  });
+
+  console.log(mergedProducts);
+
   return (
     <main>
       <Section className="mx-auto max-w-[50ch]  px-2">
         <Title>VOTRE PANIER</Title>
         <ul className="flex flex-col gap-10">
-          {basket?.length > 0 ? (
-            basket.map((product) => (
+          {mergedProducts ? (
+            mergedProducts.map((product) => (
               <li key={product.id}>
                 <h1>#{product.id}</h1>
                 <article>
