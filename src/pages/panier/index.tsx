@@ -1,10 +1,10 @@
 import { type NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import { Cross } from "~/assets/svg/Cross";
 import { OrderItemModifier } from "~/components/Button/OrderItemModifier";
-import { Modal } from "~/components/Modals/Modal/Modal";
+import { Loading } from "~/components/Loading/Loading";
 import { OptionModal } from "~/components/Modals/Modal/OptionModal";
 import { QuantityModal } from "~/components/Modals/Modal/QuantityModal";
 import { Price } from "~/components/Price/Price";
@@ -99,6 +99,18 @@ const BasketPage: NextPage = () => {
   );
   const { basket, dispatchBasket } = useBasket();
 
+  const { data: products, isLoading: productsAreLoading } =
+    api.products.getById.useQuery({
+      id: basket.map((item) => item.id),
+    });
+
+  if (productsAreLoading)
+    return (
+      <main>
+        <Loading />
+      </main>
+    );
+
   return (
     <main>
       <Section className="mx-auto max-w-[50ch]  px-2">
@@ -185,7 +197,7 @@ const BasketPage: NextPage = () => {
         <OptionModal
           {...optionModalProps}
           closeModal={() =>
-            dispatchQuantityModalProps({
+            dispatchOptionModalProps({
               type: CLOSE_TYPE,
             })
           }

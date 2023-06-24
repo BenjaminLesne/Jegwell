@@ -64,4 +64,5 @@ export const BASKET_REDUCER_TYPE = {
   REMOVE: "remove",
   SET: "set",
   UPDATE_QUANTITY: "update quantity",
+  UPDATE_OPTION: "update option",
 } as const;

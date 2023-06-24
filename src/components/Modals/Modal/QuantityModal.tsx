@@ -38,6 +38,7 @@ export const QuantityModal = ({
       type: UPDATE_QUANTITY,
       quantity: selectedQuantity,
       productId: orderedProduct.id,
+      optionId: orderedProduct.optionId,
     });
     closeModal();
   };

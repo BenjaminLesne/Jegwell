@@ -106,10 +106,12 @@ type BasketState = OrderedProduct[];
 
 type ProductId = string;
 type Quantity = number;
+type OptionId = string;
 
 type UpdateQuantityAction = {
   type: (typeof BASKET_REDUCER_TYPE)["UPDATE_QUANTITY"];
   productId: ProductId;
+  optionId: OptionId;
   quantity: Quantity;
 };
 
@@ -128,19 +130,46 @@ type RemoveAction = {
   productId: ProductId;
 };
 
+type UpdateOptionAction = {
+  type: (typeof BASKET_REDUCER_TYPE)["UPDATE_OPTION"];
+  productId: ProductId;
+  optionId: OptionId;
+  newOptionId: OptionId;
+};
+
 export type BasketAction =
   | UpdateQuantityAction
   | SetAction
   | AddAction
-  | RemoveAction;
+  | RemoveAction
+  | UpdateOptionAction;
 
 export type OrderedProduct = {
   id: string;
   quantity: number;
   optionId: string;
 };
+
+function reportUndefinedOrNullVars(...variables: unknown[]) {
+  const undefinedOrNullVariables = [];
+
+  for (let i = 0; i < variables.length; i++) {
+    if (variables[i] === undefined || variables[i] === null) {
+      undefinedOrNullVariables.push(`Variable ${String.fromCharCode(65 + i)}`);
+    }
+  }
+
+  if (undefinedOrNullVariables.length > 0) {
+    const message = `The ${undefinedOrNullVariables.join(", ")} ${
+      undefinedOrNullVariables.length > 1 ? "are" : "is"
+    } undefined or null.`;
+    consoleError(message);
+  }
+}
+
 const basketReducer = (state: BasketState, action: BasketAction) => {
-  const { ADD, REMOVE, SET, UPDATE_QUANTITY } = BASKET_REDUCER_TYPE;
+  const { ADD, REMOVE, SET, UPDATE_QUANTITY, UPDATE_OPTION } =
+    BASKET_REDUCER_TYPE;
 
   function removeFromBasket(
     state: BasketState,
@@ -156,10 +185,42 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
       consoleError("action.product is undefined");
       break;
 
-    case UPDATE_QUANTITY:
-      if (action.quantity && action.quantity > 0 && action.productId) {
+    case UPDATE_OPTION:
+      if (action.optionId && action.productId && action.newOptionId) {
         const updatedState = state.map((product) => {
-          if (action.quantity != null && product.id === action.productId) {
+          if (
+            product.id === action.productId &&
+            product.optionId === action.optionId
+          ) {
+            return { ...product, optionId: action.optionId };
+          }
+
+          return product;
+        });
+
+        return updatedState;
+      }
+
+      reportUndefinedOrNullVars(
+        action.optionId,
+        action.productId,
+        action.newOptionId
+      );
+      break;
+
+    case UPDATE_QUANTITY:
+      if (
+        typeof action.quantity != "number" &&
+        action.quantity > 0 &&
+        action.productId &&
+        action.optionId
+      ) {
+        const updatedState = state.map((product) => {
+          if (
+            action.quantity != null &&
+            product.id === action.productId &&
+            product.optionId === action.optionId
+          ) {
             return { ...product, quantity: action.quantity };
           }
 
@@ -172,7 +233,11 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
         return removeFromBasket(state, action.productId);
       }
 
-      consoleError("quantity and/or productId is undefined");
+      reportUndefinedOrNullVars(
+        action.quantity,
+        action.productId,
+        action.optionId
+      );
       break;
 
     case REMOVE:
