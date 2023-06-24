@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import {
   BASKET_REDUCER_TYPE,
   DEVELOPMENT,
@@ -94,7 +94,7 @@ export function isSorted({ array, order }: isSortedProps) {
   }
   return true;
 }
-// BASET RELATED
+// BASKET RELATED
 const orderedProductSchema = z.array(
   z.object({
     id: z.string(),
@@ -103,13 +103,36 @@ const orderedProductSchema = z.array(
   })
 );
 type BasketState = OrderedProduct[];
-type BasketAction = {
-  type: (typeof BASKET_REDUCER_TYPE)[keyof typeof BASKET_REDUCER_TYPE];
-  product?: OrderedProduct;
-  newBasket?: BasketState;
-  productId?: string;
-  quantity?: number;
+
+type ProductId = string;
+type Quantity = number;
+
+type UpdateQuantityAction = {
+  type: (typeof BASKET_REDUCER_TYPE)["UPDATE_QUANTITY"];
+  productId: ProductId;
+  quantity: Quantity;
 };
+
+type SetAction = {
+  type: (typeof BASKET_REDUCER_TYPE)["SET"];
+  newBasket: BasketState;
+};
+
+type AddAction = {
+  type: (typeof BASKET_REDUCER_TYPE)["ADD"];
+  product: BasketState[0];
+};
+
+type RemoveAction = {
+  type: (typeof BASKET_REDUCER_TYPE)["REMOVE"];
+  productId: ProductId;
+};
+
+export type BasketAction =
+  | UpdateQuantityAction
+  | SetAction
+  | AddAction
+  | RemoveAction;
 
 export type OrderedProduct = {
   id: string;
@@ -121,7 +144,7 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
 
   function removeFromBasket(
     state: BasketState,
-    productId: BasketAction["productId"]
+    productId: RemoveAction["productId"]
   ) {
     return state.filter((product) => product.id !== productId);
   }
@@ -139,8 +162,10 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
           if (action.quantity != null && product.id === action.productId) {
             return { ...product, quantity: action.quantity };
           }
+
           return product;
         });
+
         return updatedState;
       }
       if (action.quantity === 0) {
@@ -175,74 +200,51 @@ export const useBasket = () => {
   const initialState: BasketState = [];
   const [basket, dispatchBasket] = useReducer(basketReducer, initialState);
 
+  const { SET } = BASKET_REDUCER_TYPE;
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
     const newBasketStringified = localStorage.getItem(
       LOCALE_STORAGE_BASKET_KEY
     );
+
     if (newBasketStringified) {
       const newBasket = orderedProductSchema.parse(
         JSON.parse(newBasketStringified)
       );
-      dispatchBasket({ type: "SET", newBasket });
+      dispatchBasket({ type: SET, newBasket });
     }
   }, []);
 
   useEffect(() => {
+    const newBasketStringified = localStorage.getItem(
+      LOCALE_STORAGE_BASKET_KEY
+    );
+
+    if (newBasketStringified) {
+      try {
+        const newBasket = orderedProductSchema.parse(
+          JSON.parse(newBasketStringified)
+        );
+        dispatchBasket({ type: SET, newBasket });
+      } catch (error) {
+        consoleError("Failed to parse the basket from localStorage", error);
+        localStorage.removeItem(LOCALE_STORAGE_BASKET_KEY);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     localStorage.setItem(LOCALE_STORAGE_BASKET_KEY, JSON.stringify(basket));
   }, [basket]);
 
   return { basket, dispatchBasket };
 };
-// /BASKET RELATED
-
-// export const useBasket = () => {
-//   type OrderedProduct = {
-//     id: string;
-//     quantity: number;
-//     optionId: string;
-//   };
-//   const [basket, setBasket] = useState<OrderedProduct[]>([]);
-
-//   useEffect(() => {
-//     const orderedProductSchema = z.array(
-//       z.object({
-//         id: z.string(),
-//         quantity: z.number(),
-//         optionId: z.string(),
-//       })
-//     );
-//     const newBasketStringified = localStorage.getItem(
-//       LOCALE_STORAGE_BASKET_KEY
-//     );
-//     if (newBasketStringified) {
-//       const newBasket = orderedProductSchema.parse(
-//         JSON.parse(newBasketStringified)
-//       );
-//       setBasket(newBasket);
-//     }
-//   }, []);
-
-//   useEffect(() => {
-//     localStorage.setItem(LOCALE_STORAGE_BASKET_KEY, JSON.stringify(basket));
-//   }, [basket]);
-
-//   const addToBasket = (product: OrderedProduct) => {
-//     setBasket((prevBasket) => [...prevBasket, product]);
-//   };
-
-//   const removeFromBasket = (productId: string) => {
-//     setBasket((prevBasket) => {
-//       const updatedBasket = prevBasket.filter(
-//         (product) => product.id !== productId
-//       );
-//       return updatedBasket;
-//     });
-//   };
-
-//   return { basket, addToBasket, removeFromBasket, setBasket };
-// };
-
-// ================================================
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

@@ -60,9 +60,8 @@ export const CLOSE_TYPE = "close"
 // /modals
 
 export const BASKET_REDUCER_TYPE = {
-  ADD: 'add',
-  REMOVE: 'remove',
-  SET: 'set',
-  UPDATE_QUANTITY: 'update quantity',
-
-}
+  ADD: "add",
+  REMOVE: "remove",
+  SET: "set",
+  UPDATE_QUANTITY: "update quantity",
+} as const;

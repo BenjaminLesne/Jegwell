@@ -9,19 +9,24 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../../ui/AlertDialog/alert-dialog";
-import { type OrderedProduct, useBasket } from "~/lib/helpers/helpers";
+import { type OrderedProduct, type BasketAction } from "~/lib/helpers/helpers";
 import { BASKET_REDUCER_TYPE } from "~/lib/constants";
 
 type Props = {
   open: boolean;
   closeModal: () => void;
   orderedProduct: OrderedProduct;
+  dispatchBasket: React.Dispatch<BasketAction>;
 };
 
 const { UPDATE_QUANTITY } = BASKET_REDUCER_TYPE;
 
-export const QuantityModal = ({ open, closeModal, orderedProduct }: Props) => {
-  const { dispatchBasket } = useBasket();
+export const QuantityModal = ({
+  open,
+  closeModal,
+  orderedProduct,
+  dispatchBasket,
+}: Props) => {
   const [selectedQuantity, setSelectedQuantity] = useState(0);
 
   useEffect(() => {
