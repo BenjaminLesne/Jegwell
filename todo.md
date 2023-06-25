@@ -12,15 +12,9 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - use library resend to send emails cf theo video
 - make it easy for user to make feedbacks (cf webdevcody way)
 - add error message on screen when stuff goes wrong (check try catch code and consoleError in code base)
+- add a button reset the basket on the basketpage (the only way to do it now is to remove each item one by one by clicking their top right cross)
 
 Doing:
 - button option/quantity basket page with dialog
 => make a test for the basket (it should render properly when giving a basket in localstorage when we load the pageo)
 a penser qu'on va fetch les ids qu'on a dans le localStorage plus tard
-Attention, quand on clique sur l'option ca ouvre la modal des quantité...
-on a un soucis, on modifie la quantité basé sur l'identifiant du produit OR on peut avoir deux orderedProduct avec le meme id mais pas la meme option !!
-
-je dois fetch les products based on basket. i should create the api.getById endpoint, early return if the ids given are empty array
-
-
-mergedProducts have the wrong type OrderedProducts[] in index panier l.115

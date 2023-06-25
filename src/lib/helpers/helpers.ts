@@ -165,7 +165,8 @@ function reportUndefinedOrNullVars(...variables: unknown[]) {
   const undefinedOrNullVariables = [];
 
   for (let i = 0; i < variables.length; i++) {
-    if (variables[i] === undefined || variables[i] === null) {
+    if (variables[i] == null) {
+      console.log("report ran");
       undefinedOrNullVariables.push(`Variable ${String.fromCharCode(65 + i)}`);
     }
   }
@@ -221,7 +222,7 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
             product.id === action.productId &&
             product.optionId === action.optionId
           ) {
-            return { ...product, optionId: action.optionId };
+            return { ...product, optionId: action.newOptionId };
           }
 
           return product;
@@ -239,24 +240,30 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
 
     case UPDATE_QUANTITY:
       if (
-        typeof action.quantity != "number" &&
+        typeof action.quantity === "number" &&
         action.quantity > 0 &&
         action.productId &&
         action.optionId
       ) {
+        let didChange = false;
         const updatedState = state.map((product) => {
           if (
             action.quantity != null &&
             product.id === action.productId &&
             product.optionId === action.optionId
           ) {
+            didChange = true;
+
             return { ...product, quantity: action.quantity };
           }
 
           return product;
         });
 
-        return updatedState;
+        if (didChange) return updatedState;
+
+        consoleError("Could not find the product to update the quantity");
+        return [];
       }
       if (action.quantity === 0) {
         return removeFromBasket(state, action.productId);

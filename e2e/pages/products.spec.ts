@@ -5,11 +5,11 @@ import {
   isSorted,
   type isSortedProps,
 } from "~/lib/helpers/helpers";
-import { PRODUCTS_PAGE_URL } from "~/lib/constants";
+import { PRODUCTS_ROUTE } from "~/lib/constants";
 
 test.describe("the products page", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(PRODUCTS_PAGE_URL);
+    await page.goto(PRODUCTS_ROUTE);
   });
   test("products page snapshot", async ({ page }) => {
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
@@ -116,8 +116,6 @@ test.describe("the products page", () => {
       previousCategory = categories[0],
       category,
     }: TestCategory) {
-      // await page.getByText(previousCategory).nth(1).click();
-      // await page.getByRole("option", { name: category }).click();
       await page
         .getByRole("combobox")
         .filter({ hasText: previousCategory })

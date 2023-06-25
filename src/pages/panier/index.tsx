@@ -18,6 +18,7 @@ import {
   CLOSE_TYPE,
   DELIVERY_ROUTE,
   LOCALE_STORAGE_BASKET_KEY,
+  NO_OPTION,
   OPEN_TYPE,
   PRODUCTS_ROUTE,
 } from "~/lib/constants";
@@ -243,13 +244,25 @@ const BasketPage: NextPage = () => {
                   <div className="flex flex-1 flex-col">
                     <div className="flex items-center justify-between">
                       <h3 className="text-xl font-light">{product.name}</h3>
-                      <button className="justify-end">
+                      <button
+                        className="justify-end"
+                        onClick={() =>
+                          dispatchBasket({
+                            type: "remove",
+                            productId: product.id,
+                          })
+                        }
+                      >
                         <Cross className="h-4 w-4 fill-red-400" />
                       </button>
                     </div>
                     <OrderItemModifier
                       name="option"
-                      value={product.optionId}
+                      value={
+                        product.options.find(
+                          (option) => option.id.toString() === product.optionId
+                        )?.name ?? NO_OPTION
+                      }
                       onClick={() =>
                         dispatchOptionModalProps({
                           type: OPEN_TYPE,

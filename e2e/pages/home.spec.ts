@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
-import { CATEGORY, CATEGORY_TEST_ID, HOME_PAGE_URL } from "~/lib/constants";
+import { CATEGORY, CATEGORY_TEST_ID, HOME_ROUTE } from "~/lib/constants";
 
 test.describe("the header navigation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(HOME_PAGE_URL);
+    await page.goto(HOME_ROUTE);
   });
   test("home match snapshot", async ({ page }) => {
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();

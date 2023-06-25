@@ -20,11 +20,6 @@ export const FACEBOOK = "https://www.facebook.com/jegwell";
 export const DESKTOP_MAX_WIDTH = "lg:max-w-[1200px]";
 // /styles
 
-// urls
-export const PRODUCTS_PAGE_URL = '/creations'
-export const HOME_PAGE_URL = "/";
-// /urls
-
 export const CATEGORY = "catégorie";
 export const ALL_CATEGORIES = -1;
 export const SORT = "trie";
@@ -55,8 +50,8 @@ export const CATEGORY_TEST_ID = "category";
 export const LOCALE_STORAGE_BASKET_KEY = "basket";
 
 // modals
-export const OPEN_TYPE = "open"
-export const CLOSE_TYPE = "close"
+export const OPEN_TYPE = "open";
+export const CLOSE_TYPE = "close";
 // /modals
 
 export const BASKET_REDUCER_TYPE = Object.freeze({
@@ -69,4 +64,4 @@ export const BASKET_REDUCER_TYPE = Object.freeze({
   RESET: "reset",
 });
 
-export const NO_OPTION = "ORIGINAL";
+export const NO_OPTION = "Aucune";
