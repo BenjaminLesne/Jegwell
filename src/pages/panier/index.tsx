@@ -190,9 +190,28 @@ const BasketPage: NextPage = () => {
     );
   }
 
-  const subtotal = 10;
-  const totalQuantity = 10;
+  const subtotal = getSubtotalPrice(mergedProducts);
+  const totalQuantity = getTotalQuantity(mergedProducts);
 
+  function getTotalQuantity(products: typeof mergedProducts): number {
+    let totalQuantity = 0;
+    for (const product of products) {
+      totalQuantity += product.quantity;
+    }
+    return totalQuantity;
+  }
+
+  function getSubtotalPrice(items: typeof mergedProducts): number {
+    let totalPrice = 0;
+    for (const item of items) {
+      const chosenOption = item.options.find(
+        (option) => option.id.toString() === item.optionId
+      );
+      const optionPrice = chosenOption ? chosenOption.price : item.price;
+      totalPrice += optionPrice * item.quantity;
+    }
+    return totalPrice;
+  }
   return (
     <main>
       <Section className="mx-auto max-w-[50ch]  px-2">
@@ -282,7 +301,7 @@ const BasketPage: NextPage = () => {
             <Price priceInCents={subtotal} />
           </div>
           <div className="w-full text-right text-sm">
-            ({totalQuantity} {totalQuantity > 1 ? "articles" : "article"})
+            ({totalQuantity} {totalQuantity > 1 ? "bijoux" : "bijou"})
           </div>
         </section>
         <Button asChild variant="secondary" className="mx-auto block w-fit">
