@@ -81,6 +81,7 @@ export const productsRouter = createTRPCRouter({
           price: true,
           options: {
             select: {
+              id: true,
               name: true,
               price: true,
               image: {
@@ -93,6 +94,7 @@ export const productsRouter = createTRPCRouter({
         },
       } satisfies Prisma.ProductFindManyArgs;
 
-      return ctx.prisma.product.findMany(arg);
+      const result = ctx.prisma.product.findMany(arg);
+      return result;
     }),
 });

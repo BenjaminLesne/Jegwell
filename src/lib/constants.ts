@@ -59,13 +59,14 @@ export const OPEN_TYPE = "open"
 export const CLOSE_TYPE = "close"
 // /modals
 
-export const BASKET_REDUCER_TYPE = {
+export const BASKET_REDUCER_TYPE = Object.freeze({
   ADD: "add",
   REMOVE: "remove",
   SET: "set",
   UPDATE_QUANTITY: "update quantity",
   UPDATE_OPTION: "update option",
   INCREMENT: "increment",
-} as const;
+  RESET: "reset",
+});
 
 export const NO_OPTION = "ORIGINAL";

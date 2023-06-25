@@ -143,13 +143,17 @@ type IncrementAction = {
   productId: ProductId;
 };
 
+type ResetAction = {
+  type: (typeof BASKET_REDUCER_TYPE)["RESET"];
+};
 export type BasketAction =
   | UpdateQuantityAction
   | SetAction
   | AddAction
   | RemoveAction
   | UpdateOptionAction
-  | IncrementAction;
+  | IncrementAction
+  | ResetAction;
 
 export type OrderedProduct = {
   id: string;
@@ -175,7 +179,7 @@ function reportUndefinedOrNullVars(...variables: unknown[]) {
 }
 
 const basketReducer = (state: BasketState, action: BasketAction) => {
-  const { ADD, REMOVE, SET, UPDATE_QUANTITY, UPDATE_OPTION, INCREMENT } =
+  const { ADD, REMOVE, SET, UPDATE_QUANTITY, UPDATE_OPTION, INCREMENT, RESET } =
     BASKET_REDUCER_TYPE;
 
   function removeFromBasket(
@@ -195,7 +199,11 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
     case INCREMENT: {
       const product = state.find((item) => item.id === action.productId);
       if (product?.quantity) {
-        return [...state, { ...product, quantity: product?.quantity + 1 }];
+        const partialState = state.filter((item) => item.id !== product.id);
+        return [
+          ...partialState,
+          { ...product, quantity: product?.quantity + 1 },
+        ];
       } else {
         const newProduct = {
           id: action.productId,
@@ -267,6 +275,9 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
       }
       consoleError("action.productId is undefined");
       break;
+
+    case RESET:
+      return [];
 
     case SET:
       if (action.newBasket) {

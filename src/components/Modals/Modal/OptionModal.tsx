@@ -17,10 +17,33 @@ import {
 import { BASKET_REDUCER_TYPE, NO_OPTION } from "~/lib/constants";
 import Image from "next/image";
 
+type MergedProduct = {
+  id: string;
+  quantity: number;
+  optionId: string;
+  options?:
+    | {
+        id: number;
+        image: {
+          url: string;
+        };
+        price: number;
+        name: string;
+      }[]
+    | undefined;
+  image?:
+    | {
+        url: string;
+      }
+    | null
+    | undefined;
+  price?: number | undefined;
+  name?: string | undefined;
+};
 type Props = {
   open: boolean;
   closeModal: () => void;
-  orderedProduct: OrderedProduct;
+  orderedProduct: MergedProduct;
   dispatchBasket: React.Dispatch<BasketAction>;
 };
 
@@ -50,28 +73,51 @@ export const OptionModal = ({
     closeModal();
   };
 
-  // fixture for developmpent
-  const options = [{ name: "Vert", id: "0" }];
-
   return (
-    <>
-      <AlertDialog open={open}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="mb-5 text-center">
-              Choisissez votre option :
-            </AlertDialogTitle>
-            <AlertDialogDescription asChild className="my-9">
-              <ul className="mb-10 flex gap-2">
-                <li>
+    <AlertDialog open={open}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle className="mb-5 text-center">
+            Choisissez votre option :
+          </AlertDialogTitle>
+          <AlertDialogDescription asChild className="my-9">
+            <ul className="mb-10 flex gap-2">
+              <li>
+                <button
+                  className={cn(
+                    selectedOption === NO_OPTION ? "border-2" : "border-0",
+                    "border-solid",
+                    "border-black",
+                    "rounded"
+                  )}
+                  onClick={() => setSelectedOption(NO_OPTION)}
+                >
+                  <article className="flex max-w-[250px] flex-col items-center justify-center gap-1 p-4">
+                    <div className="aspect-square overflow-hidden rounded">
+                      <Image
+                        className="h-full w-full object-cover"
+                        src="/hero.webp"
+                        alt="Défaut"
+                        width={IMAGE_WIDTH}
+                        height={IMAGE_HEIGHT}
+                      />
+                    </div>
+                    <span>Original</span>
+                  </article>
+                </button>
+              </li>
+              {orderedProduct.options?.map((option) => (
+                <li key={option.id}>
                   <button
                     className={cn(
-                      selectedOption === NO_OPTION ? "border-2" : "border-0",
+                      selectedOption === option.id.toString()
+                        ? "border-2"
+                        : "border-0",
                       "border-solid",
                       "border-black",
                       "rounded"
                     )}
-                    onClick={() => setSelectedOption(NO_OPTION)}
+                    onClick={() => setSelectedOption(option.id.toString())}
                   >
                     <article className="flex max-w-[250px] flex-col items-center justify-center gap-1 p-4">
                       <div className="aspect-square overflow-hidden rounded">
@@ -83,84 +129,24 @@ export const OptionModal = ({
                           height={IMAGE_HEIGHT}
                         />
                       </div>
-                      <span>Original</span>
+                      <span>{option.name}</span>
                     </article>
                   </button>
                 </li>
-                {orderedProduct.?.map((option) => (
-                  <li key={option.id}>
-                    <button
-                      className={cn(
-                        selectedOption === option.id ? "border-2" : "border-0",
-                        "border-solid",
-                        "border-black",
-                        "rounded"
-                      )}
-                      onClick={() => setSelectedOption(option.id)}
-                    >
-                      <article className="flex max-w-[250px] flex-col items-center justify-center gap-1 p-4">
-                        <div className="aspect-square overflow-hidden rounded">
-                          <Image
-                            className="h-full w-full object-cover"
-                            src="/hero.webp"
-                            alt="Défaut"
-                            width={IMAGE_WIDTH}
-                            height={IMAGE_HEIGHT}
-                          />
-                        </div>
-                        <span>{option.name}</span>
-                      </article>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter className="flex justify-center">
-            <AlertDialogCancel onClick={closeModal}>Annuler</AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-secondary text-primary"
-              onClick={onConfirm}
-            >
-              Confirmer
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      {/* <dialog className="modal optionsModal">
-        <button className="close-button close-button--modal">
-          <svg className="close-button__cross-icon close-button__cross-icon--modal">
-            <use href="$svgs_sprite_url#cross"></use>
-          </svg>
-        </button>
-        <section>
-          <h2 className="modal__title">Choisissez votre option :</h2>
-          <ul className="product-options-wrapper">
-            <li>
-              <button className="product-option-wrapper">
-                <article className="product-option">
-                  <div className="product-option__image-wrapper">
-                    <img src="$product_default_image_url" alt="Défaut">
-                  </div>
-                  <h3 className="product-option__name">Défaut</h3>
-                </article>
-              </button>
-            </li>
-            <li>
-              <button className="product-option-wrapper">
-                <article className="product-option">
-                  <div className="product-option__image-wrapper">
-                    <img src="$option[image_url]" alt="$alt">
-                  </div>
-                  <h3 className="product-option__name">$option[name]</h3>
-                </article>
-              </button>
-            </li>
-          </ul>
-          <button className="main-call-to-action">Confirmer</button>
-        </section>
-      </dialog> */}
-    </>
+              ))}
+            </ul>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="flex justify-center">
+          <AlertDialogCancel onClick={closeModal}>Annuler</AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-secondary text-primary"
+            onClick={onConfirm}
+          >
+            Confirmer
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };

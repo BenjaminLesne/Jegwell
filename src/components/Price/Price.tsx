@@ -1,10 +1,10 @@
 import React from "react";
 import { formatPrice } from "~/lib/helpers/helpers";
 type Props = {
-  value: number;
+  priceInCents: number;
 };
-export const Price = ({ value }: Props) => {
-  const price = formatPrice(value);
+export const Price = ({ priceInCents }: Props) => {
+  const price = formatPrice(priceInCents / 100);
 
   const spaceIndex = price.indexOf(" ");
   const commaIndex = price.indexOf(",");

@@ -11,6 +11,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - delivery page
 - use library resend to send emails cf theo video
 - make it easy for user to make feedbacks (cf webdevcody way)
+- add error message on screen when stuff goes wrong (check try catch code and consoleError in code base)
 
 Doing:
 - button option/quantity basket page with dialog
