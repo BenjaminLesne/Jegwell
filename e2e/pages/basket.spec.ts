@@ -133,7 +133,7 @@ test.describe("basket page with items added to basket", () => {
       .isVisible();
   });
 
-  test.only("remove item", async ({ page }) => {
+  test("remove item", async ({ page }) => {
     const orderedProduct = page.getByRole("article").first();
     while (await orderedProduct.isVisible()) {
       const text = await orderedProduct.innerText();
@@ -143,7 +143,9 @@ test.describe("basket page with items added to basket", () => {
     }
   });
 
-  test("call to action redirect to delivery page", async ({ page }) => {
-    // expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
+  test.only("call to action redirect to delivery page", async ({ page }) => {
+    await page.getByRole("link", { name: "Passer la commande" }).click();
+    const header = page.getByText("Livraison");
+    await expect(header).toBeVisible();
   });
 });
