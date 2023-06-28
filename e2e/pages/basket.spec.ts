@@ -99,11 +99,43 @@ test.describe("basket page with items added to basket", () => {
     await page.getByRole("button", { name: "Confirmer" }).click();
   });
 
-  test.only("quantity change", async ({ page }) => {
-    await page.pause();
-    // expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
+  test("quantity change", async ({ page }) => {
+    await page.getByRole("button", { name: "Quantité: 3" }).click();
+
+    const expectedQuantitiesAfterDecrement = ["3", "2", "1", "0", "0"];
+    for (const expectedQuantityAfterDecrement of expectedQuantitiesAfterDecrement) {
+      await page
+        .getByRole("alertdialog", { name: "Choisissez une quantité :" })
+        .getByText(expectedQuantityAfterDecrement)
+        .isVisible();
+      await page.getByRole("button").first().click();
+    }
+
+    const expectedQuantitiesAfterIncrement = ["1", "2", "3", "4"] as const;
+    for (const expectedQuantityAfterIncrement of expectedQuantitiesAfterIncrement) {
+      await page
+        .getByRole("alertdialog", { name: "Choisissez une quantité :" })
+        .getByText(expectedQuantityAfterIncrement)
+        .isVisible();
+      await page.getByRole("button").first().click();
+    }
+
+    const afterDecrementLength = expectedQuantitiesAfterDecrement.length;
+    const lastExpectedQuantityAfterIncrement =
+      expectedQuantitiesAfterDecrement[afterDecrementLength] ??
+      "THERE IS NOTHING IN YOUR ARRAY DUMBASS";
+
+    await page.getByRole("button", { name: "Confirmer" }).click();
+    await page
+      .getByRole("button", {
+        name: `Quantité: ${lastExpectedQuantityAfterIncrement}`,
+      })
+      .isVisible();
   });
   test("remove item", async ({ page }) => {
+    // expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
+  });
+  test("call to action redirect to delivery page", async ({ page }) => {
     // expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
   });
 });
