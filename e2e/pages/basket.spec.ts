@@ -132,9 +132,17 @@ test.describe("basket page with items added to basket", () => {
       })
       .isVisible();
   });
-  test("remove item", async ({ page }) => {
-    // expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
+
+  test.only("remove item", async ({ page }) => {
+    const orderedProduct = page.getByRole("article").first();
+    while (await orderedProduct.isVisible()) {
+      const text = await orderedProduct.innerText();
+      const removeButton = orderedProduct.getByRole("button").first();
+      await removeButton.click();
+      await expect(page.getByText(text)).toBeHidden();
+    }
   });
+
   test("call to action redirect to delivery page", async ({ page }) => {
     // expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
   });
