@@ -55,59 +55,56 @@ const Home: NextPage = () => {
   const category = isNaN(parsedIntCategoryQuery)
     ? undefined
     : parsedIntCategoryQuery;
+    
+const initialState = {
+  category: category,
+  sort: sort,
+};
 
-  const initialState = {
-    category: category,
-    sort: sort,
-  };
+type State = {
+  category: number | undefined;
+  sort: string | undefined;
+};
 
-  type State = {
-    category: number | undefined;
-    sort: string | undefined;
-  };
+type Action = {
+  type: typeof SET_CATEGORY | typeof SET_SORT;
+  value: string | undefined;
+};
 
-  type Action = {
-    type: typeof SET_CATEGORY | typeof SET_SORT;
-    value: string | undefined;
-  };
+const reducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case SET_CATEGORY:
+      let newCategory: State["category"] = DEFAULT_CATEGORY;
+      const parsedIntValue = parseInt(action.value ?? "");
 
-  const reducer = (state: State, action: Action) => {
-    switch (action.type) {
-      case SET_CATEGORY:
-        let newCategory: State["category"] = DEFAULT_CATEGORY;
-        const parsedIntValue = parseInt(action.value ?? "");
+      if (
+        action.value != null &&
+        typeof parsedIntValue === "number" &&
+        parsedIntValue > ALL_CATEGORIES
+      ) {
+        newCategory = parsedIntValue;
+      }
 
-        if (
-          action.value != null &&
-          typeof parsedIntValue === "number" &&
-          parsedIntValue > ALL_CATEGORIES
-        ) {
-          newCategory = parsedIntValue;
-        }
+      return { ...state, category: newCategory };
 
-        return { ...state, category: newCategory };
+    case SET_SORT:
+      let newSort: State["sort"] = DEFAULT_SORT;
 
-      case SET_SORT:
-        let newSort: State["sort"] = DEFAULT_SORT;
+      if (
+        action.value != null &&
+        Object.keys(SORT_OPTIONS).includes(action.value)
+      ) {
+        newSort = action.value;
+      }
 
-        if (
-          action.value != null &&
-          Object.keys(SORT_OPTIONS).includes(action.value)
-        ) {
-          newSort = action.value;
-        }
+      return { ...state, sort: newSort };
+    default:
+      return state;
+  }
+};
 
-        return { ...state, sort: newSort };
-      default:
-        return state;
-    }
-  };
-
-  const [queryOptions, dispatchQueryOptions] = useReducer(
-    reducer,
-    initialState
-  );
-  const { basket, dispatchBasket } = useBasket();
+const [queryOptions, dispatchQueryOptions] = useReducer(reducer, initialState);
+const { dispatchBasket } = useBasket();
   const [animationsKey, setAnimationsKey] = useState<{
     [key: string]: string;
   }>({});

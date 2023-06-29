@@ -74,7 +74,6 @@ test.describe("basket page with items added to basket", () => {
     expect(orderedProducts.length).toBe(7);
 
     let targetOptionName: string | null = null;
-    await page.pause();
     for (const orderedProduct of orderedProducts) {
       await orderedProduct
         .getByRole("button")

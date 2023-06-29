@@ -17,4 +17,4 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 Doing:
 - button option/quantity basket page with dialog
 => make a test for the basket (it should render properly when giving a basket in localstorage when we load the pageo)
-a penser qu'on va fetch les ids qu'on a dans le localStorage plus tard
+=> quand je lance tous les tests pas mal échoue -> a investiger

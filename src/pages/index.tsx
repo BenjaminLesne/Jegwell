@@ -71,7 +71,7 @@ const Home: NextPage = () => {
                 >
                   <Link
                     className="m-0 w-full"
-                    href={`${PRODUCTS_ROUTE}?${CATEGORY}=${category.name}`}
+                    href={`${PRODUCTS_ROUTE}?${CATEGORY}=${category.id}`}
                   >
                     <figure
                       className={`flex aspect-[2/1] w-full overflow-hidden rounded-md ${
