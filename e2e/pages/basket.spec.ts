@@ -1,6 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { BASKET_ROUTE, PRODUCTS_ROUTE } from "~/lib/constants";
-
+import {
+  BASKET_ROUTE,
+  PRICE_TESTID,
+  PRODUCTS_ROUTE,
+  QUANTITY_TESTID,
+  SUBTOTAL_TESTID,
+} from "~/lib/constants";
 
 test.describe("basket page with no item added to basket", () => {
   test("snapshot", async ({ page }) => {
@@ -143,9 +148,35 @@ test.describe("basket page with items added to basket", () => {
     }
   });
 
-  test.only("call to action redirect to delivery page", async ({ page }) => {
+  test("call to action redirect to delivery page", async ({ page }) => {
     await page.getByRole("link", { name: "Passer la commande" }).click();
     const header = page.getByText("Livraison");
     await expect(header).toBeVisible();
+  });
+
+  test("display right total price", async ({ page }) => {
+    const displayedPriceRaw = await page
+      .getByTestId(SUBTOTAL_TESTID)
+      .innerText();
+    const orderedProducts = await page.getByRole("article").all();
+    let totalPrice = 0;
+
+    for (const orderedProduct of orderedProducts) {
+      const rawPrice = await orderedProduct
+        .getByTestId(PRICE_TESTID)
+        .innerText();
+      const rawQuantity = await orderedProduct
+        .getByTestId(QUANTITY_TESTID)
+        .innerText();
+
+      const quantity = rawQuantity.replaceAll(" ", "");
+      const price = rawPrice.replaceAll(/[\s€]/g, "").replace(",", ".");
+
+      totalPrice += (parseFloat(price) * 100 * parseFloat(quantity)) / 100;
+    }
+    const displayedPrice = displayedPriceRaw
+      .replaceAll(/[\s€]/g, "")
+      .replace(",", ".");
+    expect(totalPrice.toFixed(2)).toBe(displayedPrice);
   });
 });

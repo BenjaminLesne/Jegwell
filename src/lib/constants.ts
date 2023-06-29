@@ -65,3 +65,6 @@ export const BASKET_REDUCER_TYPE = Object.freeze({
 });
 
 export const NO_OPTION = "Aucune";
+export const SUBTOTAL_TESTID = "subtotal";
+export const QUANTITY_TESTID = "quantity";
+export const PRICE_TESTID = "price";

@@ -21,6 +21,8 @@ import {
   NO_OPTION,
   OPEN_TYPE,
   PRODUCTS_ROUTE,
+  QUANTITY_TESTID,
+  SUBTOTAL_TESTID,
 } from "~/lib/constants";
 import { cn, consoleError, useBasket } from "~/lib/helpers/helpers";
 
@@ -280,6 +282,7 @@ const BasketPage: NextPage = () => {
                           value: product,
                         })
                       }
+                      data-testid={QUANTITY_TESTID}
                     />
                   </div>
                 </div>
@@ -311,7 +314,7 @@ const BasketPage: NextPage = () => {
         <section className="my-10 flex flex-col gap-7">
           <div className="relative flex h-[1px] justify-between pt-[10px] before:absolute before:left-0 before:top-0 before:h-[1px] before:w-full before:bg-black before:content-['']">
             <h2 className="text-xl font-normal">sous-total</h2>
-            <Price priceInCents={subtotal} />
+            <Price priceInCents={subtotal} data-testid={SUBTOTAL_TESTID} />
           </div>
           <div className="w-full text-right text-sm">
             ({totalQuantity} {totalQuantity > 1 ? "bijoux" : "bijou"})
