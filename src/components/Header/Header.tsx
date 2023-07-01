@@ -5,7 +5,12 @@ import { Basket } from "~/assets/svg/Basket";
 import { Cross } from "~/assets/svg/Cross";
 import { Rings } from "~/assets/svg/Rings";
 import { capitalize, cn } from "~/lib/helpers/helpers";
-import { BASKET_ROUTE, HOME_ROUTE, PRODUCTS_ROUTE } from "~/lib/constants";
+import {
+  BASKET_ICON_TESTID,
+  BASKET_ROUTE,
+  HOME_ROUTE,
+  PRODUCTS_ROUTE,
+} from "~/lib/constants";
 
 export const Header = () => {
   const [isOpen, toggle] = useReducer((prev) => !prev, false);
@@ -36,14 +41,20 @@ export const Header = () => {
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "unset";
   }, [isOpen]);
+  
+  const headerClasses = cn(
+    "bg-white",
+    "text-primary-background-color",
+    "shadow-box-shadow-values",
+    "relative",
+    "z-30",
+    "h-16",
+    "overflow-hidden",
+    isHome ? "absolute left-0 top-0 bg-opacity-75 w-full" : ""
+  );
+
   return (
-    <header
-      className={`bg-primary-background-color text-primary-background-color shadow-box-shadow-values relative z-30 h-16 ${
-        isHome
-          ? "bg-primary-background-color absolute left-0 top-0 bg-opacity-75"
-          : ""
-      }`}
-    >
+    <header className={headerClasses}>
       <nav
         className="mx-auto flex h-full items-center justify-between px-2 md:max-w-[1200px]"
         aria-labelledby="primary-navigation"
@@ -145,6 +156,7 @@ export const Header = () => {
         <Link
           className="flex h-[100%] items-center justify-end"
           href={BASKET_ROUTE}
+          data-testid={BASKET_ICON_TESTID}
         >
           <Basket className="w-[35px] fill-transparent stroke-primary stroke-[20px]" />
         </Link>

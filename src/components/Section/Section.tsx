@@ -13,6 +13,6 @@ export const Section: React.FC<SectionProps> = ({
   className = "",
   id = "",
 }) => {
-  const classes = cn("py-5", className);
+  const classes = cn("py-5", "mx-2", className);
   return React.createElement("section", { className: classes, id }, children);
 };

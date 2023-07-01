@@ -18,3 +18,4 @@ Doing:
 - button option/quantity basket page with dialog
 => make a test for the basket (it should render properly when giving a basket in localstorage when we load the pageo)
 => quand je lance tous les tests pas mal échoue -> a investiger
+==> optionModal on mobile is not centered and make tests fails

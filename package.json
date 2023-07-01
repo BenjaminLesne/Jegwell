@@ -10,7 +10,8 @@
     "start": "next start",
     "tests": "vitest; pnpm playwright test;",
     "test:watch": "vitest watch",
-    "e2e-local": "playwright test --headed --project='Google Chrome'",
+    "testsE2e": "playwright test --forbid-only",
+    "e2e-local": "playwright test --headed --project='Mobile Chrome'",
     "e2e-local-ui": "playwright test --ui",
     "e2e-snapshots": "playwright test --update-snapshots"
   },

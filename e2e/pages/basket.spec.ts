@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
+import { waitLoadingEnds } from "e2e/utils";
 import {
+  BASKET_ICON_TESTID,
   BASKET_ROUTE,
   PRICE_TESTID,
   PRODUCTS_ROUTE,
@@ -10,6 +12,7 @@ import {
 test.describe("basket page with no item added to basket", () => {
   test("snapshot", async ({ page }) => {
     await page.goto(BASKET_ROUTE);
+    await page.getByRole("progressbar").waitFor({ state: "hidden" });
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
   });
 });
@@ -57,21 +60,20 @@ test.describe("basket page with items added to basket", () => {
       .filter({ hasText: "Paris55,55 €Ajouter au panierAjouté ✓" })
       .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
       .dblclick();
-    await page.locator("a:nth-child(5)").click();
+
+    await page.getByTestId(BASKET_ICON_TESTID).click();
     await page.waitForURL(BASKET_ROUTE);
-    await page
-      .getByRole("progressbar")
-      .locator("div")
-      .waitFor({ state: "hidden" });
+    await waitLoadingEnds({ page });
   });
 
   test("snapshot", async ({ page }) => {
+    await page.getByRole("progressbar").waitFor({ state: "hidden" });
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
   });
 
   test("option change", async ({ page }) => {
     const orderedProducts = await page.getByRole("article").all();
-    expect(orderedProducts.length).toBe(7);
+    expect(orderedProducts).toHaveLength(7);
 
     let targetOptionName: string | null = null;
     for (const orderedProduct of orderedProducts) {
@@ -104,24 +106,27 @@ test.describe("basket page with items added to basket", () => {
   });
 
   test("quantity change", async ({ page }) => {
-    await page.getByRole("button", { name: "Quantité: 3" }).click();
+    const quantityButton = page.getByRole("button", { name: "Quantité: 3" });
+    await quantityButton.click();
 
     const expectedQuantitiesAfterDecrement = ["3", "2", "1", "0", "0"];
     for (const expectedQuantityAfterDecrement of expectedQuantitiesAfterDecrement) {
-      await page
-        .getByRole("alertdialog", { name: "Choisissez une quantité :" })
-        .getByText(expectedQuantityAfterDecrement)
-        .isVisible();
+      await expect(
+        page
+          .getByRole("alertdialog", { name: "Choisissez une quantité :" })
+          .getByText(expectedQuantityAfterDecrement)
+      ).toBeVisible();
       await page.getByRole("button").first().click();
     }
 
-    const expectedQuantitiesAfterIncrement = ["1", "2", "3", "4"] as const;
+    const expectedQuantitiesAfterIncrement = ["0", "1", "2", "3", "4"] as const;
     for (const expectedQuantityAfterIncrement of expectedQuantitiesAfterIncrement) {
-      await page
-        .getByRole("alertdialog", { name: "Choisissez une quantité :" })
-        .getByText(expectedQuantityAfterIncrement)
-        .isVisible();
-      await page.getByRole("button").first().click();
+      await expect(
+        page
+          .getByRole("alertdialog", { name: "Choisissez une quantité :" })
+          .getByText(expectedQuantityAfterIncrement)
+      ).toBeVisible();
+      await page.getByRole("button", { name: "+" }).click();
     }
 
     const afterDecrementLength = expectedQuantitiesAfterDecrement.length;
@@ -149,7 +154,7 @@ test.describe("basket page with items added to basket", () => {
 
   test("call to action redirect to delivery page", async ({ page }) => {
     await page.getByRole("link", { name: "Passer la commande" }).click();
-    const header = page.getByText("Livraison");
+    const header = page.getByText("livraison");
     await expect(header).toBeVisible();
   });
 
@@ -168,14 +173,17 @@ test.describe("basket page with items added to basket", () => {
         .getByTestId(QUANTITY_TESTID)
         .innerText();
 
-      const quantity = rawQuantity.replaceAll(" ", "");
+      const quantity = rawQuantity
+        .replaceAll(" ", "")
+        .replaceAll("Quantité:", "");
       const price = rawPrice.replaceAll(/[\s€]/g, "").replace(",", ".");
 
-      totalPrice += (parseFloat(price) * 100 * parseFloat(quantity)) / 100;
+      totalPrice += parseFloat(price) * parseInt(quantity);
     }
     const displayedPrice = displayedPriceRaw
       .replaceAll(/[\s€]/g, "")
       .replace(",", ".");
+
     expect(totalPrice.toFixed(2)).toBe(displayedPrice);
   });
 });

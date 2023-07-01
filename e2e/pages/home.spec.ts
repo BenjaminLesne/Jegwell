@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { waitLoadingEnds } from "e2e/utils";
 import { CATEGORY, CATEGORY_TEST_ID, HOME_ROUTE } from "~/lib/constants";
 
 test.describe("the navigation", () => {
@@ -6,6 +7,7 @@ test.describe("the navigation", () => {
     await page.goto(HOME_ROUTE);
   });
   test("home match snapshot", async ({ page }) => {
+    await waitLoadingEnds({ page });
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
   });
 

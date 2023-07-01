@@ -68,3 +68,4 @@ export const NO_OPTION = "Aucune";
 export const SUBTOTAL_TESTID = "subtotal";
 export const QUANTITY_TESTID = "quantity";
 export const PRICE_TESTID = "price";
+export const BASKET_ICON_TESTID = "basket icon";
