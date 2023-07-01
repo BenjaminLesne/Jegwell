@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { ALL_CATEGORIES, DEFAULT_SORT, SORT_OPTIONS } from "~/lib/constants";
+import {
+  ALL_CATEGORIES,
+  DEFAULT_SORT,
+  GET_BY_IDS,
+  SORT_OPTIONS,
+} from "~/lib/constants";
 import { type Prisma } from "@prisma/client";
 
 const getAllInputSchema = z
@@ -14,7 +19,7 @@ const getAllInputSchema = z
 
 const getByIdsInputSchema = z
   .object({
-    ids: z.array(z.string()),
+    ids: z.array(z.string().optional()),
   })
   .optional();
 
@@ -53,7 +58,7 @@ export const productsRouter = createTRPCRouter({
 
       return ctx.prisma.product.findMany(arg);
     }),
-  getByIds: publicProcedure
+  [GET_BY_IDS]: publicProcedure
     .input(getByIdsInputSchema)
     .query(({ ctx, input = {} }) => {
       const { ids = [] } = input;

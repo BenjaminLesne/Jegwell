@@ -6,6 +6,7 @@ export const DEVELOPMENT = "development";
 // routes
 export const HOME_ROUTE = "/";
 export const PRODUCTS_ROUTE = "/creations";
+export const SINGLE_PRODUCT_ROUTE = "/creations/";
 export const BASKET_ROUTE = "/panier";
 export const DELIVERY_ROUTE = "/livraison";
 // /routes
@@ -69,3 +70,7 @@ export const SUBTOTAL_TESTID = "subtotal";
 export const QUANTITY_TESTID = "quantity";
 export const PRICE_TESTID = "price";
 export const BASKET_ICON_TESTID = "basket icon";
+
+// api endpoints
+export const GET_BY_IDS = "getByIds"
+// /api endpoints

@@ -222,7 +222,6 @@ const BasketPage: NextPage = () => {
         <ul className="flex flex-col gap-10">
           {mergedProducts.map((product) => (
             <li key={product.id + product.optionId}>
-              <h1>#{product.id}</h1>
               <article>
                 <div className="flex gap-5">
                   <div

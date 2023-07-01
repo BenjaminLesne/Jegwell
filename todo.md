@@ -13,9 +13,8 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - make it easy for user to make feedbacks (cf webdevcody way)
 - add error message on screen when stuff goes wrong (check try catch code and consoleError in code base)
 - add a button reset the basket on the basketpage (the only way to do it now is to remove each item one by one by clicking their top right cross)
+- create a 404 template
+- optimiser les requetes (getServerSideProps, getStaticProps)
 
 Doing:
-- button option/quantity basket page with dialog
-=> make a test for the basket (it should render properly when giving a basket in localstorage when we load the pageo)
-=> quand je lance tous les tests pas mal échoue -> a investiger
-==> optionModal on mobile is not centered and make tests fails
+- delivery page

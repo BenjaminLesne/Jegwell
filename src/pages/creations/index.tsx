@@ -9,6 +9,7 @@ import {
   CATEGORY,
   DEFAULT_CATEGORY,
   DEFAULT_SORT,
+  SINGLE_PRODUCT_ROUTE,
   SORT,
   SORT_OPTIONS,
   SORT_OPTIONS_NAMES,
@@ -45,7 +46,7 @@ const { INCREMENT } = BASKET_REDUCER_TYPE;
 const SET_CATEGORY = "SET_CATEGORY";
 const SET_SORT = "SET_SORT";
 
-const Home: NextPage = () => {
+const ProductsPage: NextPage = () => {
   const router = useRouter();
   const categoryQuery = router.query[CATEGORY];
   const sortQuery = router.query[SORT];
@@ -55,56 +56,59 @@ const Home: NextPage = () => {
   const category = isNaN(parsedIntCategoryQuery)
     ? undefined
     : parsedIntCategoryQuery;
-    
-const initialState = {
-  category: category,
-  sort: sort,
-};
 
-type State = {
-  category: number | undefined;
-  sort: string | undefined;
-};
+  const initialState = {
+    category: category,
+    sort: sort,
+  };
 
-type Action = {
-  type: typeof SET_CATEGORY | typeof SET_SORT;
-  value: string | undefined;
-};
+  type State = {
+    category: number | undefined;
+    sort: string | undefined;
+  };
 
-const reducer = (state: State, action: Action) => {
-  switch (action.type) {
-    case SET_CATEGORY:
-      let newCategory: State["category"] = DEFAULT_CATEGORY;
-      const parsedIntValue = parseInt(action.value ?? "");
+  type Action = {
+    type: typeof SET_CATEGORY | typeof SET_SORT;
+    value: string | undefined;
+  };
 
-      if (
-        action.value != null &&
-        typeof parsedIntValue === "number" &&
-        parsedIntValue > ALL_CATEGORIES
-      ) {
-        newCategory = parsedIntValue;
-      }
+  const reducer = (state: State, action: Action) => {
+    switch (action.type) {
+      case SET_CATEGORY:
+        let newCategory: State["category"] = DEFAULT_CATEGORY;
+        const parsedIntValue = parseInt(action.value ?? "");
 
-      return { ...state, category: newCategory };
+        if (
+          action.value != null &&
+          typeof parsedIntValue === "number" &&
+          parsedIntValue > ALL_CATEGORIES
+        ) {
+          newCategory = parsedIntValue;
+        }
 
-    case SET_SORT:
-      let newSort: State["sort"] = DEFAULT_SORT;
+        return { ...state, category: newCategory };
 
-      if (
-        action.value != null &&
-        Object.keys(SORT_OPTIONS).includes(action.value)
-      ) {
-        newSort = action.value;
-      }
+      case SET_SORT:
+        let newSort: State["sort"] = DEFAULT_SORT;
 
-      return { ...state, sort: newSort };
-    default:
-      return state;
-  }
-};
+        if (
+          action.value != null &&
+          Object.keys(SORT_OPTIONS).includes(action.value)
+        ) {
+          newSort = action.value;
+        }
 
-const [queryOptions, dispatchQueryOptions] = useReducer(reducer, initialState);
-const { dispatchBasket } = useBasket();
+        return { ...state, sort: newSort };
+      default:
+        return state;
+    }
+  };
+
+  const [queryOptions, dispatchQueryOptions] = useReducer(
+    reducer,
+    initialState
+  );
+  const { dispatchBasket } = useBasket();
   const [animationsKey, setAnimationsKey] = useState<{
     [key: string]: string;
   }>({});
@@ -292,7 +296,12 @@ const { dispatchBasket } = useBasket();
                     <li key={product.id}>
                       <Card className="mx-auto max-w-[250px]">
                         <CardHeader>
-                          <Link href={product.id.toString() ?? "#"}>
+                          <Link
+                            href={
+                              SINGLE_PRODUCT_ROUTE + product.id.toString() ??
+                              "#"
+                            }
+                          >
                             <div className="relative m-0 aspect-square w-full overflow-hidden rounded-md object-cover shadow-md">
                               <Image
                                 src={product.image?.url ?? "#"}
@@ -373,4 +382,4 @@ const { dispatchBasket } = useBasket();
   );
 };
 
-export default Home;
+export default ProductsPage;
