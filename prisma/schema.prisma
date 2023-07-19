@@ -22,8 +22,8 @@ model Product {
   productId   String?
   relateTo    Product[]  @relation("RelatedProducts")
   relatedBy   Product[]  @relation("RelatedProducts")
-  image       Image?     @relation(fields: [imageId], references: [id])
-  imageId     Int?
+  image       Image     @relation(fields: [imageId], references: [id])
+  imageId     Int
 
   @@index([imageId])
 }

@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useReducer } from "react";
 import { z } from "zod";
 import { Cross } from "~/assets/svg/Cross";
-import { OrderItemModifier } from "~/components/Button/OrderItemModifier";
+import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
 import { Loading } from "~/components/Loading/Loading";
 import { OptionModal } from "~/components/Modals/Modal/OptionModal";
 import { QuantityModal } from "~/components/Modals/Modal/QuantityModal";
@@ -23,8 +23,10 @@ import {
   PRODUCTS_ROUTE,
   QUANTITY_TESTID,
   SUBTOTAL_TESTID,
+  mergedProductsSchema,
 } from "~/lib/constants";
 import { cn, consoleError, useBasket } from "~/lib/helpers/helpers";
+import { MergedProduct } from "~/lib/types";
 
 const PRODUCT_INFO = "orderedProduct";
 const initialModalProps = {
@@ -96,25 +98,6 @@ const optionReducer = (
   return state;
 };
 
-export type MergedProduct = {
-  quantity: number;
-  optionId: string;
-  image: {
-    url: string;
-  };
-  options: {
-    image: {
-      url: string;
-    };
-    id: number;
-    price: number;
-    name: string;
-  }[];
-  id: string;
-  price: number;
-  name: string;
-};
-
 const BasketPage: NextPage = () => {
   const [quantityModalProps, dispatchQuantityModalProps] = useReducer(
     quantityReducer,
@@ -137,29 +120,6 @@ const BasketPage: NextPage = () => {
         <Loading />
       </main>
     );
-
-  const mergedProductsSchema = z.array(
-    z.object({
-      id: z.string(),
-      quantity: z.number(),
-      optionId: z.string(),
-      image: z.object({
-        url: z.string(),
-      }),
-      options: z.array(
-        z.object({
-          image: z.object({
-            url: z.string(),
-          }),
-          id: z.number(),
-          price: z.number(),
-          name: z.string(),
-        })
-      ),
-      price: z.number(),
-      name: z.string(),
-    })
-  );
 
   const mergedProductsRaw = basket.map((item) => {
     const product = products?.find(

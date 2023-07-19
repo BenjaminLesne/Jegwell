@@ -1,4 +1,5 @@
 import { type Prisma } from "@prisma/client";
+import { z } from "zod";
 
 export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
@@ -72,5 +73,29 @@ export const PRICE_TESTID = "price";
 export const BASKET_ICON_TESTID = "basket icon";
 
 // api endpoints
-export const GET_BY_IDS = "getByIds"
+export const GET_BY_IDS = "getByIds";
 // /api endpoints
+
+// prisma schema
+export const mergedProductSchema = z.object({
+  id: z.string(),
+  quantity: z.number(),
+  optionId: z.string(),
+  image: z.object({
+    url: z.string(),
+  }),
+  options: z.array(
+    z.object({
+      image: z.object({
+        url: z.string(),
+      }),
+      id: z.number(),
+      price: z.number(),
+      name: z.string(),
+    })
+  ),
+  price: z.number(),
+  name: z.string(),
+});
+export const mergedProductsSchema = z.array(mergedProductSchema);
+// /prisma schema

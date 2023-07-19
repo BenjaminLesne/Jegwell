@@ -23,6 +23,10 @@ const getByIdsInputSchema = z
   })
   .optional();
 
+const getBySingleIdInputSchema = z.object({
+  id: z.string().optional(),
+});
+
 export const productsRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(getAllInputSchema)
@@ -60,13 +64,13 @@ export const productsRouter = createTRPCRouter({
     }),
   [GET_BY_IDS]: publicProcedure
     .input(getByIdsInputSchema)
-    .query(({ ctx, input = {} }) => {
-      const { ids = [] } = input;
+    .query(({ ctx, input = { ids: [] } }) => {
+      const { ids } = input;
 
       if (ids?.length === 0) return [];
 
       const idsAsNumbers = ids
-        .map((id: string) => parseInt(id))
+        .map((id) => parseInt(id ?? "not a number"))
         .filter((id: number) => !isNaN(id));
 
       const arg = {
@@ -100,6 +104,47 @@ export const productsRouter = createTRPCRouter({
       } satisfies Prisma.ProductFindManyArgs;
 
       const result = ctx.prisma.product.findMany(arg);
+      return result;
+    }),
+  getBySingleId: publicProcedure
+    .input(getBySingleIdInputSchema)
+    .query(({ ctx, input = {} }) => {
+      const { id } = input;
+
+      if (id == null) return;
+
+      const arg = {
+        where: {
+          id: {
+            in: [parseInt(id)],
+          },
+        },
+        select: {
+          name: true,
+          image: {
+            select: {
+              url: true,
+            },
+          },
+          id: true,
+          price: true,
+          description: true,
+          options: {
+            select: {
+              id: true,
+              name: true,
+              price: true,
+              image: {
+                select: {
+                  url: true,
+                },
+              },
+            },
+          },
+        },
+      } satisfies Prisma.ProductFindFirstArgs;
+
+      const result = ctx.prisma.product.findFirst(arg);
       return result;
     }),
 });
