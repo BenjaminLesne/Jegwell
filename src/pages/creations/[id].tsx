@@ -73,6 +73,7 @@ const SingleProductPage: NextPage = () => {
     dispatchBasket({ type: INCREMENT, productId });
     incrementAnimationKey();
   };
+
   return (
     <>
       <Head>
@@ -82,21 +83,23 @@ const SingleProductPage: NextPage = () => {
         </title>
       </Head>
       <main>
+        <div className="media-scroller snaps-inline w-60"></div>
         <Section>
           <h1 className="sr-only">{product.name}</h1>
           <div className="lg:flex lg:gap-20">
             <div className="media-scroller-wrapper">
-              <div className="media-scroller snaps-inline">
+              <div className="media-scroller snaps-inline w-60"></div>
+              {/* <div className="media-scroller snaps-inline">
                 <div className="media-element">
-                  <Image
-                    src={product.image.url}
+                <Image
+                src={product.image.url}
                     alt="$main_image_alt"
                     width={200}
                     height={200}
                   />
                 </div>
                 $option_images_html;
-              </div>
+              </div> */}
               <div className="media-scroller-wrapper__buttons">
                 <button className="media-scroller-wrapper__button media-scroller-wrapper__button--left">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -117,12 +120,24 @@ const SingleProductPage: NextPage = () => {
                     {product.name}
                   </span>
                   <span className="grid items-center text-xl font-bold">
-                    $price_html
+                    13,99 €
                   </span>
                 </div>
                 <div className="relative min-h-[100px]">
-                  <p>{product.description}</p>
-                  <div className="aboslute before:to-rgb-primary-background-color bottom-0 left-0 w-full before:block before:h-3 before:w-full before:bg-gradient-to-b before:from-transparent before:content-[''] ">
+                  <p>
+                    {product.description} Lorem Ipsum is simply dummy text of
+                    the printing and typesetting industry. Lorem Ipsum has been
+                    the industry's standard dummy text ever since the 1500s,
+                    when an unknown printer took a galley of type and scrambled
+                    it to make a type specimen book. It has survived not only
+                    five centuries, but also the leap into electronic
+                    typesetting, remaining essentially unchanged. It was
+                    popularised in the 1960s with the release of Letraset sheets
+                    containing Lorem Ipsum passages, and more recently with
+                    desktop publishing software like Aldus PageMaker including
+                    versions of Lorem Ipsum.
+                  </p>
+                  {/* <div className="aboslute before:to-rgb-primary-background-color bottom-0 left-0 w-full before:block before:h-3 before:w-full before:bg-gradient-to-b before:from-transparent before:content-[''] ">
                     <div className="flex w-full flex-col items-center justify-center bg-white">
                       <button className="m-0">
                         <span className="rounded border-2 border-solid px-1 py-3 text-center text-xs">
@@ -130,29 +145,30 @@ const SingleProductPage: NextPage = () => {
                         </span>
                       </button>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="mb-10 mt-4">
-                  <button className="relative m-0 flex h-[1.5px] w-full justify-between text-base after:absolute after:bottom-[-4px] after:left-0 after:w-full after:content-['']">
+                  <button className="relative m-0 flex h-12 w-full items-center justify-between text-base after:absolute after:bottom-[-4px] after:left-0 after:h-[1.5px] after:w-full after:content-['']">
                     <span>Option:</span>
                     <div className="flex gap-3">
-                      <span>$option_selected_sanitized</span>
-                      <div className="my-auto mb-2 h-1 w-1 rotate-45 border-b-2 border-r-2 border-solid border-black"></div>
+                      <span>Vert</span>
+                      <div className="my-auto mb-2 h-2 w-2 rotate-45 border-b-2 border-r-2 border-solid border-black"></div>
                     </div>
                   </button>
-                  <button className="relative m-0 flex w-full justify-between text-base">
+                  <div className="bottom-[-4px] left-0 my-1 h-[1.5px] w-full bg-gray-500 bg-opacity-25"></div>
+                  <button className="relative m-0 flex h-12 w-full items-center justify-between text-base">
                     <span>Quantité:</span>
                     <div className="flex gap-3">
                       <span>1</span>
-                      <div className="my-auto mb-2 h-1 w-1 rotate-45 border-b-2 border-r-2 border-solid border-black"></div>
+                      <div className="my-auto mb-2 h-2 w-2 rotate-45 border-b-2 border-r-2 border-solid border-black"></div>
                     </div>
                   </button>
                 </div>
 
                 <Button
                   variant="secondary"
-                  className="relative overflow-hidden border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black"
+                  className="relative h-12 w-full overflow-hidden border-[1px] border-solid bg-secondary px-2 py-[10px] text-lg font-medium text-primary"
                   onClick={() =>
                     addToBasket({
                       productId: product.id.toString(),

@@ -19,3 +19,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 
 Doing:
 - delivery page
+
+
+Note:
+When you awake the ps database you have to restard the frontend server aswell
