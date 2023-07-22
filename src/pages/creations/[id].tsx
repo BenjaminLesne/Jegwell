@@ -31,7 +31,7 @@ import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
 import { useOptionModal } from "~/lib/hooks/hooks";
 import { OptionModal } from "~/components/Modals/Modal/OptionModal";
 
-const { RESET, INCREMENT } = BASKET_REDUCER_TYPE;
+const { RESET, ADD } = BASKET_REDUCER_TYPE;
 
 type PartialOrderState = Pick<OrderedProduct, "quantity" | "optionId">;
 
@@ -154,11 +154,13 @@ const SingleProductPage: NextPage = () => {
     if (basket.length > 0) dispatchBasket({ type: RESET });
   }
 
-  type AddToBasketProps = {
-    productId: string;
-  };
-  const addToBasket = ({ productId }: AddToBasketProps) => {
-    dispatchBasket({ type: INCREMENT, productId });
+  const addToBasket = () => {
+    const cleanProduct = {
+      id: product.id.toString(),
+      ...partialOrder,
+    };
+    console.log("cleanProduct", cleanProduct);
+    dispatchBasket({ type: ADD, product: cleanProduct });
     incrementAnimationKey();
   };
   const settings: Settings = {
@@ -178,7 +180,7 @@ const SingleProductPage: NextPage = () => {
     const { newOptionId } = dispatchBasketArgs;
     dispatchPartialOrder({ type: UPDATE_OPTION, value: newOptionId });
   };
-
+  const images = product.options.map((option) => option.image.url);
   return (
     <>
       <Head>
@@ -188,18 +190,26 @@ const SingleProductPage: NextPage = () => {
         </title>
       </Head>
       <main>
-        {JSON.stringify(partialOrder)}
         <Section>
           <h1 className="sr-only">{product.name}</h1>
           <div className="flex flex-col lg:flex-row lg:gap-20">
             <div className="mx-auto w-[400px] max-w-full lg:mx-0 lg:mt-5">
               <div className="h-full">
                 <Slider {...settings}>
-                  {[1, 2, 3, 4].map((item, index) => (
-                    <div key={index} className="">
+                  <div>
+                    <Image
+                      src={product.image.url}
+                      alt={product.name}
+                      width={400}
+                      height={400}
+                      className="mx-auto h-[400px] max-h-[400px] w-[400px] max-w-full object-cover lg:mt-5"
+                    />
+                  </div>
+                  {images.map((image, index) => (
+                    <div key={index}>
                       <Image
-                        src={product.image.url}
-                        alt="$main_image_alt"
+                        src={image}
+                        alt={product.name}
                         width={400}
                         height={400}
                         className="mx-auto h-[400px] max-h-[400px] w-[400px] max-w-full object-cover lg:mt-5"
@@ -268,11 +278,7 @@ const SingleProductPage: NextPage = () => {
                 <Button
                   variant="secondary"
                   className="relative h-12 w-full overflow-hidden border-[1px] border-solid bg-secondary px-2 py-[10px] text-lg font-medium text-primary"
-                  onClick={() =>
-                    addToBasket({
-                      productId: product.id.toString(),
-                    })
-                  }
+                  onClick={addToBasket}
                 >
                   <span>Ajouter au panier</span>
                   <span

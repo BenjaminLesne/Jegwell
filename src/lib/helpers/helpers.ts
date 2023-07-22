@@ -8,6 +8,7 @@ import {
 import { z } from "zod";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { RemoveFormattingIcon } from "lucide-react";
 
 type GetSelectFieldsProps = {
   fields: string[];
@@ -129,6 +130,7 @@ type AddAction = {
 type RemoveAction = {
   type: (typeof BASKET_REDUCER_TYPE)["REMOVE"];
   productId: ProductId;
+  optionId: OptionId;
 };
 
 type UpdateOptionAction = {
@@ -182,16 +184,37 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
   const { ADD, REMOVE, SET, UPDATE_QUANTITY, UPDATE_OPTION, INCREMENT, RESET } =
     BASKET_REDUCER_TYPE;
 
-  function removeFromBasket(
-    state: BasketState,
-    productId: RemoveAction["productId"]
-  ) {
-    return state.filter((product) => product.id !== productId);
+  type RemoveFromBasketProps = {
+    state: BasketState;
+    productId: RemoveAction["productId"];
+    optionId: RemoveAction["optionId"];
+  };
+
+  function removeFromBasket({
+    state,
+    productId,
+    optionId,
+  }: RemoveFromBasketProps) {
+    return state.filter(
+      (product) => product.id !== productId && product.optionId !== optionId
+    );
   }
 
   switch (action.type) {
     case ADD:
-      if (action.product) return [...state, action.product];
+      if (action.product) {
+        const optionId = action.product.optionId;
+        const productId = action.product.id;
+        const targetProduct = state.find((product) => product.id === productId);
+        if (targetProduct === undefined) return [...state, action.product];
+
+        const newState = removeFromBasket({ state, productId, optionId });
+        const newProduct = {
+          ...action.product,
+          quantity: action.product.quantity + targetProduct.quantity,
+        };
+        return [...newState, newProduct];
+      }
 
       consoleError("action.product is undefined");
       break;
@@ -265,7 +288,8 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
         return [];
       }
       if (action.quantity === 0) {
-        return removeFromBasket(state, action.productId);
+        const { productId, optionId } = action;
+        return removeFromBasket({ state, productId, optionId });
       }
 
       reportUndefinedOrNullVars(
@@ -277,7 +301,8 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
 
     case REMOVE:
       if (action.productId) {
-        return removeFromBasket(state, action.productId);
+        const { optionId, productId } = action;
+        return removeFromBasket({ state, productId, optionId });
       }
       consoleError("action.productId is undefined");
       break;
