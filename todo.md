@@ -18,9 +18,9 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - add eslint pluging for tech I use (prettier, etc check tweet I retweeted from cory house)
 
 Doing:
-- delivery page
-=> option modal done, quantity modal todo
-
+- single product page
+=> when adding product option vert then adding product with option original, it remove the product with option vert from basket and add product original with the quantity of the vert that would have get if selected instead.
+=> make a e2e test for it
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

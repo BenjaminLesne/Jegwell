@@ -12,11 +12,20 @@ import {
 import { type OrderedProduct, type BasketAction } from "~/lib/helpers/helpers";
 import { BASKET_REDUCER_TYPE } from "~/lib/constants";
 
+type OnQuantityConfirm = (
+  dispatchBasketArgs: Extract<
+    BasketAction,
+    {
+      type: (typeof BASKET_REDUCER_TYPE)["UPDATE_QUANTITY"];
+    }
+  >
+) => void;
+
 type Props = {
   open: boolean;
   closeModal: () => void;
   orderedProduct: OrderedProduct;
-  dispatchBasket: React.Dispatch<BasketAction>;
+  onConfirmation: React.Dispatch<BasketAction> | OnQuantityConfirm;
 };
 
 const { UPDATE_QUANTITY } = BASKET_REDUCER_TYPE;
@@ -56,7 +65,7 @@ export const QuantityModal = ({
   open,
   closeModal,
   orderedProduct,
-  dispatchBasket,
+  onConfirmation,
 }: Props) => {
   const [selectedQuantity, dispatchSelectedQuantity] = useReducer(
     selectedQuantityReducer,
@@ -69,7 +78,7 @@ export const QuantityModal = ({
   }, [orderedProduct]);
 
   const onConfirm = () => {
-    dispatchBasket({
+    onConfirmation({
       type: UPDATE_QUANTITY,
       quantity: selectedQuantity,
       productId: orderedProduct.id,

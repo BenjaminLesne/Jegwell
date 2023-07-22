@@ -17,7 +17,6 @@ import {
   BASKET_REDUCER_TYPE,
   CLOSE_TYPE,
   DELIVERY_ROUTE,
-  LOCALE_STORAGE_BASKET_KEY,
   NO_OPTION,
   OPEN_TYPE,
   PRODUCTS_ROUTE,
@@ -26,87 +25,96 @@ import {
   mergedProductsSchema,
 } from "~/lib/constants";
 import { cn, consoleError, useBasket } from "~/lib/helpers/helpers";
+import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 import { type MergedProduct } from "~/lib/types";
 
-const PRODUCT_INFO = "orderedProduct";
-const initialModalProps = {
-  [PRODUCT_INFO]: {
-    id: "-1",
-    optionId: "-1",
-    quantity: -1,
-  },
-  open: false,
-};
+// const PRODUCT_INFO = "orderedProduct";
+// const initialModalProps = {
+//   [PRODUCT_INFO]: {
+//     id: "-1",
+//     optionId: "-1",
+//     quantity: -1,
+//   },
+//   open: false,
+// };
 
-type QuantityModalPropsState = {
-  [PRODUCT_INFO]: {
-    id: string;
-    optionId: string;
-    quantity: number;
-  };
-  open: boolean;
-};
+// type QuantityModalPropsState = {
+//   [PRODUCT_INFO]: {
+//     id: string;
+//     optionId: string;
+//     quantity: number;
+//   };
+//   open: boolean;
+// };
 
-type QuantityModalPropsAction = {
-  type: typeof OPEN_TYPE | typeof CLOSE_TYPE;
-  value?: QuantityModalPropsState[typeof PRODUCT_INFO];
-};
+// type QuantityModalPropsAction = {
+//   type: typeof OPEN_TYPE | typeof CLOSE_TYPE;
+//   value?: QuantityModalPropsState[typeof PRODUCT_INFO];
+// };
 
-const quantityReducer = (
-  state: QuantityModalPropsState,
-  action: QuantityModalPropsAction
-) => {
-  switch (action.type) {
-    case OPEN_TYPE:
-      if (action.value)
-        return {
-          open: true,
-          [PRODUCT_INFO]: action.value,
-        };
-      break;
+// const quantityReducer = (
+//   state: QuantityModalPropsState,
+//   action: QuantityModalPropsAction
+// ) => {
+//   switch (action.type) {
+//     case OPEN_TYPE:
+//       if (action.value)
+//         return {
+//           open: true,
+//           [PRODUCT_INFO]: action.value,
+//         };
+//       break;
 
-    case CLOSE_TYPE:
-      return { ...state, open: false };
+//     case CLOSE_TYPE:
+//       return { ...state, open: false };
 
-    default:
-      return state;
-  }
+//     default:
+//       return state;
+//   }
 
-  return state;
-};
+//   return state;
+// };
 
-const optionReducer = (
-  state: QuantityModalPropsState,
-  action: QuantityModalPropsAction
-) => {
-  switch (action.type) {
-    case OPEN_TYPE:
-      if (action.value)
-        return {
-          open: true,
-          [PRODUCT_INFO]: action.value,
-        };
-      break;
+// const optionReducer = (
+//   state: QuantityModalPropsState,
+//   action: QuantityModalPropsAction
+// ) => {
+//   switch (action.type) {
+//     case OPEN_TYPE:
+//       if (action.value)
+//         return {
+//           open: true,
+//           [PRODUCT_INFO]: action.value,
+//         };
+//       break;
 
-    case CLOSE_TYPE:
-      return { ...state, open: false };
+//     case CLOSE_TYPE:
+//       return { ...state, open: false };
 
-    default:
-      return state;
-  }
+//     default:
+//       return state;
+//   }
 
-  return state;
-};
+//   return state;
+// };
 
 const BasketPage: NextPage = () => {
-  const [quantityModalProps, dispatchQuantityModalProps] = useReducer(
-    quantityReducer,
-    initialModalProps
-  );
-  const [optionModalProps, dispatchOptionModalProps] = useReducer(
-    optionReducer,
-    initialModalProps
-  );
+  // const [quantityModalProps, dispatchQuantityModalProps] = useReducer(
+  //   quantityReducer,
+  //   initialModalProps
+  // );
+  const {
+    quantityModal: quantityModalProps,
+    dispatchQuantityModal: dispatchQuantityModalProps,
+  } = useQuantityModal();
+  // const [optionModalProps, dispatchOptionModalProps] = useReducer(
+  //   optionReducer,
+  //   initialModalProps
+  // );
+  const {
+    optionModal: optionModalProps,
+    dispatchOptionModal: dispatchOptionModalProps,
+  } = useOptionModal();
   const { basket, dispatchBasket } = useBasket();
 
   const { data: products, isLoading: productsAreLoading } =
@@ -211,6 +219,7 @@ const BasketPage: NextPage = () => {
                           dispatchBasket({
                             type: "remove",
                             productId: product.id,
+                            optionId: product.optionId,
                           })
                         }
                       >
@@ -269,7 +278,7 @@ const BasketPage: NextPage = () => {
               type: CLOSE_TYPE,
             })
           }
-          dispatchBasket={dispatchBasket}
+          onConfirmation={dispatchBasket}
         />
         <section className="my-10 flex flex-col gap-7">
           <div className="relative flex h-[1px] justify-between pt-[10px] before:absolute before:left-0 before:top-0 before:h-[1px] before:w-full before:bg-black before:content-['']">

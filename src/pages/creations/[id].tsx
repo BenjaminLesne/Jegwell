@@ -15,21 +15,22 @@ import {
   NO_OPTION,
   OPEN_TYPE,
   PRODUCTS_ROUTE,
+  QUANTITY_TESTID,
   TAB_BASE_TITLE,
   mergedProductSchema,
 } from "~/lib/constants";
 import {
-  BasketAction,
-  OrderedProduct,
+  type BasketAction,
+  type OrderedProduct,
   cn,
-  consoleError,
   useBasket,
 } from "~/lib/helpers/helpers";
 import { type MergedProduct } from "~/lib/types";
 import Slider, { type Settings } from "react-slick";
 import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
-import { useOptionModal } from "~/lib/hooks/hooks";
+import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 import { OptionModal } from "~/components/Modals/Modal/OptionModal";
+import { QuantityModal } from "~/components/Modals/Modal/QuantityModal";
 
 const { RESET, ADD } = BASKET_REDUCER_TYPE;
 
@@ -87,6 +88,7 @@ const SingleProductPage: NextPage = () => {
     0
   );
   const { optionModal, dispatchOptionModal } = useOptionModal();
+  const { quantityModal, dispatchQuantityModal } = useQuantityModal();
   const { basket, dispatchBasket } = useBasket();
   const [partialOrder, dispatchPartialOrder] = useReducer(
     partialOrderReducer,
@@ -180,6 +182,16 @@ const SingleProductPage: NextPage = () => {
     const { newOptionId } = dispatchBasketArgs;
     dispatchPartialOrder({ type: UPDATE_OPTION, value: newOptionId });
   };
+
+  const onQuantityConfirm = (
+    dispatchBasketArgs: Extract<
+      BasketAction,
+      { type: (typeof BASKET_REDUCER_TYPE)["UPDATE_QUANTITY"] }
+    >
+  ) => {
+    const { quantity } = dispatchBasketArgs;
+    dispatchPartialOrder({ type: UPDATE_QUANTITY, value: quantity });
+  };
   const images = product.options.map((option) => option.image.url);
   return (
     <>
@@ -265,14 +277,19 @@ const SingleProductPage: NextPage = () => {
                       testid="OPTION_ID"
                     />
                   )}
+
                   <div className="bottom-[-4px] left-0 my-1 h-[1.5px] w-full bg-gray-500 bg-opacity-25"></div>
-                  <button className="relative m-0 flex h-12 w-full items-center justify-between text-base">
-                    <span>Quantité:</span>
-                    <div className="flex gap-3">
-                      <span>1</span>
-                      <div className="my-auto mb-2 h-2 w-2 rotate-45 border-b-2 border-r-2 border-solid border-black"></div>
-                    </div>
-                  </button>
+                  <OrderItemModifier
+                    name="quantité"
+                    value={partialOrder.quantity}
+                    onClick={() =>
+                      dispatchQuantityModal({
+                        type: OPEN_TYPE,
+                        value: { ...mergedProduct, ...partialOrder },
+                      })
+                    }
+                    testid={QUANTITY_TESTID}
+                  />
                 </div>
 
                 <Button
@@ -297,6 +314,15 @@ const SingleProductPage: NextPage = () => {
         </Section>
       </main>
 
+      <QuantityModal
+        {...quantityModal}
+        closeModal={() =>
+          dispatchQuantityModal({
+            type: CLOSE_TYPE,
+          })
+        }
+        onConfirmation={onQuantityConfirm}
+      />
       <OptionModal
         {...optionModal}
         closeModal={() =>

@@ -11,19 +11,6 @@ const initialModalProps = {
   open: false,
 };
 
-type QuantityModalPropsState = {
-  [PRODUCT_INFO]: {
-    id: string;
-    optionId: string;
-    quantity: number;
-  };
-  open: boolean;
-};
-
-type QuantityModalPropsAction = {
-  type: typeof OPEN_TYPE | typeof CLOSE_TYPE;
-  value?: QuantityModalPropsState[typeof PRODUCT_INFO];
-};
 
 type OptionModalPropsAction = QuantityModalPropsAction;
 type OptionModalPropsState = QuantityModalPropsState;
@@ -58,4 +45,50 @@ export const useOptionModal = () => {
   );
 
   return { optionModal, dispatchOptionModal };
+};
+
+type QuantityModalPropsState = {
+  [PRODUCT_INFO]: {
+    id: string;
+    optionId: string;
+    quantity: number;
+  };
+  open: boolean;
+};
+
+type QuantityModalPropsAction = {
+  type: typeof OPEN_TYPE | typeof CLOSE_TYPE;
+  value?: QuantityModalPropsState[typeof PRODUCT_INFO];
+};
+
+const quantityReducer = (
+  state: QuantityModalPropsState,
+  action: QuantityModalPropsAction
+) => {
+  switch (action.type) {
+    case OPEN_TYPE:
+      if (action.value)
+        return {
+          open: true,
+          [PRODUCT_INFO]: action.value,
+        };
+      break;
+
+    case CLOSE_TYPE:
+      return { ...state, open: false };
+
+    default:
+      return state;
+  }
+
+  return state;
+};
+
+export const useQuantityModal = () => {
+  const [quantityModal, dispatchQuantityModal] = useReducer(
+    quantityReducer,
+    initialModalProps
+  );
+
+  return { quantityModal, dispatchQuantityModal };
 };
