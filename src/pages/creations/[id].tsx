@@ -11,22 +11,87 @@ import { Button } from "~/components/ui/Button/button";
 import { api } from "~/lib/api";
 import {
   BASKET_REDUCER_TYPE,
+  CLOSE_TYPE,
+  NO_OPTION,
+  OPEN_TYPE,
   PRODUCTS_ROUTE,
   TAB_BASE_TITLE,
   mergedProductSchema,
 } from "~/lib/constants";
-import { cn, consoleError, useBasket } from "~/lib/helpers/helpers";
+import {
+  BasketAction,
+  OrderedProduct,
+  cn,
+  consoleError,
+  useBasket,
+} from "~/lib/helpers/helpers";
 import { type MergedProduct } from "~/lib/types";
-import Slider, { Settings } from "react-slick";
+import Slider, { type Settings } from "react-slick";
+import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
+import { useOptionModal } from "~/lib/hooks/hooks";
+import { OptionModal } from "~/components/Modals/Modal/OptionModal";
 
 const { RESET, INCREMENT } = BASKET_REDUCER_TYPE;
+
+type PartialOrderState = Pick<OrderedProduct, "quantity" | "optionId">;
+
+const initialPartialOrder: PartialOrderState = {
+  quantity: 1,
+  optionId: NO_OPTION,
+};
+
+const UPDATE_OPTION = "update option";
+const UPDATE_QUANTITY = "update quantity";
+const SET = "set";
+
+type UpdateOption = {
+  type: typeof UPDATE_OPTION;
+  value: PartialOrderState["optionId"];
+};
+
+type UpdateQuantity = {
+  type: typeof UPDATE_QUANTITY;
+  value: PartialOrderState["quantity"];
+};
+
+type Set = { type: typeof SET; value: PartialOrderState };
+
+type PartialOrderAction = UpdateOption | UpdateQuantity | Set;
+
+const partialOrderReducer = (
+  state: PartialOrderState,
+  action: PartialOrderAction
+) => {
+  switch (action.type) {
+    case SET:
+      return action.value;
+
+    case UPDATE_OPTION:
+      return { ...state, optionId: action.value };
+
+    case UPDATE_QUANTITY:
+      if (action.value < 0) {
+        return { ...state, quantity: 0 };
+      } else {
+        return { ...state, quantity: action.value };
+      }
+
+    default:
+      return state;
+  }
+};
 
 const SingleProductPage: NextPage = () => {
   const [animationKey, incrementAnimationKey] = useReducer(
     (prev: number) => prev + 1,
     0
   );
+  const { optionModal, dispatchOptionModal } = useOptionModal();
   const { basket, dispatchBasket } = useBasket();
+  const [partialOrder, dispatchPartialOrder] = useReducer(
+    partialOrderReducer,
+    initialPartialOrder
+  );
   const router = useRouter();
   const { id } = router.query;
   const idIsNumber = !isNaN(Number(id));
@@ -56,15 +121,37 @@ const SingleProductPage: NextPage = () => {
   if (product == null || !usableId) return productNotFoundJSX;
 
   const productFromBasket = basket.find((item) => item.id.toString() === id);
-  const mergedProductRaw = { ...product, ...productFromBasket };
+  const mergedProductRaw = {
+    ...product,
+    ...productFromBasket,
+    id: product.id.toString(),
+    quantity: productFromBasket?.quantity ?? 1,
+    optionId: productFromBasket?.optionId ?? NO_OPTION,
+  };
 
   let mergedProduct: MergedProduct;
 
   try {
     mergedProduct = mergedProductSchema.parse(mergedProductRaw);
+    const data = {
+      optionId: mergedProduct.optionId,
+      quantity: mergedProduct.quantity,
+    };
+
+    if (
+      data.quantity !== partialOrder.quantity &&
+      data.optionId !== partialOrder.optionId
+    ) {
+      dispatchPartialOrder({
+        type: SET,
+        value: {
+          optionId: data.optionId,
+          quantity: data.quantity,
+        },
+      });
+    }
   } catch (error) {
-    dispatchBasket({ type: RESET });
-    consoleError("Parsing mergedProductsRaw gave : ", error);
+    if (basket.length > 0) dispatchBasket({ type: RESET });
   }
 
   type AddToBasketProps = {
@@ -81,6 +168,17 @@ const SingleProductPage: NextPage = () => {
     centerPadding: "0",
     className: cn("h-full"),
   };
+
+  const onOptionConfirm = (
+    dispatchBasketArgs: Extract<
+      BasketAction,
+      { type: (typeof BASKET_REDUCER_TYPE)["UPDATE_OPTION"] }
+    >
+  ) => {
+    const { newOptionId } = dispatchBasketArgs;
+    dispatchPartialOrder({ type: UPDATE_OPTION, value: newOptionId });
+  };
+
   return (
     <>
       <Head>
@@ -90,6 +188,7 @@ const SingleProductPage: NextPage = () => {
         </title>
       </Head>
       <main>
+        {JSON.stringify(partialOrder)}
         <Section>
           <h1 className="sr-only">{product.name}</h1>
           <div className="flex flex-col lg:flex-row lg:gap-20">
@@ -109,29 +208,6 @@ const SingleProductPage: NextPage = () => {
                   ))}
                 </Slider>
               </div>
-              {/* <div className="media-scroller snaps-inline">
-                <div className="media-element">
-                <Image
-                src={product.image.url}
-                    alt="$main_image_alt"
-                    width={200}
-                    height={200}
-                  />
-                </div>
-                $option_images_html;
-              </div> */}
-              {/* <div className="media-scroller-wrapper__buttons">
-                <button className="media-scroller-wrapper__button media-scroller-wrapper__button--left">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-                  </svg>
-                </button>
-                <button className="media-scroller-wrapper__button media-scroller-wrapper__button--right">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
-                  </svg>
-                </button>
-              </div> */}
             </div>
             <div className="h-[400px]">
               <div className="mx-auto max-w-prose">
@@ -157,25 +233,28 @@ const SingleProductPage: NextPage = () => {
                     desktop publishing software like Aldus PageMaker including
                     versions of Lorem Ipsum.
                   </p>
-                  {/* <div className="aboslute before:to-rgb-primary-background-color bottom-0 left-0 w-full before:block before:h-3 before:w-full before:bg-gradient-to-b before:from-transparent before:content-[''] ">
-                    <div className="flex w-full flex-col items-center justify-center bg-white">
-                      <button className="m-0">
-                        <span className="rounded border-2 border-solid px-1 py-3 text-center text-xs">
-                          VOIR PLUS
-                        </span>
-                      </button>
-                    </div>
-                  </div> */}
                 </div>
 
                 <div className="mb-10 mt-4">
-                  <button className="relative m-0 flex h-12 w-full items-center justify-between text-base after:absolute after:bottom-[-4px] after:left-0 after:h-[1.5px] after:w-full after:content-['']">
-                    <span>Option:</span>
-                    <div className="flex gap-3">
-                      <span>Vert</span>
-                      <div className="my-auto mb-2 h-2 w-2 rotate-45 border-b-2 border-r-2 border-solid border-black"></div>
-                    </div>
-                  </button>
+                  {product.options.length > 0 && (
+                    <OrderItemModifier
+                      name="option"
+                      value={
+                        product.options.find((option) => {
+                          return (
+                            option.id.toString() === partialOrder?.optionId
+                          );
+                        })?.name ?? NO_OPTION
+                      }
+                      onClick={() =>
+                        dispatchOptionModal({
+                          type: OPEN_TYPE,
+                          value: { ...mergedProduct, ...partialOrder },
+                        })
+                      }
+                      testid="OPTION_ID"
+                    />
+                  )}
                   <div className="bottom-[-4px] left-0 my-1 h-[1.5px] w-full bg-gray-500 bg-opacity-25"></div>
                   <button className="relative m-0 flex h-12 w-full items-center justify-between text-base">
                     <span>Quantité:</span>
@@ -211,6 +290,16 @@ const SingleProductPage: NextPage = () => {
           </div>
         </Section>
       </main>
+
+      <OptionModal
+        {...optionModal}
+        closeModal={() =>
+          dispatchOptionModal({
+            type: CLOSE_TYPE,
+          })
+        }
+        onConfirmation={onOptionConfirm}
+      />
     </>
   );
 };

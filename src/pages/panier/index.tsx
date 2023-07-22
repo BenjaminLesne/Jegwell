@@ -26,7 +26,7 @@ import {
   mergedProductsSchema,
 } from "~/lib/constants";
 import { cn, consoleError, useBasket } from "~/lib/helpers/helpers";
-import { MergedProduct } from "~/lib/types";
+import { type MergedProduct } from "~/lib/types";
 
 const PRODUCT_INFO = "orderedProduct";
 const initialModalProps = {
@@ -230,6 +230,7 @@ const BasketPage: NextPage = () => {
                           value: product,
                         })
                       }
+                      testid="OPTION_ID"
                     />
                     <div className="bottom-[-4px] left-0 my-1 h-[1.5px] w-full bg-gray-500 bg-opacity-25"></div>
                     <OrderItemModifier
@@ -241,7 +242,7 @@ const BasketPage: NextPage = () => {
                           value: product,
                         })
                       }
-                      data-testid={QUANTITY_TESTID}
+                      testid={QUANTITY_TESTID}
                     />
                   </div>
                 </div>

@@ -40,11 +40,20 @@ type MergedProduct = {
   price?: number | undefined;
   name?: string | undefined;
 };
+type OnOptionConfirm = (
+  dispatchBasketArgs: Extract<
+    BasketAction,
+    {
+      type: (typeof BASKET_REDUCER_TYPE)["UPDATE_OPTION"];
+    }
+  >
+) => void;
+
 type Props = {
   open: boolean;
   closeModal: () => void;
   orderedProduct: MergedProduct;
-  dispatchBasket: React.Dispatch<BasketAction>;
+  onConfirmation: React.Dispatch<BasketAction> | OnOptionConfirm;
 };
 
 const { UPDATE_OPTION } = BASKET_REDUCER_TYPE;
@@ -55,7 +64,7 @@ export const OptionModal = ({
   open,
   closeModal,
   orderedProduct,
-  dispatchBasket,
+  onConfirmation,
 }: Props) => {
   const [selectedOption, setSelectedOption] = useState(NO_OPTION);
 
@@ -64,7 +73,7 @@ export const OptionModal = ({
   }, [orderedProduct]);
 
   const onConfirm = () => {
-    dispatchBasket({
+    onConfirmation({
       type: UPDATE_OPTION,
       newOptionId: selectedOption,
       productId: orderedProduct.id,

@@ -11,7 +11,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - delivery page
 - use library resend to send emails cf theo video
 - make it easy for user to make feedbacks (cf webdevcody way)
-- add error message on screen when stuff goes wrong (check try catch code and consoleError in code base)
+- add error message on screen when stuff goes wrong (check try catch code and consoleError in code base) toast?
 - add a button reset the basket on the basketpage (the only way to do it now is to remove each item one by one by clicking their top right cross)
 - create a 404 template
 - optimiser les requetes (getServerSideProps, getStaticProps)
@@ -19,6 +19,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 
 Doing:
 - delivery page
+=> option modal done, quantity modal todo
 
 
 Note:

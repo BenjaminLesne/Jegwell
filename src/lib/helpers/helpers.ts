@@ -166,7 +166,6 @@ function reportUndefinedOrNullVars(...variables: unknown[]) {
 
   for (let i = 0; i < variables.length; i++) {
     if (variables[i] == null) {
-      console.log("report ran");
       undefinedOrNullVariables.push(`Variable ${String.fromCharCode(65 + i)}`);
     }
   }
