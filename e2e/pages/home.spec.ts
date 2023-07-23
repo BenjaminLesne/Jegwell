@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { waitLoadingEnds } from "e2e/utils";
+import { testPageScreenshotMatch, waitLoadingEnds } from "e2e/utils";
 import { CATEGORY, CATEGORY_TEST_ID, HOME_ROUTE } from "~/lib/constants";
 
 test.describe("the navigation", () => {
@@ -8,7 +8,7 @@ test.describe("the navigation", () => {
   });
   test("home match snapshot", async ({ page }) => {
     await waitLoadingEnds({ page });
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
+    await testPageScreenshotMatch({ page });
   });
 
   test("categories cards have right links", async ({ page, context }) => {

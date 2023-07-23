@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { waitLoadingEnds } from "e2e/utils";
+import { testPageScreenshotMatch, waitLoadingEnds } from "e2e/utils";
 import {
   BASKET_ICON_TESTID,
   BASKET_ROUTE,
@@ -13,7 +13,7 @@ test.describe("basket page with no item added to basket", () => {
   test("snapshot", async ({ page }) => {
     await page.goto(BASKET_ROUTE);
     await page.getByRole("progressbar").waitFor({ state: "hidden" });
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
+    await testPageScreenshotMatch({ page });
   });
 });
 
@@ -68,7 +68,7 @@ test.describe("basket page with items added to basket", () => {
 
   test("snapshot", async ({ page }) => {
     await page.getByRole("progressbar").waitFor({ state: "hidden" });
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
+    await testPageScreenshotMatch({ page });
   });
 
   test("option change", async ({ page }) => {

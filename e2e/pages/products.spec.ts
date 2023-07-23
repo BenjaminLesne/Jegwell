@@ -6,15 +6,15 @@ import {
   type isSortedProps,
 } from "~/lib/helpers/helpers";
 import { PRODUCTS_ROUTE } from "~/lib/constants";
-import { waitLoadingEnds } from "e2e/utils";
+import { testPageScreenshotMatch, waitLoadingEnds } from "e2e/utils";
 
 test.describe("the products page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(PRODUCTS_ROUTE);
   });
-  test("products page snapshot", async ({ page }) => {
+  test.only("products page snapshot", async ({ page }) => {
     await waitLoadingEnds({ page });
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
+    await testPageScreenshotMatch({ page });
   });
 
   test("sort the products", async ({ page }) => {
