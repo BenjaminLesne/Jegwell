@@ -205,7 +205,9 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
       if (action.product) {
         const optionId = action.product.optionId;
         const productId = action.product.id;
-        const targetProduct = state.find((product) => product.id === productId);
+        const targetProduct = state.find(
+          (product) => product.id === productId && product.optionId === optionId
+        );
         if (targetProduct === undefined) return [...state, action.product];
 
         const newState = removeFromBasket({ state, productId, optionId });

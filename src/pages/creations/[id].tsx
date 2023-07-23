@@ -31,6 +31,7 @@ import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
 import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 import { OptionModal } from "~/components/Modals/Modal/OptionModal";
 import { QuantityModal } from "~/components/Modals/Modal/QuantityModal";
+import { LucideThermometerSun } from "lucide-react";
 
 const { RESET, ADD } = BASKET_REDUCER_TYPE;
 
@@ -82,6 +83,8 @@ const partialOrderReducer = (
   }
 };
 
+let didRun = false;
+
 const SingleProductPage: NextPage = () => {
   const [animationKey, incrementAnimationKey] = useReducer(
     (prev: number) => prev + 1,
@@ -122,13 +125,13 @@ const SingleProductPage: NextPage = () => {
 
   if (product == null || !usableId) return productNotFoundJSX;
 
-  const productFromBasket = basket.find((item) => item.id.toString() === id);
+  // const productFromBasket = basket.find((item) => item.id.toString() === id);
   const mergedProductRaw = {
     ...product,
-    ...productFromBasket,
+    // ...productFromBasket,
     id: product.id.toString(),
-    quantity: productFromBasket?.quantity ?? 1,
-    optionId: productFromBasket?.optionId ?? NO_OPTION,
+    quantity: 1,
+    optionId: NO_OPTION,
   };
 
   let mergedProduct: MergedProduct;
@@ -140,10 +143,7 @@ const SingleProductPage: NextPage = () => {
       quantity: mergedProduct.quantity,
     };
 
-    if (
-      data.quantity !== partialOrder.quantity &&
-      data.optionId !== partialOrder.optionId
-    ) {
+    if (didRun === false) {
       dispatchPartialOrder({
         type: SET,
         value: {
@@ -151,6 +151,8 @@ const SingleProductPage: NextPage = () => {
           quantity: data.quantity,
         },
       });
+
+      didRun = true;
     }
   } catch (error) {
     if (basket.length > 0) dispatchBasket({ type: RESET });
@@ -192,7 +194,7 @@ const SingleProductPage: NextPage = () => {
     const { quantity } = dispatchBasketArgs;
     dispatchPartialOrder({ type: UPDATE_QUANTITY, value: quantity });
   };
-  const images = product.options.map((option) => option.image.url);
+
   return (
     <>
       <Head>
@@ -217,11 +219,11 @@ const SingleProductPage: NextPage = () => {
                       className="mx-auto h-[400px] max-h-[400px] w-[400px] max-w-full object-cover lg:mt-5"
                     />
                   </div>
-                  {images.map((image, index) => (
+                  {product.options.map((option, index) => (
                     <div key={index}>
                       <Image
-                        src={image}
-                        alt={product.name}
+                        src={option.image.url}
+                        alt={product.name + " " + option.name}
                         width={400}
                         height={400}
                         className="mx-auto h-[400px] max-h-[400px] w-[400px] max-w-full object-cover lg:mt-5"
@@ -231,7 +233,7 @@ const SingleProductPage: NextPage = () => {
                 </Slider>
               </div>
             </div>
-            <div className="h-[400px]">
+            <div>
               <div className="mx-auto max-w-prose">
                 <div className="my-4 flex justify-between">
                   <span className="grid items-center text-xl">
@@ -262,11 +264,10 @@ const SingleProductPage: NextPage = () => {
                     <OrderItemModifier
                       name="option"
                       value={
-                        product.options.find((option) => {
-                          return (
+                        product.options.find(
+                          (option) =>
                             option.id.toString() === partialOrder?.optionId
-                          );
-                        })?.name ?? NO_OPTION
+                        )?.name ?? NO_OPTION
                       }
                       onClick={() =>
                         dispatchOptionModal({
