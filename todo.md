@@ -18,8 +18,9 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - add eslint pluging for tech I use (prettier, etc check tweet I retweeted from cory house)
 
 Doing:
-- single product page
-=> make a e2e test for it
+
+- delivery page
+=> figuring out shadcn react hook form with zod. video: https://www.youtube.com/watch?v=GtXafkB6bkA
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
