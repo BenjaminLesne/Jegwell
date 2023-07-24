@@ -14,6 +14,12 @@ import {
 } from "~/components/ui/form";
 import { Button } from "~/components/ui/Button/button";
 import { Input } from "~/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Label } from "~/components/ui/label";
+import { execOnce } from "next/dist/shared/lib/utils";
+import { Textarea } from "~/components/ui/textarea";
+import { Section } from "~/components/Section/Section";
+import { Title } from "~/components/Title/Title";
 
 const DeliveryPage: NextPage = () => {
   const minShortString = 2;
@@ -37,8 +43,7 @@ const DeliveryPage: NextPage = () => {
     max: maxShortString,
   });
   const emailMessage = "Votre saisie n'est pas un email valide";
-  const phoneMessage =
-    "Votre saisie n'est pas un numéro de téléphone mobile français valide";
+  const phoneMessage = "Votre saisie doit uniquement être des nombres";
 
   const EXPRESS = "express";
   const FOLLOWED_LETTER = "lettre suivie";
@@ -57,7 +62,7 @@ const DeliveryPage: NextPage = () => {
     label: "La ville",
   });
   const commentMessage = shortStringMessage({
-    min: 10,
+    min: 0,
     max: 500,
     label: "Le commentaire",
   });
@@ -73,7 +78,7 @@ const DeliveryPage: NextPage = () => {
       .min(2, { message: lastnameMessage })
       .max(50, { message: lastnameMessage }),
     email: z.string().email({ message: emailMessage }),
-    phone: z.number(),
+    phone: z.string({ description: phoneMessage }),
     // .regex(/^(\+33|0)[1-9](\d{2}){4}$/, { message: phoneMessage }),
     deliveryOption: z.enum([EXPRESS, FOLLOWED_LETTER], {
       errorMap: () => ({ message: deliveryOptionMessage }),
@@ -86,13 +91,10 @@ const DeliveryPage: NextPage = () => {
       .string()
       .min(2, { message: cityMessage })
       .max(50, { message: cityMessage }),
-    postal_code: z
+    postalCode: z
       .string()
       .regex(/^\d{5}$/, { message: "Le code postal doit contenir 5 chiffres" }),
-    comment: z
-      .string()
-      .min(10, { message: commentMessage })
-      .max(500, { message: commentMessage }),
+    comment: z.string().max(500, { message: commentMessage }).optional(),
   });
   const defaultValues = {
     firstname: "",
@@ -102,7 +104,7 @@ const DeliveryPage: NextPage = () => {
     deliveryOption: undefined,
     address: "",
     city: "",
-    postal_code: "",
+    postalCode: "",
     comment: "",
   } as const;
 
@@ -133,48 +135,142 @@ const DeliveryPage: NextPage = () => {
   );
   return (
     <main>
-      <Form {...form}>
-        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="firstname"
-            render={({ field }) => (
-              <ShortInput label="Prénom" placeholder="Héloïse" field={field} />
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastname"
-            render={({ field }) => (
-              <ShortInput label="Nom" placeholder="Dior" field={field} />
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <ShortInput
-                label="Email"
-                placeholder="exemple@jegwell.fr"
-                field={field}
-              />
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <ShortInput
-                label="Téléphone"
-                placeholder="0612345678"
-                field={field}
-              />
-            )}
-          />
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
+      <Section>
+        <Title>Livraison</Title>
+        <Form {...form}>
+          <form
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="mx-auto max-w-prose space-y-8"
+          >
+            <FormField
+              control={form.control}
+              name="firstname"
+              render={({ field }) => (
+                <ShortInput
+                  label="Prénom"
+                  placeholder="Héloïse"
+                  field={field}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastname"
+              render={({ field }) => (
+                <ShortInput label="Nom" placeholder="Dior" field={field} />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <ShortInput
+                  label="Email"
+                  placeholder="exemple@jegwell.fr"
+                  field={field}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <ShortInput
+                  label="Téléphone"
+                  placeholder="0612345678"
+                  field={field}
+                />
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="deliveryOption"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Méthode de livraison</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value={EXPRESS} />
+                        </FormControl>
+                        <FormLabel className="font-normal">{EXPRESS}</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value={FOLLOWED_LETTER} />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          {FOLLOWED_LETTER}
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <ShortInput
+                  label="Adresse"
+                  placeholder="16 rue de la Genetais"
+                  field={field}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <ShortInput label="Ville" placeholder="Paris" field={field} />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="postalCode"
+              render={({ field }) => (
+                <ShortInput
+                  label="Le code postal"
+                  placeholder="35170"
+                  field={field}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="comment"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Commentaire</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="J'adore Jegwell !"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Vous avez des précisions pour la livraison ? un soucis avec
+                    le formulaire ? Vous adorez Jegwell ? Dites-le nous !
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Submit</Button>
+          </form>
+        </Form>
+      </Section>
     </main>
   );
 };

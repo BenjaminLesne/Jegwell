@@ -20,7 +20,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 Doing:
 
 - delivery page
-=> figuring out shadcn react hook form with zod. video: https://www.youtube.com/watch?v=GtXafkB6bkA
+=> when starting to type in fields it get red instantly cause 2 characters are expected at least. When error show on screen we lose the focus on the field and we have to spam click on the input to write one character then click one character until we respect min/max characters
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
