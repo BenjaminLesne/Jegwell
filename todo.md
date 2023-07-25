@@ -4,7 +4,7 @@
 car les descriptions des produits doivent etre traduite aussi. Et le client n'a pas le temps pour ca. Donc pour l'instant que du français.
 
 - créer un Jira avec les templates de story et bug (en français pour que Solène puisse les remplir?)
-- create templates for merge requests (take those from work and remove they unsued part of it
+- create templates for merge requests (take those from work and remove they unsued part of it)
 - remove BenjaminLesneLica as collaborator on github
 - créer une documentation (se renseigner sur les solutions, jira atlass?, elles font comment les librairies genre react?)
 - basket page
@@ -21,6 +21,13 @@ Doing:
 
 - delivery page
 => when starting to type in fields it get red instantly cause 2 characters are expected at least. When error show on screen we lose the focus on the field and we have to spam click on the input to write one character then click one character until we respect min/max characters
+=> on submit on récupère les infos OR on est intéressé par les info uniquement si le paiement réussi. Est-ce stripe peut aider avec ca ?
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
+
+
+qjhsdiqhsgdqhsg
+qjhsdiqhsgdqhsg
+qjhsdiqhsgdqhsg
+

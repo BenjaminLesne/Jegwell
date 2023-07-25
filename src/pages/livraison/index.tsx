@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
-import React from "react";
-import { ControllerRenderProps, FieldValues, useForm } from "react-hook-form";
+import React, { useMemo } from "react";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -15,124 +15,123 @@ import {
 import { Button } from "~/components/ui/Button/button";
 import { Input } from "~/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
-import { Label } from "~/components/ui/label";
-import { execOnce } from "next/dist/shared/lib/utils";
 import { Textarea } from "~/components/ui/textarea";
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 
+type ShortInputProps = {
+  label: string;
+  placeholder: string;
+  field: object;
+};
+const ShortInput = ({ label, placeholder, field }: ShortInputProps) => (
+  <FormItem>
+    <FormLabel>{label}</FormLabel>
+    <FormControl>
+      <Input placeholder={placeholder} {...field} />
+    </FormControl>
+    <FormMessage />
+  </FormItem>
+);
+
+const minShortString = 2;
+const maxShortString = 50;
+type ShortStringProps = {
+  min: number;
+  max: number;
+  label: string;
+};
+
+const shortStringMessage = ({ min, max, label }: ShortStringProps) => {
+  return `${label} doit contenir entre ${min} et ${max} caractères`;
+};
+const firstnameMessage = shortStringMessage({
+  label: "Le prénom",
+  min: minShortString,
+  max: maxShortString,
+});
+const lastnameMessage = shortStringMessage({
+  label: "Le nom",
+  min: minShortString,
+  max: maxShortString,
+});
+const emailMessage = "Votre saisie n'est pas un email valide";
+const phoneMessage = "Votre saisie doit uniquement être des nombres";
+
+const EXPRESS = "express";
+const FOLLOWED_LETTER = "lettre suivie";
+
+const deliveryOptionMessage = "Veuillez selectionner une méthode de livraison";
+
+const addressMessage = shortStringMessage({
+  min: 5,
+  max: 100,
+  label: "L'adresse",
+});
+const cityMessage = shortStringMessage({
+  min: 2,
+  max: 50,
+  label: "La ville",
+});
+const commentMessage = shortStringMessage({
+  min: 0,
+  max: 500,
+  label: "Le commentaire",
+});
+const formSchema = z.object({
+  firstname: z
+    .string()
+    .min(2, {
+      message: firstnameMessage,
+    })
+    .max(50, { message: firstnameMessage }),
+  lastname: z
+    .string()
+    .min(2, { message: lastnameMessage })
+    .max(50, { message: lastnameMessage }),
+  email: z.string().email({ message: emailMessage }),
+  phone: z.string({ description: phoneMessage }),
+  // .regex(/^(\+33|0)[1-9](\d{2}){4}$/, { message: phoneMessage }),
+  deliveryOption: z.enum([EXPRESS, FOLLOWED_LETTER], {
+    errorMap: () => ({ message: deliveryOptionMessage }),
+  }),
+  address: z
+    .string()
+    .min(5, { message: addressMessage })
+    .max(100, { message: addressMessage }),
+  city: z
+    .string()
+    .min(2, { message: cityMessage })
+    .max(50, { message: cityMessage }),
+  postalCode: z
+    .string()
+    .regex(/^\d{5}$/, { message: "Le code postal doit contenir 5 chiffres" }),
+  comment: z.string().max(500, { message: commentMessage }).optional(),
+});
+const defaultValues = {
+  firstname: "",
+  lastname: "",
+  email: "",
+  phone: undefined,
+  deliveryOption: undefined,
+  address: "",
+  city: "",
+  postalCode: "",
+  comment: "",
+} as const;
+
+function onSubmit(values: z.infer<typeof formSchema>) {
+  // Do something with the form values.
+  // ✅ This will be type-safe and validated.
+  console.log("values", values);
+}
+
 const DeliveryPage: NextPage = () => {
-  const minShortString = 2;
-  const maxShortString = 50;
-  type ShortStringProps = {
-    min: number;
-    max: number;
-    label: string;
-  };
-
-  const shortStringMessage = ({ min, max, label }: ShortStringProps) =>
-    `${label} doit contenir entre ${min} et ${max} caractères`;
-  const firstnameMessage = shortStringMessage({
-    label: "Le prénom",
-    min: minShortString,
-    max: maxShortString,
-  });
-  const lastnameMessage = shortStringMessage({
-    label: "Le nom",
-    min: minShortString,
-    max: maxShortString,
-  });
-  const emailMessage = "Votre saisie n'est pas un email valide";
-  const phoneMessage = "Votre saisie doit uniquement être des nombres";
-
-  const EXPRESS = "express";
-  const FOLLOWED_LETTER = "lettre suivie";
-
-  const deliveryOptionMessage =
-    "Veuillez selectionner une méthode de livraison";
-
-  const addressMessage = shortStringMessage({
-    min: 5,
-    max: 100,
-    label: "L'adresse",
-  });
-  const cityMessage = shortStringMessage({
-    min: 2,
-    max: 50,
-    label: "La ville",
-  });
-  const commentMessage = shortStringMessage({
-    min: 0,
-    max: 500,
-    label: "Le commentaire",
-  });
-  const formSchema = z.object({
-    firstname: z
-      .string()
-      .min(2, {
-        message: firstnameMessage,
-      })
-      .max(50, { message: firstnameMessage }),
-    lastname: z
-      .string()
-      .min(2, { message: lastnameMessage })
-      .max(50, { message: lastnameMessage }),
-    email: z.string().email({ message: emailMessage }),
-    phone: z.string({ description: phoneMessage }),
-    // .regex(/^(\+33|0)[1-9](\d{2}){4}$/, { message: phoneMessage }),
-    deliveryOption: z.enum([EXPRESS, FOLLOWED_LETTER], {
-      errorMap: () => ({ message: deliveryOptionMessage }),
-    }),
-    address: z
-      .string()
-      .min(5, { message: addressMessage })
-      .max(100, { message: addressMessage }),
-    city: z
-      .string()
-      .min(2, { message: cityMessage })
-      .max(50, { message: cityMessage }),
-    postalCode: z
-      .string()
-      .regex(/^\d{5}$/, { message: "Le code postal doit contenir 5 chiffres" }),
-    comment: z.string().max(500, { message: commentMessage }).optional(),
-  });
-  const defaultValues = {
-    firstname: "",
-    lastname: "",
-    email: "",
-    phone: undefined,
-    deliveryOption: undefined,
-    address: "",
-    city: "",
-    postalCode: "",
-    comment: "",
-  } as const;
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log("values", values);
-  }
-
-  type ShortInputProps = {
-    label: string;
-    placeholder: string;
-    field: object;
-  };
-  const ShortInput = ({ label, placeholder, field }: ShortInputProps) => (
-    <FormItem>
-      <FormLabel>{label}</FormLabel>
-      <FormControl>
-        <Input placeholder={placeholder} {...field} />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
-  );
   return (
     <main>
       <Section>
@@ -267,7 +266,7 @@ const DeliveryPage: NextPage = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Passer au paiement</Button>
           </form>
         </Form>
       </Section>
