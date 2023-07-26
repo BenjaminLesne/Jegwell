@@ -301,10 +301,16 @@ const SingleProductPage: NextPage = () => {
                   <span>Ajouter au panier</span>
                   <span
                     key={animationKey}
-                    className={
-                      "absolute inset-0 flex items-center justify-center bg-secondary opacity-0 " +
-                      (animationKey ? "animate-fadeIn" : "")
-                    }
+                    className={cn(
+                      "absolute",
+                      "inset-0",
+                      "opacity-0",
+                      "flex",
+                      "items-center",
+                      "justify-center",
+                      "bg-secondary",
+                      animationKey ? "animate-fadeIn" : ""
+                    )}
                   >
                     Ajouté &#10003;
                   </span>
