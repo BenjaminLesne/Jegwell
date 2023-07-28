@@ -14,7 +14,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - add error message on screen when stuff goes wrong (check try catch code and consoleError in code base) toast?
 - add a button reset the basket on the basketpage (the only way to do it now is to remove each item one by one by clicking their top right cross)
 - create a 404 template
-- optimiser les requetes (getServerSideProps, getStaticProps)
+- optimiser les requetes? (getServerSideProps, getStaticProps)
 - add eslint pluging for tech I use (prettier, etc check tweet I retweeted from cory house)
 - don't forget to do the administration panel (add products, authenticate etc)
 

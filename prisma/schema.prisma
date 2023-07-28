@@ -12,50 +12,96 @@ datasource db {
 }
 
 model Product {
-  id          Int     @id @default(autoincrement())
+  id          Int               @id @default(autoincrement())
   price       Int
-  createdAt   DateTime   @default(now())
+  createdAt   DateTime          @default(now())
   name        String
   description String?
   categories  Category[]
   options     Option[]
   productId   String?
-  relateTo    Product[]  @relation("RelatedProducts")
-  relatedBy   Product[]  @relation("RelatedProducts")
-  image       Image     @relation(fields: [imageId], references: [id])
+  relateTo    Product[]         @relation("RelatedProducts")
+  relatedBy   Product[]         @relation("RelatedProducts")
+  image       Image             @relation(fields: [imageId], references: [id])
   imageId     Int
+  baskets     ProductToBasket[]
 
   @@index([imageId])
 }
 
 model Category {
-  id        Int    @id @default(autoincrement())
-  name      String
-  products  Product[]
-  image     Image     @relation(fields: [imageId], references: [id])
-  imageId   Int
+  id       Int       @id @default(autoincrement())
+  name     String
+  products Product[]
+  image    Image     @relation(fields: [imageId], references: [id])
+  imageId  Int
 
   @@index([imageId])
 }
 
 model Option {
-  id        Int  @id @default(autoincrement())
+  id        Int               @id @default(autoincrement())
   name      String
   price     Int
-  image     Image     @relation(fields: [imageId], references: [id])
+  image     Image             @relation(fields: [imageId], references: [id])
   imageId   Int
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product           @relation(fields: [productId], references: [id])
   productId Int
+  baskets   ProductToBasket[]
 
   @@index([productId])
   @@index([imageId])
 }
 
 model Image {
-  id       Int     @id @default(autoincrement())
-  name     String     @db.VarChar(255)
-  url      String     @db.Text
-  Products  Product[]
+  id         Int        @id @default(autoincrement())
+  name       String     @db.VarChar(255)
+  url        String     @db.Text
+  Products   Product[]
   Categories Category[]
-  Options Option[]
+  Options    Option[]
+}
+
+model ProductToBasket {
+  id        Int     @id @default(autoincrement())
+  quantity  Int
+  option    Option  @relation(fields: [optionId], references: [id])
+  optionId  Int
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  orders    Order[]
+
+  @@index([productId])
+  @@index([optionId])
+}
+
+model Order {
+  id               Int               @id @default(autoincrement())
+  isPaid           Boolean           @default(false)
+  isEmailSent      Boolean           @default(false)
+  paymentIntentId  String
+  price            Int
+  productsToBasket ProductToBasket[]
+  firstname        String
+  lastname         String
+  email            String
+  phoneNumber      String
+  delivery         DeliveryOption    @relation(fields: [deliveryOptionId], references: [id])
+  addressLine1     String
+  addressLine2     String?
+  country          String
+  postalCode       String
+  city             String
+  comment          String?
+  deliveryOptionId Int
+
+  @@index([deliveryOptionId])
+}
+
+model DeliveryOption {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  price       Int
+  orders      Order[]
 }
