@@ -1,5 +1,5 @@
 import { type NextPage } from "next";
-import React, { useMemo } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -63,11 +63,18 @@ const FOLLOWED_LETTER = "lettre suivie";
 
 const deliveryOptionMessage = "Veuillez selectionner une méthode de livraison";
 
-const addressMessage = shortStringMessage({
+const address1Message = shortStringMessage({
   min: 5,
   max: 100,
   label: "L'adresse",
 });
+
+const address2Message = shortStringMessage({
+  min: 0,
+  max: 100,
+  label: "Le complément d'adresse",
+});
+
 const cityMessage = shortStringMessage({
   min: 2,
   max: 50,
@@ -92,13 +99,18 @@ const formSchema = z.object({
   email: z.string().email({ message: emailMessage }),
   phone: z.string({ description: phoneMessage }),
   // .regex(/^(\+33|0)[1-9](\d{2}){4}$/, { message: phoneMessage }),
-  deliveryOption: z.enum([EXPRESS, FOLLOWED_LETTER], {
-    errorMap: () => ({ message: deliveryOptionMessage }),
-  }),
-  address: z
+  deliveryOptionId: z
+    .string({
+      errorMap: () => ({ message: deliveryOptionMessage }),
+    })
+    .refine((value) => Number.isInteger(parseInt(value, 10)), {
+      message: "Oups il semblerait qu'une erreur est survenue",
+    }),
+  address1: z
     .string()
-    .min(5, { message: addressMessage })
-    .max(100, { message: addressMessage }),
+    .min(5, { message: address1Message })
+    .max(100, { message: address1Message }),
+  address2: z.string().max(100, { message: address2Message }).optional(),
   city: z
     .string()
     .min(2, { message: cityMessage })
@@ -113,8 +125,9 @@ const defaultValues = {
   lastname: "",
   email: "",
   phone: undefined,
-  deliveryOption: undefined,
-  address: "",
+  deliveryOptionId: undefined,
+  address1: "",
+  address2: "",
   city: "",
   postalCode: "",
   comment: "",
@@ -185,7 +198,7 @@ const DeliveryPage: NextPage = () => {
 
             <FormField
               control={form.control}
-              name="deliveryOption"
+              name="deliveryOptionId"
               render={({ field }) => (
                 <FormItem className="space-y-3">
                   <FormLabel>Méthode de livraison</FormLabel>
@@ -218,11 +231,22 @@ const DeliveryPage: NextPage = () => {
 
             <FormField
               control={form.control}
-              name="address"
+              name="address1"
               render={({ field }) => (
                 <ShortInput
                   label="Adresse"
                   placeholder="16 rue de la Genetais"
+                  field={field}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address2"
+              render={({ field }) => (
+                <ShortInput
+                  label="Complément"
+                  placeholder="Bâtiment 1A, RDC, porte gauche"
                   field={field}
                 />
               )}

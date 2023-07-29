@@ -79,21 +79,21 @@ model Order {
   id               Int               @id @default(autoincrement())
   isPaid           Boolean           @default(false)
   isEmailSent      Boolean           @default(false)
-  paymentIntentId  String
+  paymentIntentId  String?
   price            Int
   productsToBasket ProductToBasket[]
   firstname        String
   lastname         String
   email            String
   phoneNumber      String
-  delivery         DeliveryOption    @relation(fields: [deliveryOptionId], references: [id])
+  deliveryOption         DeliveryOption    @relation(fields: [deliveryOptionId], references: [id])
+  deliveryOptionId Int
   addressLine1     String
   addressLine2     String?
   country          String
   postalCode       String
   city             String
   comment          String?
-  deliveryOptionId Int
 
   @@index([deliveryOptionId])
 }
