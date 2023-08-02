@@ -61,9 +61,9 @@ model Image {
   name       String     @db.VarChar(255)
   url        String     @db.Text
 
-  Products   Product[]
-  Categories Category[]
-  Options    Option[]
+  products   Product[]
+  categories Category[]
+  options    Option[]
 }
 
 model ProductToBasket {
@@ -103,7 +103,7 @@ model Customer {
 
 model Order {
   id               Int               @id @default(autoincrement())
-  datetime         DateTime
+  datetime         DateTime          @default(now())
   isPaid           Boolean           @default(false)
   isEmailSent      Boolean           @default(false)
   paymentIntentId  String?
@@ -116,7 +116,7 @@ model Order {
   productsToBasket ProductToBasket[]
   customer         Customer          @relation(fields: [customerId], references: [id])
   deliveryOption   DeliveryOption    @relation(fields: [deliveryOptionId], references: [id])
-  Address          Address           @relation(fields: [addressId], references: [id])
+  address          Address           @relation(fields: [addressId], references: [id])
 
   @@index([deliveryOptionId])
   @@index([addressId])

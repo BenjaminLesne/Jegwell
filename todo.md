@@ -24,11 +24,13 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - onConfirmation is not a function in basket page when modifying quantity
 - is stripe being loaded in every page?
 - create a customer entity to add in Order entity for later
+- update to prisma@5.1.0
+
+
 Doing:
 - delivery page
-=> webhook on payment success -> create order in database, send email to customer and Solène
-=> idk why my zod validation fails for req.body, it's undefined... somehow and I guess I need to make a buffer like webdevcody
-=> src/pages/api/stripes.js
+=>setting up the api to create an order -> data type is weird everything is optional... and this is not deeply types, the address relation is undefined as type
+
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

@@ -99,4 +99,101 @@ export const mergedProductSchema = z.object({
   name: z.string(),
 });
 export const mergedProductsSchema = z.array(mergedProductSchema);
+
+export const imageSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  url: z.string(),
+});
+
+export const optionSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  price: z.number(),
+  productId: z.number(),
+  imageId: z.number(),
+  image: imageSchema,
+});
+
+export const productToBasketSchema = z.object({
+  id: z.number(),
+  quantity: z.number(),
+  optionId: z.number(),
+  productId: z.number(),
+  option: optionSchema,
+});
+
+export const addressSchema = z.object({
+  id: z.number(),
+  line1: z.string(),
+  line2: z.string().nullable(),
+  country: z.string(),
+  postalCode: z.string(),
+  city: z.string(),
+});
+
+export const customerSchema = z.object({
+  id: z.number(),
+  firstname: z.string(),
+  lastname: z.string(),
+  email: z.string(),
+  phoneNumber: z.string(),
+  address: z.array(addressSchema),
+});
+
+export const deliveryOptionSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string().nullable(),
+  price: z.number(),
+});
+
+export const orderSchema = z.object({
+  id: z.number(),
+  datetime: z.date(),
+  isPaid: z.boolean(),
+  isEmailSent: z.boolean(),
+  paymentIntentId: z.string().nullable(),
+  price: z.number(),
+  comment: z.string().nullable(),
+  customerId: z.number(),
+  deliveryOptionId: z.number(),
+  addressId: z.number(),
+  productsToBasket: z.array(productToBasketSchema),
+  customer: customerSchema,
+  deliveryOption: deliveryOptionSchema,
+  address: addressSchema,
+});
+// .refine(
+//   (obj) => obj.address != null || obj.addressId != null,
+//   () => ({ message: "should include address key OR addressId key" })
+// )
+// .refine(
+//   (obj) => obj.deliveryOption != null || obj.deliveryOptionId != null,
+//   () => ({ message: "should include option key OR optionId key" })
+// );
+
+export const categorySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  imageId: z.number(),
+  image: imageSchema,
+});
+
+export const productSchema = z.object({
+  id: z.number(),
+  price: z.number(),
+  createdAt: z.date(),
+  name: z.string(),
+  description: z.string().nullable(),
+  productId: z.string().nullable(),
+  imageId: z.number(),
+  categories: z.array(categorySchema),
+  options: z.array(optionSchema),
+  // relateTo: z.array(productSchema),
+  // relatedBy: z.array(productSchema),
+  image: imageSchema,
+  baskets: z.array(productToBasketSchema),
+});
+
 // /prisma schema
