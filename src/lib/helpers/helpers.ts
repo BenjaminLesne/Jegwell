@@ -8,7 +8,75 @@ import {
 import { z } from "zod";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { RemoveFormattingIcon } from "lucide-react";
+import { type Stripe, loadStripe } from "@stripe/stripe-js";
+import { env } from "~/env.mjs";
+
+export async function fetchGetJSON(url: string) {
+  try {
+    const data: unknown = await fetch(url).then((res) => res.json());
+    return data;
+  } catch (err) {
+    if (err instanceof Error) {
+      throw new Error(err.message);
+    }
+    throw err;
+  }
+}
+
+type Address = {
+  city: string;
+  country: string;
+  line1: string;
+  line2?: string;
+  postal_code: string;
+};
+
+type StripeCustomer = {
+  address: Address;
+  email: string;
+  name: string;
+  phone: string;
+};
+
+type CheckoutSessionProps = {
+  basket: BasketState;
+  customer: StripeCustomer;
+};
+
+export async function fetchPostJSON(url: string, data: CheckoutSessionProps) {
+  try {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      body: JSON.stringify(data || {}),
+    });
+    return (await response.json()) as unknown;
+  } catch (err) {
+    if (err instanceof Error) {
+      throw new Error(err.message);
+    }
+    throw err;
+  }
+}
+
+let stripePromise: Promise<Stripe | null>;
+export const getStripe = () => {
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  if (!stripePromise) {
+    stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+  }
+  return stripePromise;
+};
+
 
 type GetSelectFieldsProps = {
   fields: string[];

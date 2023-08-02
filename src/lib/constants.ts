@@ -10,6 +10,7 @@ export const PRODUCTS_ROUTE = "/creations";
 export const SINGLE_PRODUCT_ROUTE = "/creations/";
 export const BASKET_ROUTE = "/panier";
 export const DELIVERY_ROUTE = "/livraison";
+export const PAYMENT_SUCCEEDED_ROUTE = "/paiement-reussi";
 // /routes
 
 // social media

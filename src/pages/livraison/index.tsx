@@ -1,5 +1,5 @@
 import { type NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +18,15 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Textarea } from "~/components/ui/textarea";
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
+import { useRouter } from "next/router";
+import { api } from "~/lib/api";
+import {
+  consoleError,
+  fetchPostJSON,
+  getStripe,
+  useBasket,
+} from "~/lib/helpers/helpers";
+import { Loading } from "~/components/Loading/Loading";
 
 type ShortInputProps = {
   label: string;
@@ -98,19 +107,14 @@ const formSchema = z.object({
     .max(50, { message: lastnameMessage }),
   email: z.string().email({ message: emailMessage }),
   phone: z.string({ description: phoneMessage }),
-  // .regex(/^(\+33|0)[1-9](\d{2}){4}$/, { message: phoneMessage }),
-  deliveryOptionId: z
-    .string({
-      errorMap: () => ({ message: deliveryOptionMessage }),
-    })
-    .refine((value) => Number.isInteger(parseInt(value, 10)), {
-      message: "Oups il semblerait qu'une erreur est survenue",
-    }),
-  address1: z
+  deliveryOptionId: z.string({
+    errorMap: () => ({ message: deliveryOptionMessage }),
+  }),
+  line1: z
     .string()
     .min(5, { message: address1Message })
     .max(100, { message: address1Message }),
-  address2: z.string().max(100, { message: address2Message }).optional(),
+  line2: z.string().max(100, { message: address2Message }).optional(),
   city: z
     .string()
     .min(2, { message: cityMessage })
@@ -133,17 +137,70 @@ const defaultValues = {
   comment: "",
 } as const;
 
-function onSubmit(values: z.infer<typeof formSchema>) {
-  // Do something with the form values.
-  // ✅ This will be type-safe and validated.
-  console.log("values", values);
-}
-
 const DeliveryPage: NextPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { basket } = useBasket();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    // console.log("values", values);
+
+    setIsLoading(true);
+
+    const {
+      lastname,
+      firstname,
+      line1,
+      line2,
+      email,
+      phone,
+      city,
+      postalCode,
+    } = values;
+
+    const customer = {
+      name: firstname + " " + lastname,
+      email,
+      phone,
+      address: {
+        city,
+        country: "France",
+        line1,
+        line2,
+        postal_code: postalCode,
+      },
+    };
+    // Create a Checkout Session.
+    const response = await fetchPostJSON("/api/checkoutSessions", {
+      basket,
+      customer: customer,
+    });
+
+    if (response.statusCode === 500) {
+      consoleError(response.message);
+      return;
+    }
+
+    // Redirect to Checkout.
+    const stripe = await getStripe();
+    const { error } = await stripe!.redirectToCheckout({
+      // Make the id field from the Checkout Session creation API response
+      // available to this file, so you can provide it as parameter here
+      // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+      sessionId: response.id,
+    });
+    // If `redirectToCheckout` fails due to a browser or network
+    // error, display the localized error message to your customer
+    // using `error.message`.
+    console.warn(error.message);
+    setIsLoading(false);
+  }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
   });
+
+  if (isLoading) return <Loading />;
 
   return (
     <main>
@@ -231,7 +288,7 @@ const DeliveryPage: NextPage = () => {
 
             <FormField
               control={form.control}
-              name="address1"
+              name="line1"
               render={({ field }) => (
                 <ShortInput
                   label="Adresse"
@@ -242,7 +299,7 @@ const DeliveryPage: NextPage = () => {
             />
             <FormField
               control={form.control}
-              name="address2"
+              name="line2"
               render={({ field }) => (
                 <ShortInput
                   label="Complément"
