@@ -17,13 +17,14 @@ model Product {
   createdAt   DateTime          @default(now())
   name        String
   description String?
+  productId   String?
+  imageId     Int
+  
   categories  Category[]
   options     Option[]
-  productId   String?
   relateTo    Product[]         @relation("RelatedProducts")
   relatedBy   Product[]         @relation("RelatedProducts")
   image       Image             @relation(fields: [imageId], references: [id])
-  imageId     Int
   baskets     ProductToBasket[]
 
   @@index([imageId])
@@ -32,9 +33,10 @@ model Product {
 model Category {
   id       Int       @id @default(autoincrement())
   name     String
+  imageId  Int
+
   products Product[]
   image    Image     @relation(fields: [imageId], references: [id])
-  imageId  Int
 
   @@index([imageId])
 }
@@ -43,10 +45,11 @@ model Option {
   id        Int               @id @default(autoincrement())
   name      String
   price     Int
-  image     Image             @relation(fields: [imageId], references: [id])
-  imageId   Int
-  product   Product           @relation(fields: [productId], references: [id])
   productId Int
+  imageId   Int
+
+  image     Image             @relation(fields: [imageId], references: [id])
+  product   Product           @relation(fields: [productId], references: [id])
   baskets   ProductToBasket[]
 
   @@index([productId])
@@ -57,6 +60,7 @@ model Image {
   id         Int        @id @default(autoincrement())
   name       String     @db.VarChar(255)
   url        String     @db.Text
+
   Products   Product[]
   Categories Category[]
   Options    Option[]
@@ -65,14 +69,36 @@ model Image {
 model ProductToBasket {
   id        Int     @id @default(autoincrement())
   quantity  Int
-  option    Option  @relation(fields: [optionId], references: [id])
   optionId  Int
-  product   Product @relation(fields: [productId], references: [id])
   productId Int
+
+  option    Option  @relation(fields: [optionId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
   orders    Order[]
 
   @@index([productId])
   @@index([optionId])
+}
+
+model Address {
+  id         Int        @id @default(autoincrement())
+  line1      String
+  line2      String?
+  country    String
+  postalCode String
+  city       String
+  orders     Order[]
+  customers  Customer[]
+}
+
+model Customer {
+  id          Int       @id @default(autoincrement())
+  firstname   String
+  lastname    String
+  email       String
+  phoneNumber String
+  address     Address[]
+  order       Order[]
 }
 
 model Order {
@@ -82,21 +108,19 @@ model Order {
   isEmailSent      Boolean           @default(false)
   paymentIntentId  String?
   price            Int
-  productsToBasket ProductToBasket[]
-  firstname        String
-  lastname         String
-  email            String
-  phoneNumber      String
-  deliveryOption         DeliveryOption    @relation(fields: [deliveryOptionId], references: [id])
-  deliveryOptionId Int
-  addressLine1     String
-  addressLine2     String?
-  country          String
-  postalCode       String
-  city             String
   comment          String?
+  customerId       Int
+  deliveryOptionId Int
+  addressId        Int
+
+  productsToBasket ProductToBasket[]
+  customer         Customer          @relation(fields: [customerId], references: [id])
+  deliveryOption   DeliveryOption    @relation(fields: [deliveryOptionId], references: [id])
+  Address          Address           @relation(fields: [addressId], references: [id])
 
   @@index([deliveryOptionId])
+  @@index([addressId])
+  @@index([customerId])
 }
 
 model DeliveryOption {
