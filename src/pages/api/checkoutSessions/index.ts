@@ -118,6 +118,11 @@ export default async function handler(
         success_url: `${
           req.headers.origin ?? "https://jegwell.fr"
         }${PAYMENT_SUCCEEDED_ROUTE}?session_id={CHECKOUT_SESSION_ID}`,
+        payment_intent_data: {
+          metadata: {
+            orderId: "79",
+          },
+        },
       };
       const checkoutSession: Stripe.Checkout.Session =
         await stripe.checkout.sessions.create(params);

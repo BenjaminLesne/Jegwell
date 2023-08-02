@@ -13,7 +13,9 @@
     "testsE2e": "playwright test --forbid-only",
     "e2e-local": "playwright test --headed --project='Mobile Chrome'",
     "e2e-local-ui": "playwright test --ui",
-    "e2e-snapshots": "playwright test --update-snapshots"
+    "e2e-snapshots": "playwright test --update-snapshots",
+    "stripe:listen": "stripe listen --forward-to localhost:3000/api/stripe",
+    "stripe:trigger": "stripe trigger payment_intent.succeeded"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.17.1",
@@ -35,6 +37,7 @@
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "lucide-react": "^0.224.0",
+    "micro": "^10.0.1",
     "next": "^13.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
