@@ -24,7 +24,12 @@ import {
   SUBTOTAL_TESTID,
   mergedProductsSchema,
 } from "~/lib/constants";
-import { cn, consoleError, useBasket } from "~/lib/helpers/helpers";
+import {
+  cn,
+  consoleError,
+  getSubtotalPrice,
+  useBasket,
+} from "~/lib/helpers/helpers";
 import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 import { type MergedProduct } from "~/lib/types";
 
@@ -172,17 +177,6 @@ const BasketPage: NextPage = () => {
     return totalQuantity;
   }
 
-  function getSubtotalPrice(items: typeof mergedProducts): number {
-    let totalPrice = 0;
-    for (const item of items) {
-      const chosenOption = item.options.find(
-        (option) => option.id.toString() === item.optionId
-      );
-      const optionPrice = chosenOption ? chosenOption.price : item.price;
-      totalPrice += optionPrice * item.quantity;
-    }
-    return totalPrice;
-  }
   return (
     <main>
       <Section className="mx-auto max-w-[50ch]  px-2">

@@ -24,9 +24,11 @@ import {
   consoleError,
   fetchPostJSON,
   getStripe,
+  getSubtotalPrice,
   useBasket,
 } from "~/lib/helpers/helpers";
 import { Loading } from "~/components/Loading/Loading";
+import { deliveryFormSchema } from "~/lib/constants";
 
 type ShortInputProps = {
   label: string;
@@ -43,87 +45,9 @@ const ShortInput = ({ label, placeholder, field }: ShortInputProps) => (
   </FormItem>
 );
 
-const minShortString = 2;
-const maxShortString = 50;
-type ShortStringProps = {
-  min: number;
-  max: number;
-  label: string;
-};
-
-const shortStringMessage = ({ min, max, label }: ShortStringProps) => {
-  return `${label} doit contenir entre ${min} et ${max} caractères`;
-};
-const firstnameMessage = shortStringMessage({
-  label: "Le prénom",
-  min: minShortString,
-  max: maxShortString,
-});
-const lastnameMessage = shortStringMessage({
-  label: "Le nom",
-  min: minShortString,
-  max: maxShortString,
-});
-const emailMessage = "Votre saisie n'est pas un email valide";
-const phoneMessage = "Votre saisie doit uniquement être des nombres";
-
 const EXPRESS = "express";
 const FOLLOWED_LETTER = "lettre suivie";
 
-const deliveryOptionMessage = "Veuillez selectionner une méthode de livraison";
-
-const address1Message = shortStringMessage({
-  min: 5,
-  max: 100,
-  label: "L'adresse",
-});
-
-const address2Message = shortStringMessage({
-  min: 0,
-  max: 100,
-  label: "Le complément d'adresse",
-});
-
-const cityMessage = shortStringMessage({
-  min: 2,
-  max: 50,
-  label: "La ville",
-});
-const commentMessage = shortStringMessage({
-  min: 0,
-  max: 500,
-  label: "Le commentaire",
-});
-const formSchema = z.object({
-  firstname: z
-    .string()
-    .min(2, {
-      message: firstnameMessage,
-    })
-    .max(50, { message: firstnameMessage }),
-  lastname: z
-    .string()
-    .min(2, { message: lastnameMessage })
-    .max(50, { message: lastnameMessage }),
-  email: z.string().email({ message: emailMessage }),
-  phone: z.string({ description: phoneMessage }),
-  deliveryOptionId: z.string({
-    errorMap: () => ({ message: deliveryOptionMessage }),
-  }),
-  line1: z
-    .string()
-    .min(5, { message: address1Message })
-    .max(100, { message: address1Message }),
-  line2: z.string().max(100, { message: address2Message }).optional(),
-  city: z
-    .string()
-    .min(2, { message: cityMessage })
-    .max(50, { message: cityMessage }),
-  postalCode: z
-    .string()
-    .regex(/^\d{5}$/, { message: "Le code postal doit contenir 5 chiffres" }),
-  comment: z.string().max(500, { message: commentMessage }).optional(),
-});
 const defaultValues = {
   firstname: "",
   lastname: "",
@@ -140,12 +64,29 @@ const defaultValues = {
 const DeliveryPage: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { basket } = useBasket();
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    // console.log("values", values);
-
+  async function onSubmit(values: z.infer<typeof deliveryFormSchema>) {
     setIsLoading(true);
+    // //////////////////THIS SHOULD BE DONE SERVER SIDE//////////////////////
+    // we should pass as input of the api the basket
+    // this basket is used to fetch products and calculate the total price (dont forget delivery fee!!)
+    //
+
+    // create order
+    // const createOrder = api.orders.create.useMutation(values)
+    const { mutateAsync: createOrder } = api.orders.create.useMutation();
+    const subTotalPrice = getSubtotalPrice();
+    const deliveryPrice = 1;
+    const totalPrice = subTotalPrice + deliveryPrice;
+
+    await createOrder({
+      ...values,
+      price: totalPrice,
+      productsToBasket: basket,
+    });
+    // get back the id of the order
+    // pass it to the checkoutsession args
+    // add it to metadata in stripe
+    // //////////////////////////////////////////////////////////////////
 
     const {
       lastname,
@@ -195,12 +136,17 @@ const DeliveryPage: NextPage = () => {
     console.warn(error.message);
     setIsLoading(false);
   }
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof deliveryFormSchema>>({
+    resolver: zodResolver(deliveryFormSchema),
     defaultValues: defaultValues,
   });
 
-  if (isLoading) return <Loading />;
+  if (isLoading)
+    return (
+      <main>
+        <Loading />
+      </main>
+    );
 
   return (
     <main>

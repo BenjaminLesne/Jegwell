@@ -11,6 +11,28 @@ import { twMerge } from "tailwind-merge";
 import { type Stripe, loadStripe } from "@stripe/stripe-js";
 import { env } from "~/env.mjs";
 
+type Products = {
+  quantity: number;
+  optionId: string;
+  options: {
+    id: number;
+    price: number;
+  }[];
+  price: number;
+};
+
+export function getSubtotalPrice(items: Products[]): number {
+  let totalPrice = 0;
+  for (const item of items) {
+    const chosenOption = item.options.find(
+      (option) => option.id.toString() === item.optionId
+    );
+    const optionPrice = chosenOption ? chosenOption.price : item.price;
+    totalPrice += optionPrice * item.quantity;
+  }
+  return totalPrice;
+}
+
 export async function fetchGetJSON(url: string) {
   try {
     const data: unknown = await fetch(url).then((res) => res.json());
