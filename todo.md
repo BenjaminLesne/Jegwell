@@ -29,6 +29,8 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - make a unit test for getSubtotalPrice
 - get rid of reportUndefinedOrNullVars
 - get rid of fetchPostJSON, use tRPC function instead
+- option modal not working on single page product
+
 Doing:
 - delivery page
 =>setting up the api to create an order -> data type is weird everything is optional... and this is not deeply types, the address relation is undefined as type

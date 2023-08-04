@@ -9,34 +9,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../../ui/AlertDialog/alert-dialog";
-import { type BasketAction, cn, OrderedProduct } from "~/lib/helpers/helpers";
+import { type BasketAction, cn } from "~/lib/helpers/helpers";
 import { BASKET_REDUCER_TYPE, NO_OPTION } from "~/lib/constants";
 import Image from "next/image";
-import { Product } from "@prisma/client";
-
-type MergedProduct = {
-  id: string;
-  quantity: number;
-  optionId: string;
-  options?:
-    | {
-        id: number;
-        image: {
-          url: string;
-        };
-        price: number;
-        name: string;
-      }[]
-    | undefined;
-  image?:
-    | {
-        url: string;
-      }
-    | null
-    | undefined;
-  price?: number | undefined;
-  name?: string | undefined;
-} & OrderedProduct;
+import { type ProductForModal } from "~/lib/types";
 
 type OnOptionConfirm = (
   dispatchBasketArgs: Extract<
@@ -50,7 +26,7 @@ type OnOptionConfirm = (
 type Props = {
   open: boolean;
   closeModal: () => void;
-  orderedProduct: MergedProduct;
+  orderedProduct: ProductForModal;
   onConfirmation: React.Dispatch<BasketAction> | OnOptionConfirm;
 };
 

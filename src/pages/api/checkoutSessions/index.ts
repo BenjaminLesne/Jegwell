@@ -2,7 +2,11 @@ import { type NextApiRequest, type NextApiResponse } from "next";
 import Stripe from "stripe";
 import { z } from "zod";
 import { env } from "~/env.mjs";
-import { NO_OPTION, PAYMENT_SUCCEEDED_ROUTE } from "~/lib/constants";
+import {
+  NO_OPTION,
+  PAYMENT_SUCCEEDED_ROUTE,
+  orderSchema,
+} from "~/lib/constants";
 import { consoleError } from "~/lib/helpers/helpers";
 import { appRouter } from "~/server/api/root";
 import { prisma } from "~/server/db";
@@ -10,12 +14,6 @@ import { prisma } from "~/server/db";
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
   // https://github.com/stripe/stripe-node#configuration
   apiVersion: "2022-11-15",
-});
-
-const productToBasketSchema = z.object({
-  id: z.string(),
-  quantity: z.number(),
-  optionId: z.string(),
 });
 
 const addressSchema = z.object({
@@ -33,11 +31,14 @@ const customerSchema = z.object({
   address: addressSchema,
 });
 
-const bodySchema = z.object({
-  basket: z.array(productToBasketSchema),
-  customer: customerSchema,
-  orderId: z.number(),
-});
+const bodySchema = z
+  .object({
+    // basket: z.array(orderSchema.pick({ productsToBasket: true })),
+    customer: customerSchema,
+    orderId: z.number(),
+  })
+  .merge(orderSchema.pick({ productsToBasket: true }));
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -45,7 +46,9 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const body = bodySchema.parse(req.body);
-      const ids = body.basket.map((product) => product.id);
+      const ids = body.productsToBasket.map((product) =>
+        product.productId.toString()
+      );
       const orderId = body.orderId;
       const caller = appRouter.createCaller({ prisma });
       const products = await caller.products.getByIds({ ids });
@@ -54,24 +57,24 @@ export default async function handler(
         throw Error("No products returned from database");
       }
 
-      const lineItemsRaw = body.basket.map((orderedProduct) => {
-        const { id, optionId, quantity } = orderedProduct;
-        const product = products.find((item) => item.id.toString() === id);
+      const lineItemsRaw = body.productsToBasket.map((orderedProduct) => {
+        const { productId, optionId, quantity } = orderedProduct;
+        const product = products.find((item) => item.id === productId);
         if (!product) {
-          consoleError("could not find product with id : " + id);
+          consoleError(
+            "could not find product with id : " + productId.toString()
+          );
           return undefined;
         }
 
-        const option = product.options.find(
-          (option) => option.id.toString() === optionId
-        );
+        const option = product.options.find((option) => option.id === optionId);
 
-        if (option === undefined && option !== NO_OPTION) {
+        if (option === undefined && optionId !== NO_OPTION) {
           consoleError(
             "could not find option with id : " +
-              optionId +
+              (optionId ? optionId.toString() : "null") +
               " of product with id " +
-              id
+              productId.toString()
           );
         }
 

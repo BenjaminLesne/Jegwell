@@ -64,6 +64,10 @@ const defaultValues = {
 const DeliveryPage: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { basket } = useBasket();
+  const { mutateAsync: createOrder } = api.orders.create.useMutation();
+  const { data: deliveryOptions, isLoading: deliveryOptionsAreLoading } =
+    api.deliveryOptions.getAll.useQuery();
+
   async function onSubmit(values: z.infer<typeof deliveryFormSchema>) {
     setIsLoading(true);
     // //////////////////THIS SHOULD BE DONE SERVER SIDE//////////////////////
@@ -73,7 +77,7 @@ const DeliveryPage: NextPage = () => {
 
     // create order
     // const createOrder = api.orders.create.useMutation(values)
-    const { mutateAsync: createOrder } = api.orders.create.useMutation();
+    // const { mutateAsync: createOrder } = api.orders.create.useMutation();
 
     const order = await createOrder({
       ...values,
@@ -110,7 +114,7 @@ const DeliveryPage: NextPage = () => {
 
     // Create a Checkout Session.
     const response = await fetchPostJSON("/api/checkoutSessions", {
-      basket,
+      productsToBasket: basket,
       customer: customer,
       orderId: order.id,
     });
@@ -139,7 +143,7 @@ const DeliveryPage: NextPage = () => {
     defaultValues: defaultValues,
   });
 
-  if (isLoading)
+  if (isLoading || deliveryOptionsAreLoading)
     return (
       <main>
         <Loading />
@@ -209,20 +213,24 @@ const DeliveryPage: NextPage = () => {
                       defaultValue={field.value}
                       className="flex flex-col space-y-1"
                     >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value={EXPRESS} />
-                        </FormControl>
-                        <FormLabel className="font-normal">{EXPRESS}</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value={FOLLOWED_LETTER} />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          {FOLLOWED_LETTER}
-                        </FormLabel>
-                      </FormItem>
+                      {deliveryOptions?.map((delivery) => (
+                        <FormItem
+                          className="flex items-center space-x-3 space-y-0"
+                          key={delivery.id}
+                        >
+                          <FormControl>
+                            <RadioGroupItem value={delivery.id.toString()} />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {delivery.name}
+                          </FormLabel>
+                          {delivery.description && (
+                            <FormDescription>
+                              {delivery.description}
+                            </FormDescription>
+                          )}
+                        </FormItem>
+                      ))}
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />

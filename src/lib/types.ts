@@ -19,3 +19,25 @@ export type MergedProduct = {
   price: number;
   name: string;
 };
+
+export type ProductForModal = {
+  id: string;
+  options?:
+    | {
+        id: number;
+        image: {
+          url: string;
+        };
+        price: number;
+        name: string;
+      }[]
+    | undefined;
+  image?:
+    | {
+        url: string;
+      }
+    | null
+    | undefined;
+  price?: number | undefined;
+  name?: string | undefined;
+} & OrderedProduct;

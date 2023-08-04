@@ -1,14 +1,16 @@
 import { useReducer, useState } from "react";
 import { CLOSE_TYPE, OPEN_TYPE } from "../constants";
 import { OrderedProduct } from "../helpers/helpers";
+import { ProductForModal } from "../types";
 
 const PRODUCT_INFO = "orderedProduct";
 const initialModalProps = {
   [PRODUCT_INFO]: {
     id: "-1",
+    productId: -1,
     optionId: -1,
     quantity: -1,
-  },
+  } satisfies ProductForModal,
   open: false,
 };
 
@@ -48,11 +50,7 @@ export const useOptionModal = () => {
 };
 
 type QuantityModalPropsState = {
-  [PRODUCT_INFO]: {
-    id: string;
-    optionId: OrderedProduct["optionId"];
-    quantity: OrderedProduct["quantity"];
-  };
+  [PRODUCT_INFO]: ProductForModal;
   open: boolean;
 };
 

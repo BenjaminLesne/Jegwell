@@ -5,6 +5,9 @@ import { env } from "~/env.mjs";
 import { consoleError } from "~/lib/helpers/helpers";
 import { z } from "zod";
 import { api } from "~/lib/api";
+import { Order } from "@prisma/client";
+import { appRouter } from "~/server/api/root";
+import { prisma } from "~/server/db";
 
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
@@ -43,16 +46,14 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
     switch (event.type) {
       case "payment_intent.succeeded":
         const result = event.data.object as {
-          metadata: { orderId: number };
+          metadata: { orderId: string };
           id: string;
         };
         const paymentIntentId = z.string().parse(result.id);
-        const orderId = z.number().parse(result.metadata.orderId);
+        const orderId = z.number().parse(parseInt(result.metadata.orderId));
 
-        const { mutateAsync: updateOrder } =
-          api.orders.paymentSucceeded.useMutation();
-
-        const updatedOrder = await updateOrder({
+        const caller = appRouter.createCaller({ prisma });
+        const updatedOrder = await caller.orders.paymentSucceeded({
           orderId,
           paymentIntentId,
         });

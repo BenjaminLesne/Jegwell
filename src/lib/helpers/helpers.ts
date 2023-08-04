@@ -61,7 +61,7 @@ type StripeCustomer = {
 };
 
 type CheckoutSessionProps = {
-  basket: BasketState;
+  productsToBasket: BasketState;
   customer: StripeCustomer;
   orderId: number;
 };

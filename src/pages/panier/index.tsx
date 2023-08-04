@@ -150,7 +150,7 @@ const BasketPage: NextPage = () => {
                       value={
                         product.options.find(
                           (option) => option.id === product.optionId
-                        )?.name ?? NO_OPTION
+                        )?.name ?? "Original"
                       }
                       onClick={() =>
                         dispatchOptionModalProps({
@@ -188,7 +188,7 @@ const BasketPage: NextPage = () => {
               type: CLOSE_TYPE,
             })
           }
-          dispatchBasket={dispatchBasket}
+          onConfirmation={dispatchBasket}
         />
         <OptionModal
           {...optionModalProps}

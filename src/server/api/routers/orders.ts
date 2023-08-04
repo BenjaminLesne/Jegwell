@@ -29,7 +29,7 @@ export const ordersRouter = createTRPCRouter({
       const ids = productsToBasket.map((item) => item.productId.toString());
       const caller = appRouter.createCaller({ prisma });
       const deliveryOption = await caller.deliveryOptions.getOrThrow({
-        id: deliveryOptionId,
+        id: parseInt(deliveryOptionId),
       });
       const products = await caller.products.getByIds({ ids });
 
@@ -41,7 +41,7 @@ export const ordersRouter = createTRPCRouter({
         const mergedProduct = {
           ...product,
           ...item,
-          optionId: item.optionId?.toString(),
+          optionId: item.optionId,
         };
         return mergedProduct;
       });
@@ -58,19 +58,29 @@ export const ordersRouter = createTRPCRouter({
       const data = {
         price: totalPrice,
         productsToBasket: {
-          create: productsToBasket.map((item) => ({
-            quantity: item.quantity,
-            option: {
-              connect: {
-                id: item.optionId ?? undefined,
+          create: productsToBasket.map((item) => {
+            const defaultObject = {
+              quantity: item.quantity,
+              product: {
+                connect: {
+                  id: item.productId,
+                },
               },
-            },
-            product: {
-              connect: {
-                id: item.productId,
-              },
-            },
-          })),
+            };
+
+            if (item.optionId != null) {
+              const optionConnect = {
+                option: {
+                  connect: {
+                    id: item.optionId,
+                  },
+                },
+              };
+
+              return { ...defaultObject, ...optionConnect };
+            }
+            return defaultObject;
+          }),
         },
         customer: {
           create: {
@@ -103,6 +113,15 @@ export const ordersRouter = createTRPCRouter({
 
       return order;
     }),
+  getAllPaid: publicProcedure.query(async ({ ctx }) => {
+    const orders = await ctx.prisma.order.findMany({
+      where: {
+        isPaid: true,
+      },
+    });
+
+    return orders;
+  }),
   paymentSucceeded: publicProcedure
     .input(paymentSucceededSchema)
     .mutation(async ({ ctx, input }) => {
@@ -117,6 +136,8 @@ export const ordersRouter = createTRPCRouter({
           paymentIntentId,
         },
       });
+
+      console.log("TESTorder", order);
 
       return order;
     }),

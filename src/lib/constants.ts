@@ -87,7 +87,7 @@ export const productToBasketSchema = z.object({
 
 export const mergedProductSchema = z
   .object({
-    id: z.string(),
+    id: z.number(),
     image: z.object({
       url: z.string(),
     }),
@@ -114,17 +114,17 @@ export const mergedProductSchema = z
 
 export const mergedProductsSchema = z.array(mergedProductSchema);
 
-export const lightMergedProductSchema = z.object({
-  quantity: z.number(),
-  optionId: z.string(),
-  options: z.array(
-    z.object({
-      id: z.number(),
-      price: z.number(),
-    })
-  ),
-  price: z.number(),
-});
+export const lightMergedProductSchema = z
+  .object({
+    options: z.array(
+      z.object({
+        id: z.number(),
+        price: z.number(),
+      })
+    ),
+    price: z.number(),
+  })
+  .merge(productToBasketSchema.pick({ optionId: true, quantity: true }));
 
 export const imageSchema = z.object({
   id: z.number(),
