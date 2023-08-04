@@ -3,15 +3,15 @@ import {
   BASKET_REDUCER_TYPE,
   DEVELOPMENT,
   LOCALE_STORAGE_BASKET_KEY,
-  NO_OPTION,
 } from "../constants";
 import { z } from "zod";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { type Stripe, loadStripe } from "@stripe/stripe-js";
 import { env } from "~/env.mjs";
+import { type ProductToBasket } from "@prisma/client";
 
-type Products = {
+export type GetSubtotalPriceProps = {
   quantity: number;
   optionId: string;
   options: {
@@ -21,7 +21,7 @@ type Products = {
   price: number;
 };
 
-export function getSubtotalPrice(items: Products[]): number {
+export function getSubtotalPrice(items: GetSubtotalPriceProps[]): number {
   let totalPrice = 0;
   for (const item of items) {
     const chosenOption = item.options.find(
@@ -98,7 +98,6 @@ export const getStripe = () => {
   }
   return stripePromise;
 };
-
 
 type GetSelectFieldsProps = {
   fields: string[];
@@ -189,22 +188,18 @@ export function isSorted({ array, order }: isSortedProps) {
 // BASKET RELATED
 const orderedProductSchema = z.array(
   z.object({
-    id: z.string(),
+    productId: z.number(),
     quantity: z.number(),
-    optionId: z.string(),
+    optionId: z.number().nullable(),
   })
 );
 type BasketState = OrderedProduct[];
 
-type ProductId = string;
-type Quantity = number;
-type OptionId = string;
-
 type UpdateQuantityAction = {
   type: (typeof BASKET_REDUCER_TYPE)["UPDATE_QUANTITY"];
-  productId: ProductId;
-  optionId: OptionId;
-  quantity: Quantity;
+  productId: OrderedProduct["productId"];
+  optionId: OrderedProduct["optionId"];
+  quantity: OrderedProduct["quantity"];
 };
 
 type SetAction = {
@@ -219,20 +214,20 @@ type AddAction = {
 
 type RemoveAction = {
   type: (typeof BASKET_REDUCER_TYPE)["REMOVE"];
-  productId: ProductId;
-  optionId: OptionId;
+  productId: OrderedProduct["productId"];
+  optionId: OrderedProduct["optionId"];
 };
 
 type UpdateOptionAction = {
   type: (typeof BASKET_REDUCER_TYPE)["UPDATE_OPTION"];
-  productId: ProductId;
-  optionId: OptionId;
-  newOptionId: OptionId;
+  productId: OrderedProduct["productId"];
+  optionId: OrderedProduct["optionId"];
+  newOptionId: OrderedProduct["optionId"];
 };
 
 type IncrementAction = {
   type: (typeof BASKET_REDUCER_TYPE)["INCREMENT"];
-  productId: ProductId;
+  productId: OrderedProduct["productId"];
 };
 
 type ResetAction = {
@@ -247,11 +242,7 @@ export type BasketAction =
   | IncrementAction
   | ResetAction;
 
-export type OrderedProduct = {
-  id: string;
-  quantity: number;
-  optionId: string;
-};
+export type OrderedProduct = Omit<ProductToBasket, "id">;
 
 function reportUndefinedOrNullVars(...variables: unknown[]) {
   const undefinedOrNullVariables = [];
@@ -276,9 +267,7 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
 
   type RemoveFromBasketProps = {
     state: BasketState;
-    productId: RemoveAction["productId"];
-    optionId: RemoveAction["optionId"];
-  };
+  } & Pick<RemoveAction, "productId" | "optionId">;
 
   function removeFromBasket({
     state,
@@ -286,7 +275,8 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
     optionId,
   }: RemoveFromBasketProps) {
     return state.filter(
-      (product) => product.id !== productId && product.optionId !== optionId
+      (product) =>
+        product.productId !== productId && product.optionId !== optionId
     );
   }
 
@@ -294,9 +284,10 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
     case ADD:
       if (action.product) {
         const optionId = action.product.optionId;
-        const productId = action.product.id;
+        const productId = action.product.productId;
         const targetProduct = state.find(
-          (product) => product.id === productId && product.optionId === optionId
+          (product) =>
+            product.productId === productId && product.optionId === optionId
         );
         if (targetProduct === undefined) return [...state, action.product];
 
@@ -312,18 +303,20 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
       break;
 
     case INCREMENT: {
-      const product = state.find((item) => item.id === action.productId);
+      const product = state.find((item) => item.productId === action.productId);
       if (product?.quantity) {
-        const partialState = state.filter((item) => item.id !== product.id);
+        const partialState = state.filter(
+          (item) => item.productId !== product.productId
+        );
         return [
           ...partialState,
           { ...product, quantity: product?.quantity + 1 },
         ];
       } else {
         const newProduct = {
-          id: action.productId,
+          productId: action.productId,
           quantity: 1,
-          optionId: NO_OPTION,
+          optionId: null,
         };
         return [...state, newProduct];
       }
@@ -333,7 +326,7 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
       if (action.optionId && action.productId && action.newOptionId) {
         const updatedState = state.map((product) => {
           if (
-            product.id === action.productId &&
+            product.productId === action.productId &&
             product.optionId === action.optionId
           ) {
             return { ...product, optionId: action.newOptionId };
@@ -363,7 +356,7 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
         const updatedState = state.map((product) => {
           if (
             action.quantity != null &&
-            product.id === action.productId &&
+            product.productId === action.productId &&
             product.optionId === action.optionId
           ) {
             didChange = true;
@@ -465,6 +458,7 @@ export const useBasket = () => {
 
   return { basket, dispatchBasket };
 };
+// /BASKET RELATED
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

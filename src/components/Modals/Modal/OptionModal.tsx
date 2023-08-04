@@ -9,11 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../../ui/AlertDialog/alert-dialog";
-import {
-  type OrderedProduct,
-  type BasketAction,
-  cn,
-} from "~/lib/helpers/helpers";
+import { type BasketAction, cn } from "~/lib/helpers/helpers";
 import { BASKET_REDUCER_TYPE, NO_OPTION } from "~/lib/constants";
 import Image from "next/image";
 

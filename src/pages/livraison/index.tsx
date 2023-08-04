@@ -74,13 +74,9 @@ const DeliveryPage: NextPage = () => {
     // create order
     // const createOrder = api.orders.create.useMutation(values)
     const { mutateAsync: createOrder } = api.orders.create.useMutation();
-    const subTotalPrice = getSubtotalPrice();
-    const deliveryPrice = 1;
-    const totalPrice = subTotalPrice + deliveryPrice;
 
     await createOrder({
       ...values,
-      price: totalPrice,
       productsToBasket: basket,
     });
     // get back the id of the order

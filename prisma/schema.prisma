@@ -67,12 +67,12 @@ model Image {
 }
 
 model ProductToBasket {
-  id        Int @id @default(autoincrement())
+  id        Int  @id @default(autoincrement())
   quantity  Int
-  optionId  Int
+  optionId  Int?
   productId Int
 
-  option  Option  @relation(fields: [optionId], references: [id])
+  option  Option?  @relation(fields: [optionId], references: [id])
   product Product @relation(fields: [productId], references: [id])
   orders  Order[]
 

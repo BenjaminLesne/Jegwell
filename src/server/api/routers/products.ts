@@ -115,9 +115,7 @@ export const productsRouter = createTRPCRouter({
 
       const arg = {
         where: {
-          id: {
-            in: [parseInt(id)],
-          },
+          id: parseInt(id),
         },
         select: {
           name: true,
@@ -142,9 +140,9 @@ export const productsRouter = createTRPCRouter({
             },
           },
         },
-      } satisfies Prisma.ProductFindFirstArgs;
+      } satisfies Prisma.ProductFindUniqueArgs;
 
-      const result = ctx.prisma.product.findFirst(arg);
+      const result = ctx.prisma.product.findUnique(arg);
       return result;
     }),
 });

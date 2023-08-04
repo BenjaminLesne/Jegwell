@@ -27,11 +27,13 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - update to prisma@5.1.0
 - in livraison/index.tsx checkout session, we don't use tRPC to fetch, we use fetchPost from vercel blog post (see https://github.com/nramkissoon/t3-stripe/blob/5121a6383442e2f77b1b7a17a0f28e210e540f77/src/pages/dashboard.tsx#L24)
 - make a unit test for getSubtotalPrice
+- get rid of reportUndefinedOrNullVars
 
 Doing:
 - delivery page
 =>setting up the api to create an order -> data type is weird everything is optional... and this is not deeply types, the address relation is undefined as type
 => schema for createOrder, createAddress, createCustomer
+=> useBasket hook gone mad because I changed the OrderedProduct type (id => productId)
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

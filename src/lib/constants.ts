@@ -98,7 +98,29 @@ export const mergedProductSchema = z.object({
   price: z.number(),
   name: z.string(),
 });
+
 export const mergedProductsSchema = z.array(mergedProductSchema);
+
+export const lightMergedProductSchema = z.object({
+  // id: z.string(),
+  quantity: z.number(),
+  optionId: z.string(),
+  // image: z.object({
+  //   url: z.string(),
+  // }),
+  options: z.array(
+    z.object({
+      // image: z.object({
+      //   url: z.string(),
+      // }),
+      id: z.number(),
+      price: z.number(),
+      // name: z.string(),
+    })
+  ),
+  price: z.number(),
+  // name: z.string(),
+});
 
 export const imageSchema = z.object({
   id: z.number(),
@@ -120,7 +142,7 @@ export const productToBasketSchema = z.object({
   quantity: z.number(),
   optionId: z.number(),
   productId: z.number(),
-  option: optionSchema,
+  // option: optionSchema,
 });
 
 export const addressSchema = z.object({
@@ -159,7 +181,7 @@ export const orderSchema = z.object({
   customerId: z.number(),
   deliveryOptionId: z.number(),
   addressId: z.number(),
-  productsToBasket: z.array(productToBasketSchema),
+  productsToBasket: z.array(productToBasketSchema.omit({id: true})),
   customer: customerSchema,
   deliveryOption: deliveryOptionSchema,
   address: addressSchema,
