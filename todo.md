@@ -21,6 +21,9 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - mettre le prix dans les options de livraison (gratuit, prix du colissimo..)
 - should we store checkout session id or payment intent id?
 - bug: add to basket products page remove the first product with productId without checking the optionId. => add to basket product with option, then add to basket without. go to basket. the item with option disappeared
+=> when removing one product on basket page, all products disappear 
+- bug: cant change the quantity on basket page
+- forgot  to add delivery option to stripe line items
 - onConfirmation is not a function in basket page when modifying quantity
 - is stripe being loaded in every page?
 - create a customer entity to add in Order entity for later

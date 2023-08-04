@@ -118,6 +118,12 @@ export const ordersRouter = createTRPCRouter({
       where: {
         isPaid: true,
       },
+      include: {
+        customer: true,
+        address: true,
+        deliveryOption: true,
+        productsToBasket: true,
+      },
     });
 
     return orders;
