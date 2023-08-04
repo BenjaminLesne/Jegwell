@@ -75,7 +75,7 @@ const DeliveryPage: NextPage = () => {
     // const createOrder = api.orders.create.useMutation(values)
     const { mutateAsync: createOrder } = api.orders.create.useMutation();
 
-    await createOrder({
+    const order = await createOrder({
       ...values,
       productsToBasket: basket,
     });
@@ -107,10 +107,12 @@ const DeliveryPage: NextPage = () => {
         postal_code: postalCode,
       },
     };
+
     // Create a Checkout Session.
     const response = await fetchPostJSON("/api/checkoutSessions", {
       basket,
       customer: customer,
+      orderId: order.id,
     });
 
     if (response.statusCode === 500) {

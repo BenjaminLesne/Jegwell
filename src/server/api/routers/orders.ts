@@ -15,13 +15,18 @@ const partialCreateOrderSchema = orderSchema.pick({
 });
 const createOrderSchema = deliveryFormSchema.merge(partialCreateOrderSchema);
 
+const paymentSucceededSchema = z.object({
+  orderId: z.number(),
+  paymentIntentId: z.string(),
+});
+
 export const ordersRouter = createTRPCRouter({
   create: publicProcedure
     .input(createOrderSchema)
     .mutation(async ({ ctx, input }) => {
       const { productsToBasket, deliveryOptionId } = input;
 
-      const ids = productsToBasket.map((product) => product.id.toString());
+      const ids = productsToBasket.map((item) => item.productId.toString());
       const caller = appRouter.createCaller({ prisma });
       const deliveryOption = await caller.deliveryOptions.getOrThrow({
         id: deliveryOptionId,
@@ -29,12 +34,14 @@ export const ordersRouter = createTRPCRouter({
       const products = await caller.products.getByIds({ ids });
 
       const mergedProductsRaw = productsToBasket.map((item) => {
-        const product = products.find((element) => element.id === item.id);
+        const product = products.find(
+          (element) => element.id === item.productId
+        );
 
         const mergedProduct = {
           ...product,
           ...item,
-          optionId: item.optionId.toString(),
+          optionId: item.optionId?.toString(),
         };
         return mergedProduct;
       });
@@ -55,7 +62,7 @@ export const ordersRouter = createTRPCRouter({
             quantity: item.quantity,
             option: {
               connect: {
-                id: item.optionId,
+                id: item.optionId ?? undefined,
               },
             },
             product: {
@@ -92,6 +99,23 @@ export const ordersRouter = createTRPCRouter({
 
       const order = await ctx.prisma.order.create({
         data,
+      });
+
+      return order;
+    }),
+  paymentSucceeded: publicProcedure
+    .input(paymentSucceededSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { orderId, paymentIntentId } = input;
+
+      const order = await ctx.prisma.order.update({
+        where: {
+          id: orderId,
+        },
+        data: {
+          isPaid: true,
+          paymentIntentId,
+        },
       });
 
       return order;

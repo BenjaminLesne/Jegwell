@@ -72,7 +72,7 @@ model ProductToBasket {
   optionId  Int?
   productId Int
 
-  option  Option?  @relation(fields: [optionId], references: [id])
+  option  Option? @relation(fields: [optionId], references: [id])
   product Product @relation(fields: [productId], references: [id])
   orders  Order[]
 

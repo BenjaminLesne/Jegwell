@@ -81,7 +81,7 @@ export const QuantityModal = ({
     onConfirmation({
       type: UPDATE_QUANTITY,
       quantity: selectedQuantity,
-      productId: orderedProduct.id,
+      productId: orderedProduct.productId,
       optionId: orderedProduct.optionId,
     });
     closeModal();

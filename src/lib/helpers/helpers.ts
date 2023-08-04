@@ -12,8 +12,8 @@ import { env } from "~/env.mjs";
 import { type ProductToBasket } from "@prisma/client";
 
 export type GetSubtotalPriceProps = {
-  quantity: number;
-  optionId: string;
+  quantity: OrderedProduct["quantity"];
+  optionId: OrderedProduct["optionId"];
   options: {
     id: number;
     price: number;
@@ -25,7 +25,7 @@ export function getSubtotalPrice(items: GetSubtotalPriceProps[]): number {
   let totalPrice = 0;
   for (const item of items) {
     const chosenOption = item.options.find(
-      (option) => option.id.toString() === item.optionId
+      (option) => option.id === item.optionId
     );
     const optionPrice = chosenOption ? chosenOption.price : item.price;
     totalPrice += optionPrice * item.quantity;
@@ -63,6 +63,7 @@ type StripeCustomer = {
 type CheckoutSessionProps = {
   basket: BasketState;
   customer: StripeCustomer;
+  orderId: number;
 };
 
 export async function fetchPostJSON(url: string, data: CheckoutSessionProps) {
@@ -413,21 +414,8 @@ export const useBasket = () => {
   const initialState: BasketState = [];
   const [basket, dispatchBasket] = useReducer(basketReducer, initialState);
 
-  const { SET } = BASKET_REDUCER_TYPE;
+  const { SET, RESET } = BASKET_REDUCER_TYPE;
   const isFirstRender = useRef(true);
-
-  useEffect(() => {
-    const newBasketStringified = localStorage.getItem(
-      LOCALE_STORAGE_BASKET_KEY
-    );
-
-    if (newBasketStringified) {
-      const newBasket = orderedProductSchema.parse(
-        JSON.parse(newBasketStringified)
-      );
-      dispatchBasket({ type: SET, newBasket });
-    }
-  }, []);
 
   useEffect(() => {
     const newBasketStringified = localStorage.getItem(
@@ -442,7 +430,7 @@ export const useBasket = () => {
         dispatchBasket({ type: SET, newBasket });
       } catch (error) {
         consoleError("Failed to parse the basket from localStorage", error);
-        localStorage.removeItem(LOCALE_STORAGE_BASKET_KEY);
+        dispatchBasket({ type: RESET });
       }
     }
   }, []);

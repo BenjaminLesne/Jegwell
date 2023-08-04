@@ -33,89 +33,11 @@ import {
 import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 import { type MergedProduct } from "~/lib/types";
 
-// const PRODUCT_INFO = "orderedProduct";
-// const initialModalProps = {
-//   [PRODUCT_INFO]: {
-//     id: "-1",
-//     optionId: "-1",
-//     quantity: -1,
-//   },
-//   open: false,
-// };
-
-// type QuantityModalPropsState = {
-//   [PRODUCT_INFO]: {
-//     id: string;
-//     optionId: string;
-//     quantity: number;
-//   };
-//   open: boolean;
-// };
-
-// type QuantityModalPropsAction = {
-//   type: typeof OPEN_TYPE | typeof CLOSE_TYPE;
-//   value?: QuantityModalPropsState[typeof PRODUCT_INFO];
-// };
-
-// const quantityReducer = (
-//   state: QuantityModalPropsState,
-//   action: QuantityModalPropsAction
-// ) => {
-//   switch (action.type) {
-//     case OPEN_TYPE:
-//       if (action.value)
-//         return {
-//           open: true,
-//           [PRODUCT_INFO]: action.value,
-//         };
-//       break;
-
-//     case CLOSE_TYPE:
-//       return { ...state, open: false };
-
-//     default:
-//       return state;
-//   }
-
-//   return state;
-// };
-
-// const optionReducer = (
-//   state: QuantityModalPropsState,
-//   action: QuantityModalPropsAction
-// ) => {
-//   switch (action.type) {
-//     case OPEN_TYPE:
-//       if (action.value)
-//         return {
-//           open: true,
-//           [PRODUCT_INFO]: action.value,
-//         };
-//       break;
-
-//     case CLOSE_TYPE:
-//       return { ...state, open: false };
-
-//     default:
-//       return state;
-//   }
-
-//   return state;
-// };
-
 const BasketPage: NextPage = () => {
-  // const [quantityModalProps, dispatchQuantityModalProps] = useReducer(
-  //   quantityReducer,
-  //   initialModalProps
-  // );
   const {
     quantityModal: quantityModalProps,
     dispatchQuantityModal: dispatchQuantityModalProps,
   } = useQuantityModal();
-  // const [optionModalProps, dispatchOptionModalProps] = useReducer(
-  //   optionReducer,
-  //   initialModalProps
-  // );
   const {
     optionModal: optionModalProps,
     dispatchOptionModal: dispatchOptionModalProps,
@@ -124,7 +46,7 @@ const BasketPage: NextPage = () => {
 
   const { data: products, isLoading: productsAreLoading } =
     api.products.getByIds.useQuery({
-      ids: basket.map((item) => item.id),
+      ids: basket.map((item) => item.productId.toString()),
     });
 
   if (productsAreLoading)
@@ -135,9 +57,7 @@ const BasketPage: NextPage = () => {
     );
 
   const mergedProductsRaw = basket.map((item) => {
-    const product = products?.find(
-      (element) => element.id.toString() === item.id
-    );
+    const product = products?.find((element) => element.id === item.productId);
 
     const mergedProduct = { ...product, ...item };
     return mergedProduct;
@@ -150,7 +70,7 @@ const BasketPage: NextPage = () => {
   } catch (error) {
     const { RESET } = BASKET_REDUCER_TYPE;
     dispatchBasket({ type: RESET });
-    consoleError("Parsing mergedProductsRaw gave : ", error);
+    consoleError("Failed to parse mergedProductsRaw : ", error);
   }
 
   if (mergedProducts.length === 0) {
@@ -183,7 +103,12 @@ const BasketPage: NextPage = () => {
         <Title>VOTRE PANIER</Title>
         <ul className="flex flex-col gap-10">
           {mergedProducts.map((product) => (
-            <li key={product.id + product.optionId}>
+            <li
+              key={
+                product.id +
+                (product.optionId ? product.optionId.toString() : "")
+              }
+            >
               <article>
                 <div className="flex gap-5">
                   <div
@@ -212,7 +137,7 @@ const BasketPage: NextPage = () => {
                         onClick={() =>
                           dispatchBasket({
                             type: "remove",
-                            productId: product.id,
+                            productId: product.productId,
                             optionId: product.optionId,
                           })
                         }
@@ -224,7 +149,7 @@ const BasketPage: NextPage = () => {
                       name="option"
                       value={
                         product.options.find(
-                          (option) => option.id.toString() === product.optionId
+                          (option) => option.id === product.optionId
                         )?.name ?? NO_OPTION
                       }
                       onClick={() =>

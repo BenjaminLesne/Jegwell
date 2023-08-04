@@ -1,6 +1,9 @@
+import { type OrderedProduct } from "./helpers/helpers";
+
 export type MergedProduct = {
-  quantity: number;
-  optionId: string;
+  quantity: OrderedProduct["quantity"];
+  optionId: OrderedProduct["optionId"];
+  productId: OrderedProduct["productId"];
   image: {
     url: string;
   };

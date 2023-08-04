@@ -67,7 +67,7 @@ export const BASKET_REDUCER_TYPE = Object.freeze({
   RESET: "reset",
 });
 
-export const NO_OPTION = "Aucune";
+export const NO_OPTION = null;
 export const SUBTOTAL_TESTID = "subtotal";
 export const QUANTITY_TESTID = "quantity";
 export const PRICE_TESTID = "price";
@@ -78,48 +78,52 @@ export const GET_BY_IDS = "getByIds";
 // /api endpoints
 
 // prisma schema
-export const mergedProductSchema = z.object({
-  id: z.string(),
+export const productToBasketSchema = z.object({
+  id: z.number(),
   quantity: z.number(),
-  optionId: z.string(),
-  image: z.object({
-    url: z.string(),
-  }),
-  options: z.array(
-    z.object({
-      image: z.object({
-        url: z.string(),
-      }),
-      id: z.number(),
-      price: z.number(),
-      name: z.string(),
-    })
-  ),
-  price: z.number(),
-  name: z.string(),
+  optionId: z.number().nullable(),
+  productId: z.number(),
 });
+
+export const mergedProductSchema = z
+  .object({
+    id: z.string(),
+    image: z.object({
+      url: z.string(),
+    }),
+    options: z.array(
+      z.object({
+        image: z.object({
+          url: z.string(),
+        }),
+        id: z.number(),
+        price: z.number(),
+        name: z.string(),
+      })
+    ),
+    price: z.number(),
+    name: z.string(),
+  })
+  .merge(
+    productToBasketSchema.pick({
+      quantity: true,
+      optionId: true,
+      productId: true,
+    })
+  );
 
 export const mergedProductsSchema = z.array(mergedProductSchema);
 
 export const lightMergedProductSchema = z.object({
-  // id: z.string(),
   quantity: z.number(),
   optionId: z.string(),
-  // image: z.object({
-  //   url: z.string(),
-  // }),
   options: z.array(
     z.object({
-      // image: z.object({
-      //   url: z.string(),
-      // }),
       id: z.number(),
       price: z.number(),
-      // name: z.string(),
     })
   ),
   price: z.number(),
-  // name: z.string(),
 });
 
 export const imageSchema = z.object({
@@ -135,14 +139,6 @@ export const optionSchema = z.object({
   productId: z.number(),
   imageId: z.number(),
   image: imageSchema,
-});
-
-export const productToBasketSchema = z.object({
-  id: z.number(),
-  quantity: z.number(),
-  optionId: z.number(),
-  productId: z.number(),
-  // option: optionSchema,
 });
 
 export const addressSchema = z.object({
@@ -181,7 +177,7 @@ export const orderSchema = z.object({
   customerId: z.number(),
   deliveryOptionId: z.number(),
   addressId: z.number(),
-  productsToBasket: z.array(productToBasketSchema.omit({id: true})),
+  productsToBasket: z.array(productToBasketSchema.omit({ id: true })),
   customer: customerSchema,
   deliveryOption: deliveryOptionSchema,
   address: addressSchema,
@@ -204,26 +200,10 @@ export const productSchema = z.object({
   imageId: z.number(),
   categories: z.array(categorySchema),
   options: z.array(optionSchema),
-  // relateTo: z.array(productSchema),
-  // relatedBy: z.array(productSchema),
   image: imageSchema,
   baskets: z.array(productToBasketSchema),
 });
-// // // // //
-// type ShortInputProps = {
-//   label: string;
-//   placeholder: string;
-//   field: object;
-// };
-// const ShortInput = ({ label, placeholder, field }: ShortInputProps) => (
-//   <FormItem>
-//     <FormLabel>{label}</FormLabel>
-//     <FormControl>
-//       <Input placeholder={placeholder} {...field} />
-//     </FormControl>
-//     <FormMessage />
-//   </FormItem>
-// );
+
 
 const minShortString = 2;
 const maxShortString = 50;

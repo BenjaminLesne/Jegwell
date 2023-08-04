@@ -4,6 +4,7 @@ import Stripe from "stripe";
 import { env } from "~/env.mjs";
 import { consoleError } from "~/lib/helpers/helpers";
 import { z } from "zod";
+import { api } from "~/lib/api";
 
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
@@ -41,26 +42,29 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
 
     switch (event.type) {
       case "payment_intent.succeeded":
-        console.log("event", event);
-        const paymentIntentSucceeded = event.data.object as {
+        const result = event.data.object as {
+          metadata: { orderId: number };
           id: string;
-          receipt_email: string;
         };
-        // add a customer key to make checkoutSession so I can retrieve it from the event.data.customer variable
-        // how do I link the payment intent received with an order? (customer can buy multiple times a day)
-        // create the order before creating the checkout session? then give the order id in metadata? (see checkoutSessions/index.ts)
+        const paymentIntentId = z.string().parse(result.id);
+        const orderId = z.number().parse(result.metadata.orderId);
 
-        // do shit with db
-        // await client
-        //   .put({
-        //     TableName: env.TABLE_NAME,
-        //     Item: {
-        //       pk: `email|${paymentIntentSucceeded.receipt_email}`,
-        //       sk: `email|${paymentIntentSucceeded.receipt_email}`,
-        //       ...paymentIntentSucceeded,
-        //     },
-        //   })
-        //   .promise();
+        const { mutateAsync: updateOrder } =
+          api.orders.paymentSucceeded.useMutation();
+
+        const updatedOrder = await updateOrder({
+          orderId,
+          paymentIntentId,
+        });
+
+        if (updatedOrder.isPaid === false) {
+          throw Error("updatedOrder.isPaid is false instead of true");
+        }
+        if (updatedOrder.paymentIntentId == null) {
+          throw Error(
+            "updatedOrder.paymentIntentId is undefined instead of being a string"
+          );
+        }
 
         break;
       default:

@@ -36,6 +36,7 @@ const customerSchema = z.object({
 const bodySchema = z.object({
   basket: z.array(productToBasketSchema),
   customer: customerSchema,
+  orderId: z.number(),
 });
 export default async function handler(
   req: NextApiRequest,
@@ -45,6 +46,7 @@ export default async function handler(
     try {
       const body = bodySchema.parse(req.body);
       const ids = body.basket.map((product) => product.id);
+      const orderId = body.orderId;
       const caller = appRouter.createCaller({ prisma });
       const products = await caller.products.getByIds({ ids });
 
@@ -120,7 +122,7 @@ export default async function handler(
         }${PAYMENT_SUCCEEDED_ROUTE}?session_id={CHECKOUT_SESSION_ID}`,
         payment_intent_data: {
           metadata: {
-            orderId: "79",
+            orderId,
           },
         },
       };

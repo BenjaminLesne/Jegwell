@@ -21,7 +21,7 @@ import { Title } from "~/components/Title/Title";
 
 import { useEffect, useReducer, useState } from "react";
 import { type NextRouter, useRouter } from "next/router";
-import { formatPrice, useBasket } from "~/lib/helpers/helpers";
+import { OrderedProduct, formatPrice, useBasket } from "~/lib/helpers/helpers";
 import {
   Select,
   SelectContent,
@@ -203,7 +203,7 @@ const ProductsPage: NextPage = () => {
 
   type AddToBasketProps = {
     key: string;
-    productId: string;
+    productId: OrderedProduct["productId"];
   };
   const addToBasket = ({ key, productId }: AddToBasketProps) => {
     dispatchBasket({ type: INCREMENT, productId });
@@ -343,7 +343,7 @@ const ProductsPage: NextPage = () => {
                             onClick={() =>
                               addToBasket({
                                 key: product.id.toString(),
-                                productId: product.id.toString(),
+                                productId: product.id,
                               })
                             }
                           >

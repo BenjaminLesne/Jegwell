@@ -9,9 +9,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../../ui/AlertDialog/alert-dialog";
-import { type BasketAction, cn } from "~/lib/helpers/helpers";
+import { type BasketAction, cn, OrderedProduct } from "~/lib/helpers/helpers";
 import { BASKET_REDUCER_TYPE, NO_OPTION } from "~/lib/constants";
 import Image from "next/image";
+import { Product } from "@prisma/client";
 
 type MergedProduct = {
   id: string;
@@ -35,7 +36,8 @@ type MergedProduct = {
     | undefined;
   price?: number | undefined;
   name?: string | undefined;
-};
+} & OrderedProduct;
+
 type OnOptionConfirm = (
   dispatchBasketArgs: Extract<
     BasketAction,
@@ -62,7 +64,7 @@ export const OptionModal = ({
   orderedProduct,
   onConfirmation,
 }: Props) => {
-  const [selectedOption, setSelectedOption] = useState(NO_OPTION);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
   useEffect(() => {
     orderedProduct && setSelectedOption(orderedProduct.optionId);
@@ -72,7 +74,7 @@ export const OptionModal = ({
     onConfirmation({
       type: UPDATE_OPTION,
       newOptionId: selectedOption,
-      productId: orderedProduct.id,
+      productId: orderedProduct.productId,
       optionId: orderedProduct.optionId,
     });
     closeModal();
@@ -115,14 +117,12 @@ export const OptionModal = ({
                 <li key={option.id}>
                   <button
                     className={cn(
-                      selectedOption === option.id.toString()
-                        ? "border-2"
-                        : "border-0",
+                      selectedOption === option.id ? "border-2" : "border-0",
                       "border-solid",
                       "border-black",
                       "rounded"
                     )}
-                    onClick={() => setSelectedOption(option.id.toString())}
+                    onClick={() => setSelectedOption(option.id)}
                   >
                     <article className="flex max-w-[250px] flex-col items-center justify-center gap-1 p-4">
                       <div className="aspect-square overflow-hidden rounded">
