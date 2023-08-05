@@ -36,11 +36,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - make the "ajouté V" only appear when successfully added to localStorage
 
 Doing:
-- delivery page
-=>setting up the api to create an order -> data type is weird everything is optional... and this is not deeply types, the address relation is undefined as type
-=> schema for createOrder, createAddress, createCustomer
-=> useBasket hook gone mad because I changed the OrderedProduct type (id => productId)
-=> issue with ProductForModal type
+- video theo
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

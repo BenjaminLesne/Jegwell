@@ -364,10 +364,11 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
 
     case UPDATE_QUANTITY:
       if (
-        typeof action.quantity === "number" &&
-        action.quantity > 0 &&
-        action.productId &&
-        action.optionId
+        (typeof action.quantity === "number" &&
+          action.quantity > 0 &&
+          typeof action.productId === "number" &&
+          typeof action.optionId === "number") ||
+        action.optionId === NO_OPTION
       ) {
         let didChange = false;
         const updatedState = state.map((product) => {
