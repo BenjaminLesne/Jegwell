@@ -9,6 +9,7 @@ import {
   CATEGORY,
   DEFAULT_CATEGORY,
   DEFAULT_SORT,
+  NO_OPTION,
   SINGLE_PRODUCT_ROUTE,
   SORT,
   SORT_OPTIONS,
@@ -21,7 +22,11 @@ import { Title } from "~/components/Title/Title";
 
 import { useEffect, useReducer, useState } from "react";
 import { type NextRouter, useRouter } from "next/router";
-import { OrderedProduct, formatPrice, useBasket } from "~/lib/helpers/helpers";
+import {
+  type OrderedProduct,
+  formatPrice,
+  useBasket,
+} from "~/lib/helpers/helpers";
 import {
   Select,
   SelectContent,
@@ -204,9 +209,10 @@ const ProductsPage: NextPage = () => {
   type AddToBasketProps = {
     key: string;
     productId: OrderedProduct["productId"];
+    optionId: OrderedProduct["optionId"];
   };
-  const addToBasket = ({ key, productId }: AddToBasketProps) => {
-    dispatchBasket({ type: INCREMENT, productId });
+  const addToBasket = ({ key, productId, optionId }: AddToBasketProps) => {
+    dispatchBasket({ type: INCREMENT, productId, optionId });
     triggerAnimation(key);
   };
 
@@ -344,6 +350,7 @@ const ProductsPage: NextPage = () => {
                               addToBasket({
                                 key: product.id.toString(),
                                 productId: product.id,
+                                optionId: NO_OPTION,
                               })
                             }
                           >

@@ -33,6 +33,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - get rid of reportUndefinedOrNullVars
 - get rid of fetchPostJSON, use tRPC function instead
 - option modal not working on single page product
+- make the "ajouté V" only appear when successfully added to localStorage
 
 Doing:
 - delivery page

@@ -230,6 +230,7 @@ type UpdateOptionAction = {
 type IncrementAction = {
   type: (typeof BASKET_REDUCER_TYPE)["INCREMENT"];
   productId: OrderedProduct["productId"];
+  optionId: OrderedProduct["optionId"];
 };
 
 type ResetAction = {
@@ -276,10 +277,12 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
     productId,
     optionId,
   }: RemoveFromBasketProps) {
-    return state.filter(
-      (product) =>
-        product.productId !== productId && product.optionId !== optionId
-    );
+    return state.filter((product) => {
+      const isSameProduct = product.productId === productId;
+      const isSameOption = product.optionId === optionId;
+
+      return !isSameProduct || (isSameProduct && !isSameOption);
+    });
   }
 
   switch (action.type) {
@@ -305,11 +308,17 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
       break;
 
     case INCREMENT: {
-      const product = state.find((item) => item.productId === action.productId);
+      const product = state.find(
+        (item) =>
+          item.productId === action.productId &&
+          item.optionId === action.optionId
+      );
       if (product?.quantity) {
-        const partialState = state.filter(
-          (item) => item.productId !== product.productId
-        );
+        const partialState = removeFromBasket({
+          optionId: product.optionId,
+          productId: product.productId,
+          state,
+        });
         return [
           ...partialState,
           { ...product, quantity: product?.quantity + 1 },
@@ -318,7 +327,7 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
         const newProduct = {
           productId: action.productId,
           quantity: 1,
-          optionId: null,
+          optionId: action.optionId,
         };
         return [...state, newProduct];
       }
