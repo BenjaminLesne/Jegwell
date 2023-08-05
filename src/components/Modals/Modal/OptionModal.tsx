@@ -9,10 +9,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../../ui/AlertDialog/alert-dialog";
-import { type BasketAction, cn } from "~/lib/helpers/helpers";
+import { type BasketAction, cn, OrderedProduct } from "~/lib/helpers/helpers";
 import { BASKET_REDUCER_TYPE, NO_OPTION } from "~/lib/constants";
 import Image from "next/image";
-import { type ProductForModal } from "~/lib/types";
+import { OptionOrderedProduct, type ProductForModal } from "~/lib/types";
+import { Prisma } from "@prisma/client";
 
 type OnOptionConfirm = (
   dispatchBasketArgs: Extract<
@@ -26,7 +27,7 @@ type OnOptionConfirm = (
 type Props = {
   open: boolean;
   closeModal: () => void;
-  orderedProduct: ProductForModal;
+  orderedProduct: OptionOrderedProduct;
   onConfirmation: React.Dispatch<BasketAction> | OnOptionConfirm;
 };
 

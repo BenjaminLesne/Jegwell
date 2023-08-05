@@ -1,30 +1,57 @@
 import { useReducer, useState } from "react";
 import { CLOSE_TYPE, OPEN_TYPE } from "../constants";
 import { OrderedProduct } from "../helpers/helpers";
-import { ProductForModal } from "../types";
+import { OptionOrderedProduct, ProductForModal } from "../types";
 import { Prisma } from "@prisma/client";
 
 const PRODUCT_INFO = "orderedProduct";
-const initialModalProps = {
+// const initialModalProps = {
+//   [PRODUCT_INFO]: {
+//     // id: -1,
+//     productId: -1,
+//     optionId: -1,
+//     quantity: -1,
+//   } satisfies ProductForModal,
+//   open: false,
+// };
+
+const initialQuantityModalProps = {
   [PRODUCT_INFO]: {
     // id: -1,
     productId: -1,
     optionId: -1,
     quantity: -1,
-  } satisfies ProductForModal,
+  } satisfies QuantityModalPropsState["orderedProduct"],
   open: false,
 };
 
-type OptionModalPropsAction = QuantityModalPropsAction;
-type OptionModalPropsState = QuantityModalPropsState;
+const initialOptionModalProps = {
+  [PRODUCT_INFO]: {
+    id: -1,
+    productId: -1,
+    optionId: -1,
+    quantity: -1,
+    options: [],
+    image: { url: "" },
+  } satisfies OptionModalPropsState["orderedProduct"],
+  open: false,
+};
+
+type OptionModalPropsAction = {
+  type: typeof OPEN_TYPE | typeof CLOSE_TYPE;
+  value?: OptionModalPropsState[typeof PRODUCT_INFO];
+};
+
+// type OptionModalPropsState = QuantityModalPropsState;
+type OptionModalPropsState = {
+  [PRODUCT_INFO]: OptionOrderedProduct;
+  open: boolean;
+};
 
 const optionReducer = (
   state: OptionModalPropsState,
   action: OptionModalPropsAction
 ) => {
-  console.log("TESTaction", action);
-  console.log("TESTstate", state);
-  
   switch (action.type) {
     case OPEN_TYPE:
       if (action.value)
@@ -47,7 +74,7 @@ const optionReducer = (
 export const useOptionModal = () => {
   const [optionModal, dispatchOptionModal] = useReducer(
     optionReducer,
-    initialModalProps
+    initialOptionModalProps
   );
 
   return { optionModal, dispatchOptionModal };
@@ -112,7 +139,7 @@ const quantityReducer = (
 export const useQuantityModal = () => {
   const [quantityModal, dispatchQuantityModal] = useReducer(
     quantityReducer,
-    initialModalProps
+    initialQuantityModalProps
   );
 
   return { quantityModal, dispatchQuantityModal };

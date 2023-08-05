@@ -49,6 +49,27 @@ export type ProductForModal =
       OrderedProduct)
   | OrderedProduct;
 
+  export type OptionOrderedProduct = Omit<
+    Prisma.ProductGetPayload<{
+      include: {
+        options: {
+          select: {
+            id: true;
+            name: true;
+            price: true;
+          };
+        };
+        image: {
+          select: {
+            url: true;
+          };
+        };
+      };
+    }>,
+    "price" | "createdAt" | "name" | "description" | "imageId"
+  > &
+    OrderedProduct;
+
 // id: -1,
 // productId: -1,
 // optionId: -1,
