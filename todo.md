@@ -34,6 +34,10 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - get rid of fetchPostJSON, use tRPC function instead
 - option modal not working on single page product
 - make the "ajouté V" only appear when successfully added to localStorage
+- check the timestamps of https://www.youtube.com/watch?v=YkOSUVzOAA4 (theo), there are stuff to do: toaster on error with zod,  Loading spinner & handling loading states or Using tRPC's createProxySSGHelpers
+- test e2e for delivery page
+- make a README.md
+
 
 Doing:
 - video theo
