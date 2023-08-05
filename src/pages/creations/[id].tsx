@@ -13,6 +13,7 @@ import {
   BASKET_REDUCER_TYPE,
   CLOSE_TYPE,
   NO_OPTION,
+  NO_OPTION_TEXT,
   OPEN_TYPE,
   PRODUCTS_ROUTE,
   QUANTITY_TESTID,
@@ -24,6 +25,7 @@ import {
   type OrderedProduct,
   cn,
   useBasket,
+  consoleError,
 } from "~/lib/helpers/helpers";
 import { type MergedProduct } from "~/lib/types";
 import Slider, { type Settings } from "react-slick";
@@ -31,7 +33,6 @@ import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
 import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 import { OptionModal } from "~/components/Modals/Modal/OptionModal";
 import { QuantityModal } from "~/components/Modals/Modal/QuantityModal";
-import { LucideThermometerSun } from "lucide-react";
 
 const { RESET, ADD } = BASKET_REDUCER_TYPE;
 
@@ -125,11 +126,9 @@ const SingleProductPage: NextPage = () => {
 
   if (product == null || !usableId) return productNotFoundJSX;
 
-  // const productFromBasket = basket.find((item) => item.id.toString() === id);
   const mergedProductRaw = {
     ...product,
-    // ...productFromBasket,
-    id: product.id.toString(),
+    productId: product.id,
     quantity: 1,
     optionId: NO_OPTION,
   };
@@ -155,15 +154,15 @@ const SingleProductPage: NextPage = () => {
       didRun = true;
     }
   } catch (error) {
+    consoleError(error);
     if (basket.length > 0) dispatchBasket({ type: RESET });
   }
 
   const addToBasket = () => {
     const cleanProduct = {
-      id: product.id.toString(),
+      productId: product.id,
       ...partialOrder,
     };
-    console.log("cleanProduct", cleanProduct);
     dispatchBasket({ type: ADD, product: cleanProduct });
     incrementAnimationKey();
   };
@@ -265,9 +264,8 @@ const SingleProductPage: NextPage = () => {
                       name="option"
                       value={
                         product.options.find(
-                          (option) =>
-                            option.id.toString() === partialOrder?.optionId
-                        )?.name ?? NO_OPTION
+                          (option) => option.id === partialOrder?.optionId
+                        )?.name ?? NO_OPTION_TEXT
                       }
                       onClick={() =>
                         dispatchOptionModal({

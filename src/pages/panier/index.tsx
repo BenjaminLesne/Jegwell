@@ -1,8 +1,7 @@
 import { type NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useReducer } from "react";
-import { z } from "zod";
+import React from "react";
 import { Cross } from "~/assets/svg/Cross";
 import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
 import { Loading } from "~/components/Loading/Loading";
@@ -17,7 +16,6 @@ import {
   BASKET_REDUCER_TYPE,
   CLOSE_TYPE,
   DELIVERY_ROUTE,
-  NO_OPTION,
   OPEN_TYPE,
   PRODUCTS_ROUTE,
   QUANTITY_TESTID,
@@ -103,12 +101,7 @@ const BasketPage: NextPage = () => {
         <Title>VOTRE PANIER</Title>
         <ul className="flex flex-col gap-10">
           {mergedProducts.map((product) => (
-            <li
-              key={
-                product.id +
-                (product.optionId ? product.optionId.toString() : "")
-              }
-            >
+            <li key={product.id + (product.optionId ?? 0)}>
               <article>
                 <div className="flex gap-5">
                   <div
@@ -126,7 +119,7 @@ const BasketPage: NextPage = () => {
                       width={125}
                       height={125}
                       src={product.image.url}
-                      alt="nameofproduct"
+                      alt={product.name}
                     />
                   </div>
                   <div className="flex flex-1 flex-col">

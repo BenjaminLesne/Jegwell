@@ -3,22 +3,23 @@ import {
   BASKET_REDUCER_TYPE,
   DEVELOPMENT,
   LOCALE_STORAGE_BASKET_KEY,
+  NO_OPTION,
 } from "../constants";
 import { z } from "zod";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { type Stripe, loadStripe } from "@stripe/stripe-js";
 import { env } from "~/env.mjs";
-import { type ProductToBasket } from "@prisma/client";
+import { type Option, type ProductToBasket } from "@prisma/client";
 
 export type GetSubtotalPriceProps = {
   quantity: OrderedProduct["quantity"];
   optionId: OrderedProduct["optionId"];
   options: {
-    id: number;
-    price: number;
+    id: Option["id"];
+    price: Option["price"];
   }[];
-  price: number;
+  price: Option["price"];
 };
 
 export function getSubtotalPrice(items: GetSubtotalPriceProps[]): number {
@@ -324,13 +325,21 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
     }
 
     case UPDATE_OPTION:
-      if (action.optionId && action.productId && action.newOptionId) {
+      const { optionId, productId, newOptionId } = action;
+      const isOptionIdGood =
+        typeof optionId === "number" || optionId === NO_OPTION;
+      const isNewOptionIdGood =
+        typeof newOptionId === "number" || newOptionId === NO_OPTION;
+      const haveRequiredVars =
+        isOptionIdGood && typeof productId === "number" && isNewOptionIdGood;
+
+      if (haveRequiredVars) {
         const updatedState = state.map((product) => {
           if (
-            product.productId === action.productId &&
-            product.optionId === action.optionId
+            product.productId === productId &&
+            product.optionId === optionId
           ) {
-            return { ...product, optionId: action.newOptionId };
+            return { ...product, optionId: newOptionId };
           }
 
           return product;
@@ -339,10 +348,8 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
         return updatedState;
       }
 
-      reportUndefinedOrNullVars(
-        action.optionId,
-        action.productId,
-        action.newOptionId
+      consoleError(
+        `basket reducer - ${UPDATE_OPTION} : one those vars are undefined: optionId, productId or newOptionId`
       );
       break;
 

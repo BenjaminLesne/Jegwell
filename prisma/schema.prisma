@@ -17,7 +17,6 @@ model Product {
   createdAt   DateTime @default(now())
   name        String
   description String?
-  productId   String?
   imageId     Int
 
   categories Category[]

@@ -2,11 +2,12 @@ import { useReducer, useState } from "react";
 import { CLOSE_TYPE, OPEN_TYPE } from "../constants";
 import { OrderedProduct } from "../helpers/helpers";
 import { ProductForModal } from "../types";
+import { Prisma } from "@prisma/client";
 
 const PRODUCT_INFO = "orderedProduct";
 const initialModalProps = {
   [PRODUCT_INFO]: {
-    id: "-1",
+    // id: -1,
     productId: -1,
     optionId: -1,
     quantity: -1,
@@ -21,6 +22,9 @@ const optionReducer = (
   state: OptionModalPropsState,
   action: OptionModalPropsAction
 ) => {
+  console.log("TESTaction", action);
+  console.log("TESTstate", state);
+  
   switch (action.type) {
     case OPEN_TYPE:
       if (action.value)
@@ -53,6 +57,29 @@ type QuantityModalPropsState = {
   [PRODUCT_INFO]: ProductForModal;
   open: boolean;
 };
+
+// Prisma.FactionGetPayload<{
+//   include: { owner: true }
+// }>
+// type QuantityModalPropsState = {
+//   [PRODUCT_INFO]: Prisma.ProductGetPayload<{
+//     include: {
+//       options: {
+//         select: {
+//           id: true;
+//           name: true;
+//           price: true;
+//         };
+//       };
+//       image: {
+//         select: {
+//           url: true;
+//         };
+//       };
+//     };
+//   }>;
+//   open: boolean;
+// };
 
 type QuantityModalPropsAction = {
   type: typeof OPEN_TYPE | typeof CLOSE_TYPE;

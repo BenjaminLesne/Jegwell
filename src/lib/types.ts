@@ -1,43 +1,55 @@
+import { Image, Option, Prisma, type Product } from "@prisma/client";
 import { type OrderedProduct } from "./helpers/helpers";
 
-export type MergedProduct = {
-  quantity: OrderedProduct["quantity"];
-  optionId: OrderedProduct["optionId"];
-  productId: OrderedProduct["productId"];
-  image: {
-    url: string;
-  };
-  options: {
-    image: {
-      url: string;
+type BaseMergedProduct = Prisma.ProductGetPayload<{
+  include: {
+    options: {
+      select: {
+        id: true;
+        name: true;
+        price: true;
+      };
     };
-    id: number;
-    price: number;
-    name: string;
-  }[];
-  id: string;
-  price: number;
-  name: string;
-};
+    image: {
+      select: {
+        url: true;
+      };
+    };
+  };
+}>;
 
-export type ProductForModal = {
-  id: string;
-  options?:
-    | {
-        id: number;
-        image: {
-          url: string;
+export type MergedProduct = Omit<
+  BaseMergedProduct,
+  "createdAt" | "description" | "imageId"
+> &
+  Omit<OrderedProduct, "id"> & {
+    options: Omit<Option, "productId" | "imageId">[];
+  };
+
+export type ProductForModal =
+  | (Omit<
+      Prisma.ProductGetPayload<{
+        include: {
+          options: {
+            select: {
+              id: true;
+              name: true;
+              price: true;
+            };
+          };
+          image: {
+            select: {
+              url: true;
+            };
+          };
         };
-        price: number;
-        name: string;
-      }[]
-    | undefined;
-  image?:
-    | {
-        url: string;
-      }
-    | null
-    | undefined;
-  price?: number | undefined;
-  name?: string | undefined;
-} & OrderedProduct;
+      }>,
+      "price" | "createdAt" | "name" | "description" | "imageId"
+    > &
+      OrderedProduct)
+  | OrderedProduct;
+
+// id: -1,
+// productId: -1,
+// optionId: -1,
+// quantity: -1,
