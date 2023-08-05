@@ -37,7 +37,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - check the timestamps of https://www.youtube.com/watch?v=YkOSUVzOAA4 (theo), there are stuff to do: toaster on error with zod,  Loading spinner & handling loading states or Using tRPC's createProxySSGHelpers
 - test e2e for delivery page
 - make a README.md
-
+- no réponse from webhook
 
 Doing:
 - video theo
