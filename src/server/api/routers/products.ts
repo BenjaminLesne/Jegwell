@@ -63,50 +63,6 @@ export const productsRouter = createTRPCRouter({
 
       return ctx.prisma.product.findMany(arg);
     }),
-  // [GET_BY_IDS]: publicProcedure
-  //   .input(getByIdsInputSchema)
-  //   .query(({ ctx, input = { ids: [] } }) => {
-  //     const { ids } = input;
-
-  //     if (ids?.length === 0) return [];
-
-  //     const idsAsNumbers = ids
-  //       .map((id) => parseInt(id ?? "not a number"))
-  //       .filter((id: number) => !isNaN(id));
-
-  //     const arg = {
-  //       where: {
-  //         id: {
-  //           in: idsAsNumbers,
-  //         },
-  //       },
-  //       select: {
-  //         name: true,
-  //         image: {
-  //           select: {
-  //             url: true,
-  //           },
-  //         },
-  //         id: true,
-  //         price: true,
-  //         options: {
-  //           select: {
-  //             id: true,
-  //             name: true,
-  //             price: true,
-  //             image: {
-  //               select: {
-  //                 url: true,
-  //               },
-  //             },
-  //           },
-  //         },
-  //       },
-  //     } satisfies Prisma.ProductFindManyArgs;
-
-  //     const result = ctx.prisma.product.findMany(arg);
-  //     return result;
-  //   }),
   [GET_BY_IDS]: publicProcedure
     .input(getByIdsInputSchema)
     .query(getProductsByIds),

@@ -1,23 +1,10 @@
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import { CLOSE_TYPE, OPEN_TYPE } from "../constants";
-import { OrderedProduct } from "../helpers/helpers";
-import { OptionOrderedProduct, ProductForModal } from "../types";
-import { Prisma } from "@prisma/client";
+import { type OptionOrderedProduct, type ProductForModal } from "../types";
 
 const PRODUCT_INFO = "orderedProduct";
-// const initialModalProps = {
-//   [PRODUCT_INFO]: {
-//     // id: -1,
-//     productId: -1,
-//     optionId: -1,
-//     quantity: -1,
-//   } satisfies ProductForModal,
-//   open: false,
-// };
-
 const initialQuantityModalProps = {
   [PRODUCT_INFO]: {
-    // id: -1,
     productId: -1,
     optionId: -1,
     quantity: -1,
@@ -42,7 +29,6 @@ type OptionModalPropsAction = {
   value?: OptionModalPropsState[typeof PRODUCT_INFO];
 };
 
-// type OptionModalPropsState = QuantityModalPropsState;
 type OptionModalPropsState = {
   [PRODUCT_INFO]: OptionOrderedProduct;
   open: boolean;
@@ -84,29 +70,6 @@ type QuantityModalPropsState = {
   [PRODUCT_INFO]: ProductForModal;
   open: boolean;
 };
-
-// Prisma.FactionGetPayload<{
-//   include: { owner: true }
-// }>
-// type QuantityModalPropsState = {
-//   [PRODUCT_INFO]: Prisma.ProductGetPayload<{
-//     include: {
-//       options: {
-//         select: {
-//           id: true;
-//           name: true;
-//           price: true;
-//         };
-//       };
-//       image: {
-//         select: {
-//           url: true;
-//         };
-//       };
-//     };
-//   }>;
-//   open: boolean;
-// };
 
 type QuantityModalPropsAction = {
   type: typeof OPEN_TYPE | typeof CLOSE_TYPE;
