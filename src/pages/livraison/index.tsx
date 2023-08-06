@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import type * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -18,15 +18,8 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Textarea } from "~/components/ui/textarea";
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
-import { useRouter } from "next/router";
 import { api } from "~/lib/api";
-import {
-  consoleError,
-  fetchPostJSON,
-  getStripe,
-  getSubtotalPrice,
-  useBasket,
-} from "~/lib/helpers/helpers";
+import { consoleError, getStripe, useBasket } from "~/lib/helpers/helpers";
 import { Loading } from "~/components/Loading/Loading";
 import { deliveryFormSchema } from "~/lib/constants";
 
@@ -44,9 +37,6 @@ const ShortInput = ({ label, placeholder, field }: ShortInputProps) => (
     <FormMessage />
   </FormItem>
 );
-
-const EXPRESS = "express";
-const FOLLOWED_LETTER = "lettre suivie";
 
 const defaultValues = {
   firstname: "",
@@ -70,23 +60,11 @@ const DeliveryPage: NextPage = () => {
 
   async function onSubmit(values: z.infer<typeof deliveryFormSchema>) {
     setIsLoading(true);
-    // //////////////////THIS SHOULD BE DONE SERVER SIDE//////////////////////
-    // we should pass as input of the api the basket
-    // this basket is used to fetch products and calculate the total price (dont forget delivery fee!!)
-    //
-
-    // create order
-    // const createOrder = api.orders.create.useMutation(values)
-    // const { mutateAsync: createOrder } = api.orders.create.useMutation();
 
     const order = await createOrder({
       ...values,
       productsToBasket: basket,
     });
-    // get back the id of the order
-    // pass it to the checkoutsession args
-    // add it to metadata in stripe
-    // //////////////////////////////////////////////////////////////////
 
     const {
       lastname,
@@ -112,26 +90,29 @@ const DeliveryPage: NextPage = () => {
       },
     };
 
-    // Create a Checkout Session.
-    const response = await fetchPostJSON("/api/checkoutSessions", {
+    const { mutateAsync: createCheckout, error: createCheckoutError } =
+      api.payments.createCheckout.useMutation();
+
+    consoleError(createCheckoutError);
+
+    const response = await createCheckout({
       productsToBasket: basket,
       customer: customer,
       orderId: order.id,
     });
 
-    if (response.statusCode === 500) {
-      consoleError(response.message);
-      return;
+    const stripe = await getStripe();
+
+    if (stripe != null) {
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: response.id,
+      });
+
+      consoleError(error);
+    } else {
+      consoleError("cannot redirect to checkout, stripe is null");
     }
 
-    const stripe = await getStripe();
-    const { error } = await stripe!.redirectToCheckout({
-      sessionId: response.id,
-    });
-    // If `redirectToCheckout` fails due to a browser or network
-    // error, display the localized error message to your customer
-    // using `error.message`.
-    console.warn(error.message);
     setIsLoading(false);
   }
   const form = useForm<z.infer<typeof deliveryFormSchema>>({
