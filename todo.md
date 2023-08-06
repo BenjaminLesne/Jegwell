@@ -32,11 +32,14 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
 - add a circle on the basket icon to show how many items were added
 - use library resend to send emails cf theo video
+=> stripe can send email to customer automatically (can we add solene to it?)
 - IMPORTANT: forgot  to add delivery option to stripe line items
+- update vercel env vars with BASE_URL
 
 
 Doing:
-- getting rid of fetchPost
+- fixing error on typecheck in pipeline
+=> Error: src/pages/index.tsx(4,23): error TS2307: Cannot find module '~/assets/images/hero.webp' or its corresponding type declarations.
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
