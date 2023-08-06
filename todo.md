@@ -38,8 +38,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 
 
 Doing:
-- fixing error on typecheck in pipeline
-=> Error: src/pages/index.tsx(4,23): error TS2307: Cannot find module '~/assets/images/hero.webp' or its corresponding type declarations.
+- adding env vars to ci through github interface (we don't want to upload any env files)
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
