@@ -37,7 +37,7 @@ jobs:
         run: pnpm run build
 
       - name: starts the application in production mode
-        run: pnpm run start
+        run: pnpm run start &
 
       - name: Run Playwright tests
         run: pnpx playwright test
