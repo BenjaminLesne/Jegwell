@@ -33,11 +33,9 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - add a circle on the basket icon to show how many items were added
 - use library resend to send emails cf theo video
 => stripe can send email to customer automatically (can we add solene to it?)
-- IMPORTANT: forgot  to add delivery option to stripe line items
-- update vercel env vars with BASE_URL
-- prevent deployment on vercel on every push. only deploy on mr to main
 - "For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'yarn add sharp', and Next.js will use it automatically for Image Optimization."
-- the .env is not loaded when running playwright test, the env validation trigger an error
+- bugstyle: homepage loading spinner in the middle of the page instead of middle of its section
+- IMPORTANT: forgot  to add delivery option to stripe line items
 
 Doing:
 - adding env vars to ci through github interface (we don't want to upload any env files)

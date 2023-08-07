@@ -57,6 +57,8 @@ const DeliveryPage: NextPage = () => {
   const { mutateAsync: createOrder } = api.orders.create.useMutation();
   const { data: deliveryOptions, isLoading: deliveryOptionsAreLoading } =
     api.deliveryOptions.getAll.useQuery();
+  const { mutateAsync: createCheckout, error: createCheckoutError } =
+    api.payments.createCheckout.useMutation();
 
   async function onSubmit(values: z.infer<typeof deliveryFormSchema>) {
     setIsLoading(true);
@@ -89,9 +91,6 @@ const DeliveryPage: NextPage = () => {
         postal_code: postalCode,
       },
     };
-
-    const { mutateAsync: createCheckout, error: createCheckoutError } =
-      api.payments.createCheckout.useMutation();
 
     consoleError(createCheckoutError);
 
