@@ -21,12 +21,7 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     try {
       const buf = await buffer(req);
-      const sigSchema = z.union([
-        z.string(),
-        z.array(z.string()),
-        z.instanceof(Buffer),
-      ]);
-      const sig = sigSchema.parse(req.headers["stripe-signature"]);
+      const sig = req.headers["stripe-signature"] as string;
 
       const event = stripe.webhooks.constructEvent(
         buf,
