@@ -9,7 +9,7 @@ env:
   STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
   STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
   BASE_URL: ${{ secrets.BASE_URL }}
-  
+
   # specific to this workflow :
   NODE_ENV: "test"
 
@@ -26,6 +26,10 @@ jobs:
         run: npm install
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+      - name: build the application
+        run: npm run build
+      - name: starts the application in production mode
+        run: npm run start
       - name: Run Playwright tests
         run: npx playwright test
       - uses: actions/upload-artifact@v3
