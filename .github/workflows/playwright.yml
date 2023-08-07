@@ -40,7 +40,7 @@ jobs:
         run: pnpm run start &
 
       - name: Run Playwright tests
-        run: pnpx playwright test
+        run: pnpm run test:e2e
 
       - uses: actions/upload-artifact@v3
         if: always()
