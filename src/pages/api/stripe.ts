@@ -4,8 +4,6 @@ import Stripe from "stripe";
 import { env } from "~/env.mjs";
 import { consoleError } from "~/lib/helpers/helpers";
 import { z } from "zod";
-import { api } from "~/lib/api";
-import { Order } from "@prisma/client";
 import { appRouter } from "~/server/api/root";
 import { prisma } from "~/server/db";
 

@@ -75,7 +75,7 @@ const BasketPage: NextPage = () => {
     return (
       <main className="">
         <div className="mt-[15%] flex flex-col items-center justify-center">
-          <span>Vous n'avez pas d'article dans votre panier.</span>
+          <span>Vous n&apos;avez pas d&apos;article dans votre panier.</span>
           <Link href={PRODUCTS_ROUTE} className="text-primary">
             Cliquez-ici pour voir nos créations !
           </Link>

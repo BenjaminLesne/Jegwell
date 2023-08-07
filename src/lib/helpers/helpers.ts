@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import {
   BASKET_REDUCER_TYPE,
   DEVELOPMENT,
@@ -481,7 +481,7 @@ export const useBasket = () => {
         dispatchBasket({ type: RESET });
       }
     }
-  }, []);
+  }, [RESET, SET]); // added non sense dependencies because eslint complaining
 
   useEffect(() => {
     if (isFirstRender.current) {

@@ -10,7 +10,7 @@ import { cn, consoleError } from "~/lib/helpers/helpers";
 
 const jegwellEmail = "support@jegwell.fr";
 
-const CopyButton = ({ text }: { text: string }) => {
+const CopyButton = ({ text = jegwellEmail }: { text: string }) => {
   const [animationKey, incrementAnimationKey] = useReducer(
     (prev: number) => prev + 1,
     0
@@ -24,7 +24,7 @@ const CopyButton = ({ text }: { text: string }) => {
     <Button
       key={animationKey}
       variant="outline"
-      onClick={() => copyToClipboard(jegwellEmail)}
+      onClick={() => copyToClipboard(text)}
       className={cn("relative", "overflow-hidden")}
     >
       Copier

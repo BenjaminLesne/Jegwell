@@ -1,4 +1,4 @@
-import { Image, Option, Prisma, type Product } from "@prisma/client";
+import { type Option, type Prisma } from "@prisma/client";
 import { type OrderedProduct } from "./helpers/helpers";
 
 type BaseMergedProduct = Prisma.ProductGetPayload<{
@@ -49,26 +49,26 @@ export type ProductForModal =
       OrderedProduct)
   | OrderedProduct;
 
-  export type OptionOrderedProduct = Omit<
-    Prisma.ProductGetPayload<{
-      include: {
-        options: {
-          select: {
-            id: true;
-            name: true;
-            price: true;
-          };
-        };
-        image: {
-          select: {
-            url: true;
-          };
+export type OptionOrderedProduct = Omit<
+  Prisma.ProductGetPayload<{
+    include: {
+      options: {
+        select: {
+          id: true;
+          name: true;
+          price: true;
         };
       };
-    }>,
-    "price" | "createdAt" | "name" | "description" | "imageId"
-  > &
-    OrderedProduct;
+      image: {
+        select: {
+          url: true;
+        };
+      };
+    };
+  }>,
+  "price" | "createdAt" | "name" | "description" | "imageId"
+> &
+  OrderedProduct;
 
 // id: -1,
 // productId: -1,

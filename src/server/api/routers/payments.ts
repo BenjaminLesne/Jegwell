@@ -1,4 +1,3 @@
-import { type Prisma } from "@prisma/client";
 import Stripe from "stripe";
 import { z } from "zod";
 import { env } from "~/env.mjs";
