@@ -12,7 +12,7 @@ test.describe("the products page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(PRODUCTS_ROUTE);
   });
-  test.only("products page snapshot", async ({ page }) => {
+  test("products page snapshot", async ({ page }) => {
     await waitLoadingEnds({ page });
     await testPageScreenshotMatch({ page });
   });
