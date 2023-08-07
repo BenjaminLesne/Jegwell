@@ -35,7 +35,11 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 => stripe can send email to customer automatically (can we add solene to it?)
 - "For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'yarn add sharp', and Next.js will use it automatically for Image Optimization."
 - bugstyle: homepage loading spinner in the middle of the page instead of middle of its section
-- IMPORTANT: forgot  to add delivery option to stripe line items
+- bug: webhook not triggered on jegwell.vercel.com
+
+IMPORTANT:
+- forgot  to add delivery option to stripe line items
+
 
 Doing:
 - adding env vars to ci through github interface (we don't want to upload any env files)
