@@ -13,7 +13,7 @@ env:
   BASE_URL: ${{ secrets.BASE_URL }}
 
 jobs:
-  setup:
+  tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,26 +31,21 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-  test-basic:
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Run TypeScript type checking
         run: pnpm run typecheck
 
       - name: Run linting
         run: pnpm run lint
 
-  test-e2e:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    steps:
       - name: Install dependencies
         run: pnpm ci
+
       - name: Install Playwright Browsers
         run: pnpx playwright install --with-deps
+
       - name: Run Playwright tests
         run: pnpm run test:e2e
+
       - uses: actions/upload-artifact@v3
         if: always()
         with:

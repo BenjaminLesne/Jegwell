@@ -35,7 +35,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 => stripe can send email to customer automatically (can we add solene to it?)
 - IMPORTANT: forgot  to add delivery option to stripe line items
 - update vercel env vars with BASE_URL
-
+- prevent deployment on vercel on every push. only deploy on mr to main
 
 Doing:
 - adding env vars to ci through github interface (we don't want to upload any env files)
