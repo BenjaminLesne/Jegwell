@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { testPageScreenshotMatch, waitLoadingEnds } from "e2e/utils";
-import { PRODUCTS_ROUTE, SINGLE_PRODUCT_ROUTE } from "~/lib/constants";
+import { testPageScreenshotMatch } from "e2e/utils";
+import { NO_OPTION_TEXT, PRODUCTS_ROUTE } from "~/lib/constants";
 
 test.describe("single product page", () => {
   test.beforeEach(async ({ page }) => {
@@ -27,9 +27,11 @@ test.describe("single product page", () => {
   });
   test.describe("add to basket", () => {
     test("option button", async ({ page }) => {
-      await page.getByRole("button", { name: "Option: Aucune" }).click();
+      await page
+        .getByRole("button", { name: `Option: ${NO_OPTION_TEXT}` })
+        .click();
       await expect(
-        page.getByRole("button").filter({ hasText: "Original" })
+        page.getByRole("button").filter({ hasText: NO_OPTION_TEXT })
       ).toBeVisible();
       await page.getByRole("button").filter({ hasText: "Vert" }).click();
       await page.getByRole("button", { name: "Confirmer" }).click();

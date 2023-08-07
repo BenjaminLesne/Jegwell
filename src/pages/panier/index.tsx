@@ -16,6 +16,7 @@ import {
   BASKET_REDUCER_TYPE,
   CLOSE_TYPE,
   DELIVERY_ROUTE,
+  NO_OPTION_TEXT,
   OPEN_TYPE,
   PRODUCTS_ROUTE,
   QUANTITY_TESTID,
@@ -143,7 +144,7 @@ const BasketPage: NextPage = () => {
                       value={
                         product.options.find(
                           (option) => option.id === product.optionId
-                        )?.name ?? "Original"
+                        )?.name ?? NO_OPTION_TEXT
                       }
                       onClick={() =>
                         dispatchOptionModalProps({

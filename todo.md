@@ -37,6 +37,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - update vercel env vars with BASE_URL
 - prevent deployment on vercel on every push. only deploy on mr to main
 - "For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'yarn add sharp', and Next.js will use it automatically for Image Optimization."
+- the .env is not loaded when running playwright test, the env validation trigger an error
 
 Doing:
 - adding env vars to ci through github interface (we don't want to upload any env files)

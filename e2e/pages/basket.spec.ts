@@ -154,7 +154,7 @@ test.describe("basket page with items added to basket", () => {
 
   test("call to action redirect to delivery page", async ({ page }) => {
     await page.getByRole("link", { name: "Passer la commande" }).click();
-    const header = page.getByText("livraison");
+    const header = page.getByText(/livraison/i).first();
     await expect(header).toBeVisible();
   });
 

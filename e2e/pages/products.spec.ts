@@ -126,7 +126,7 @@ test.describe("the products page", () => {
 
       const images = await page.getByRole("img").all();
       for (const image of images) {
-        expect(await image.screenshot()).toMatchSnapshot();
+        await expect(image).toHaveScreenshot();
       }
     }
   });
