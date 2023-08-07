@@ -36,6 +36,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - IMPORTANT: forgot  to add delivery option to stripe line items
 - update vercel env vars with BASE_URL
 - prevent deployment on vercel on every push. only deploy on mr to main
+- "For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'yarn add sharp', and Next.js will use it automatically for Image Optimization."
 
 Doing:
 - adding env vars to ci through github interface (we don't want to upload any env files)
