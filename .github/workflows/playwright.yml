@@ -24,14 +24,16 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: npm install
+      - name: Install pnpm
+        run: npm install -g pnpm
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: pnpx playwright install --with-deps
       - name: build the application
-        run: npm run build
+        run: pnpm run build
       - name: starts the application in production mode
-        run: npm run start
+        run: pnpm run start
       - name: Run Playwright tests
-        run: npx playwright test
+        run: pnpx playwright test
       - uses: actions/upload-artifact@v3
         if: always()
         with:
