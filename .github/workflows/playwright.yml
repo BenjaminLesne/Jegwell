@@ -26,7 +26,7 @@ jobs:
         run: npm install
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-      - name: starts the application in production mode
+      - name: starts the application in dev mode
         run: npm run dev
       - name: Run Playwright tests
         run: npx playwright test
