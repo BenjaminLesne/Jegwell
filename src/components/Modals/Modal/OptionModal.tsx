@@ -10,9 +10,13 @@ import {
   AlertDialogTitle,
 } from "../../ui/AlertDialog/alert-dialog";
 import { type BasketAction, cn } from "~/lib/helpers/helpers";
-import { BASKET_REDUCER_TYPE, NO_OPTION } from "~/lib/constants";
+import {
+  BASKET_REDUCER_TYPE,
+  NO_OPTION,
+  NO_OPTION_TEXT,
+} from "~/lib/constants";
 import Image from "next/image";
-import { type ProductForModal } from "~/lib/types";
+import { type OptionOrderedProduct } from "~/lib/types";
 
 type OnOptionConfirm = (
   dispatchBasketArgs: Extract<
@@ -26,7 +30,7 @@ type OnOptionConfirm = (
 type Props = {
   open: boolean;
   closeModal: () => void;
-  orderedProduct: ProductForModal;
+  orderedProduct: OptionOrderedProduct;
   onConfirmation: React.Dispatch<BasketAction> | OnOptionConfirm;
 };
 
@@ -85,7 +89,7 @@ export const OptionModal = ({
                         height={IMAGE_HEIGHT}
                       />
                     </div>
-                    <span>Original</span>
+                    <span>{NO_OPTION_TEXT}</span>
                   </article>
                 </button>
               </li>

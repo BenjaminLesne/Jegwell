@@ -1,7 +1,5 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import heroImage from "../assets/images/hero.webp";
 
 import { TAB_BASE_TITLE } from "~/lib/constants";
 import { Title } from "~/components/Title/Title";
@@ -35,14 +33,14 @@ const Home: NextPage = () => {
             <h2>Order Details</h2>
             <table>
               <tr>
-                <th>Order ID</th>
+                <th>ID</th>
                 <th>Date</th>
-                <th>Customer</th>
-                <th>Address</th>
-                <th>Total Price</th>
-                <th>Is Paid</th>
-                <th>Is Email Sent</th>
-                <th>Comment</th>
+                <th>Client</th>
+                <th>Adresse</th>
+                <th>Prix total</th>
+                <th>est payé</th>
+                <th>email est envoyé</th>
+                <th>Commentaire</th>
               </tr>
               {orders?.map((order) => (
                 <tr key={order.id}>

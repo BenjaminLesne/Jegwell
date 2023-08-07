@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import {
   BASKET_REDUCER_TYPE,
   DEVELOPMENT,
@@ -10,7 +10,75 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { type Stripe, loadStripe } from "@stripe/stripe-js";
 import { env } from "~/env.mjs";
-import { type Option, type ProductToBasket } from "@prisma/client";
+import {
+  type Prisma,
+  type Option,
+  type ProductToBasket,
+  type PrismaClient,
+} from "@prisma/client";
+
+const getByIdsInputSchema = z
+  .object({
+    ids: z.array(z.string().optional()),
+  })
+  .optional();
+
+type GetProductsByIdsProps = {
+  ctx: {
+    prisma: PrismaClient<
+      Prisma.PrismaClientOptions,
+      never,
+      Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
+    >;
+  };
+  input: z.infer<typeof getByIdsInputSchema>;
+};
+
+export const getProductsByIds = ({
+  ctx,
+  input = { ids: [] },
+}: GetProductsByIdsProps) => {
+  const { ids } = input;
+
+  if (ids?.length === 0) return [];
+
+  const idsAsNumbers = ids
+    .map((id) => parseInt(id ?? "not a number"))
+    .filter((id: number) => !isNaN(id));
+
+  const arg = {
+    where: {
+      id: {
+        in: idsAsNumbers,
+      },
+    },
+    select: {
+      name: true,
+      image: {
+        select: {
+          url: true,
+        },
+      },
+      id: true,
+      price: true,
+      options: {
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          image: {
+            select: {
+              url: true,
+            },
+          },
+        },
+      },
+    },
+  } satisfies Prisma.ProductFindManyArgs;
+
+  const result = ctx.prisma.product.findMany(arg);
+  return result;
+};
 
 export type GetSubtotalPriceProps = {
   quantity: OrderedProduct["quantity"];
@@ -413,7 +481,7 @@ export const useBasket = () => {
         dispatchBasket({ type: RESET });
       }
     }
-  }, []);
+  }, [RESET, SET]); // added non sense dependencies because eslint complaining
 
   useEffect(() => {
     if (isFirstRender.current) {

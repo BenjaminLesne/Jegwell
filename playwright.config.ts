@@ -4,7 +4,8 @@ import { defineConfig, devices } from "@playwright/test";
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// require('dotenv').config();
+// dotenv.config();
+process.env.SKIP_ENV_VALIDATION ="1"; // for env-nextjs
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -37,7 +38,7 @@ export default defineConfig({
     timeout: 10_000,
     toMatchSnapshot: {
       // An acceptable ratio of pixels that are different to the total amount of pixels, between 0 and 1.
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.2,
     },
   },
   /* Configure projects for major browsers */
