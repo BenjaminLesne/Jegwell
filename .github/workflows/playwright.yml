@@ -26,8 +26,10 @@ jobs:
         run: npm install
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-      - name: starts the application in dev mode
-        run: npm run dev
+      - name: build the application 
+        run: npm run build
+      - name: starts the application in production mode
+        run: npm run start
       - name: Run Playwright tests
         run: npx playwright test
       - uses: actions/upload-artifact@v3
