@@ -53,7 +53,7 @@ IMPORTANT:
 
 
 Doing:
-- 
+- forgot  to add delivery option to stripe line items
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
