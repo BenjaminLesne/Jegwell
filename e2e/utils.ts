@@ -1,4 +1,9 @@
 import { expect, type Page } from "@playwright/test";
+import {
+  BASKET_ICON_TESTID,
+  BASKET_ROUTE,
+  PRODUCTS_ROUTE,
+} from "~/lib/constants";
 
 type TestArgs = {
   page: Page;
@@ -24,3 +29,51 @@ export async function testPageScreenshotMatch({ page }: TestArgs) {
     maxDiffPixelRatio: 0.2,
   });
 }
+
+export const addItemsToBasket = async ({ page }: TestArgs) => {
+  await page.goto(PRODUCTS_ROUTE);
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "test31 €Ajouter au panierAjouté ✓" })
+    .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
+    .click();
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "test10 €Ajouter au panierAjouté ✓" })
+    .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
+    .dblclick();
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "test220 €Ajouter au panierAjouté ✓" })
+    .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
+    .click();
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "Test435 €Ajouter au panierAjouté ✓" })
+    .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
+    .click();
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "Paris55,55 €Ajouter au panierAjouté ✓" })
+    .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
+    .click();
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "Rennes77,77 €Ajouter au panierAjouté ✓" })
+    .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
+    .click();
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "Bruz88,99 €Ajouter au panierAjouté ✓" })
+    .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
+    .click();
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "Paris55,55 €Ajouter au panierAjouté ✓" })
+    .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
+    .dblclick();
+
+  await page.getByTestId(BASKET_ICON_TESTID).click();
+  await page.waitForURL(BASKET_ROUTE);
+  await waitLoadingEnds({ page });
+};

@@ -102,7 +102,7 @@ model Customer {
 
 model Order {
   id               Int      @id @default(autoincrement())
-  datetime         DateTime @default(now())
+  createdAt         DateTime @default(now())
   isPaid           Boolean  @default(false)
   isEmailSent      Boolean  @default(false)
   paymentIntentId  String?

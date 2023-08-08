@@ -1,20 +1,19 @@
 name: Playwright Tests
 on:
-  pull_request:
-    branches: [main]
+  deployment_status:
 
 env:
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
   STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
   STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-  BASE_URL: ${{ secrets.BASE_URL }}
 
   # specific to this workflow :
   NODE_ENV: "test"
 
 jobs:
   test:
+    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -33,14 +32,10 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm playwright install --with-deps
 
-      - name: build the application 
-        run: pnpm run build
-
-      - name: starts the application in production mode
-        run: pnpm run start &
-
       - name: Run Playwright tests
         run: pnpm run test:e2e
+        env:
+          BASE_URL: ${{ github.event.deployment_status.target_url }}
 
       - uses: actions/upload-artifact@v3
         if: always()

@@ -143,8 +143,13 @@ export const ordersRouter = createTRPCRouter({
         },
       });
 
-      console.log("TESTorder", order);
-
       return order;
     }),
+  getLast: publicProcedure.query(async ({ ctx }) => {
+    const order = await ctx.prisma.order.findFirst({
+      orderBy: { createdAt: "desc" },
+    });
+
+    return order;
+  }),
 });
