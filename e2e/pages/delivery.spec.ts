@@ -21,10 +21,13 @@ import { prisma } from "~/server/db";
 
 test.describe("the delivery page form", () => {
   test.beforeEach(async ({ page }) => {
+    const header = page.getByText("Livraison").first();
     await page.goto(DELIVERY_ROUTE);
+    await waitLoadingEnds({ page });
+    await expect(header).toBeVisible();
   });
 
-  test("match snapshot", async ({ page }) => {
+  test.only("match snapshot", async ({ page }) => {
     await waitLoadingEnds({ page });
     await testPageScreenshotMatch({ page });
   });

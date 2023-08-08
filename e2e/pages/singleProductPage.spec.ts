@@ -4,8 +4,15 @@ import { NO_OPTION_TEXT, PRODUCTS_ROUTE } from "~/lib/constants";
 
 test.describe("single product page", () => {
   test.beforeEach(async ({ page }) => {
+    const productName = "Bruz";
+    const productNameLocator = page
+      .locator("span")
+      .filter({ hasText: productName });
+
     await page.goto(PRODUCTS_ROUTE);
-    await page.getByRole("link", { name: "Bruz" }).first().click();
+    await page.getByRole("link", { name: productName }).first().click();
+    await productNameLocator.click();
+    await expect(productNameLocator).toBeVisible();
   });
   test("snapshot", async ({ page }) => {
     await testPageScreenshotMatch({ page });
