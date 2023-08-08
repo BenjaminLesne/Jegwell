@@ -19,7 +19,12 @@ import { Textarea } from "~/components/ui/textarea";
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 import { api } from "~/lib/api";
-import { consoleError, getStripe, useBasket } from "~/lib/helpers/helpers";
+import {
+  consoleError,
+  formatPrice,
+  getStripe,
+  useBasket,
+} from "~/lib/helpers/helpers";
 import { Loading } from "~/components/Loading/Loading";
 import { deliveryFormSchema } from "~/lib/constants";
 
@@ -62,57 +67,62 @@ const DeliveryPage: NextPage = () => {
 
   async function onSubmit(values: z.infer<typeof deliveryFormSchema>) {
     setIsLoading(true);
-
-    const order = await createOrder({
-      ...values,
-      productsToBasket: basket,
-    });
-
-    const {
-      lastname,
-      firstname,
-      line1,
-      line2,
-      email,
-      phone,
-      city,
-      postalCode,
-    } = values;
-
-    const customer = {
-      name: firstname + " " + lastname,
-      email,
-      phone,
-      address: {
-        city,
-        country: "France",
-        line1,
-        line2,
-        postal_code: postalCode,
-      },
-    };
-
-    consoleError(createCheckoutError);
-
-    const response = await createCheckout({
-      productsToBasket: basket,
-      customer: customer,
-      orderId: order.id,
-    });
-
-    const stripe = await getStripe();
-
-    if (stripe != null) {
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: response.id,
+    try {
+      const order = await createOrder({
+        ...values,
+        productsToBasket: basket,
       });
 
-      consoleError(error);
-    } else {
-      consoleError("cannot redirect to checkout, stripe is null");
-    }
+      const {
+        lastname,
+        firstname,
+        line1,
+        line2,
+        email,
+        phone,
+        city,
+        postalCode,
+        deliveryOptionId,
+      } = values;
 
-    setIsLoading(false);
+      const customer = {
+        name: firstname + " " + lastname,
+        email,
+        phone,
+        address: {
+          city,
+          country: "France",
+          line1,
+          line2,
+          postal_code: postalCode,
+        },
+      };
+
+      if (createCheckoutError) consoleError(createCheckoutError);
+
+      const response = await createCheckout({
+        productsToBasket: basket,
+        customer: customer,
+        orderId: order.id,
+        deliveryOptionId: parseInt(deliveryOptionId),
+      });
+
+      const stripe = await getStripe();
+
+      if (stripe != null) {
+        const { error } = await stripe.redirectToCheckout({
+          sessionId: response.id,
+        });
+
+        consoleError(error);
+      } else {
+        consoleError("cannot redirect to checkout, stripe is null");
+      }
+    } catch (error) {
+      consoleError(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
   const form = useForm<z.infer<typeof deliveryFormSchema>>({
     resolver: zodResolver(deliveryFormSchema),
@@ -200,11 +210,12 @@ const DeliveryPage: NextPage = () => {
                           <FormLabel className="font-normal">
                             {delivery.name}
                           </FormLabel>
-                          {delivery.description && (
-                            <FormDescription>
-                              {delivery.description}
-                            </FormDescription>
-                          )}
+                          <FormDescription>
+                            {delivery.description} | prix:{" "}
+                            {delivery.price === 0
+                              ? "GRATUIT"
+                              : formatPrice(delivery.price / 100)}
+                          </FormDescription>
                         </FormItem>
                       ))}
                     </RadioGroup>

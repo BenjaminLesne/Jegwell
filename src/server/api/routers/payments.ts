@@ -6,7 +6,11 @@ import {
   PAYMENT_SUCCEEDED_ROUTE,
   orderSchema,
 } from "~/lib/constants";
-import { consoleError, getProductsByIds } from "~/lib/helpers/helpers";
+import {
+  consoleError,
+  getOrThrowDeliveryOption,
+  getProductsByIds,
+} from "~/lib/helpers/helpers";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const addressSchema = z.object({
@@ -28,6 +32,7 @@ const createCheckoutSchema = z
   .object({
     customer: customerSchema,
     orderId: z.number(),
+    deliveryOptionId: z.number(),
   })
   .merge(orderSchema.pick({ productsToBasket: true }));
 
@@ -44,12 +49,16 @@ export const paymentsRouter = createTRPCRouter({
       );
       const orderId = input.orderId;
       const products = await getProductsByIds({ ctx, input: { ids } });
+      const deliveryOption = await getOrThrowDeliveryOption({
+        ctx,
+        input: { id: input.deliveryOptionId },
+      });
 
       if (products === undefined) {
         throw Error("No products returned from database");
       }
 
-      const lineItemsRaw = input.productsToBasket.map((orderedProduct) => {
+      const productsItems = input.productsToBasket.map((orderedProduct) => {
         const { productId, optionId, quantity } = orderedProduct;
         const product = products.find((item) => item.id === productId);
         if (!product) {
@@ -99,6 +108,17 @@ export const paymentsRouter = createTRPCRouter({
         quantity: z.number(),
       });
 
+      const deliveryFeeItem = {
+        price_data: {
+          currency: "EUR",
+          product_data: { name: deliveryOption.name },
+          unit_amount: deliveryOption.price,
+        },
+        quantity: 1,
+      } satisfies z.infer<typeof lineItemSchema>;
+
+      const lineItemsRaw = [...productsItems, deliveryFeeItem];
+
       const lineItemsWithoutUndefined = lineItemsRaw.filter(
         (item) => item !== undefined
       );
@@ -107,17 +127,11 @@ export const paymentsRouter = createTRPCRouter({
         .array(lineItemSchema)
         .parse(lineItemsWithoutUndefined);
 
-        const ciSuccessUrl =
-          "https://jegwell.vercel.app" +
-          PAYMENT_SUCCEEDED_ROUTE +
-          "?session_id={CHECKOUT_SESSION_ID}";
-        const defaultSuccessUrl =
-          env.BASE_URL +
-          PAYMENT_SUCCEEDED_ROUTE +
-          "?session_id={CHECKOUT_SESSION_ID}";
+      const success_url =
+        env.BASE_URL +
+        PAYMENT_SUCCEEDED_ROUTE +
+        "?session_id={CHECKOUT_SESSION_ID}";
 
-        const success_url = process.env.CI ? ciSuccessUrl : defaultSuccessUrl;
-        
       const params: Stripe.Checkout.SessionCreateParams = {
         submit_type: "pay",
         mode: "payment",

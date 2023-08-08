@@ -17,6 +17,42 @@ import {
   type PrismaClient,
 } from "@prisma/client";
 
+
+const getOrThrowDeliveryOptionInputSchema = z.object({
+  id: z.number(),
+});
+
+type GetOrThrowDeliveryOptionProps = {
+  ctx: {
+    prisma: PrismaClient<
+      Prisma.PrismaClientOptions,
+      never,
+      Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
+    >;
+  };
+  input: z.infer<typeof getOrThrowDeliveryOptionInputSchema>;
+};
+
+export const getOrThrowDeliveryOption = async ({
+  ctx,
+  input,
+}: GetOrThrowDeliveryOptionProps) => {
+  const { id } = input;
+
+  const arg = {
+    where: {
+      id,
+    },
+    select: {
+      price: true,
+      name: true,
+    },
+  } satisfies Prisma.DeliveryOptionFindUniqueArgs;
+
+  const deliveryOption = ctx.prisma.deliveryOption.findUniqueOrThrow(arg);
+  return deliveryOption;
+};
+
 const getByIdsInputSchema = z
   .object({
     ids: z.array(z.string().optional()),
