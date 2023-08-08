@@ -36,13 +36,15 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - "For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'yarn add sharp', and Next.js will use it automatically for Image Optimization."
 - bugstyle: homepage loading spinner in the middle of the page instead of middle of its section
 - bug: webhook not triggered on jegwell.vercel.com
+- change favicon for jegwell icone
+- don't allow access to delivery page if basket is empty
 
 IMPORTANT:
 - forgot  to add delivery option to stripe line items
 
 
 Doing:
-- adding env vars to ci through github interface (we don't want to upload any env files)
+- 
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

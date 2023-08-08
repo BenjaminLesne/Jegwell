@@ -69,6 +69,7 @@ export const BASKET_REDUCER_TYPE = Object.freeze({
 
 export const NO_OPTION = null;
 export const NO_OPTION_TEXT = "Original";
+export const REQUIRED_TEXT = "saisie obligatoire";
 export const SUBTOTAL_TESTID = "subtotal";
 export const QUANTITY_TESTID = "quantity";
 export const PRICE_TESTID = "price";
@@ -205,7 +206,6 @@ export const productSchema = z.object({
   baskets: z.array(productToBasketSchema),
 });
 
-
 const minShortString = 2;
 const maxShortString = 50;
 type ShortStringProps = {
@@ -217,22 +217,23 @@ type ShortStringProps = {
 const shortStringMessage = ({ min, max, label }: ShortStringProps) => {
   return `${label} doit contenir entre ${min} et ${max} caractères`;
 };
-const firstnameMessage = shortStringMessage({
+export const firstnameMessage = shortStringMessage({
   label: "Le prénom",
   min: minShortString,
   max: maxShortString,
 });
-const lastnameMessage = shortStringMessage({
+export const lastnameMessage = shortStringMessage({
   label: "Le nom",
   min: minShortString,
   max: maxShortString,
 });
-const emailMessage = "Votre saisie n'est pas un email valide";
-const phoneMessage = "Votre saisie doit uniquement être des nombres";
+export const emailMessage = "Votre saisie n'est pas un email valide";
+export const phoneMessage = "Votre saisie doit uniquement être des nombres";
 
-const deliveryOptionMessage = "Veuillez selectionner une méthode de livraison";
+export const deliveryOptionMessage =
+  "Veuillez selectionner une méthode de livraison";
 
-const address1Message = shortStringMessage({
+export const address1Message = shortStringMessage({
   min: 5,
   max: 100,
   label: "L'adresse",
@@ -244,11 +245,14 @@ const address2Message = shortStringMessage({
   label: "Le complément d'adresse",
 });
 
-const cityMessage = shortStringMessage({
+export const cityMessage = shortStringMessage({
   min: 2,
   max: 50,
   label: "La ville",
 });
+
+export const postalCodeMessage = "Le code postal doit contenir 5 chiffres";
+
 const commentMessage = shortStringMessage({
   min: 0,
   max: 500,
@@ -266,12 +270,15 @@ export const deliveryFormSchema = z.object({
     .min(2, { message: lastnameMessage })
     .max(50, { message: lastnameMessage }),
   email: z.string().email({ message: emailMessage }),
-  phone: z.string({ description: phoneMessage }),
+  phone: z.string({
+    description: phoneMessage,
+    required_error: REQUIRED_TEXT,
+  }),
   deliveryOptionId: z.string({
     errorMap: () => ({ message: deliveryOptionMessage }),
   }),
   line1: z
-    .string()
+    .string({ required_error: REQUIRED_TEXT })
     .min(5, { message: address1Message })
     .max(100, { message: address1Message }),
   line2: z.string().max(100, { message: address2Message }).optional(),
@@ -279,9 +286,7 @@ export const deliveryFormSchema = z.object({
     .string()
     .min(2, { message: cityMessage })
     .max(50, { message: cityMessage }),
-  postalCode: z
-    .string()
-    .regex(/^\d{5}$/, { message: "Le code postal doit contenir 5 chiffres" }),
+  postalCode: z.string().regex(/^\d{5}$/, { message: postalCodeMessage }),
   comment: z.string().max(500, { message: commentMessage }).optional(),
 });
 // /prisma schema

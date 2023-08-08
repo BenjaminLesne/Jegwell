@@ -1,10 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { testPageScreenshotMatch, waitLoadingEnds } from "e2e/utils";
+import { addItemsToBasket, testPageScreenshotMatch } from "e2e/utils";
 import {
-  BASKET_ICON_TESTID,
   BASKET_ROUTE,
   PRICE_TESTID,
-  PRODUCTS_ROUTE,
   QUANTITY_TESTID,
   SUBTOTAL_TESTID,
 } from "~/lib/constants";
@@ -18,53 +16,7 @@ test.describe("basket page with no item added to basket", () => {
 });
 
 test.describe("basket page with items added to basket", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(PRODUCTS_ROUTE);
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: "test31 €Ajouter au panierAjouté ✓" })
-      .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
-      .click();
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: "test10 €Ajouter au panierAjouté ✓" })
-      .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
-      .dblclick();
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: "test220 €Ajouter au panierAjouté ✓" })
-      .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
-      .click();
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: "Test435 €Ajouter au panierAjouté ✓" })
-      .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
-      .click();
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: "Paris55,55 €Ajouter au panierAjouté ✓" })
-      .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
-      .click();
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: "Rennes77,77 €Ajouter au panierAjouté ✓" })
-      .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
-      .click();
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: "Bruz88,99 €Ajouter au panierAjouté ✓" })
-      .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
-      .click();
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: "Paris55,55 €Ajouter au panierAjouté ✓" })
-      .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
-      .dblclick();
-
-    await page.getByTestId(BASKET_ICON_TESTID).click();
-    await page.waitForURL(BASKET_ROUTE);
-    await waitLoadingEnds({ page });
-  });
+  test.beforeEach(addItemsToBasket);
 
   test("snapshot", async ({ page }) => {
     await page.getByRole("progressbar").waitFor({ state: "hidden" });
