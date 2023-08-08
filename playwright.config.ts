@@ -1,11 +1,12 @@
 import { defineConfig, devices } from "@playwright/test";
+import { env } from "~/env.mjs";
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
 // dotenv.config();
-process.env.SKIP_ENV_VALIDATION ="1"; // for env-nextjs
+process.env.SKIP_ENV_VALIDATION = "1"; // for env-nextjs
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -25,7 +26,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: "http://localhost:3000",
+    baseURL: env.BASE_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: process.env.CI ? "on-first-retry" : "retain-on-failure",
