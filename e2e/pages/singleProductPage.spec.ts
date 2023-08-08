@@ -5,14 +5,12 @@ import { NO_OPTION_TEXT, PRODUCTS_ROUTE } from "~/lib/constants";
 test.describe("single product page", () => {
   test.beforeEach(async ({ page }) => {
     const productName = "Bruz";
-    const productNameLocator = page
-      .locator("span")
-      .filter({ hasText: productName });
+    const quantity = page.getByTestId("quantity");
 
     await page.goto(PRODUCTS_ROUTE);
     await page.getByRole("link", { name: productName }).first().click();
-    await productNameLocator.click();
-    await expect(productNameLocator).toBeVisible();
+
+    await expect(quantity).toBeVisible();
   });
 
   test("snapshot", async ({ page }) => {

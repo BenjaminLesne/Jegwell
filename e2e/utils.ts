@@ -26,7 +26,6 @@ export const waitLoadingEnds = async ({ page }: TestArgs) => {
 export async function testPageScreenshotMatch({ page }: TestArgs) {
   await expect(page).toHaveScreenshot({
     fullPage: true,
-    maxDiffPixelRatio: 0.2,
   });
 }
 
