@@ -127,16 +127,10 @@ export const paymentsRouter = createTRPCRouter({
         .array(lineItemSchema)
         .parse(lineItemsWithoutUndefined);
 
-      const ciSuccessUrl =
-        "https://jegwell.vercel.app" +
-        PAYMENT_SUCCEEDED_ROUTE +
-        "?session_id={CHECKOUT_SESSION_ID}";
-      const defaultSuccessUrl =
+      const success_url =
         env.BASE_URL +
         PAYMENT_SUCCEEDED_ROUTE +
         "?session_id={CHECKOUT_SESSION_ID}";
-
-      const success_url = process.env.CI ? ciSuccessUrl : defaultSuccessUrl;
 
       const params: Stripe.Checkout.SessionCreateParams = {
         submit_type: "pay",
