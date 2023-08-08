@@ -60,7 +60,7 @@ const Home: NextPage = () => {
                       "border-gray-400"
                     )}
                   >
-                    {order.datetime.toLocaleString("fr", {
+                    {order.createdAt.toLocaleString("fr", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
