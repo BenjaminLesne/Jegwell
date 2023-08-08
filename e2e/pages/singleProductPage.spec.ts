@@ -14,6 +14,7 @@ test.describe("single product page", () => {
     await productNameLocator.click();
     await expect(productNameLocator).toBeVisible();
   });
+
   test("snapshot", async ({ page }) => {
     await testPageScreenshotMatch({ page });
   });

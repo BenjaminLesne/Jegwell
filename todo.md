@@ -38,6 +38,15 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - bug: webhook not triggered on jegwell.vercel.com
 - change favicon for jegwell icone
 - don't allow access to delivery page if basket is empty
+-  Update available 4.11.0 -> 5.1.1                       
+                                                         
+  This is a major update - please follow the guide at    
+  https://pris.ly/d/major-version-upgrade                
+                                                         
+  Run the following to update                            
+    npm i --save-dev prisma@latest                       
+    npm i @prisma/client@latest
+-----
 
 IMPORTANT:
 - forgot  to add delivery option to stripe line items
