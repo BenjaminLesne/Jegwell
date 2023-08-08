@@ -27,7 +27,7 @@ test.describe("the delivery page form", () => {
     await expect(header).toBeVisible();
   });
 
-  test.only("match snapshot", async ({ page }) => {
+  test("match snapshot", async ({ page }) => {
     await waitLoadingEnds({ page });
     await testPageScreenshotMatch({ page });
   });
