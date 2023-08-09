@@ -136,7 +136,7 @@ export const paymentsRouter = createTRPCRouter({
         submit_type: "pay",
         mode: "payment",
         payment_method_types: ["paypal", "card"],
-        line_items: line_items,
+        line_items,
         success_url,
         payment_intent_data: {
           metadata: {

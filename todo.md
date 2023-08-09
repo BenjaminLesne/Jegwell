@@ -44,6 +44,7 @@ IMPORTANT:
 
 Doing:
 - e2e: stripe payment
+=> test does not work in pipeline idk why, I guess it cannot access the success url
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
