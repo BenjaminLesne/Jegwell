@@ -7,7 +7,10 @@ import {
 
 type TestArgs = {
   page: Page;
+  animations?: "disabled";
+  fullPage?: boolean;
 };
+
 export const waitLoadingEnds = async ({ page }: TestArgs) => {
   const progressBar = page.getByRole("progressbar").first();
   let progressIsVisible = await progressBar.isVisible();
@@ -23,9 +26,10 @@ export const waitLoadingEnds = async ({ page }: TestArgs) => {
   await expect(progressBar).toBeHidden();
 };
 
-export async function testPageScreenshotMatch({ page }: TestArgs) {
+export async function testPageScreenshotMatch({ page, ...options }: TestArgs) {
   await expect(page).toHaveScreenshot({
     fullPage: true,
+    ...options,
   });
 }
 

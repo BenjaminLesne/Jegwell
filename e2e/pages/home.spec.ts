@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { testPageScreenshotMatch, waitLoadingEnds } from "e2e/utils";
 import { CATEGORY, CATEGORY_TEST_ID, HOME_ROUTE } from "~/lib/constants";
 
-test.describe("the navigation", () => {
+test.describe("the home page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(HOME_ROUTE);
   });
