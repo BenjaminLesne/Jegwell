@@ -6,13 +6,12 @@ import { stripe } from "~/server/api/routers/payments";
 import { env } from "~/env.mjs";
 
 test.describe("the payment process", () => {
+  test.skip(() => env.NODE_ENV !== "test", "in test environment only");
   test.beforeEach(async ({ page }) => {
     await deliveryBeforeEach({ page });
   });
 
   test("on payment success it update the order", async ({ page }) => {
-    test.skip(() => env.NODE_ENV !== "test", "in test environment only");
-
     const caller = appRouter.createCaller({ prisma });
     const lastOrder = await caller.orders.getLast();
 
