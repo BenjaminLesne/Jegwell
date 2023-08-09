@@ -10,7 +10,7 @@ test.describe("the payment process", () => {
     await deliveryBeforeEach({ page });
   });
 
-  test.only("on payment success it update the order", async ({ page }) => {
+  test("on payment success it update the order", async ({ page }) => {
     test.skip(() => env.NODE_ENV !== "test", "in test environment only");
 
     const caller = appRouter.createCaller({ prisma });
