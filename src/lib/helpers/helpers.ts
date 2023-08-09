@@ -252,7 +252,7 @@ export function isSorted({ array, order }: isSortedProps) {
   return true;
 }
 // BASKET RELATED
-const orderedProductSchema = z.array(
+export const orderedProductSchema = z.array(
   z.object({
     productId: z.number(),
     quantity: z.number(),
@@ -495,29 +495,28 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
 };
 
 export const useBasket = () => {
-  const initialState: BasketState = [];
-  const [basket, dispatchBasket] = useReducer(basketReducer, initialState);
+  let initialBasket: BasketState = [];
+  const wasInitialUpdated = useRef(false);
 
-  const { SET, RESET } = BASKET_REDUCER_TYPE;
-  const isFirstRender = useRef(true);
+  if (wasInitialUpdated.current === false) {
+    try {
+      const initialBasketRawStringified = localStorage.getItem(
+        LOCALE_STORAGE_BASKET_KEY
+      );
 
-  useEffect(() => {
-    const newBasketStringified = localStorage.getItem(
-      LOCALE_STORAGE_BASKET_KEY
-    );
+      if (initialBasketRawStringified === null)
+        throw Error("get basket from localStorage returned null");
 
-    if (newBasketStringified) {
-      try {
-        const newBasket = orderedProductSchema.parse(
-          JSON.parse(newBasketStringified)
-        );
-        dispatchBasket({ type: SET, newBasket });
-      } catch (error) {
-        consoleError("Failed to parse the basket from localStorage", error);
-        dispatchBasket({ type: RESET });
-      }
+      const initialBasketRaw: unknown = JSON.parse(initialBasketRawStringified);
+      initialBasket = orderedProductSchema.parse(initialBasketRaw);
+      wasInitialUpdated.current = true;
+    } catch (error) {
+      consoleError("Failed to parse the basket from localStorage", error);
     }
-  }, [RESET, SET]); // added non sense dependencies because eslint complaining
+  }
+  const [basket, dispatchBasket] = useReducer(basketReducer, initialBasket);
+
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     if (isFirstRender.current) {

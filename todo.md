@@ -27,24 +27,17 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - "For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'yarn add sharp', and Next.js will use it automatically for Image Optimization."
 - bugstyle: homepage loading spinner in the middle of the page instead of middle of its section
 - change favicon for jegwell icone
-- don't allow access to delivery page if basket is empty
--  Update available 4.11.0 -> 5.1.1                       
-                                                         
-  This is a major update - please follow the guide at    
-  https://pris.ly/d/major-version-upgrade                
-                                                         
-  Run the following to update                            
-    npm i --save-dev prisma@latest                       
-    npm i @prisma/client@latest
+- bug: when adding original and option vert to basket, if I change option vert to original, the items to not merge and an error related to their key appear in the console
+
 -----
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
--
+- e2e: stripe payment 
 
 
 Doing:
--
+- 
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
