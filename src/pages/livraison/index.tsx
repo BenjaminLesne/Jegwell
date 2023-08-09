@@ -1,5 +1,5 @@
 import { type NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +26,8 @@ import {
   useBasket,
 } from "~/lib/helpers/helpers";
 import { Loading } from "~/components/Loading/Loading";
-import { deliveryFormSchema } from "~/lib/constants";
+import { BASKET_ROUTE, deliveryFormSchema } from "~/lib/constants";
+import { useRouter } from "next/router";
 
 type ShortInputProps = {
   label: string;
@@ -57,6 +58,7 @@ const defaultValues = {
 } as const;
 
 const DeliveryPage: NextPage = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { basket } = useBasket();
   const { mutateAsync: createOrder } = api.orders.create.useMutation();
@@ -64,6 +66,14 @@ const DeliveryPage: NextPage = () => {
     api.deliveryOptions.getAll.useQuery();
   const { mutateAsync: createCheckout, error: createCheckoutError } =
     api.payments.createCheckout.useMutation();
+
+  useEffect(() => {
+    if (basket.length === 0) {
+      void router.push(BASKET_ROUTE); // Redirect to home page
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [basket]);
 
   async function onSubmit(values: z.infer<typeof deliveryFormSchema>) {
     setIsLoading(true);

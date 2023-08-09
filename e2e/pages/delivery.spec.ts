@@ -21,9 +21,12 @@ import { prisma } from "~/server/db";
 
 test.describe("the delivery page form", () => {
   test.beforeEach(async ({ page }) => {
-    const header = page.getByText("Livraison").first();
+    await addItemsToBasket({ page });
+
     await page.goto(DELIVERY_ROUTE);
     await waitLoadingEnds({ page });
+
+    const header = page.getByText("Livraison").first();
     await expect(header).toBeVisible();
   });
 
