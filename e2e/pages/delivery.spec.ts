@@ -1,12 +1,11 @@
 import { expect, test } from "@playwright/test";
 import {
-  addItemsToBasket,
+  submitDeliveryForm,
+  deliveryBeforeEach,
   testPageScreenshotMatch,
   waitLoadingEnds,
 } from "e2e/utils";
-import { env } from "~/env.mjs";
 import {
-  DELIVERY_ROUTE,
   REQUIRED_TEXT,
   address1Message,
   cityMessage,
@@ -16,19 +15,9 @@ import {
   lastnameMessage,
   postalCodeMessage,
 } from "~/lib/constants";
-import { appRouter } from "~/server/api/root";
-import { prisma } from "~/server/db";
 
 test.describe("the delivery page form", () => {
-  test.beforeEach(async ({ page }) => {
-    await addItemsToBasket({ page });
-
-    await page.goto(DELIVERY_ROUTE);
-    await waitLoadingEnds({ page });
-
-    const header = page.getByText("Livraison").first();
-    await expect(header).toBeVisible();
-  });
+  test.beforeEach(deliveryBeforeEach);
 
   test("match snapshot", async ({ page }) => {
     await waitLoadingEnds({ page });
@@ -122,60 +111,5 @@ test.describe("the delivery page form", () => {
     await expect(postalCodeWithError).toBeVisible();
   });
 
-  test("create an order and redirect to stripe on submit", async ({ page }) => {
-    const goToPaymentButton = page.getByRole("button", {
-      name: "Passer au paiement",
-    });
-    const firstnameInput = page.getByPlaceholder("Héloïse");
-    const lastnameInput = page.getByPlaceholder("Dior");
-    const emailInput = page.getByPlaceholder("exemple@jegwell.fr");
-    const phoneInput = page.getByPlaceholder("0612345678");
-    const expressOption = page.getByRole("radio", { name: "Express" });
-    const address1Input = page.getByPlaceholder("16 rue de la Genetais");
-    const cityInput = page.getByPlaceholder("Paris");
-    const postalCodeInput = page.getByPlaceholder("35170");
-    const commentInput = page.getByPlaceholder("J'adore Jegwell !");
-
-    await addItemsToBasket({ page });
-    await page.getByRole("link", { name: "Passer la commande" }).click();
-    await page.waitForURL(env.BASE_URL + DELIVERY_ROUTE);
-
-    await firstnameInput.click();
-    await page.keyboard.type("Héloise");
-
-    await lastnameInput.click();
-    await page.keyboard.type("Dior");
-
-    await emailInput.click();
-    await page.keyboard.type("bot@jegwell.fr");
-
-    await phoneInput.click();
-    await page.keyboard.type("0606060606");
-
-    await expressOption.click();
-
-    await address1Input.click();
-    await page.keyboard.type("16 rue antoine");
-
-    await cityInput.click();
-    await page.keyboard.type("Paris");
-
-    await postalCodeInput.click();
-    await page.keyboard.type("35170");
-
-    await commentInput.click();
-    const datetime = new Date().toISOString();
-    await page.keyboard.type(datetime);
-
-    await goToPaymentButton.click();
-
-    const stripeUrl = /https:\/\/checkout\.stripe\.com/;
-    await page.waitForURL(stripeUrl);
-    await expect(page).toHaveURL(stripeUrl);
-
-    const caller = appRouter.createCaller({ prisma });
-    const order = await caller.orders.getLast();
-
-    expect(order?.comment).toBe(datetime);
-  });
+  test("submit form and redirect to stripe", submitDeliveryForm);
 });
