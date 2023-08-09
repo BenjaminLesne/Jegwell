@@ -7,8 +7,8 @@ import {
 
 type TestArgs = {
   page: Page;
-  animations: "disabled";
-  fullPage: boolean;
+  animations?: "disabled";
+  fullPage?: boolean;
 };
 
 export const waitLoadingEnds = async ({ page }: TestArgs) => {
