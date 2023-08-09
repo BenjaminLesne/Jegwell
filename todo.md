@@ -33,7 +33,8 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
-- e2e: stripe payment 
+- e2e: stripe payment
+- e2e: navigation (mobile and desktop)
 
 
 Doing:
