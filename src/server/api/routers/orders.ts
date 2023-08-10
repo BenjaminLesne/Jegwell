@@ -20,6 +20,10 @@ const paymentSucceededSchema = z.object({
   paymentIntentId: z.string(),
 });
 
+const getSchema = z.object({
+  id: z.number(),
+});
+
 export const ordersRouter = createTRPCRouter({
   create: publicProcedure
     .input(createOrderSchema)
@@ -148,6 +152,16 @@ export const ordersRouter = createTRPCRouter({
   getLast: publicProcedure.query(async ({ ctx }) => {
     const order = await ctx.prisma.order.findFirst({
       orderBy: { createdAt: "desc" },
+    });
+
+    return order;
+  }),
+
+  get: publicProcedure.input(getSchema).query(async ({ ctx, input }) => {
+    const { id } = input;
+
+    const order = await ctx.prisma.order.findUnique({
+      where: { id },
     });
 
     return order;
