@@ -26,7 +26,6 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 => stripe can send email to customer automatically (can we add solene to it?)
 - "For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'yarn add sharp', and Next.js will use it automatically for Image Optimization."
 - bugstyle: homepage loading spinner in the middle of the page instead of middle of its section
-- change favicon for jegwell icone
 - bug: when adding original and option vert to basket, if I change option vert to original, the items to not merge and an error related to their key appear in the console
 - Warning: A title element received an array with more than 1 element as children. In browsers title Elements can only have Text Nodes as children. If the children being rendered output more than a single text node in aggregate the browser will display markup and comments as text in the title and hydration will likely fail and fall back to client rendering
     at title
@@ -36,6 +35,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
     at Html (webpack-internal:///./node_modules/.pnpm/next@13.4.1_@babel+core@7.21.8_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/pages/_document.js:719:114)
     at Document (webpack-internal:///./node_modules/.pnpm/next@13.4.1_@babel+core@7.21.8_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/pages/_document.js:735:1)
 -----
+- e2e: email after successful payment
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity

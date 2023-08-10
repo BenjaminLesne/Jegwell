@@ -59,7 +59,7 @@ const Home: NextPage = () => {
         </Section>
         <Section id="categories">
           <Title component="h2">NOS CATÉGORIES</Title>
-          <ul className="grid justify-center gap-6 md:grid-cols-2">
+          <ul className="relative grid justify-center gap-6 md:grid-cols-2">
             {isLoading ? (
               <Loading />
             ) : (
