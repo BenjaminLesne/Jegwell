@@ -34,7 +34,7 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
           const result = event.data.object as {
             metadata: { orderId: string };
             id: string;
-            amount: number;
+            amount: string;
           };
           const paymentIntentId = z.string().parse(result.id);
           const orderId = z.number().parse(parseInt(result.metadata.orderId));
@@ -55,7 +55,7 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
             );
           }
 
-          if (updatedOrder.price === result.amount) {
+          if (updatedOrder.price === parseInt(result.amount)) {
             throw Error(
               `the order price ${updatedOrder.price} is not matching the stripe payment ${result.amount}`
             );
