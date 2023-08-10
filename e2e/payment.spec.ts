@@ -7,16 +7,18 @@ import {
 import { appRouter } from "~/server/api/root";
 import { prisma } from "~/server/db";
 import { stripe } from "~/server/api/routers/payments";
-import { env } from "~/env.mjs";
 
 test.describe("the payment process", () => {
-  test.skip(() => env.NODE_ENV !== "test", "in test environment only");
   test.beforeEach(async ({ page }) => {
     await deliveryBeforeEach({ page });
   });
 
+  test.use({
+    locale: "fr-FR",
+    geolocation: { latitude: 48.8566, longitude: 2.3522 }, // Paris
+  });
+
   test("on payment success it update the order", async ({ page }) => {
-    test.slow();
     const caller = appRouter.createCaller({ prisma });
     const lastOrder = await caller.orders.getLast();
 
@@ -25,6 +27,8 @@ test.describe("the payment process", () => {
 
     await submitDeliveryForm({ page });
     await waitLoadingEnds({ page });
+
+    await page.getByLabel("Country or region").selectOption("FR"); // the github workflow has USA as default country
 
     await page.getByLabel("Email").click();
     await page.keyboard.type("jegwell@exemple.fr");
@@ -56,6 +60,7 @@ test.describe("the payment process", () => {
 
     try {
       const lastPaymentIntentId = order.paymentIntentId;
+      expect(lastPaymentIntentId).toBeDefined();
       if (lastPaymentIntentId == null) throw Error("payment intent id is null");
 
       const paymentIntent = await stripe.paymentIntents.retrieve(
