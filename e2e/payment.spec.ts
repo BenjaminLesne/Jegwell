@@ -14,7 +14,7 @@ test.describe("the payment process", () => {
   });
 
   test.use({
-    locale: "fr-FR",
+    locale: "en-US",
     geolocation: { latitude: 48.8566, longitude: 2.3522 }, // Paris
   });
 
