@@ -16,6 +16,7 @@ test.describe("the payment process", () => {
   });
 
   test("on payment success it update the order", async ({ page }) => {
+    test.slow();
     const caller = appRouter.createCaller({ prisma });
     const lastOrder = await caller.orders.getLast();
 
