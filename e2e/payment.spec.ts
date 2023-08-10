@@ -42,7 +42,7 @@ test.describe("the payment process", () => {
 
     await page.getByTestId("hosted-payment-submit-button").click();
 
-    await page.waitForTimeout(3000); // we have to wait for the webhook to get triggered after payment
+    await page.waitForURL(/paiement-reussi/);
     await expect(page.getByText("Paiment réussi")).toBeVisible();
 
     const order = await caller.orders.get({ id: lastOrder.id + 1 });
