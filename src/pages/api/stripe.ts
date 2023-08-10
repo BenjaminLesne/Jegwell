@@ -51,11 +51,11 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
 
           if (updatedOrder.paymentIntentId == null) {
             throw Error(
-              "updatedOrder.paymentIntentId is undefined instead of being a string"
+              "updatedOrder.paymentIntentId is null instead of being a string"
             );
           }
 
-          if (updatedOrder.price === result.amount) {
+          if (updatedOrder.price !== result.amount) {
             throw Error(
               `the order price ${updatedOrder.price} is not matching the stripe payment ${result.amount}`
             );

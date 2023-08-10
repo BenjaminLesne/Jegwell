@@ -39,8 +39,8 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
-- e2e: stripe payment
-
+- add in test e2e of payment a check that the last payment intent succeeded without error
+- email: support@jegwell.fr (IS NOT A REAL EMAIL IN THE SUCCESS PAYMENT PAGE)
 
 Doing:
 - e2e: stripe payment
