@@ -34,7 +34,7 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
           const result = event.data.object as {
             metadata: { orderId: string };
             id: string;
-            amount: string;
+            amount: number;
           };
           const paymentIntentId = z.string().parse(result.id);
           const orderId = z.number().parse(parseInt(result.metadata.orderId));
@@ -51,11 +51,11 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
 
           if (updatedOrder.paymentIntentId == null) {
             throw Error(
-              "updatedOrder.paymentIntentId is undefined instead of being a string"
+              "updatedOrder.paymentIntentId is null instead of being a string"
             );
           }
 
-          if (updatedOrder.price === parseInt(result.amount)) {
+          if (updatedOrder.price !== result.amount) {
             throw Error(
               `the order price ${updatedOrder.price} is not matching the stripe payment ${result.amount}`
             );
