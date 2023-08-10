@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { deliveryBeforeEach, submitDeliveryForm } from "./utils";
+import {
+  deliveryBeforeEach,
+  submitDeliveryForm,
+  waitLoadingEnds,
+} from "./utils";
 import { appRouter } from "~/server/api/root";
 import { prisma } from "~/server/db";
 import { stripe } from "~/server/api/routers/payments";
@@ -19,6 +23,7 @@ test.describe("the payment process", () => {
     if (lastOrder == null) throw Error("last order is null");
 
     await submitDeliveryForm({ page });
+    await waitLoadingEnds({ page });
 
     await page.getByLabel("Email").click();
     await page.keyboard.type("jegwell@exemple.fr");

@@ -46,6 +46,7 @@ Doing:
 - e2e: stripe payment
 => test does not work in pipeline idk why, I guess it cannot access the success url
 => https://github.com/BenjaminLesne/Jegwell/actions/runs/5811844822/job/15755967932?pr=63
+=> its because the only webhook set in stripe is jegwell.vercel.app
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
