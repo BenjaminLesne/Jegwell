@@ -28,8 +28,6 @@ test.describe("the payment process", () => {
     await submitDeliveryForm({ page });
     await waitLoadingEnds({ page });
 
-    await page.getByLabel("Country or region").selectOption("FR"); // the github workflow has USA as default country
-
     await page.getByLabel("Email").click();
     await page.keyboard.type("jegwell@exemple.fr");
 
