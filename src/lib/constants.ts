@@ -11,6 +11,7 @@ export const SINGLE_PRODUCT_ROUTE = "/creations/";
 export const BASKET_ROUTE = "/panier";
 export const DELIVERY_ROUTE = "/livraison";
 export const PAYMENT_SUCCEEDED_ROUTE = "/paiement-reussi";
+export const BASE_ADMIN_ROUTE = "/gestion"
 // /routes
 
 // social media

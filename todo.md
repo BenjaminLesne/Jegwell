@@ -38,6 +38,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - setup a production database
 - setup the domain name on vercel
 - setup production env in vercel, idem preview and develop env 
+- use jenkins for deploying, generating new version etc?
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
@@ -46,9 +47,12 @@ IMPORTANT:
 - admin product page:
 => authentication required (clerk)
 => design to make?
+- store .env in keepassxc jegwell
 
 Doing:
-- 
+- gestion page
+=> table https://ui.shadcn.com/docs/components/data-table
+=> sign in to access gestion page deactivated
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
