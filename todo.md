@@ -39,6 +39,8 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - setup the domain name on vercel
 - setup production env in vercel, idem preview and develop env 
 - use jenkins for deploying, generating new version etc?
+- add filtering, sorting and more to tables cf https://ui.shadcn.com/docs/components/data-table
+- make a system where she can check order that have been handled already
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity

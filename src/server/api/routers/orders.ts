@@ -168,6 +168,12 @@ export const ordersRouter = createTRPCRouter({
 
     const order = await ctx.prisma.order.findUnique({
       where: { id },
+      include: {
+        customer: true,
+        address: true,
+        deliveryOption: true,
+        productsToBasket: true,
+      },
     });
 
     return order;

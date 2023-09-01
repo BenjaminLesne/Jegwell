@@ -1,6 +1,6 @@
 import { type Prisma } from "@prisma/client";
 import { z } from "zod";
-import { OrderGetAllArg } from "./types";
+import { type OrderGetAllArg } from "./types";
 
 export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
@@ -8,11 +8,13 @@ export const DEVELOPMENT = "development";
 // routes
 export const HOME_ROUTE = "/";
 export const PRODUCTS_ROUTE = "/creations";
-export const SINGLE_PRODUCT_ROUTE = "/creations/";
+export const SINGLE_PRODUCT_ROUTE = `${PRODUCTS_ROUTE}/`;
 export const BASKET_ROUTE = "/panier";
 export const DELIVERY_ROUTE = "/livraison";
 export const PAYMENT_SUCCEEDED_ROUTE = "/paiement-reussi";
 export const BASE_ADMIN_ROUTE = "/gestion";
+export const ORDERS_ROUTE = `${BASE_ADMIN_ROUTE}/commandes`;
+export const SINGLE_ORDER_ROUTE = `${ORDERS_ROUTE}/`;
 // /routes
 
 // social media
