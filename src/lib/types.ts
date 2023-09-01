@@ -1,6 +1,54 @@
 import { type Option, type Prisma } from "@prisma/client";
 import { type OrderedProduct } from "./helpers/helpers";
 
+export type OrderGetAllArg = {
+  include: {
+    customer: {
+      select: {
+        firstname: true;
+        lastname: true;
+        phone: true;
+      };
+    };
+    address: {
+      select: {
+        city: true;
+        country: true;
+        line1: true;
+        line2: true;
+        postalCode: true;
+      };
+    };
+    productsToBasket: {
+      select: {
+        option: {
+          select: {
+            name: true;
+            price: true;
+            image: {
+              select: {
+                url: true;
+              };
+            };
+          };
+        };
+        quantity: true;
+        product: {
+          select: {
+            image: {
+              select: {
+                url: true;
+              };
+            };
+            name: true;
+            price: true;
+          };
+        };
+      };
+    };
+  };
+};
+
 type BaseMergedProduct = Prisma.ProductGetPayload<{
   include: {
     options: {
@@ -69,8 +117,3 @@ export type OptionOrderedProduct = Omit<
   "price" | "createdAt" | "name" | "description" | "imageId"
 > &
   OrderedProduct;
-
-// id: -1,
-// productId: -1,
-// optionId: -1,
-// quantity: -1,

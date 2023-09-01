@@ -1,5 +1,6 @@
 import { type Prisma } from "@prisma/client";
 import { z } from "zod";
+import { OrderGetAllArg } from "./types";
 
 export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
@@ -11,7 +12,7 @@ export const SINGLE_PRODUCT_ROUTE = "/creations/";
 export const BASKET_ROUTE = "/panier";
 export const DELIVERY_ROUTE = "/livraison";
 export const PAYMENT_SUCCEEDED_ROUTE = "/paiement-reussi";
-export const BASE_ADMIN_ROUTE = "/gestion"
+export const BASE_ADMIN_ROUTE = "/gestion";
 // /routes
 
 // social media
@@ -290,4 +291,52 @@ export const deliveryFormSchema = z.object({
   postalCode: z.string().regex(/^\d{5}$/, { message: postalCodeMessage }),
   comment: z.string().max(500, { message: commentMessage }).optional(),
 });
+
+export const orderGetAllArg: OrderGetAllArg = {
+  include: {
+    customer: {
+      select: {
+        firstname: true,
+        lastname: true,
+        phone: true,
+      },
+    },
+    address: {
+      select: {
+        city: true,
+        country: true,
+        line1: true,
+        line2: true,
+        postalCode: true,
+      },
+    },
+    productsToBasket: {
+      select: {
+        option: {
+          select: {
+            name: true,
+            price: true,
+            image: {
+              select: {
+                url: true,
+              },
+            },
+          },
+        },
+        quantity: true,
+        product: {
+          select: {
+            image: {
+              select: {
+                url: true,
+              },
+            },
+            name: true,
+            price: true,
+          },
+        },
+      },
+    },
+  },
+};
 // /prisma schema

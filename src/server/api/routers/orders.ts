@@ -1,6 +1,7 @@
 import { type Prisma } from "@prisma/client";
 import {
   deliveryFormSchema,
+  orderGetAllArg,
   lightMergedProductSchema,
   orderSchema,
 } from "~/lib/constants";
@@ -117,6 +118,11 @@ export const ordersRouter = createTRPCRouter({
 
       return order;
     }),
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const orders = await ctx.prisma.order.findMany(orderGetAllArg);
+
+    return orders;
+  }),
   getAllPaid: publicProcedure.query(async ({ ctx }) => {
     const orders = await ctx.prisma.order.findMany({
       where: {
