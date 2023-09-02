@@ -2,6 +2,9 @@ import { type Option, type Prisma } from "@prisma/client";
 import { type OrderedProduct } from "./helpers/helpers";
 
 export type OrderGetAllArg = {
+  orderBy: {
+    createdAt: string;
+  };
   include: {
     customer: {
       select: {
@@ -66,13 +69,39 @@ type BaseMergedProduct = Prisma.ProductGetPayload<{
   };
 }>;
 
-export type MergedProduct = Omit<
+export type MergedProductOld = Omit<
   BaseMergedProduct,
   "createdAt" | "description" | "imageId"
 > &
   Omit<OrderedProduct, "id"> & {
     options: Omit<Option, "productId" | "imageId">[];
   };
+
+export type MergedProduct = Prisma.ProductGetPayload<{
+  include: {
+    options: {
+      select: {
+        id: true;
+        name: true;
+        price: true;
+        image: {
+          select: {
+            url: true;
+          };
+        };
+      };
+    };
+    image: {
+      select: {
+        url: true;
+      };
+    };
+  };
+}> &
+  Omit<OrderedProduct, "id"> & {
+    options: Omit<Option, "productId" | "imageId">[];
+  };
+ 
 
 export type ProductForModal =
   | (Omit<

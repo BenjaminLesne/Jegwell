@@ -1,7 +1,11 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 
-import { TAB_BASE_TITLE } from "~/lib/constants";
+import {
+  NO_OPTION_TEXT,
+  TAB_BASE_TITLE,
+  mergedProductsSchema,
+} from "~/lib/constants";
 import { Title } from "~/components/Title/Title";
 import { Section } from "~/components/Section/Section";
 import { api } from "~/lib/api";
@@ -10,8 +14,10 @@ import { Error } from "~/components/Error/Error";
 
 import { useRouter } from "next/router";
 import { z } from "zod";
-import { cn } from "~/lib/helpers/helpers";
+import { cn, consoleError } from "~/lib/helpers/helpers";
 import Image from "next/image";
+import { type MergedProduct } from "~/lib/types";
+import { Price } from "~/components/Price/Price";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -31,14 +37,17 @@ const Home: NextPage = () => {
     { enabled: idIsNumber }
   );
 
-  const { data: products, productsAreLoading } = api.products.getByIds.useQuery(
-    {
-      id: z.number().parse(parseInt(typeof id === "string" ? id : "-1")),
-    },
-    { enabled: idIsNumber }
-  );
+  const { data: products, isLoading: productsAreLoading } =
+    api.products.getByIds.useQuery(
+      {
+        ids: order?.productsToBasket.map((item) =>
+          item.productId.toString()
+        ) ?? ["-1"],
+      },
+      { enabled: !!order }
+    );
 
-  if (isLoading) {
+  if (isLoading || productsAreLoading) {
     return (
       <main>
         <Loading />
@@ -46,10 +55,29 @@ const Home: NextPage = () => {
     );
   }
 
-  if (!order && !isLoading) return <Error />;
+  if (!order && !isLoading && !productsAreLoading) return <Error />;
 
   if (order == null || !usableId) return orderNotFoundJSX;
+  const mergedProductsRaw = order.productsToBasket.map((item) => {
+    const product = products?.find((element) => element.id === item.productId);
 
+    const mergedProduct = { ...product, ...item };
+    return mergedProduct;
+  });
+
+  let mergedProducts: MergedProduct[] = [];
+
+  try {
+    mergedProducts = mergedProductsSchema.parse(mergedProductsRaw);
+  } catch (error) {
+    consoleError("Failed to parse mergedProductsRaw : ", error);
+    return (
+      <main>
+        <Error />
+      </main>
+    );
+  }
+  console.log(mergedProducts);
   return (
     <>
       <Head>
@@ -59,7 +87,7 @@ const Home: NextPage = () => {
         <Section>
           <Title>Commande n°{order?.id} : </Title>
           <div>
-            <h2>Livraison : </h2>
+            <Title>Livraison : </Title>
             <div>
               <div className={cn("flex")}>
                 <div>Ville : </div>
@@ -90,7 +118,7 @@ const Home: NextPage = () => {
             </div>
           </div>
           <div>
-            <h2>Client : </h2>
+            <Title>Client : </Title>
             <div>
               <div className={cn("flex")}>
                 <div>Prénom : </div>
@@ -110,70 +138,95 @@ const Home: NextPage = () => {
               </div>
             </div>
           </div>
-          <div>
-            <h2>Client : </h2>
+          <br />
+          <div className={cn("mx-auto", "max-w-[50ch]", "px-2")}>
+            <Title>Panier commandé : </Title>
             <div>
-              {order.productsToBasket.map((product) => (
-                <li key={product.id + (product.optionId ?? 0)}>
-                  <article>
-                    <div className="flex gap-5">
-                      <div
-                        className={cn(
-                          "overflow-hidden",
-                          "h-[125px]",
-                          "flex",
-                          "items-center",
-                          "rounded-md",
-                          "shadow-md"
-                        )}
-                      >
-                        <Image
-                          className="rounded object-cover"
-                          width={125}
-                          height={125}
-                          src={product.image.url}
-                          alt={product.name}
-                        />
-                      </div>
-                      <div className="flex flex-1 flex-col">
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-xl font-light">{product.name}</h3>
+              {mergedProducts.map((product) => {
+                const isDefaultOption = product.optionId === null;
+                const possibleOption =
+                  isDefaultOption === false &&
+                  product.options.find((item) => item.id === product.optionId);
+                const imageUrl = possibleOption
+                  ? possibleOption.image.url
+                  : product.image.url;
+
+                const option = product.options.find(
+                  (option) => option.id === product.optionId
+                );
+
+                const optionName =
+                  option !== undefined
+                    ? option.name
+                    : product.optionId === null
+                    ? NO_OPTION_TEXT
+                    : "inconnu";
+
+                return (
+                  <li key={product.id + (product.optionId ?? 0)}>
+                    <article>
+                      <div className="flex gap-5">
+                        <div
+                          className={cn(
+                            "overflow-hidden",
+                            "h-[125px]",
+                            "flex",
+                            "items-center",
+                            "rounded-md",
+                            "shadow-md"
+                          )}
+                        >
+                          <Image
+                            className="rounded object-cover"
+                            width={125}
+                            height={125}
+                            src={imageUrl}
+                            alt={product.name}
+                          />
                         </div>
-                        <OrderItemModifier
-                          name="option"
-                          value={
-                            product.options.find(
-                              (option) => option.id === product.optionId
-                            )?.name ?? NO_OPTION_TEXT
-                          }
-                          onClick={() =>
-                            dispatchOptionModalProps({
-                              type: OPEN_TYPE,
-                              value: product,
-                            })
-                          }
-                          testid="OPTION_ID"
-                        />
-                        <div className="bottom-[-4px] left-0 my-1 h-[1.5px] w-full bg-gray-500 bg-opacity-25"></div>
-                        <OrderItemModifier
-                          name="quantité"
-                          value={product.quantity}
-                          onClick={() =>
-                            dispatchQuantityModalProps({
-                              type: OPEN_TYPE,
-                              value: product,
-                            })
-                          }
-                          testid={QUANTITY_TESTID}
-                        />
+                        <div className="flex flex-1 flex-col">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-xl font-light">
+                              {product.name}
+                            </h3>
+                          </div>
+
+                          <div
+                            className={cn(
+                              "relative",
+                              "m-0",
+                              "flex h-12",
+                              "w-full",
+                              "items-center",
+                              "justify-between",
+                              "text-sm"
+                            )}
+                          >
+                            option: {optionName}
+                          </div>
+                          <div className="bottom-[-4px] left-0 my-1 h-[1.5px] w-full bg-gray-500 bg-opacity-25"></div>
+                          <div
+                            className={cn(
+                              "relative",
+                              "m-0",
+                              "flex h-12",
+                              "w-full",
+                              "items-center",
+                              "justify-between",
+                              "text-sm"
+                            )}
+                          >
+                            quantité : {product.quantity}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <span className="inline-block w-full text-right text-xl font-bold">
-                      <Price priceInCents={product.price} />
-                    </span>
-                  </article>
-                </li>
-              ))}
+                      <span className="inline-block w-full text-right text-xl font-bold">
+                        <Price priceInCents={product.price} />
+                      </span>
+                    </article>
+                  </li>
+                );
+              })}
             </div>
           </div>
         </Section>

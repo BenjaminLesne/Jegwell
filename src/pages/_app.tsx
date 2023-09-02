@@ -16,16 +16,16 @@ import { useRouter } from "next/router";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const router = useRouter();
-  const showHeaderFooter =
-    [BASE_ADMIN_ROUTE].includes(router.pathname) === false;
+  const isAdmin = router.pathname.includes(BASE_ADMIN_ROUTE);
+
   return (
     <>
       <Head>
         <title>{BRAND_NAME}</title>
       </Head>
-      {showHeaderFooter && <Header />}
+      {isAdmin === false && <Header />}
       <Component {...pageProps} />
-      {showHeaderFooter && <Footer />}
+      {isAdmin === false && <Footer />}
     </>
   );
 };

@@ -295,6 +295,9 @@ export const deliveryFormSchema = z.object({
 });
 
 export const orderGetAllArg: OrderGetAllArg = {
+  orderBy: {
+    createdAt: "desc",
+  },
   include: {
     customer: {
       select: {
