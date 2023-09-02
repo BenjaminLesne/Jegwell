@@ -163,7 +163,7 @@ const Home: NextPage = () => {
                     : "inconnu";
 
                 return (
-                  <li key={product.id + (product.optionId ?? 0)}>
+                  <li key={product.id + (product.optionId ?? -1)}>
                     <article>
                       <div className="flex gap-5">
                         <div

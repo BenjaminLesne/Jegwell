@@ -13,8 +13,8 @@ export const BASKET_ROUTE = "/panier";
 export const DELIVERY_ROUTE = "/livraison";
 export const PAYMENT_SUCCEEDED_ROUTE = "/paiement-reussi";
 export const BASE_ADMIN_ROUTE = "/gestion";
-export const ORDERS_ROUTE = `${BASE_ADMIN_ROUTE}/commandes`;
-export const SINGLE_ORDER_ROUTE = `${ORDERS_ROUTE}/`;
+export const ADMIN_ORDERS_ROUTE = `${BASE_ADMIN_ROUTE}/commandes`;
+export const ADMIN_SINGLE_ORDER_ROUTE = `${ADMIN_ORDERS_ROUTE}/`;
 // /routes
 
 // social media

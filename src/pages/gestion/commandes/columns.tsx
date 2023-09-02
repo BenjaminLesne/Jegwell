@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { SINGLE_ORDER_ROUTE } from "~/lib/constants";
+import { ADMIN_SINGLE_ORDER_ROUTE } from "~/lib/constants";
 import { formatPrice } from "~/lib/helpers/helpers";
 import { type OrderGetAllArg } from "~/lib/types";
 
@@ -95,7 +95,7 @@ export const columns: ColumnDef<Order>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href={SINGLE_ORDER_ROUTE + order.id.toString()}>
+              <Link href={ADMIN_SINGLE_ORDER_ROUTE + order.id.toString()}>
                 Voir le détails
               </Link>
             </DropdownMenuItem>
