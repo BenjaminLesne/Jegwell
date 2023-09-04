@@ -13,7 +13,7 @@ test.describe("admin orders page", () => {
     await page.goto(ADMIN_ORDERS_ROUTE);
   });
 
-  test.only("see details action redirect to single order page with right price", async ({
+  test("see details action redirect to single order page with right price", async ({
     page,
   }) => {
     const headerRow = page.getByRole("row").first();
