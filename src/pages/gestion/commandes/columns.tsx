@@ -16,14 +16,6 @@ import { ADMIN_SINGLE_ORDER_ROUTE } from "~/lib/constants";
 import { formatPrice } from "~/lib/helpers/helpers";
 import { type OrderGetAllArg } from "~/lib/types";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
 
 type Order = Prisma.OrderGetPayload<OrderGetAllArg>;
 
