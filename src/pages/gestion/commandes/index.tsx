@@ -7,8 +7,8 @@ import { Section } from "~/components/Section/Section";
 import { api } from "~/lib/api";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
-import { DataTable } from "./data-table";
-import { columns } from "./columns";
+import { DataTable } from "~/components/data-table";
+import { columns } from "~/components/columns";
 
 const Home: NextPage = () => {
   const { data: orders, isLoading } = api.orders.getAll.useQuery();
