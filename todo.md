@@ -58,6 +58,7 @@ Doing:
 => table https://ui.shadcn.com/docs/components/data-table
 => sign in to access gestion page deactivated
 => fetch productsToBaskets, merged product etc check panier/index.tsx, can we reuse the logic? extract the code and stuff
+mr: https://github.com/BenjaminLesne/Jegwell/pull/68
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

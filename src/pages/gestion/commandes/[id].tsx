@@ -65,7 +65,7 @@ const Home: NextPage = () => {
     return mergedProduct;
   });
 
-  let mergedProducts: MergedProduct[] = [];
+  let mergedProducts: z.infer<typeof mergedProductsSchema> = [];
 
   try {
     mergedProducts = mergedProductsSchema.parse(mergedProductsRaw);

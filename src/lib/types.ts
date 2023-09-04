@@ -3,7 +3,7 @@ import { type OrderedProduct } from "./helpers/helpers";
 
 export type OrderGetAllArg = {
   orderBy: {
-    createdAt: string;
+    createdAt: Prisma.SortOrder;
   };
   include: {
     customer: {

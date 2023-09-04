@@ -33,6 +33,7 @@ import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
 import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 import { OptionModal } from "~/components/Modals/Modal/OptionModal";
 import { QuantityModal } from "~/components/Modals/Modal/QuantityModal";
+import { z } from "zod";
 
 const { RESET, ADD } = BASKET_REDUCER_TYPE;
 
@@ -133,7 +134,7 @@ const SingleProductPage: NextPage = () => {
     optionId: NO_OPTION,
   };
 
-  let mergedProduct: MergedProduct;
+  let mergedProduct: z.infer<typeof mergedProductSchema>;
 
   try {
     mergedProduct = mergedProductSchema.parse(mergedProductRaw);

@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { z } from "zod";
 import { Cross } from "~/assets/svg/Cross";
 import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
 import { Loading } from "~/components/Loading/Loading";
@@ -62,7 +63,7 @@ const BasketPage: NextPage = () => {
     return mergedProduct;
   });
 
-  let mergedProducts: MergedProduct[] = [];
+  let mergedProducts: z.infer<typeof mergedProductsSchema> = [];
 
   try {
     mergedProducts = mergedProductsSchema.parse(mergedProductsRaw);

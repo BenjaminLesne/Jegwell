@@ -19,7 +19,7 @@ import { type OrderGetAllArg } from "~/lib/types";
 
 type Order = Prisma.OrderGetPayload<OrderGetAllArg>;
 
-export const columns: ColumnDef<Order>[] = [
+export const columns = [
   {
     accessorKey: "id",
     header: "Id",
@@ -96,4 +96,4 @@ export const columns: ColumnDef<Order>[] = [
       );
     },
   },
-];
+] satisfies ColumnDef<Order>[];
