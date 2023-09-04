@@ -14,7 +14,7 @@ import { Error } from "~/components/Error/Error";
 
 import { useRouter } from "next/router";
 import { z } from "zod";
-import { cn, consoleError } from "~/lib/helpers/helpers";
+import { cn, consoleError, getSubtotalPrice } from "~/lib/helpers/helpers";
 import Image from "next/image";
 import { type MergedProduct } from "~/lib/types";
 import { Price } from "~/components/Price/Price";
@@ -161,6 +161,9 @@ const Home: NextPage = () => {
                     : product.optionId === null
                     ? NO_OPTION_TEXT
                     : "inconnu";
+                const productPrice = possibleOption
+                  ? possibleOption.price
+                  : product.price;
 
                 return (
                   <li key={product.id + (product.optionId ?? -1)}>
@@ -221,13 +224,26 @@ const Home: NextPage = () => {
                         </div>
                       </div>
                       <span className="inline-block w-full text-right text-xl font-bold">
-                        <Price priceInCents={product.price} />
+                        <Price priceInCents={productPrice} />
                       </span>
                     </article>
                   </li>
                 );
               })}
             </div>
+          </div>
+          <div>
+            prix marchandise:{" "}
+            <Price priceInCents={getSubtotalPrice(mergedProducts)} />
+            <br />
+            prix livraison: <Price priceInCents={order.deliveryOption.price} />
+            <br />
+            Total:{" "}
+            <Price
+              priceInCents={
+                order.deliveryOption.price + getSubtotalPrice(mergedProducts)
+              }
+            />
           </div>
         </Section>
       </main>

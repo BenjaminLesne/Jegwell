@@ -41,6 +41,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - use jenkins for deploying, generating new version etc?
 - add filtering, sorting and more to tables cf https://ui.shadcn.com/docs/components/data-table
 - make a system where she can check order that have been handled already
+- reset the database between each test/project in e2e tests? https://playwright.dev/docs/test-projects
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
@@ -50,6 +51,7 @@ IMPORTANT:
 => authentication required (clerk)
 => design to make?
 - store .env in keepassxc jegwell
+- price in orders page do not match the one on see details > single order page
 
 Doing:
 - gestion page
