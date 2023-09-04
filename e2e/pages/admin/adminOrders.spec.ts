@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { waitLoadingEnds } from "e2e/utils";
 import { ADMIN_ORDERS_ROUTE } from "~/lib/constants";
 
 test.describe("admin orders page", () => {
@@ -38,7 +39,8 @@ test.describe("admin orders page", () => {
 
     await secondRowMenuItem.click();
     await page.getByRole("menuitem", { name: "Voir le détails" }).click();
+    await waitLoadingEnds({ page });
     await expect(page.getByText("Commande")).toBeVisible();
-    await expect(page.getByText(secondRowPrice)).toBeVisible();
+    await expect(page.getByText(secondRowPrice).first()).toBeVisible();
   });
 });
