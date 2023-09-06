@@ -8,10 +8,12 @@ import { api } from "~/lib/api";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 import { DataTable } from "~/components/data-table";
-import { orderColumns } from "~/components/columns";
+import { productColumns } from "~/components/columns";
+import { Button } from "~/components/ui/Button/button";
+import { cn } from "~/lib/helpers/helpers";
 
 const Home: NextPage = () => {
-  const { data: orders, isLoading } = api.orders.getAll.useQuery();
+  const { data: products, isLoading } = api.products.AdminGetAll.useQuery();
 
   if (isLoading) {
     return (
@@ -21,7 +23,7 @@ const Home: NextPage = () => {
     );
   }
 
-  if (!orders && !isLoading) return <Error />;
+  if (!products && !isLoading) return <Error />;
 
   return (
     <>
@@ -30,8 +32,11 @@ const Home: NextPage = () => {
       </Head>
       <main>
         <Section>
-          <Title>Commandes :</Title>
-          <DataTable columns={orderColumns} data={orders} />
+          <Title>Produits :</Title>
+          <Button className={cn("flex", "ml-auto", "mb-10")}>
+            Ajouter un produit
+          </Button>
+          <DataTable columns={productColumns} data={products} />
         </Section>
       </main>
     </>

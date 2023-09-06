@@ -1,6 +1,6 @@
 import { type Prisma } from "@prisma/client";
 import { z } from "zod";
-import { type OrderGetAllArg } from "./types";
+import { ProductAdminGetAllArg, type OrderGetAllArg } from "./types";
 
 export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
@@ -342,6 +342,22 @@ export const orderGetAllArg: OrderGetAllArg = {
         },
       },
     },
+  },
+};
+
+export const productAdminGetAllArg: ProductAdminGetAllArg = {
+  include: {
+    image: {
+      select: {
+        url: true,
+      },
+    },
+    options: {
+      include: {
+        image: true,
+      },
+    },
+    categories: true,
   },
 };
 // /prisma schema

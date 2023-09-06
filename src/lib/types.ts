@@ -1,6 +1,22 @@
 import { type Option, type Prisma } from "@prisma/client";
 import { type OrderedProduct } from "./helpers/helpers";
 
+export type ProductAdminGetAllArg = {
+  include: {
+    image: {
+      select: {
+        url: true;
+      };
+    };
+    options: {
+      include: {
+        image: true;
+      };
+    };
+    categories: true;
+  };
+};
+
 export type OrderGetAllArg = {
   orderBy: {
     createdAt: Prisma.SortOrder;

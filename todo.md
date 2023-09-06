@@ -42,6 +42,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - add filtering, sorting and more to tables cf https://ui.shadcn.com/docs/components/data-table
 - make a system where she can check order that have been handled already
 - reset the database between each test/project in e2e tests? https://playwright.dev/docs/test-projects
+- add identification with AdminGetAll api endpoint
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
@@ -52,6 +53,7 @@ IMPORTANT:
 => design to make?
 - store .env in keepassxc jegwell
 - price in orders page do not match the one on see details > single order page
+- admin navigation
 
 Doing:
 - gestion page
