@@ -9,19 +9,23 @@ import { api } from "~/lib/api";
 
 import "~/styles/globals.css";
 import Head from "next/head";
-import { BRAND_NAME } from "~/lib/constants";
+import { BASE_ADMIN_ROUTE, BRAND_NAME } from "~/lib/constants";
 import { Header } from "~/components/Header/Header";
 import { Footer } from "~/components/Footer/Footer";
+import { useRouter } from "next/router";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
+  const router = useRouter();
+  const isAdmin = router.pathname.includes(BASE_ADMIN_ROUTE);
+
   return (
     <>
       <Head>
         <title>{BRAND_NAME}</title>
       </Head>
-      <Header />
+      {isAdmin === false && <Header />}
       <Component {...pageProps} />
-      <Footer />
+      {isAdmin === false && <Footer />}
     </>
   );
 };

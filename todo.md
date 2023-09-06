@@ -38,6 +38,10 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - setup a production database
 - setup the domain name on vercel
 - setup production env in vercel, idem preview and develop env 
+- use jenkins for deploying, generating new version etc?
+- add filtering, sorting and more to tables cf https://ui.shadcn.com/docs/components/data-table
+- make a system where she can check order that have been handled already
+- reset the database between each test/project in e2e tests? https://playwright.dev/docs/test-projects
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
@@ -46,9 +50,15 @@ IMPORTANT:
 - admin product page:
 => authentication required (clerk)
 => design to make?
+- store .env in keepassxc jegwell
+- price in orders page do not match the one on see details > single order page
 
 Doing:
-- 
+- gestion page
+=> table https://ui.shadcn.com/docs/components/data-table
+=> sign in to access gestion page deactivated
+=> fetch productsToBaskets, merged product etc check panier/index.tsx, can we reuse the logic? extract the code and stuff
+mr: https://github.com/BenjaminLesne/Jegwell/pull/68
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

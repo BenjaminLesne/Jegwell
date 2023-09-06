@@ -15,7 +15,6 @@ test.describe("the payment process", () => {
 
   test.use({
     locale: "en-US",
-    geolocation: { latitude: 48.8566, longitude: 2.3522 }, // Paris
   });
 
   test("on payment success it update the order", async ({ page }) => {
@@ -28,7 +27,6 @@ test.describe("the payment process", () => {
     await submitDeliveryForm({ page });
     await waitLoadingEnds({ page });
 
-    await page.getByPlaceholder("ZIP").click();
     await page.getByLabel("Country or region").selectOption("FR"); // pipeline has USA as default country and show a form for american credit cards
 
     await page.getByLabel("Email").click();
