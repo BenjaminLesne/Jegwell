@@ -12,7 +12,7 @@ import { productColumns } from "~/components/columns";
 import { Button } from "~/components/ui/Button/button";
 import { cn } from "~/lib/helpers/helpers";
 
-const Home: NextPage = () => {
+const AdminProductsPage: NextPage = () => {
   const { data: products, isLoading } = api.products.AdminGetAll.useQuery();
 
   if (isLoading) {
@@ -43,4 +43,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default AdminProductsPage;

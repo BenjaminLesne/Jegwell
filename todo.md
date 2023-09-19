@@ -43,6 +43,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - make a system where she can check order that have been handled already
 - reset the database between each test/project in e2e tests? https://playwright.dev/docs/test-projects
 - add identification with AdminGetAll api endpoint
+- add bun as package manager, testing framework and bundler?... runtime?
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
@@ -57,10 +58,7 @@ IMPORTANT:
 
 Doing:
 - gestion page
-=> table https://ui.shadcn.com/docs/components/data-table
-=> sign in to access gestion page deactivated
-=> fetch productsToBaskets, merged product etc check panier/index.tsx, can we reuse the logic? extract the code and stuff
-mr: https://github.com/BenjaminLesne/Jegwell/pull/68
+=> add name price of options of products
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

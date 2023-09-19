@@ -17,6 +17,48 @@ import { ADMIN_SINGLE_ORDER_ROUTE } from "~/lib/constants";
 import { formatPrice } from "~/lib/helpers/helpers";
 import { type ProductAdminGetAllArg, type OrderGetAllArg } from "~/lib/types";
 
+
+type Option = Prisma.OptionGetPayload<{
+  include: {
+    image: true;
+  };
+}>;
+
+export const optionColumns = [
+  {
+    accessorKey: "image",
+    header: "Image",
+    cell: ({ row }) => {
+      const imageUrl = row.original.image.url;
+
+      return (
+        <div>
+          <Image
+            src={imageUrl}
+            width={100}
+            height={100}
+            alt={row.original.name}
+          />
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "name",
+    header: "Nom",
+  },
+  {
+    accessorKey: "price",
+    header: "Prix",
+    cell: ({ row }) => {
+      const priceInCents = z.number().parse(row.getValue("price"));
+      const formatted = formatPrice(priceInCents / 100);
+
+      return <div className="text-right font-medium">{formatted}</div>;
+    },
+  },
+] satisfies ColumnDef<Option>[];
+
 type Product = Prisma.ProductGetPayload<ProductAdminGetAllArg>;
 
 export const productColumns = [
@@ -38,18 +80,13 @@ export const productColumns = [
             height={150}
             alt={row.original.name}
           />
-          {row.original.options.map((option, index) => (
-            <Image
-              key={index}
-              src={option?.image?.url ?? ""}
-              width={75}
-              height={75}
-              alt={row.original.name}
-            />
-          ))}
         </div>
       );
     },
+  },
+  {
+    accessorKey: "name",
+    header: "Nom",
   },
   {
     accessorKey: "createdAt",
@@ -80,7 +117,7 @@ export const productColumns = [
   },
   {
     id: "actions",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -94,6 +131,12 @@ export const productColumns = [
             <DropdownMenuSeparator />
             <DropdownMenuItem>Supprimer</DropdownMenuItem>
             <DropdownMenuItem>modifier</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={row.getToggleExpandedHandler()}
+              disabled={row.original.options.length === 0}
+            >
+              {row.getIsExpanded() ? "Cacher les options" : "Voir les options"}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
