@@ -57,8 +57,7 @@ IMPORTANT:
 - admin navigation
 
 Doing:
-- gestion page
-=> add name price of options of products
+- create a dialog and form to create a product in /gestion/produits
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

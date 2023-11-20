@@ -9,6 +9,7 @@ import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 import { DataTable } from "~/components/data-table";
 import { orderColumns } from "~/components/columns";
+import { AdminHeader } from "~/components/Header/AdminHeader";
 
 const Home: NextPage = () => {
   const { data: orders, isLoading } = api.orders.getAll.useQuery();
@@ -28,6 +29,7 @@ const Home: NextPage = () => {
       <Head>
         <title>{TAB_BASE_TITLE}gestion</title>
       </Head>
+      <AdminHeader />
       <main>
         <Section>
           <Title>Commandes :</Title>

@@ -11,6 +11,7 @@ import { DataTable } from "~/components/data-table";
 import { productColumns } from "~/components/columns";
 import { Button } from "~/components/ui/Button/button";
 import { cn } from "~/lib/helpers/helpers";
+import { AdminHeader } from "~/components/Header/AdminHeader";
 
 const AdminProductsPage: NextPage = () => {
   const { data: products, isLoading } = api.products.AdminGetAll.useQuery();
@@ -30,6 +31,7 @@ const AdminProductsPage: NextPage = () => {
       <Head>
         <title>{TAB_BASE_TITLE}gestion</title>
       </Head>
+      <AdminHeader />
       <main>
         <Section>
           <Title>Produits :</Title>
