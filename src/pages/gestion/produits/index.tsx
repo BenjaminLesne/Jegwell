@@ -12,6 +12,7 @@ import { productColumns } from "~/components/columns";
 import { Button } from "~/components/ui/Button/button";
 import { cn } from "~/lib/helpers/helpers";
 import { AdminHeader } from "~/components/Header/AdminHeader";
+import { CreateProductDialog } from "~/components/Modals/CreateProductDialog";
 
 const AdminProductsPage: NextPage = () => {
   const { data: products, isLoading } = api.products.AdminGetAll.useQuery();
@@ -35,9 +36,7 @@ const AdminProductsPage: NextPage = () => {
       <main>
         <Section>
           <Title>Produits :</Title>
-          <Button className={cn("flex", "ml-auto", "mb-10")}>
-            Ajouter un produit
-          </Button>
+          <CreateProductDialog />
           <DataTable columns={productColumns} data={products} />
         </Section>
       </main>

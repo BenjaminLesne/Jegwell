@@ -44,6 +44,9 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - reset the database between each test/project in e2e tests? https://playwright.dev/docs/test-projects
 - add identification with AdminGetAll api endpoint
 - add bun as package manager, testing framework and bundler?... runtime?
+- add knip https://github.com/webpro/knip
+- can I use this? https://github.com/release-it/release-it
+- clean up useEffect wrongly use see this video: https://www.youtube.com/watch?v=TGUSijXKuyA
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
@@ -58,9 +61,13 @@ IMPORTANT:
 
 Doing:
 - create a dialog and form to create a product in /gestion/produits
+=> https://ui.shadcn.com/docs/components/dialog
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
 we can add customer details (address, email) in the Stripe checkout session
+
+there is two branch dev and production available with current plan, we need a stage branch so we can run our e2e tests
+https://app.planetscale.com/benjamin-lesne/jegwelldb/branches
 
 
