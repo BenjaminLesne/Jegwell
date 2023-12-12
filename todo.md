@@ -63,8 +63,7 @@ IMPORTANT:
 
 Doing:
 - create a dialog and form to create a product in /gestion/produits
-=> MultipleSelectCategories
-=> formSchema l.50 string[] when it should be Option[]
+=> MultipleSelectRelatedProducts?
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

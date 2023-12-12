@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { SetStateAction, useState } from "react";
+import React, { type SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -22,10 +22,12 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/Button/button";
 import { cn } from "~/lib/helpers/helpers";
 
-import { MultiSelect, OptionType } from "../MultipleSelect/MultipleSelect";
+import { MultiSelect, type OptionType } from "../MultipleSelect/MultipleSelect";
 import { Check } from "lucide-react";
+import { api } from "~/lib/api";
+import { Loading } from "../Loading/Loading";
+import { Error } from "../Error/Error";
 
-// Add your validation logic here, for example checking file type
 const allowedTypes = [
   "image/jpeg",
   "image/jpg",
@@ -100,6 +102,23 @@ const CategoryMenuItem = ({ option, selected }: CategoryMenuItem) => (
 );
 
 export const CreateProductDialog = () => {
+  const { data: categories = [], isLoading: categoriesAreLoading } =
+    api.categories.getAll.useQuery();
+  const { data: products = [], isLoading: productsAreLoading } =
+    api.products.getAll.useQuery();
+
+  const categoriesAsOptions = categories.map((category) => ({
+    label: category.name,
+    value: category.id.toString(),
+    imageUrl: category.image.url,
+  })) satisfies OptionType[];
+
+  const productsAsOptions = products.map((product) => ({
+    label: product.name,
+    value: product.id.toString(),
+    imageUrl: product.image.url,
+  })) satisfies OptionType[];
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -129,6 +148,19 @@ export const CreateProductDialog = () => {
   }: CategoriesOnChangeProps) {
     fieldOnChange(value);
   }
+
+  if (categoriesAreLoading && productsAreLoading)
+    return (
+      <main>
+        <Loading />
+      </main>
+    );
+
+  const nothingIsLoading = !categoriesAreLoading && !productsAreLoading;
+  if (nothingIsLoading && (!categories || !products)) {
+    return <Error message="Une erreur est survenue." />;
+  }
+
   return (
     <Dialog>
       <DialogTrigger>
@@ -192,9 +224,9 @@ export const CreateProductDialog = () => {
                     <FormControl>
                       <MultiSelect
                         {...field}
-                        options={data}
+                        options={categoriesAsOptions}
                         MenuItem={CategoryMenuItem}
-                        selected={data.filter((item) => {
+                        selected={categoriesAsOptions.filter((item) => {
                           const shouldFilter = field.value.some(
                             (object) => object.value === item.value
                           );
@@ -213,6 +245,13 @@ export const CreateProductDialog = () => {
                   </FormItem>
                 )}
               />
+
+              {/* options  (create option, name, image)   */}
+              {/* in progress */}
+
+              {/* relateTo list of products, like categories we pick the one we want   */}
+              {/* relatedBy this should fill automatically with the same value as relateTo? */}
+              {/* image upload a file (how do I handle this? uploadthing?) */}
               <Button type="submit">Envoyer</Button>
             </form>
           </Form>
