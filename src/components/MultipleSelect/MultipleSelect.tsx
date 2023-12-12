@@ -1,39 +1,44 @@
 import * as React from "react";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 
-import { Badge } from "@/registry/default/ui/badge";
-import { Button } from "@/registry/default/ui/button";
+import { cn } from "~/lib/helpers/helpers";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/Button/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/registry/default/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/registry/default/ui/popover";
-import { cn } from "~/lib/helpers/helpers";
+} from "../ui/command";
 
 export type OptionType = Record<"value" | "label", string>;
 
+type MenuItemProps = {
+  option: OptionType;
+  selected: OptionType[];
+};
+
 interface MultiSelectProps {
-  options: Record<"value" | "label", string>[];
-  selected: Record<"value" | "label", string>[];
-  onChange: React.Dispatch<
-    React.SetStateAction<Record<"value" | "label", string>[]>
-  >;
+  MenuItem: ({ option, selected }: MenuItemProps) => JSX.Element;
+  options: OptionType[];
+  selected: OptionType[];
+  onChange: React.Dispatch<React.SetStateAction<OptionType[]>>;
   className?: string;
   placeholder?: string;
 }
-
+/*
+short explanation: to make it compatible with any type of options we use object as options. As long as your options satisfies the OptionType, you should be good.
+To make sure the data display itself as wanted, you have to pass a MenuItem component that will receive the option.
+You don't need to change the type of anything.
+A more detailed documentation should be done with docusaurus when the time allow me to
+*/
 const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
-  ({ options, selected, onChange, className, ...props }, ref) => {
+  ({ MenuItem, options, selected, onChange, className, ...props }, ref) => {
     const [open, setOpen] = React.useState(false);
 
-    const handleUnselect = (item: Record<"value" | "label", string>) => {
+    const handleUnselect = (item: OptionType) => {
       onChange(selected.filter((i) => i.value !== item.value));
     };
 
@@ -84,7 +89,6 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                   <Button
                     asChild
                     variant="outline"
-                    size="icon"
                     className="border-none"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
@@ -129,15 +133,7 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
                     setOpen(true);
                   }}
                 >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      selected.some((item) => item.value === option.value)
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
-                  {option.label}
+                  <MenuItem option={option} selected={selected} />
                 </CommandItem>
               ))}
             </CommandGroup>

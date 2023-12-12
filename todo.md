@@ -58,10 +58,13 @@ IMPORTANT:
 - store .env in keepassxc jegwell
 - price in orders page do not match the one on see details > single order page
 - admin navigation
+- make a doc with docusaurus (How to use the MultipleSelect)
+- make a doc with docusaurus for solene
 
 Doing:
 - create a dialog and form to create a product in /gestion/produits
-=> https://ui.shadcn.com/docs/components/dialog
+=> MultipleSelectCategories
+=> formSchema l.50 string[] when it should be Option[]
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -13,7 +13,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,13 +21,9 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/Button/button";
 import { cn } from "~/lib/helpers/helpers";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/Select/select";
+
+import { MultiSelect, OptionType } from "../MultipleSelect/MultipleSelect";
+import { Check } from "lucide-react";
 
 // Add your validation logic here, for example checking file type
 const allowedTypes = [
@@ -46,9 +41,20 @@ const formSchema = z.object({
   name: z.string(),
   price: z.number().int(),
   description: z.string().optional(),
-  categories: z.array(z.number().int()),
-
-  options: z.array(z.number().int()),
+  categories: z.array(
+    z.object({
+      label: z.string(),
+      value: z.string(),
+    })
+  ),
+  options: z.array(
+    z
+      .string()
+      .transform((str) => parseInt(str))
+      .refine((num) => Number.isInteger(num), {
+        message: "La valeur doit être un entier",
+      })
+  ),
   relateTo: z.array(z.number().int()),
   image: z.unknown().refine(
     (value) => {
@@ -63,6 +69,35 @@ const formSchema = z.object({
     }
   ),
 });
+
+const data = [
+  { label: "Boucle d'oreille", value: "0" },
+  { label: "Bagues", value: "1" },
+];
+
+type CategoryOption = {
+  value: string;
+  label: string;
+};
+
+type CategoryMenuItem = {
+  option: CategoryOption;
+  selected: CategoryOption[];
+};
+
+const CategoryMenuItem = ({ option, selected }: CategoryMenuItem) => (
+  <>
+    <Check
+      className={cn(
+        "mr-2 h-4 w-4",
+        selected.some((item) => item.value === option.value)
+          ? "opacity-100"
+          : "opacity-0"
+      )}
+    />
+    {option.label}
+  </>
+);
 
 export const CreateProductDialog = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -82,7 +117,17 @@ export const CreateProductDialog = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    console.log("TEST values submitted", values);
+  }
+  type CategoriesOnChangeProps = {
+    value: SetStateAction<OptionType[]>;
+    fieldOnChange: (...args: unknown[]) => void;
+  };
+  function categoriesOnChange({
+    value,
+    fieldOnChange,
+  }: CategoriesOnChangeProps) {
+    fieldOnChange(value);
   }
   return (
     <Dialog>
@@ -145,19 +190,24 @@ export const CreateProductDialog = () => {
                   <FormItem>
                     <FormLabel>Catégories</FormLabel>
                     <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a verified email to display" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value={1}>1</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <MultiSelect
+                        {...field}
+                        options={data}
+                        MenuItem={CategoryMenuItem}
+                        selected={data.filter((item) => {
+                          const shouldFilter = field.value.some(
+                            (object) => object.value === item.value
+                          );
+
+                          return shouldFilter;
+                        })}
+                        onChange={(value) =>
+                          categoriesOnChange({
+                            value,
+                            fieldOnChange: field.onChange,
+                          })
+                        }
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
