@@ -13,20 +13,21 @@ import { BASE_ADMIN_ROUTE, BRAND_NAME } from "~/lib/constants";
 import { Header } from "~/components/Header/Header";
 import { Footer } from "~/components/Footer/Footer";
 import { useRouter } from "next/router";
+import { HydrationOverlay } from "@builder.io/react-hydration-overlay";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const router = useRouter();
   const isAdmin = router.pathname.includes(BASE_ADMIN_ROUTE);
 
   return (
-    <>
+    <HydrationOverlay>
       <Head>
         <title>{BRAND_NAME}</title>
       </Head>
       {isAdmin === false && <Header />}
       <Component {...pageProps} />
       {isAdmin === false && <Footer />}
-    </>
+    </HydrationOverlay>
   );
 };
 

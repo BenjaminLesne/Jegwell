@@ -17,6 +17,7 @@
     "stripe:trigger": "stripe trigger payment_intent.succeeded"
   },
   "dependencies": {
+    "@builder.io/react-hydration-overlay": "^0.0.6",
     "@clerk/nextjs": "^4.17.1",
     "@fontsource/roboto": "^4.5.8",
     "@hookform/resolvers": "^3.1.1",
@@ -74,7 +75,8 @@
     "prisma": "^5.1.1",
     "tailwindcss": "^3.3.0",
     "typescript": "^5.0.2",
-    "vitest": "^0.31.1"
+    "vitest": "^0.31.1",
+    "webpack": "~5.74.0"
   },
   "ct3aMetadata": {
     "initVersion": "7.12.2"
