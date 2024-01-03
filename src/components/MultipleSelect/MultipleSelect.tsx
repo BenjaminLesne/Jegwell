@@ -13,7 +13,11 @@ import {
   CommandItem,
 } from "../ui/command";
 
-export type OptionType = Record<"value" | "label" | string, string>;
+export type OptionType = {
+  [key: string]: string;
+  value: string;
+  label: string;
+};
 
 export type MenuItemProps = {
   option: OptionType;

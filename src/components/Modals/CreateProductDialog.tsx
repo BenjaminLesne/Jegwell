@@ -118,7 +118,7 @@ const ProductMenuItem = ({ option, selected }: ProductMenuItem) => (
       height={250}
       alt="bijou"
       />
-    <Check
+    <Check 
       className={cn(
         "mr-2 h-4 w-4",
         selected.some((item) => item.value === option.value)
