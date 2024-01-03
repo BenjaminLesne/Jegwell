@@ -47,6 +47,7 @@ car les descriptions des produits doivent etre traduite aussi. Et le client n'a 
 - add knip https://github.com/webpro/knip
 - can I use this? https://github.com/release-it/release-it
 - clean up useEffect wrongly use see this video: https://www.youtube.com/watch?v=TGUSijXKuyA
+- make 3D model of products? (threejs)
 
 IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
@@ -64,6 +65,7 @@ IMPORTANT:
 Doing:
 - create a dialog and form to create a product in /gestion/produits
 => MultipleSelectRelatedProducts?
+=> trying to figure out how to type OptionType to accept value, label and any other key/properties
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { type SetStateAction, useState } from "react";
+import React, { type SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -22,11 +22,13 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/Button/button";
 import { cn } from "~/lib/helpers/helpers";
 
-import { MultiSelect, type OptionType } from "../MultipleSelect/MultipleSelect";
+import { MenuItemProps, MultiSelect, type OptionType } from "../MultipleSelect/MultipleSelect";
 import { Check } from "lucide-react";
 import { api } from "~/lib/api";
 import { Loading } from "../Loading/Loading";
 import { Error } from "../Error/Error";
+import { urlSchema } from "~/lib/constants";
+import Image from "next/image";
 
 const allowedTypes = [
   "image/jpeg",
@@ -72,20 +74,18 @@ const formSchema = z.object({
   ),
 });
 
-const data = [
-  { label: "Boucle d'oreille", value: "0" },
-  { label: "Bagues", value: "1" },
-];
+type MenuItem<OptionType> = {
+  option: OptionType;
+  selected: OptionType[];
+}
+
 
 type CategoryOption = {
   value: string;
   label: string;
 };
 
-type CategoryMenuItem = {
-  option: CategoryOption;
-  selected: CategoryOption[];
-};
+type CategoryMenuItem = MenuItem<CategoryOption>
 
 const CategoryMenuItem = ({ option, selected }: CategoryMenuItem) => (
   <>
@@ -97,6 +97,35 @@ const CategoryMenuItem = ({ option, selected }: CategoryMenuItem) => (
           : "opacity-0"
       )}
     />
+    {option.label}
+  </>
+);
+
+type ProductOption = {
+  value: string;
+  label: string;
+  imageUrl: z.infer<typeof urlSchema>;
+};
+
+type ProductMenuItem = MenuItem<ProductOption>
+
+
+const ProductMenuItem = ({ option, selected }: ProductMenuItem) => (
+  <>
+  <Image
+      src={option.imageUrl}
+      width={250}
+      height={250}
+      alt="bijou"
+      />
+    <Check
+      className={cn(
+        "mr-2 h-4 w-4",
+        selected.some((item) => item.value === option.value)
+        ? "opacity-100"
+        : "opacity-0"
+        )}
+        />
     {option.label}
   </>
 );
@@ -243,12 +272,42 @@ export const CreateProductDialog = () => {
                   </FormItem>
                 )}
               />
+                            <FormField
+                control={form.control}
+                name="relateTo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Associé à</FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        {...field}
+                        options={productsAsOptions}
+                        MenuItem={ProductMenuItem}
+                        selected={productsAsOptions.filter((item) => {
+                          const shouldFilter = field.value.some(
+                            (object) => object.value === item.value
+                          );
 
-              {/* options  (create option, name, image)   */}
-              {/* in progress */}
+                          return shouldFilter;
+                        })}
+                        onChange={(value) =>
+                          categoriesOnChange({
+                            value,
+                            fieldOnChange: field.onChange,
+                          })
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               {/* relateTo list of products, like categories we pick the one we want   */}
               {/* relatedBy this should fill automatically with the same value as relateTo? */}
+              {/* in progress */}
+
+              {/* options  (create option, name, image)   */}
               {/* image upload a file (how do I handle this? uploadthing?) */}
               <Button type="submit">Envoyer</Button>
             </form>

@@ -1,10 +1,12 @@
 import { type Prisma } from "@prisma/client";
 import { z } from "zod";
 import { type ProductAdminGetAllArg, type OrderGetAllArg } from "./types";
+import { env } from "~/env.mjs";
 
 export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
 export const DEVELOPMENT = "development";
+export const isDevelopment = env.NEXT_PUBLIC_NODE_ENV === DEVELOPMENT;
 // routes
 export const HOME_ROUTE = "/";
 export const PRODUCTS_ROUTE = "/creations";
@@ -364,3 +366,6 @@ export const productAdminGetAllArg: ProductAdminGetAllArg = {
   },
 };
 // /prisma schema
+
+// other zod schema
+export const urlSchema = z.string().url()
