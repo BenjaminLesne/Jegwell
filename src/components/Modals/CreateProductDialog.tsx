@@ -22,13 +22,18 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/Button/button";
 import { cn } from "~/lib/helpers/helpers";
 
-import { MenuItemProps, MultiSelect, type OptionType } from "../MultipleSelect/MultipleSelect";
+import {
+  MenuItemProps,
+  MultiSelect,
+  MultiSelectProps,
+  type OptionType,
+} from "../MultipleSelect/MultipleSelect";
 import { Check } from "lucide-react";
 import { api } from "~/lib/api";
 import { Loading } from "../Loading/Loading";
 import { Error } from "../Error/Error";
-import { urlSchema } from "~/lib/constants";
 import Image from "next/image";
+import { urlSchema } from "~/lib/constants";
 
 const allowedTypes = [
   "image/jpeg",
@@ -51,6 +56,13 @@ const formSchema = z.object({
       value: z.string(),
     })
   ),
+  relateTo: z.array(
+    z.object({
+      label: z.string(),
+      value: z.string(),
+      imageUrl: z.string().url(),
+    })
+  ),
   options: z.array(
     z
       .string()
@@ -59,7 +71,6 @@ const formSchema = z.object({
         message: "La valeur doit être un entier",
       })
   ),
-  relateTo: z.array(z.number().int()),
   image: z.unknown().refine(
     (value) => {
       if (!(value instanceof File)) {
@@ -74,61 +85,59 @@ const formSchema = z.object({
   ),
 });
 
-type MenuItem<OptionType> = {
-  option: OptionType;
-  selected: OptionType[];
-}
+const categoryOptionSchema = z.object({
+  value: z.string(),
+  label: z.string(),
+});
 
+const categoryiesSelectedSchema = z.array(categoryOptionSchema);
 
-type CategoryOption = {
-  value: string;
-  label: string;
-};
+const CategoryMenuItem = ({ option, selected }: OptionType) => {
+  const optionParsed = categoryOptionSchema.parse(option);
+  const selectedParsed = categoryiesSelectedSchema.parse(selected);
 
-type CategoryMenuItem = MenuItem<CategoryOption>
-
-const CategoryMenuItem = ({ option, selected }: CategoryMenuItem) => (
-  <>
-    <Check
-      className={cn(
-        "mr-2 h-4 w-4",
-        selected.some((item) => item.value === option.value)
-          ? "opacity-100"
-          : "opacity-0"
-      )}
-    />
-    {option.label}
-  </>
-);
-
-type ProductOption = {
-  value: string;
-  label: string;
-  imageUrl: z.infer<typeof urlSchema>;
-};
-
-type ProductMenuItem = MenuItem<ProductOption>
-
-
-const ProductMenuItem = ({ option, selected }: ProductMenuItem) => (
-  <>
-  <Image
-      src={option.imageUrl}
-      width={250}
-      height={250}
-      alt="bijou"
-      />
-    <Check 
-      className={cn(
-        "mr-2 h-4 w-4",
-        selected.some((item) => item.value === option.value)
-        ? "opacity-100"
-        : "opacity-0"
+  return (
+    <>
+      <Check
+        className={cn(
+          "mr-2 h-4 w-4",
+          selectedParsed.some((item) => item.value === optionParsed.value)
+            ? "opacity-100"
+            : "opacity-0"
         )}
-        />
-    {option.label}
-  </>
-);
+      />
+      {optionParsed.label}
+    </>
+  );
+};
+
+const productOptionSchema = z.object({
+  value: z.string(),
+  label: z.string(),
+  imageUrl: z.string().url(),
+});
+
+const productsSelectedSchema = z.array(productOptionSchema);
+
+const ProductMenuItem = ({ option, selected }: OptionType) => {
+  const optionParsed = productOptionSchema.parse(option);
+  const selectedParsed = productsSelectedSchema.parse(selected);
+
+  return (
+    <>
+      <Image src={optionParsed.imageUrl} width={250} height={250} alt="bijou" />
+      <Check
+        className={cn(
+          "mr-2 h-4 w-4",
+          selectedParsed.some((item) => item.value === optionParsed.value)
+            ? "opacity-100"
+            : "opacity-0"
+        )}
+      />
+      {optionParsed.label}
+    </>
+  );
+};
 
 export const CreateProductDialog = () => {
   const { data: categories = [], isLoading: categoriesAreLoading } =
@@ -192,8 +201,18 @@ export const CreateProductDialog = () => {
 
   return (
     <Dialog>
-      <DialogTrigger className={cn("flex", "ml-auto", "mb-10", "bg-red-300", "border-solid", "border-blue-600", "border-2")}>
-          Ajouter un produit
+      <DialogTrigger
+        className={cn(
+          "flex",
+          "ml-auto",
+          "mb-10",
+          "bg-red-300",
+          "border-solid",
+          "border-blue-600",
+          "border-2"
+        )}
+      >
+        Ajouter un produit
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -272,7 +291,7 @@ export const CreateProductDialog = () => {
                   </FormItem>
                 )}
               />
-                            <FormField
+              <FormField
                 control={form.control}
                 name="relateTo"
                 render={({ field }) => (
@@ -285,7 +304,8 @@ export const CreateProductDialog = () => {
                         MenuItem={ProductMenuItem}
                         selected={productsAsOptions.filter((item) => {
                           const shouldFilter = field.value.some(
-                            (object) => object.value === item.value
+                            (productAsOption) =>
+                              productAsOption.value === item.value
                           );
 
                           return shouldFilter;

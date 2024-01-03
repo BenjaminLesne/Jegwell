@@ -14,9 +14,7 @@ import {
 } from "../ui/command";
 
 export type OptionType = {
-  [key: string]: string;
-  value: string;
-  label: string;
+  [key: string]: unknown;
 };
 
 export type MenuItemProps = {
