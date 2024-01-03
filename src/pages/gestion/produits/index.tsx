@@ -9,8 +9,6 @@ import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 import { DataTable } from "~/components/data-table";
 import { productColumns } from "~/components/columns";
-import { Button } from "~/components/ui/Button/button";
-import { cn } from "~/lib/helpers/helpers";
 import { AdminHeader } from "~/components/Header/AdminHeader";
 import { CreateProductDialog } from "~/components/Modals/CreateProductDialog";
 

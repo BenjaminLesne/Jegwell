@@ -163,10 +163,8 @@ export const CreateProductDialog = () => {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button className={cn("flex", "ml-auto", "mb-10")}>
+      <DialogTrigger className={cn("flex", "ml-auto", "mb-10", "bg-red-300", "border-solid", "border-blue-600", "border-2")}>
           Ajouter un produit
-        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

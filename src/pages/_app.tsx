@@ -14,21 +14,36 @@ import { Header } from "~/components/Header/Header";
 import { Footer } from "~/components/Footer/Footer";
 import { useRouter } from "next/router";
 import { HydrationOverlay } from "@builder.io/react-hydration-overlay";
+import { env } from "~/env.mjs";
+
+type ConditionalHydrationOverlayProps = {
+  condition: boolean;
+  wrapper: (children: React.ReactNode) => React.ReactNode;
+  children: React.ReactNode
+}
+
+const ConditionalHydrationOverlay = ({ condition, wrapper, children }: ConditionalHydrationOverlayProps) => 
+  condition ? <>{wrapper(children)}</> : <>{children}</>;
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const router = useRouter();
   const isAdmin = router.pathname.includes(BASE_ADMIN_ROUTE);
+  const isDevelopment = env.NODE_ENV === 'development';
 
   return (
-    <HydrationOverlay>
+    <ConditionalHydrationOverlay
+    condition={isDevelopment}
+    wrapper={children => <HydrationOverlay>{children}</HydrationOverlay>}
+    >
       <Head>
         <title>{BRAND_NAME}</title>
       </Head>
       {isAdmin === false && <Header />}
       <Component {...pageProps} />
       {isAdmin === false && <Footer />}
-    </HydrationOverlay>
+    </ConditionalHydrationOverlay>
   );
 };
+
 
 export default api.withTRPC(MyApp);

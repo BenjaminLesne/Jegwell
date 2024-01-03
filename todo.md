@@ -52,7 +52,7 @@ IMPORTANT:
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
 - add in test e2e of payment a check that the last payment intent succeeded without error
 - email: support@jegwell.fr (IS NOT A REAL EMAIL IN THE SUCCESS PAYMENT PAGE)
-- admin product page:
+- admin product page:p
 => authentication required (clerk)
 => design to make?
 - store .env in keepassxc jegwell
