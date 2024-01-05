@@ -114,7 +114,7 @@ const CategoryMenuItem = ({ option, selected }: OptionType) => {
 const productOptionSchema = z.object({
   value: z.string(),
   label: z.string(),
-  imageUrl: z.string().url(),
+  imageUrl: z.string(),
 });
 
 const productsSelectedSchema = z.array(productOptionSchema);
@@ -125,7 +125,6 @@ const ProductMenuItem = ({ option, selected }: OptionType) => {
 
   return (
     <>
-      <Image src={optionParsed.imageUrl} width={250} height={250} alt="bijou" />
       <Check
         className={cn(
           "mr-2 h-4 w-4",
@@ -134,6 +133,7 @@ const ProductMenuItem = ({ option, selected }: OptionType) => {
             : "opacity-0"
         )}
       />
+      <Image src={optionParsed.imageUrl} width={75} height={75} alt="bijou" />
       {optionParsed.label}
     </>
   );
@@ -323,11 +323,8 @@ export const CreateProductDialog = () => {
                 )}
               />
 
-              {/* relateTo list of products, like categories we pick the one we want   */}
-              {/* relatedBy this should fill automatically with the same value as relateTo? */}
-              {/* in progress */}
-
               {/* options  (create option, name, image)   */}
+              {/* in progress */}
               {/* image upload a file (how do I handle this? uploadthing?) */}
               <Button type="submit">Envoyer</Button>
             </form>
