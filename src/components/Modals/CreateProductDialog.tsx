@@ -43,7 +43,7 @@ const allowedTypes = [
   "image/gif",
 ];
 const allowedTypesString = allowedTypes
-  .map((type) => type.replace("image/", ""))
+  .map((type) => type.replace("image/", "."))
   .join(", ");
 
 const formSchema = z.object({
@@ -71,7 +71,7 @@ const formSchema = z.object({
         message: "La valeur doit être un entier",
       })
   ),
-  image: z.unknown().refine(
+  image: z.instanceof(File).refine(
     (value) => {
       if (!(value instanceof File)) {
         return false; // Not a File object
@@ -323,9 +323,32 @@ export const CreateProductDialog = () => {
                 )}
               />
 
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Image :</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="file"
+                          accept={allowedTypesString}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.files ? e.target.files[0] : null
+                            )
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+
               {/* options  (create option, name, image)   */}
               {/* in progress */}
-              {/* image upload a file (how do I handle this? uploadthing?) */}
               <Button type="submit">Envoyer</Button>
             </form>
           </Form>

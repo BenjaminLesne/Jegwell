@@ -15,33 +15,40 @@ import { Footer } from "~/components/Footer/Footer";
 import { useRouter } from "next/router";
 import { HydrationOverlay } from "@builder.io/react-hydration-overlay";
 
-type ConditionalHydrationOverlayProps = {
-  condition: boolean;
-  wrapper: (children: React.ReactNode) => React.ReactNode;
-  children: React.ReactNode
-}
 
-const ConditionalHydrationOverlay = ({ condition, wrapper, children }: ConditionalHydrationOverlayProps) => 
-  condition ? <>{wrapper(children)}</> : <>{children}</>;
+  type Provider = ({ children }: { children: React.ReactNode }) => JSX.Element;
 
-const MyApp: AppType = ({ Component, pageProps }) => {
-  const router = useRouter();
-  const isAdmin = router.pathname.includes(BASE_ADMIN_ROUTE);
+  type ConditionalProviderProps = {
+    condition: boolean;
+    Provider: Provider;
+    children: React.ReactNode;
+  };
 
-  return (
-    <ConditionalHydrationOverlay
-    condition={isDevelopment}
-    wrapper={children => <HydrationOverlay>{children}</HydrationOverlay>}
-    >
-      <Head>
-        <title>{BRAND_NAME}</title>
-      </Head>
-      {isAdmin === false && <Header />}
-      <Component {...pageProps} />
-      {isAdmin === false && <Footer />}
-    </ConditionalHydrationOverlay>
-  );
-};
+  const ConditionalProvider = ({
+    condition,
+    Provider,
+    children,
+  }: ConditionalProviderProps) =>
+    condition ? <Provider>{children}</Provider> : <>{children}</>;
+
+  const MyApp: AppType = ({ Component, pageProps }) => {
+    const router = useRouter();
+    const isAdmin = router.pathname.includes(BASE_ADMIN_ROUTE);
+
+    return (
+      <ConditionalProvider
+        condition={isDevelopment}
+        Provider={HydrationOverlay}
+      >
+        <Head>
+          <title>{BRAND_NAME}</title>
+        </Head>
+        {isAdmin === false && <Header />}
+        <Component {...pageProps} />
+        {isAdmin === false && <Footer />}
+      </ConditionalProvider>
+    );
+  };
 
 
 export default api.withTRPC(MyApp);
