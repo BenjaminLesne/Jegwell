@@ -48,6 +48,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.2",
     "react-slick": "^0.29.0",
+    "sharp": "^0.33.2",
     "stripe": "^12.16.0",
     "superjson": "1.12.2",
     "tailwind-merge": "^1.12.0",
