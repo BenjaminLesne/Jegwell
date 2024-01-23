@@ -17,21 +17,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Run debug
-        run: npm run typecheck --version
+        run: pnpm run typecheck --version
 
       - name: Run TypeScript type checking
-        run: npm run typecheck
+        run: pnpm run typecheck
 
       - name: Run linting
-        run: npm run lint
+        run: pnpm run lint
