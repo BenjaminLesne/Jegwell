@@ -22,7 +22,11 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/Button/button";
 import { cn } from "~/lib/helpers/helpers";
 
-import { MultiSelect, type OptionType } from "../MultipleSelect/MultipleSelect";
+import {
+  MenuItemProps,
+  MultiSelect,
+  type OptionType,
+} from "../MultipleSelect/MultipleSelect";
 import { Check } from "lucide-react";
 import { api } from "~/lib/api";
 import { Loading } from "../Loading/Loading";
@@ -93,7 +97,7 @@ const categoryOptionSchema = z.object({
 
 const categoryiesSelectedSchema = z.array(categoryOptionSchema);
 
-const CategoryMenuItem = ({ option, selected }: OptionType) => {
+const CategoryMenuItem = ({ option, selected }: MenuItemProps) => {
   const optionParsed = categoryOptionSchema.parse(option);
   const selectedParsed = categoryiesSelectedSchema.parse(selected);
 
@@ -120,7 +124,7 @@ const productOptionSchema = z.object({
 
 const productsSelectedSchema = z.array(productOptionSchema);
 
-const ProductMenuItem = ({ option, selected }: OptionType) => {
+const ProductMenuItem = ({ option, selected }: MenuItemProps) => {
   const optionParsed = productOptionSchema.parse(option);
   const selectedParsed = productsSelectedSchema.parse(selected);
 
