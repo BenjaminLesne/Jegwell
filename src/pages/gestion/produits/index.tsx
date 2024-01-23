@@ -8,11 +8,12 @@ import { api } from "~/lib/api";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 import { DataTable } from "~/components/data-table";
-import { orderColumns } from "~/components/columns";
+import { productColumns } from "~/components/columns";
 import { AdminHeader } from "~/components/Header/AdminHeader";
+import { CreateProductDialog } from "~/components/Modals/CreateProductDialog";
 
-const Home: NextPage = () => {
-  const { data: orders, isLoading } = api.orders.getAll.useQuery();
+const AdminProductsPage: NextPage = () => {
+  const { data: products, isLoading } = api.products.AdminGetAll.useQuery();
 
   if (isLoading) {
     return (
@@ -22,7 +23,7 @@ const Home: NextPage = () => {
     );
   }
 
-  if (!orders && !isLoading) return <Error />;
+  if (!products && !isLoading) return <Error />;
 
   return (
     <>
@@ -32,12 +33,13 @@ const Home: NextPage = () => {
       <AdminHeader />
       <main>
         <Section>
-          <Title>Commandes :</Title>
-          <DataTable columns={orderColumns} data={orders} />
+          <Title>Produits :</Title>
+          <CreateProductDialog />
+          <DataTable columns={productColumns} data={products} />
         </Section>
       </main>
     </>
   );
 };
 
-export default Home;
+export default AdminProductsPage;

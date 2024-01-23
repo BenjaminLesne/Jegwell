@@ -27,13 +27,12 @@ import {
   useBasket,
   consoleError,
 } from "~/lib/helpers/helpers";
-import { type MergedProduct } from "~/lib/types";
 import Slider, { type Settings } from "react-slick";
 import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
 import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 import { OptionModal } from "~/components/Modals/Modal/OptionModal";
 import { QuantityModal } from "~/components/Modals/Modal/QuantityModal";
-import { z } from "zod";
+import { type z } from "zod";
 
 const { RESET, ADD } = BASKET_REDUCER_TYPE;
 

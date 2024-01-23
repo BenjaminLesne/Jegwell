@@ -83,6 +83,7 @@ export const submitDeliveryForm = async ({ page }: TestArgs) => {
 
 export const waitLoadingEnds = async ({ page }: TestArgs) => {
   const progressBar = page.getByRole("progressbar").first();
+
   let progressIsVisible = await progressBar.isVisible();
 
   while (progressIsVisible) {

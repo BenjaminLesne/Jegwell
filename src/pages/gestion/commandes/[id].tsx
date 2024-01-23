@@ -16,8 +16,8 @@ import { useRouter } from "next/router";
 import { z } from "zod";
 import { cn, consoleError, getSubtotalPrice } from "~/lib/helpers/helpers";
 import Image from "next/image";
-import { type MergedProduct } from "~/lib/types";
 import { Price } from "~/components/Price/Price";
+import { AdminHeader } from "~/components/Header/AdminHeader";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -83,6 +83,7 @@ const Home: NextPage = () => {
       <Head>
         <title>{TAB_BASE_TITLE}gestion</title>
       </Head>
+      <AdminHeader />
       <main>
         <Section>
           <Title>Commande n°{order?.id} : </Title>

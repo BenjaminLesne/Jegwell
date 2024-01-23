@@ -13,12 +13,32 @@ import { BASE_ADMIN_ROUTE, BRAND_NAME } from "~/lib/constants";
 import { Header } from "~/components/Header/Header";
 import { Footer } from "~/components/Footer/Footer";
 import { useRouter } from "next/router";
+// import { HydrationOverlay } from "@builder.io/react-hydration-overlay";
+
+// type Provider = ({ children }: { children: React.ReactNode }) => JSX.Element;
+
+// type ConditionalProviderProps = {
+//   condition: boolean;
+//   Provider: Provider;
+//   children: React.ReactNode;
+// };
+
+// const ConditionalProvider = ({
+//   condition,
+//   Provider,
+//   children,
+// }: ConditionalProviderProps) =>
+//   condition ? <Provider>{children}</Provider> : <>{children}</>;
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const router = useRouter();
   const isAdmin = router.pathname.includes(BASE_ADMIN_ROUTE);
 
   return (
+    // <ConditionalProvider
+    //   condition={isDevelopment}
+    //   Provider={HydrationOverlay}
+    // >
     <>
       <Head>
         <title>{BRAND_NAME}</title>
@@ -27,6 +47,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <Component {...pageProps} />
       {isAdmin === false && <Footer />}
     </>
+    // </ConditionalProvider>
   );
 };
 

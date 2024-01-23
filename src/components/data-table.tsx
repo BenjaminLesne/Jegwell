@@ -5,6 +5,7 @@ import {
   useReactTable,
   getPaginationRowModel,
 } from "@tanstack/react-table";
+import { Fragment } from "react";
 import { Button } from "~/components/ui/Button/button";
 
 import {
@@ -15,6 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { OptionsDataTable } from "./options-data-table";
+import { optionColumns } from "./columns";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -30,6 +33,7 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getRowCanExpand: () => true,
   });
 
   return (
@@ -57,19 +61,30 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                <Fragment key={row.id}>
+                  <TableRow data-state={row.getIsSelected() && "selected"}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  {row.getIsExpanded() && (
+                    <TableRow>
+                      <TableCell>Options de {row.getValue("name")}: </TableCell>
+                      <TableCell colSpan={columns.length / 2}>
+                        <OptionsDataTable
+                          columns={optionColumns}
+                          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+                          data={(row.original as any).options}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </Fragment>
               ))
             ) : (
               <TableRow>

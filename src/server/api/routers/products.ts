@@ -5,6 +5,7 @@ import {
   DEFAULT_SORT,
   GET_BY_IDS,
   SORT_OPTIONS,
+  productAdminGetAllArg,
 } from "~/lib/constants";
 import { type Prisma } from "@prisma/client";
 import { getProductsByIds } from "~/lib/helpers/helpers";
@@ -29,6 +30,10 @@ const getBySingleIdInputSchema = z.object({
 });
 
 export const productsRouter = createTRPCRouter({
+  // AdminGetAll: adminProcedure.query(({ ctx }) => {
+  AdminGetAll: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.product.findMany(productAdminGetAllArg);
+  }),
   getAll: publicProcedure
     .input(getAllInputSchema)
     .query(({ ctx, input = {} }) => {

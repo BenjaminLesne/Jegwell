@@ -1,10 +1,12 @@
 import { type Prisma } from "@prisma/client";
 import { z } from "zod";
-import { type OrderGetAllArg } from "./types";
+import { type ProductAdminGetAllArg, type OrderGetAllArg } from "./types";
+import { env } from "~/env.mjs";
 
 export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
 export const DEVELOPMENT = "development";
+export const isDevelopment = env.NEXT_PUBLIC_NODE_ENV === DEVELOPMENT;
 // routes
 export const HOME_ROUTE = "/";
 export const PRODUCTS_ROUTE = "/creations";
@@ -15,6 +17,9 @@ export const PAYMENT_SUCCEEDED_ROUTE = "/paiement-reussi";
 export const BASE_ADMIN_ROUTE = "/gestion";
 export const ADMIN_ORDERS_ROUTE = `${BASE_ADMIN_ROUTE}/commandes`;
 export const ADMIN_SINGLE_ORDER_ROUTE = `${ADMIN_ORDERS_ROUTE}/`;
+export const ADMIN_CATEGORIES = `${BASE_ADMIN_ROUTE}/categories`;
+export const ADMIN_PRODUCTS = `${BASE_ADMIN_ROUTE}/produits`;
+export const ADMIN_DELIVERY_OPTIONS = `${BASE_ADMIN_ROUTE}/livraisons`;
 // /routes
 
 // social media
@@ -344,4 +349,23 @@ export const orderGetAllArg: OrderGetAllArg = {
     },
   },
 };
+
+export const productAdminGetAllArg: ProductAdminGetAllArg = {
+  include: {
+    image: {
+      select: {
+        url: true,
+      },
+    },
+    options: {
+      include: {
+        image: true,
+      },
+    },
+    categories: true,
+  },
+};
 // /prisma schema
+
+// other zod schema
+export const urlSchema = z.string().url()

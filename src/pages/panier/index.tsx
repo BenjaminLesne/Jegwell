@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { z } from "zod";
+import { type z } from "zod";
 import { Cross } from "~/assets/svg/Cross";
 import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
 import { Loading } from "~/components/Loading/Loading";
@@ -31,7 +31,6 @@ import {
   useBasket,
 } from "~/lib/helpers/helpers";
 import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
-import { type MergedProduct } from "~/lib/types";
 
 const BasketPage: NextPage = () => {
   const {
