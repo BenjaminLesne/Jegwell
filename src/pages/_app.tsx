@@ -9,26 +9,26 @@ import { api } from "~/lib/api";
 
 import "~/styles/globals.css";
 import Head from "next/head";
-import { BASE_ADMIN_ROUTE, BRAND_NAME, isDevelopment } from "~/lib/constants";
+import { BASE_ADMIN_ROUTE, BRAND_NAME } from "~/lib/constants";
 import { Header } from "~/components/Header/Header";
 import { Footer } from "~/components/Footer/Footer";
 import { useRouter } from "next/router";
 // import { HydrationOverlay } from "@builder.io/react-hydration-overlay";
 
-type Provider = ({ children }: { children: React.ReactNode }) => JSX.Element;
+// type Provider = ({ children }: { children: React.ReactNode }) => JSX.Element;
 
-type ConditionalProviderProps = {
-  condition: boolean;
-  Provider: Provider;
-  children: React.ReactNode;
-};
+// type ConditionalProviderProps = {
+//   condition: boolean;
+//   Provider: Provider;
+//   children: React.ReactNode;
+// };
 
-const ConditionalProvider = ({
-  condition,
-  Provider,
-  children,
-}: ConditionalProviderProps) =>
-  condition ? <Provider>{children}</Provider> : <>{children}</>;
+// const ConditionalProvider = ({
+//   condition,
+//   Provider,
+//   children,
+// }: ConditionalProviderProps) =>
+//   condition ? <Provider>{children}</Provider> : <>{children}</>;
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const router = useRouter();

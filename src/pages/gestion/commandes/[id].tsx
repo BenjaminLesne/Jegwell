@@ -16,7 +16,6 @@ import { useRouter } from "next/router";
 import { z } from "zod";
 import { cn, consoleError, getSubtotalPrice } from "~/lib/helpers/helpers";
 import Image from "next/image";
-import { type MergedProduct } from "~/lib/types";
 import { Price } from "~/components/Price/Price";
 import { AdminHeader } from "~/components/Header/AdminHeader";
 

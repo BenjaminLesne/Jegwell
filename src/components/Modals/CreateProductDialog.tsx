@@ -23,7 +23,7 @@ import { Button } from "../ui/Button/button";
 import { cn } from "~/lib/helpers/helpers";
 
 import {
-  MenuItemProps,
+  type MenuItemProps,
   MultiSelect,
   type OptionType,
 } from "../MultipleSelect/MultipleSelect";
