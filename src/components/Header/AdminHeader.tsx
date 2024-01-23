@@ -8,7 +8,7 @@ import {
 } from "~/lib/constants";
 import { cn } from "~/lib/helpers/helpers";
 
-export const AdminHeader = ({ children }: { children: React.ReactNode }) => {
+export const AdminHeader = ({ children }: { children?: React.ReactNode }) => {
   return (
     <header>
       {children}
