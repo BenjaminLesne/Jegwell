@@ -22,18 +22,12 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/Button/button";
 import { cn } from "~/lib/helpers/helpers";
 
-import {
-  MenuItemProps,
-  MultiSelect,
-  MultiSelectProps,
-  type OptionType,
-} from "../MultipleSelect/MultipleSelect";
+import { MultiSelect, type OptionType } from "../MultipleSelect/MultipleSelect";
 import { Check } from "lucide-react";
 import { api } from "~/lib/api";
 import { Loading } from "../Loading/Loading";
 import { Error } from "../Error/Error";
 import Image from "next/image";
-import { urlSchema } from "~/lib/constants";
 
 const allowedTypes = [
   "image/jpeg",
@@ -64,19 +58,26 @@ const formSchema = z.object({
     })
   ),
   options: z.array(
-    z
-      .string()
-      .transform((str) => parseInt(str))
-      .refine((num) => Number.isInteger(num), {
-        message: "La valeur doit être un entier",
-      })
+    z.object({
+      name: z.string(),
+      image: z.instanceof(File).refine(
+        (value) => {
+          return allowedTypes.includes(value.type);
+        },
+        {
+          message: `Fichier non valide. Types acceptés: ${allowedTypesString}`,
+        }
+      ),
+      price: z
+        .string()
+        .transform((str) => parseInt(str))
+        .refine((num) => Number.isInteger(num), {
+          message: "La valeur doit être un nombre",
+        }),
+    })
   ),
   image: z.instanceof(File).refine(
     (value) => {
-      if (!(value instanceof File)) {
-        return false; // Not a File object
-      }
-
       return allowedTypes.includes(value.type);
     },
     {
@@ -347,8 +348,47 @@ export const CreateProductDialog = () => {
                 }}
               />
 
+              <FormField
+                control={form.control}
+                name="options"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Options :</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Bruz"
+                          onChange={(e) => field.onChange(e.target.value)}
+                        />
+                      </FormControl>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="19.99"
+                          onChange={(e) => field.onChange(e.target.value)}
+                        />
+                      </FormControl>
+                      <FormControl>
+                        <Input
+                          type="file"
+                          accept={allowedTypesString}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.files ? e.target.files[0] : null
+                            )
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+
               {/* options  (create option, name, image)   */}
               {/* in progress */}
+              {/* tempId: crypto.randomUUID(), use it to identify which input is this in the array. add onChange => add to field.value option. need remove button to filter it out. Use tempId for all of it. We should be able to handle error message with the tempId (conditonnaly display the error message based on tempId)*/}
+              {/* it is too big for a dialog */}
               <Button type="submit">Envoyer</Button>
             </form>
           </Form>
