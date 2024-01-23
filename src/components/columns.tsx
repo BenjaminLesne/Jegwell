@@ -1,4 +1,4 @@
-import { type Product, type Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 import { type ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
@@ -16,7 +16,6 @@ import {
 import { ADMIN_SINGLE_ORDER_ROUTE } from "~/lib/constants";
 import { formatPrice } from "~/lib/helpers/helpers";
 import { type ProductAdminGetAllArg, type OrderGetAllArg } from "~/lib/types";
-
 
 type Option = Prisma.OptionGetPayload<{
   include: {
@@ -59,7 +58,7 @@ export const optionColumns = [
   },
 ] satisfies ColumnDef<Option>[];
 
-type Product = Prisma.ProductGetPayload<ProductAdminGetAllArg>;
+type MyProduct = Prisma.ProductGetPayload<ProductAdminGetAllArg>;
 
 export const productColumns = [
   {
@@ -142,7 +141,7 @@ export const productColumns = [
       );
     },
   },
-] satisfies ColumnDef<Product>[];
+] satisfies ColumnDef<MyProduct>[];
 
 type Order = Prisma.OrderGetPayload<OrderGetAllArg>;
 

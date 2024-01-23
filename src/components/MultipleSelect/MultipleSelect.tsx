@@ -14,6 +14,8 @@ import {
 } from "../ui/command";
 
 export type OptionType = {
+  value: string;
+  label: string;
   [key: string]: unknown;
 };
 

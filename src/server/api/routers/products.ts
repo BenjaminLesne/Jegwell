@@ -1,9 +1,5 @@
 import { z } from "zod";
-import {
-  adminProcedure,
-  createTRPCRouter,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import {
   ALL_CATEGORIES,
   DEFAULT_SORT,

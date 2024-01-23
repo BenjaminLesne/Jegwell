@@ -78,7 +78,8 @@ export function DataTable<TData, TValue>({
                       <TableCell colSpan={columns.length / 2}>
                         <OptionsDataTable
                           columns={optionColumns}
-                          data={row.original.options}
+                          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+                          data={(row.original as any).options}
                         />
                       </TableCell>
                     </TableRow>
