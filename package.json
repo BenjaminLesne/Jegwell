@@ -11,6 +11,7 @@
     "start": "next start",
     "test:e2e": "playwright test",
     "test:e2e:local": "playwright test --headed --project='Mobile Chrome'",
+    "test:e2e:local:desktop": "playwright test --headed --project='Google Chrome'",
     "test:e2e:local:headless": "playwright test --project='Mobile Chrome'",
     "test:e2e:local-ui": "playwright test --ui",
     "test:e2e:snapshots": "playwright test --update-snapshots",

@@ -40,7 +40,7 @@ test.describe("admin orders page", () => {
     await secondRowMenuItem.click();
     await page.getByRole("menuitem", { name: "Voir le détails" }).click();
     await waitLoadingEnds({ page });
-    await expect(page.getByText("Commande")).toBeVisible();
+    await expect(page.getByText("Commandes :")).toBeVisible();
     await expect(page.getByText(secondRowPrice).first()).toBeVisible();
   });
 });

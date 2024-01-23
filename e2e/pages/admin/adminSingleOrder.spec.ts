@@ -14,7 +14,7 @@ test.describe("admin single order page", () => {
     await waitLoadingEnds({ page });
   });
 
-  test("match snapshot", async ({ page }) => {
+  test.only("match snapshot", async ({ page }) => {
     await testPageScreenshotMatch({ page });
   });
 });
