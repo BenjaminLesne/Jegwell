@@ -18,6 +18,7 @@ test.describe("the payment process", () => {
   });
 
   test("on payment success it update the order", async ({ page }) => {
+    test.slow();
     const caller = appRouter.createCaller({ prisma });
     const lastOrder = await caller.orders.getLast();
 
@@ -41,14 +42,14 @@ test.describe("the payment process", () => {
     await page.getByPlaceholder("CVC").click();
     await page.keyboard.type("111");
 
-    await page.getByLabel("Name on card").click();
-    await page.keyboard.type("Jegwell Bot");
+    await page.getByPlaceholder("Full name on card").fill("Jegwell Bot");
 
     await page.getByTestId("hosted-payment-submit-button").click();
 
     await page.waitForURL(/paiement-reussi/);
     await expect(page.getByText("Paiment réussi")).toBeVisible();
 
+    await page.waitForTimeout(3_000);
     const order = await caller.orders.get({ id: lastOrder.id + 1 });
 
     expect(order).toBeDefined();
