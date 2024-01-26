@@ -64,13 +64,13 @@ IMPORTANT:
 - admin navigation
 - make a doc with docusaurus (How to use the MultipleSelect)
 - make a doc with docusaurus for solene
-
-Doing:
-
 - create a dialog and form to create a product in /gestion/produits
   => MultipleSelectRelatedProducts?
-  => trying to figure out how to type OptionType to accept value, label and any other key/properties
-  => figuring out why tsc version in github actions is 10 when locally is 9
+
+Doing:
+=> Error: its-fine: useFiber must be called within a <FiberProvider />!
+=> how do I use react three fiber in one page and not as a whole application?
+=> upgrade to next 14 to see if it fixes the issue
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

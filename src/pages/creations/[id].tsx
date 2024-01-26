@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useReducer } from "react";
+import { useReducer, useRef } from "react";
 import { Loading } from "~/components/Loading/Loading";
 import { Section } from "~/components/Section/Section";
 import { Button } from "~/components/ui/Button/button";
@@ -33,6 +33,7 @@ import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 import { OptionModal } from "~/components/Modals/Modal/OptionModal";
 import { QuantityModal } from "~/components/Modals/Modal/QuantityModal";
 import { type z } from "zod";
+import { Product3d } from "~/components/Product3d";
 
 const { RESET, ADD } = BASKET_REDUCER_TYPE;
 
@@ -87,6 +88,7 @@ const partialOrderReducer = (
 let didRun = false;
 
 const SingleProductPage: NextPage = () => {
+  const ref = useRef();
   const [animationKey, incrementAnimationKey] = useReducer(
     (prev: number) => prev + 1,
     0
@@ -206,6 +208,9 @@ const SingleProductPage: NextPage = () => {
         <Section>
           <h1 className="sr-only">{product.name}</h1>
           <div className="flex flex-col lg:flex-row lg:gap-20">
+            <div>
+              <Product3d eventSource={ref} eventPrefix="client" />
+            </div>
             <div className="mx-auto w-[400px] max-w-full lg:mx-0 lg:mt-5">
               <div className="h-full">
                 <Slider {...settings}>
