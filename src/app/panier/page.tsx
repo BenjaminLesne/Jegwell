@@ -1,3 +1,5 @@
+"use client";
+
 import { type NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +14,7 @@ import { Price } from "~/components/Price/Price";
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 import { Button } from "~/components/ui/Button/button";
-import { api } from "~/lib/api";
+import { api } from "~/trpc/react";
 import {
   BASKET_REDUCER_TYPE,
   CLOSE_TYPE,
@@ -112,7 +114,7 @@ const BasketPage: NextPage = () => {
                       "flex",
                       "items-center",
                       "rounded-md",
-                      "shadow-md"
+                      "shadow-md",
                     )}
                   >
                     <Image
@@ -143,7 +145,7 @@ const BasketPage: NextPage = () => {
                       name="option"
                       value={
                         product.options.find(
-                          (option) => option.id === product.optionId
+                          (option) => option.id === product.optionId,
                         )?.name ?? NO_OPTION_TEXT
                       }
                       onClick={() =>

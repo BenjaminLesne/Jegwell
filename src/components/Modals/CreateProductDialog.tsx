@@ -28,7 +28,7 @@ import {
   type OptionType,
 } from "../MultipleSelect/MultipleSelect";
 import { Check } from "lucide-react";
-import { api } from "~/lib/api";
+import { api } from "~/trpc/react";
 import { Loading } from "../Loading/Loading";
 import { Error } from "../Error/Error";
 import Image from "next/image";
@@ -52,14 +52,14 @@ const formSchema = z.object({
     z.object({
       label: z.string(),
       value: z.string(),
-    })
+    }),
   ),
   relateTo: z.array(
     z.object({
       label: z.string(),
       value: z.string(),
       imageUrl: z.string().url(),
-    })
+    }),
   ),
   options: z.array(
     z.object({
@@ -70,7 +70,7 @@ const formSchema = z.object({
         },
         {
           message: `Fichier non valide. Types acceptés: ${allowedTypesString}`,
-        }
+        },
       ),
       price: z
         .string()
@@ -78,7 +78,7 @@ const formSchema = z.object({
         .refine((num) => Number.isInteger(num), {
           message: "La valeur doit être un nombre",
         }),
-    })
+    }),
   ),
   image: z.instanceof(File).refine(
     (value) => {
@@ -86,7 +86,7 @@ const formSchema = z.object({
     },
     {
       message: `Fichier non valide. Types acceptés: ${allowedTypesString}`,
-    }
+    },
   ),
 });
 
@@ -108,7 +108,7 @@ const CategoryMenuItem = ({ option, selected }: MenuItemProps) => {
           "mr-2 h-4 w-4",
           selectedParsed.some((item) => item.value === optionParsed.value)
             ? "opacity-100"
-            : "opacity-0"
+            : "opacity-0",
         )}
       />
       {optionParsed.label}
@@ -135,7 +135,7 @@ const ProductMenuItem = ({ option, selected }: MenuItemProps) => {
           "mr-2 h-4 w-4",
           selectedParsed.some((item) => item.value === optionParsed.value)
             ? "opacity-100"
-            : "opacity-0"
+            : "opacity-0",
         )}
       />
       <Image src={optionParsed.imageUrl} width={75} height={75} alt="bijou" />
@@ -214,7 +214,7 @@ export const CreateProductDialog = () => {
           "bg-red-300",
           "border-solid",
           "border-blue-600",
-          "border-2"
+          "border-2",
         )}
       >
         Ajouter un produit
@@ -279,7 +279,7 @@ export const CreateProductDialog = () => {
                         MenuItem={CategoryMenuItem}
                         selected={categoriesAsOptions.filter((item) => {
                           const shouldFilter = field.value.some(
-                            (object) => object.value === item.value
+                            (object) => object.value === item.value,
                           );
 
                           return shouldFilter;
@@ -310,7 +310,7 @@ export const CreateProductDialog = () => {
                         selected={productsAsOptions.filter((item) => {
                           const shouldFilter = field.value.some(
                             (productAsOption) =>
-                              productAsOption.value === item.value
+                              productAsOption.value === item.value,
                           );
 
                           return shouldFilter;
@@ -341,7 +341,7 @@ export const CreateProductDialog = () => {
                           accept={allowedTypesString}
                           onChange={(e) =>
                             field.onChange(
-                              e.target.files ? e.target.files[0] : null
+                              e.target.files ? e.target.files[0] : null,
                             )
                           }
                         />
@@ -378,7 +378,7 @@ export const CreateProductDialog = () => {
                           accept={allowedTypesString}
                           onChange={(e) =>
                             field.onChange(
-                              e.target.files ? e.target.files[0] : null
+                              e.target.files ? e.target.files[0] : null,
                             )
                           }
                         />

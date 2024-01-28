@@ -1,3 +1,5 @@
+"use client";
+
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -21,7 +23,7 @@ import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 
 import { useEffect, useReducer, useState } from "react";
-import { type NextRouter, useRouter } from "next/router";
+import { type NextRouter, useRouter } from "next/navigation";
 import {
   type OrderedProduct,
   formatPrice,
@@ -43,18 +45,23 @@ import {
 } from "~/components/ui/Card/card";
 import { Button } from "~/components/ui/Button/button";
 import { capitalize } from "~/lib/helpers/helpers";
-import { api } from "~/lib/api";
+import { api } from "~/trpc/react";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
+import { Header } from "~/components/Header/Header";
+import { Footer } from "~/components/Footer/Footer";
 
 const { INCREMENT } = BASKET_REDUCER_TYPE;
 const SET_CATEGORY = "SET_CATEGORY";
 const SET_SORT = "SET_SORT";
 
-const ProductsPage: NextPage = () => {
+const ProductsPage: NextPage = ({
+  params,
+}: {
+  params: { category: string; sort: string };
+}) => {
   const router = useRouter();
-  const categoryQuery = router.query[CATEGORY];
-  const sortQuery = router.query[SORT];
+  const { category: categoryQuery, sort: sortQuery } = params;
   const sort = typeof sortQuery === "string" ? sortQuery : undefined;
   const parsedIntCategoryQuery =
     typeof categoryQuery === "string" ? parseInt(categoryQuery) : NaN;
@@ -111,7 +118,7 @@ const ProductsPage: NextPage = () => {
 
   const [queryOptions, dispatchQueryOptions] = useReducer(
     reducer,
-    initialState
+    initialState,
   );
   const { dispatchBasket } = useBasket();
   const [animationsKey, setAnimationsKey] = useState<{
@@ -221,6 +228,7 @@ const ProductsPage: NextPage = () => {
       <Head>
         <title>{TAB_BASE_TITLE}créations</title>
       </Head>
+      <Header />
       <main>
         <Section className="min-h-screen">
           <Title>NOS CRÉATIONS</Title>
@@ -281,7 +289,7 @@ const ProductsPage: NextPage = () => {
                         <SelectItem key={index} value={value}>
                           {name}
                         </SelectItem>
-                      )
+                      ),
                     )}
                   </SelectContent>
                 </Select>
@@ -345,7 +353,7 @@ const ProductsPage: NextPage = () => {
                         <CardFooter className="flex items-center justify-center">
                           <Button
                             variant="secondary"
-                            className="relative overflow-hidden border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black"
+                            className="bg-secondary relative overflow-hidden border-[1px] border-solid border-black px-2 py-[10px] text-[12px] font-light text-black"
                             onClick={() =>
                               addToBasket({
                                 key: product.id.toString(),
@@ -358,7 +366,7 @@ const ProductsPage: NextPage = () => {
                             <span
                               key={animationsKey[product.id] ?? product.id}
                               className={
-                                "absolute inset-0 flex items-center justify-center bg-secondary opacity-0 " +
+                                "bg-secondary absolute inset-0 flex items-center justify-center opacity-0 " +
                                 (animationsKey[product.id] &&
                                 animationsKey[product.id] !==
                                   product.id.toString()
@@ -385,6 +393,7 @@ const ProductsPage: NextPage = () => {
           )}
         </Section>
       </main>
+      <Footer />
     </>
   );
 };

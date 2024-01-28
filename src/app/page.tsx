@@ -1,3 +1,5 @@
+"use client";
+
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -13,9 +15,11 @@ import Image from "next/image";
 import { Title } from "~/components/Title/Title";
 import { Section } from "~/components/Section/Section";
 import { Rings } from "../assets/svg/Rings";
-import { api } from "~/lib/api";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
+import { api } from "~/trpc/react";
+import { Header } from "~/components/Header/Header";
+import { Footer } from "~/components/Footer/Footer";
 
 const Home: NextPage = () => {
   const { data: categories, isLoading } = api.categories.getAll.useQuery();
@@ -27,6 +31,7 @@ const Home: NextPage = () => {
       <Head>
         <title>{TAB_BASE_TITLE}accueil</title>
       </Head>
+      <Header />
       <main>
         <div className="relative sm:h-96">
           <Image
@@ -85,7 +90,7 @@ const Home: NextPage = () => {
                         width="200"
                         height="200"
                       />
-                      <figcaption className="flex w-1/2 items-center justify-center bg-secondary  text-xl text-primary">
+                      <figcaption className="bg-secondary text-primary flex w-1/2 items-center  justify-center text-xl">
                         <span className="first-letter:uppercase">
                           {category.name}
                         </span>
@@ -98,6 +103,7 @@ const Home: NextPage = () => {
           </ul>
         </Section>
       </main>
+      <Footer />
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { type Prisma } from "@prisma/client";
 import { z } from "zod";
 import { type ProductAdminGetAllArg, type OrderGetAllArg } from "./types";
-import { env } from "~/env.mjs";
+import { env } from "~/env";
 
 export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
@@ -110,7 +110,7 @@ export const mergedProductSchema = z
         id: z.number(),
         price: z.number(),
         name: z.string(),
-      })
+      }),
     ),
     price: z.number(),
     name: z.string(),
@@ -120,7 +120,7 @@ export const mergedProductSchema = z
       quantity: true,
       optionId: true,
       productId: true,
-    })
+    }),
   );
 
 export const mergedProductsSchema = z.array(mergedProductSchema);
@@ -131,7 +131,7 @@ export const lightMergedProductSchema = z
       z.object({
         id: z.number(),
         price: z.number(),
-      })
+      }),
     ),
     price: z.number(),
   })
@@ -368,4 +368,4 @@ export const productAdminGetAllArg: ProductAdminGetAllArg = {
 // /prisma schema
 
 // other zod schema
-export const urlSchema = z.string().url()
+export const urlSchema = z.string().url();

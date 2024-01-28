@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useReducer, useRef } from "react";
 import {
   BASKET_REDUCER_TYPE,
@@ -9,14 +11,13 @@ import { z } from "zod";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { type Stripe, loadStripe } from "@stripe/stripe-js";
-import { env } from "~/env.mjs";
+import { env } from "~/env";
 import {
   type Prisma,
   type Option,
   type ProductToBasket,
   type PrismaClient,
 } from "@prisma/client";
-
 
 const getOrThrowDeliveryOptionInputSchema = z.object({
   id: z.number(),
@@ -130,7 +131,7 @@ export function getSubtotalPrice(items: GetSubtotalPriceProps[]): number {
   let totalPrice = 0;
   for (const item of items) {
     const chosenOption = item.options.find(
-      (option) => option.id === item.optionId
+      (option) => option.id === item.optionId,
     );
     const optionPrice = chosenOption ? chosenOption.price : item.price;
     totalPrice += optionPrice * item.quantity;
@@ -257,7 +258,7 @@ export const orderedProductSchema = z.array(
     productId: z.number(),
     quantity: z.number(),
     optionId: z.number().nullable(),
-  })
+  }),
 );
 type BasketState = OrderedProduct[];
 
@@ -356,7 +357,7 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
         const productId = action.product.productId;
         const targetProduct = state.find(
           (product) =>
-            product.productId === productId && product.optionId === optionId
+            product.productId === productId && product.optionId === optionId,
         );
         if (targetProduct === undefined) return [...state, action.product];
 
@@ -375,7 +376,7 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
       const product = state.find(
         (item) =>
           item.productId === action.productId &&
-          item.optionId === action.optionId
+          item.optionId === action.optionId,
       );
       if (product?.quantity) {
         const partialState = removeFromBasket({
@@ -422,7 +423,7 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
       }
 
       consoleError(
-        `basket reducer - ${UPDATE_OPTION} : one those vars are undefined: optionId, productId or newOptionId`
+        `basket reducer - ${UPDATE_OPTION} : one those vars are undefined: optionId, productId or newOptionId`,
       );
       break;
 
@@ -462,10 +463,10 @@ const basketReducer = (state: BasketState, action: BasketAction) => {
       reportUndefinedOrNullVars(
         action.quantity,
         action.productId,
-        action.optionId
+        action.optionId,
       );
       consoleError(
-        "basket reducer UPDATE_QUANTITY : One of those variables from action object are undefined quantity, productId or optionId"
+        "basket reducer UPDATE_QUANTITY : One of those variables from action object are undefined quantity, productId or optionId",
       );
       break;
 
@@ -501,7 +502,7 @@ export const useBasket = () => {
   if (wasInitialUpdated.current === false) {
     try {
       const initialBasketRawStringified = localStorage.getItem(
-        LOCALE_STORAGE_BASKET_KEY
+        LOCALE_STORAGE_BASKET_KEY,
       );
 
       if (initialBasketRawStringified === null)

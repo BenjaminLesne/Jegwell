@@ -1,3 +1,5 @@
+"use client";
+
 import { type NextPage } from "next";
 import Head from "next/head";
 
@@ -8,20 +10,19 @@ import {
 } from "~/lib/constants";
 import { Title } from "~/components/Title/Title";
 import { Section } from "~/components/Section/Section";
-import { api } from "~/lib/api";
+import { api } from "~/trpc/react";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { cn, consoleError, getSubtotalPrice } from "~/lib/helpers/helpers";
 import Image from "next/image";
 import { Price } from "~/components/Price/Price";
 import { AdminHeader } from "~/components/Header/AdminHeader";
 
-const Home: NextPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
+const Home: NextPage = ({ params }: { params: { id: string } }) => {
+  const { id } = params;
   const idIsNumber = !isNaN(Number(id));
   const orderNotFoundJSX = (
     <main>
@@ -34,17 +35,17 @@ const Home: NextPage = () => {
     {
       id: z.number().parse(parseInt(typeof id === "string" ? id : "-1")),
     },
-    { enabled: idIsNumber }
+    { enabled: idIsNumber },
   );
 
   const { data: products, isLoading: productsAreLoading } =
     api.products.getByIds.useQuery(
       {
         ids: order?.productsToBasket.map((item) =>
-          item.productId.toString()
+          item.productId.toString(),
         ) ?? ["-1"],
       },
-      { enabled: !!order }
+      { enabled: !!order },
     );
 
   if (isLoading || productsAreLoading) {
@@ -153,15 +154,15 @@ const Home: NextPage = () => {
                   : product.image.url;
 
                 const option = product.options.find(
-                  (option) => option.id === product.optionId
+                  (option) => option.id === product.optionId,
                 );
 
                 const optionName =
                   option !== undefined
                     ? option.name
                     : product.optionId === null
-                    ? NO_OPTION_TEXT
-                    : "inconnu";
+                      ? NO_OPTION_TEXT
+                      : "inconnu";
                 const productPrice = possibleOption
                   ? possibleOption.price
                   : product.price;
@@ -177,7 +178,7 @@ const Home: NextPage = () => {
                             "flex",
                             "items-center",
                             "rounded-md",
-                            "shadow-md"
+                            "shadow-md",
                           )}
                         >
                           <Image
@@ -203,7 +204,7 @@ const Home: NextPage = () => {
                               "w-full",
                               "items-center",
                               "justify-between",
-                              "text-sm"
+                              "text-sm",
                             )}
                           >
                             option: {optionName}
@@ -217,7 +218,7 @@ const Home: NextPage = () => {
                               "w-full",
                               "items-center",
                               "justify-between",
-                              "text-sm"
+                              "text-sm",
                             )}
                           >
                             quantité : {product.quantity}

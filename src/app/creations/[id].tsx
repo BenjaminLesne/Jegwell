@@ -33,7 +33,10 @@ import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 import { OptionModal } from "~/components/Modals/Modal/OptionModal";
 import { QuantityModal } from "~/components/Modals/Modal/QuantityModal";
 import { type z } from "zod";
-import { Product3d } from "~/components/Product3d";
+import dynamic from "next/dynamic";
+import { Header } from "~/components/Header/Header";
+import { Footer } from "~/components/Footer/Footer";
+const Product3d = dynamic(() => import("../../components/Product3d"));
 
 const { RESET, ADD } = BASKET_REDUCER_TYPE;
 
@@ -64,7 +67,7 @@ type PartialOrderAction = UpdateOption | UpdateQuantity | Set;
 
 const partialOrderReducer = (
   state: PartialOrderState,
-  action: PartialOrderAction
+  action: PartialOrderAction,
 ) => {
   switch (action.type) {
     case SET:
@@ -91,14 +94,14 @@ const SingleProductPage: NextPage = () => {
   const ref = useRef();
   const [animationKey, incrementAnimationKey] = useReducer(
     (prev: number) => prev + 1,
-    0
+    0,
   );
   const { optionModal, dispatchOptionModal } = useOptionModal();
   const { quantityModal, dispatchQuantityModal } = useQuantityModal();
   const { basket, dispatchBasket } = useBasket();
   const [partialOrder, dispatchPartialOrder] = useReducer(
     partialOrderReducer,
-    initialPartialOrder
+    initialPartialOrder,
   );
   const router = useRouter();
   const { id } = router.query;
@@ -116,7 +119,7 @@ const SingleProductPage: NextPage = () => {
     {
       id: Array.isArray(id) ? undefined : id,
     },
-    { enabled: usableId }
+    { enabled: usableId },
   );
 
   if (isLoading && usableId)
@@ -180,7 +183,7 @@ const SingleProductPage: NextPage = () => {
     dispatchBasketArgs: Extract<
       BasketAction,
       { type: (typeof BASKET_REDUCER_TYPE)["UPDATE_OPTION"] }
-    >
+    >,
   ) => {
     const { newOptionId } = dispatchBasketArgs;
     dispatchPartialOrder({ type: UPDATE_OPTION, value: newOptionId });
@@ -190,7 +193,7 @@ const SingleProductPage: NextPage = () => {
     dispatchBasketArgs: Extract<
       BasketAction,
       { type: (typeof BASKET_REDUCER_TYPE)["UPDATE_QUANTITY"] }
-    >
+    >,
   ) => {
     const { quantity } = dispatchBasketArgs;
     dispatchPartialOrder({ type: UPDATE_QUANTITY, value: quantity });
@@ -204,6 +207,7 @@ const SingleProductPage: NextPage = () => {
           {product.name}
         </title>
       </Head>
+      <Header />
       <main>
         <Section>
           <h1 className="sr-only">{product.name}</h1>
@@ -269,7 +273,7 @@ const SingleProductPage: NextPage = () => {
                       name="option"
                       value={
                         product.options.find(
-                          (option) => option.id === partialOrder?.optionId
+                          (option) => option.id === partialOrder?.optionId,
                         )?.name ?? NO_OPTION_TEXT
                       }
                       onClick={() =>
@@ -298,7 +302,7 @@ const SingleProductPage: NextPage = () => {
 
                 <Button
                   variant="secondary"
-                  className="relative h-12 w-full overflow-hidden border-[1px] border-solid bg-secondary px-2 py-[10px] text-lg font-medium text-primary"
+                  className="bg-secondary text-primary relative h-12 w-full overflow-hidden border-[1px] border-solid px-2 py-[10px] text-lg font-medium"
                   onClick={addToBasket}
                 >
                   <span>Ajouter au panier</span>
@@ -312,7 +316,7 @@ const SingleProductPage: NextPage = () => {
                       "items-center",
                       "justify-center",
                       "bg-secondary",
-                      animationKey ? "animate-fadeIn" : ""
+                      animationKey ? "animate-fadeIn" : "",
                     )}
                   >
                     Ajouté &#10003;
@@ -342,6 +346,7 @@ const SingleProductPage: NextPage = () => {
         }
         onConfirmation={onOptionConfirm}
       />
+      <Footer />
     </>
   );
 };

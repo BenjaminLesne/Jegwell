@@ -1,10 +1,12 @@
+"use client"
+
 import { type NextPage } from "next";
 import Head from "next/head";
 
 import { TAB_BASE_TITLE } from "~/lib/constants";
 import { Title } from "~/components/Title/Title";
 import { Section } from "~/components/Section/Section";
-import { api } from "~/lib/api";
+import { api } from "~/trpc/react";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 import { cn } from "~/lib/helpers/helpers";
@@ -48,7 +50,7 @@ const Home: NextPage = () => {
                     className={cn(
                       "border-solid",
                       "border-2",
-                      "border-gray-400"
+                      "border-gray-400",
                     )}
                   >
                     {order.id}
@@ -57,7 +59,7 @@ const Home: NextPage = () => {
                     className={cn(
                       "border-solid",
                       "border-2",
-                      "border-gray-400"
+                      "border-gray-400",
                     )}
                   >
                     {order.createdAt.toLocaleString("fr", {
@@ -70,21 +72,21 @@ const Home: NextPage = () => {
                     className={cn(
                       "border-solid",
                       "border-2",
-                      "border-gray-400"
+                      "border-gray-400",
                     )}
                   >{`${order.customer.firstname} ${order.customer.lastname}`}</td>
                   <td
                     className={cn(
                       "border-solid",
                       "border-2",
-                      "border-gray-400"
+                      "border-gray-400",
                     )}
                   >{`${order.address.line1}, ${order.address.city}, ${order.address.country}`}</td>
                   <td
                     className={cn(
                       "border-solid",
                       "border-2",
-                      "border-gray-400"
+                      "border-gray-400",
                     )}
                   >
                     {order.price}
@@ -93,7 +95,7 @@ const Home: NextPage = () => {
                     className={cn(
                       "border-solid",
                       "border-2",
-                      "border-gray-400"
+                      "border-gray-400",
                     )}
                   >
                     {order.isPaid ? "Yes" : "No"}
@@ -102,7 +104,7 @@ const Home: NextPage = () => {
                     className={cn(
                       "border-solid",
                       "border-2",
-                      "border-gray-400"
+                      "border-gray-400",
                     )}
                   >
                     {order.isEmailSent ? "Yes" : "No"}
@@ -111,7 +113,7 @@ const Home: NextPage = () => {
                     className={cn(
                       "border-solid",
                       "border-2",
-                      "border-gray-400"
+                      "border-gray-400",
                     )}
                   >
                     {order.comment}

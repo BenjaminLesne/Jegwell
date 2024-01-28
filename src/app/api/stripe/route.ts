@@ -1,11 +1,12 @@
 import type { NextApiResponse, NextApiRequest } from "next";
 import { buffer } from "micro";
 import Stripe from "stripe";
-import { env } from "~/env.mjs";
+import { env } from "~/env";
 import { consoleError } from "~/lib/helpers/helpers";
 import { z } from "zod";
-import { appRouter } from "~/server/api/root";
-import { prisma } from "~/server/db";
+import { createCallerFactory } from "~/server/api/trpc";
+import { ordersRouter } from "~/server/api/routers/orders";
+import { db } from "~/server/db";
 
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
@@ -26,7 +27,7 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
       const event = stripe.webhooks.constructEvent(
         buf,
         sig,
-        env.STRIPE_WEBHOOK_SECRET
+        env.STRIPE_WEBHOOK_SECRET,
       );
 
       switch (event.type) {
@@ -38,8 +39,10 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
           };
           const paymentIntentId = z.string().parse(result.id);
           const orderId = z.number().parse(parseInt(result.metadata.orderId));
-
-          const caller = appRouter.createCaller({ prisma });
+          const createCaller = createCallerFactory(ordersRouter)
+          const caller = createCaller({db, headers: req.headers})
+          // const callerOld = appRouter.createCaller({ db });
+          
           const updatedOrder = await caller.orders.paymentSucceeded({
             orderId,
             paymentIntentId,
@@ -51,13 +54,13 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
 
           if (updatedOrder.paymentIntentId == null) {
             throw Error(
-              "updatedOrder.paymentIntentId is null instead of being a string"
+              "updatedOrder.paymentIntentId is null instead of being a string",
             );
           }
 
           if (updatedOrder.price !== result.amount) {
             throw Error(
-              `the order price ${updatedOrder.price} is not matching the stripe payment ${result.amount}`
+              `the order price ${updatedOrder.price} is not matching the stripe payment ${result.amount}`,
             );
           }
 

@@ -8,7 +8,7 @@ import {
 import { getSubtotalPrice } from "~/lib/helpers/helpers";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { appRouter } from "../root";
-import { prisma } from "~/server/db";
+import { db } from "~/server/db";
 import { z } from "zod";
 
 const partialCreateOrderSchema = orderSchema.pick({
@@ -40,7 +40,7 @@ export const ordersRouter = createTRPCRouter({
 
       const mergedProductsRaw = productsToBasket.map((item) => {
         const product = products.find(
-          (element) => element.id === item.productId
+          (element) => element.id === item.productId,
         );
 
         const mergedProduct = {

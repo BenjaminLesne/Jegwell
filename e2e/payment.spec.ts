@@ -5,7 +5,7 @@ import {
   waitLoadingEnds,
 } from "./utils";
 import { appRouter } from "~/server/api/root";
-import { prisma } from "~/server/db";
+import { db } from "~/server/db";
 import { stripe } from "~/server/api/routers/payments";
 
 test.describe("the payment process", () => {
@@ -63,9 +63,8 @@ test.describe("the payment process", () => {
       expect(lastPaymentIntentId).toBeDefined();
       if (lastPaymentIntentId == null) throw Error("payment intent id is null");
 
-      const paymentIntent = await stripe.paymentIntents.retrieve(
-        lastPaymentIntentId
-      );
+      const paymentIntent =
+        await stripe.paymentIntents.retrieve(lastPaymentIntentId);
       const { amount } = paymentIntent;
 
       expect(amount).toBe(order.price);

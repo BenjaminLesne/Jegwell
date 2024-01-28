@@ -15,6 +15,6 @@ export const categoriesRouter = createTRPCRouter({
       },
     } satisfies Prisma.CategoryFindManyArgs;
 
-    return ctx.prisma.category.findMany(arg);
+    return ctx.db.category.findMany(arg);
   }),
 });

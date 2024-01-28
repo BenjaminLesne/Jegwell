@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { env } from "~/env.mjs";
+import { env } from "~/env";
 import {
   BASKET_ICON_TESTID,
   BASKET_ROUTE,
@@ -7,7 +7,7 @@ import {
   PRODUCTS_ROUTE,
 } from "~/lib/constants";
 import { appRouter } from "~/server/api/root";
-import { prisma } from "~/server/db";
+import { db } from "~/server/db";
 
 type TestArgs = {
   page: Page;

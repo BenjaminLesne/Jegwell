@@ -8,36 +8,33 @@ import { DDSLoader } from "three-stdlib";
 import { type MutableRefObject, Suspense } from "react";
 // extend({ DDSLoader });
 
-THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
+// THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
 
-type Props = {
-  eventSource: HTMLElement | MutableRefObject<HTMLElement> | undefined;
-  eventPrefix: "offset" | "client" | "page" | "layer" | "screen" | undefined;
-};
+// type Props = {
+//   eventSource: HTMLElement | MutableRefObject<HTMLElement> | undefined;
+//   eventPrefix: "offset" | "client" | "page" | "layer" | "screen" | undefined;
+// };
 
-const Scene = () => {
-  const materials = useLoader(MTLLoader, "Poimandres.mtl");
-  const obj = useLoader(OBJLoader, "Poimandres.obj", (loader) => {
-    materials.preload();
-    loader.setMaterials(materials);
-  });
+// const Scene = () => {
+//   const materials = useLoader(MTLLoader, "Poimandres.mtl");
+//   const obj = useLoader(OBJLoader, "Poimandres.obj", (loader) => {
+//     materials.preload();
+//     loader.setMaterials(materials);
+//   });
 
-  console.log(obj);
-  return <primitive object={obj} scale={0.4} />;
-};
+//   console.log(obj);
+//   return <primitive object={obj} scale={0.4} />;
+// };
 
 export const Product3d = (props: Props) => {
   return (
-    <>
-      <Canvas
-      // {...props}
-      // onCreated={(state) => (state.gl.toneMapping = THREE.AgXToneMapping)}
-      >
-        <Suspense fallback={<div>Chargement</div>}>
-          <Scene />
-          <OrbitControls />
-        </Suspense>
-      </Canvas>
-    </>
+    <Canvas>
+      <pointLight position={[10, 10, 10]} />
+      <mesh>
+        <boxGeometry />
+      </mesh>
+    </Canvas>
   );
 };
+
+export default Product3d;

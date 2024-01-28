@@ -1,6 +1,10 @@
+"use client";
+
 import { type NextPage } from "next";
 import Link from "next/link";
 import React, { useReducer } from "react";
+import { Footer } from "~/components/Footer/Footer";
+import { Header } from "~/components/Header/Header";
 
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
@@ -13,7 +17,7 @@ const jegwellEmail = "support@jegwell.fr";
 const CopyButton = ({ text = jegwellEmail }: { text: string }) => {
   const [animationKey, incrementAnimationKey] = useReducer(
     (prev: number) => prev + 1,
-    0
+    0,
   );
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).catch((error) => consoleError(error));
@@ -37,7 +41,7 @@ const CopyButton = ({ text = jegwellEmail }: { text: string }) => {
           "items-center",
           "justify-center",
           "bg-secondary",
-          animationKey ? "animate-fadeIn" : ""
+          animationKey ? "animate-fadeIn" : "",
         )}
       >
         Copié !
@@ -54,26 +58,30 @@ const PaymentSucceededPage: NextPage = () => {
   // set recapEmailSent = true
 
   return (
-    <main>
-      <Section className="h-[500px] text-center">
-        <Title className="text-green-600">Paiment réussi</Title>
-        <p>Merci !</p>
-        <p>Un récapitulatif de votre commande sera envoyé sur votre email</p>
-        <p>En cas de besoin vous pouvez nous contacter à :</p>
-        <p>
-          <a href={`mailto:${jegwellEmail}`}>
-            <Button variant="link">{jegwellEmail}</Button>
-          </a>
-          <CopyButton text={jegwellEmail} />
-        </p>
+    <>
+      <Header />
+      <main>
+        <Section className="h-[500px] text-center">
+          <Title className="text-green-600">Paiment réussi</Title>
+          <p>Merci !</p>
+          <p>Un récapitulatif de votre commande sera envoyé sur votre email</p>
+          <p>En cas de besoin vous pouvez nous contacter à :</p>
+          <p>
+            <a href={`mailto:${jegwellEmail}`}>
+              <Button variant="link">{jegwellEmail}</Button>
+            </a>
+            <CopyButton text={jegwellEmail} />
+          </p>
 
-        <Link href={PRODUCTS_ROUTE}>
-          <Button className="mt-32" variant="secondary">
-            Continuer le shopping
-          </Button>
-        </Link>
-      </Section>
-    </main>
+          <Link href={PRODUCTS_ROUTE}>
+            <Button className="mt-32" variant="secondary">
+              Continuer le shopping
+            </Button>
+          </Link>
+        </Section>
+      </main>
+      <Footer />
+    </>
   );
 };
 
