@@ -71,6 +71,7 @@ Doing:
 => Error: its-fine: useFiber must be called within a <FiberProvider />!
 => how do I use react three fiber in one page and not as a whole application?
 => upgrade to next 14 to see if it fixes the issue
+=> panier page has an tRPCClientError while fetching. I don't get this error on homepage.
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

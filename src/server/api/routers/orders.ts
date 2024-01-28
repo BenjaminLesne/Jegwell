@@ -112,19 +112,19 @@ export const ordersRouter = createTRPCRouter({
         comment: input.comment,
       } satisfies Prisma.OrderCreateArgs["data"];
 
-      const order = await ctx.prisma.order.create({
+      const order = await ctx.db.order.create({
         data,
       });
 
       return order;
     }),
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const orders = await ctx.prisma.order.findMany(orderGetAllArg);
+    const orders = await ctx.db.order.findMany(orderGetAllArg);
 
     return orders;
   }),
   getAllPaid: publicProcedure.query(async ({ ctx }) => {
-    const orders = await ctx.prisma.order.findMany({
+    const orders = await ctx.db.order.findMany({
       where: {
         isPaid: true,
       },
@@ -143,7 +143,7 @@ export const ordersRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { orderId, paymentIntentId } = input;
 
-      const order = await ctx.prisma.order.update({
+      const order = await ctx.db.order.update({
         where: {
           id: orderId,
         },
@@ -156,7 +156,7 @@ export const ordersRouter = createTRPCRouter({
       return order;
     }),
   getLast: publicProcedure.query(async ({ ctx }) => {
-    const order = await ctx.prisma.order.findFirst({
+    const order = await ctx.db.order.findFirst({
       orderBy: { createdAt: "desc" },
     });
 
@@ -166,7 +166,7 @@ export const ordersRouter = createTRPCRouter({
   get: publicProcedure.input(getSchema).query(async ({ ctx, input }) => {
     const { id } = input;
 
-    const order = await ctx.prisma.order.findUnique({
+    const order = await ctx.db.order.findUnique({
       where: { id },
       include: {
         customer: true,

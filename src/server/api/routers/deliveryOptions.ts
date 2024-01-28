@@ -18,7 +18,7 @@ export const deliveryOptionsRouter = createTRPCRouter({
       },
     } satisfies Prisma.DeliveryOptionFindManyArgs;
 
-    return ctx.prisma.deliveryOption.findMany(arg);
+    return ctx.db.deliveryOption.findMany(arg);
   }),
   getOrThrow: publicProcedure
     .input(getDeliveryOptionSchema)

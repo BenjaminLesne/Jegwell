@@ -34,7 +34,20 @@ import {
 } from "~/lib/helpers/helpers";
 import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 
+const EmptyBasket = () => (
+  <main className="">
+    <div className="mt-[15%] flex flex-col items-center justify-center">
+      <span>Vous n&apos;avez pas d&apos;article dans votre panier.</span>
+      <Link href={PRODUCTS_ROUTE} className="text-primary">
+        Cliquez-ici pour voir nos créations !
+      </Link>
+    </div>
+  </main>
+);
+
 const BasketPage: NextPage = () => {
+  const { basket, dispatchBasket } = useBasket();
+
   const {
     quantityModal: quantityModalProps,
     dispatchQuantityModal: dispatchQuantityModalProps,
@@ -43,7 +56,6 @@ const BasketPage: NextPage = () => {
     optionModal: optionModalProps,
     dispatchOptionModal: dispatchOptionModalProps,
   } = useOptionModal();
-  const { basket, dispatchBasket } = useBasket();
 
   const { data: products, isLoading: productsAreLoading } =
     api.products.getByIds.useQuery({
@@ -56,6 +68,8 @@ const BasketPage: NextPage = () => {
         <Loading />
       </main>
     );
+
+  if (basket.length === 0) return <EmptyBasket />;
 
   const mergedProductsRaw = basket.map((item) => {
     const product = products?.find((element) => element.id === item.productId);
@@ -74,18 +88,7 @@ const BasketPage: NextPage = () => {
     consoleError("Failed to parse mergedProductsRaw : ", error);
   }
 
-  if (mergedProducts.length === 0) {
-    return (
-      <main className="">
-        <div className="mt-[15%] flex flex-col items-center justify-center">
-          <span>Vous n&apos;avez pas d&apos;article dans votre panier.</span>
-          <Link href={PRODUCTS_ROUTE} className="text-primary">
-            Cliquez-ici pour voir nos créations !
-          </Link>
-        </div>
-      </main>
-    );
-  }
+  if (mergedProducts.length === 0) return <EmptyBasket />;
 
   const subtotal = getSubtotalPrice(mergedProducts);
   const totalQuantity = getTotalQuantity(mergedProducts);

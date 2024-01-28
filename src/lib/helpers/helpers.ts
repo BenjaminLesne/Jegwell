@@ -25,11 +25,7 @@ const getOrThrowDeliveryOptionInputSchema = z.object({
 
 type GetOrThrowDeliveryOptionProps = {
   ctx: {
-    prisma: PrismaClient<
-      Prisma.PrismaClientOptions,
-      never,
-      Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
-    >;
+    db: PrismaClient<Prisma.PrismaClientOptions, never>;
   };
   input: z.infer<typeof getOrThrowDeliveryOptionInputSchema>;
 };
@@ -50,7 +46,7 @@ export const getOrThrowDeliveryOption = async ({
     },
   } satisfies Prisma.DeliveryOptionFindUniqueArgs;
 
-  const deliveryOption = ctx.prisma.deliveryOption.findUniqueOrThrow(arg);
+  const deliveryOption = ctx.db.deliveryOption.findUniqueOrThrow(arg);
   return deliveryOption;
 };
 
@@ -62,11 +58,7 @@ const getByIdsInputSchema = z
 
 type GetProductsByIdsProps = {
   ctx: {
-    prisma: PrismaClient<
-      Prisma.PrismaClientOptions,
-      never,
-      Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
-    >;
+    db: PrismaClient<Prisma.PrismaClientOptions, never>;
   };
   input: z.infer<typeof getByIdsInputSchema>;
 };
@@ -113,7 +105,7 @@ export const getProductsByIds = ({
     },
   } satisfies Prisma.ProductFindManyArgs;
 
-  const result = ctx.prisma.product.findMany(arg);
+  const result = ctx.db.product.findMany(arg);
   return result;
 };
 

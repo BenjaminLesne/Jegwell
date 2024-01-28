@@ -32,7 +32,7 @@ const getBySingleIdInputSchema = z.object({
 export const productsRouter = createTRPCRouter({
   // AdminGetAll: adminProcedure.query(({ ctx }) => {
   AdminGetAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.product.findMany(productAdminGetAllArg);
+    return ctx.db.product.findMany(productAdminGetAllArg);
   }),
   getAll: publicProcedure
     .input(getAllInputSchema)
@@ -66,7 +66,7 @@ export const productsRouter = createTRPCRouter({
         orderBy: SORT_OPTIONS[sortType],
       } satisfies Prisma.ProductFindManyArgs;
 
-      return ctx.prisma.product.findMany(arg);
+      return ctx.db.product.findMany(arg);
     }),
   [GET_BY_IDS]: publicProcedure
     .input(getByIdsInputSchema)
@@ -107,7 +107,7 @@ export const productsRouter = createTRPCRouter({
         },
       } satisfies Prisma.ProductFindUniqueArgs;
 
-      const result = ctx.prisma.product.findUnique(arg);
+      const result = ctx.db.product.findUnique(arg);
       return result;
     }),
 });
