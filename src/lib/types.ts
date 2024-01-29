@@ -1,5 +1,5 @@
 import { type Option, type Prisma } from "@prisma/client";
-import { type OrderedProduct } from "./helpers/helpers";
+import { type OrderedProduct } from "./helpers/client";
 
 export type ProductAdminGetAllArg = {
   include: {
@@ -117,7 +117,6 @@ export type MergedProduct = Prisma.ProductGetPayload<{
   Omit<OrderedProduct, "id"> & {
     options: Omit<Option, "productId" | "imageId">[];
   };
- 
 
 export type ProductForModal =
   | (Omit<

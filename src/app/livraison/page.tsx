@@ -72,6 +72,7 @@ const DeliveryPage: NextPage = () => {
     api.payments.createCheckout.useMutation();
 
   useEffect(() => {
+    console.log("TEST basket", basket);
     if (basket.length === 0) {
       void router.push(BASKET_ROUTE); // Redirect to home page
     }
@@ -82,10 +83,11 @@ const DeliveryPage: NextPage = () => {
   async function onSubmit(values: z.infer<typeof deliveryFormSchema>) {
     setIsLoading(true);
     try {
-      const order = await createOrder({
+      const input = {
         ...values,
         productsToBasket: basket,
-      });
+      };
+      const order = await createOrder(input);
 
       const {
         lastname,

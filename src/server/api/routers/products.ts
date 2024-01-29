@@ -8,7 +8,6 @@ import {
   productAdminGetAllArg,
 } from "~/lib/constants";
 import { type Prisma } from "@prisma/client";
-import { getProductsByIds } from "~/lib/helpers/helpers";
 
 const getAllInputSchema = z
   .object({

@@ -50,69 +50,6 @@ export const getOrThrowDeliveryOption = async ({
   return deliveryOption;
 };
 
-const getByIdsInputSchema = z
-  .object({
-    ids: z.array(z.string().optional()),
-  })
-  .optional();
-
-type GetProductsByIdsProps = {
-  ctx: {
-    db: PrismaClient<Prisma.PrismaClientOptions, never>;
-  };
-  input: z.infer<typeof getByIdsInputSchema>;
-};
-
-export const getProductsByIds = ({
-  ctx,
-  input = { ids: [] },
-}: GetProductsByIdsProps) => {
-  try {
-    const { ids } = input;
-
-    if (ids?.length === 0) return [];
-
-    const idsAsNumbers = ids
-      .map((id) => parseInt(id ?? "not a number"))
-      .filter((id: number) => !isNaN(id));
-
-    const arg = {
-      where: {
-        id: {
-          in: idsAsNumbers,
-        },
-      },
-      select: {
-        name: true,
-        image: {
-          select: {
-            url: true,
-          },
-        },
-        id: true,
-        price: true,
-        options: {
-          select: {
-            id: true,
-            name: true,
-            price: true,
-            image: {
-              select: {
-                url: true,
-              },
-            },
-          },
-        },
-      },
-    } satisfies Prisma.ProductFindManyArgs;
-
-    const result = ctx.db.product.findMany(arg);
-    return result;
-  } catch (error) {
-    console.log("TEST", error);
-  }
-};
-
 export type GetSubtotalPriceProps = {
   quantity: OrderedProduct["quantity"];
   optionId: OrderedProduct["optionId"];

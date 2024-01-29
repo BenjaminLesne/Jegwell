@@ -1,15 +1,13 @@
-import { type Prisma } from "@prisma/client";
+import { type PrismaClient, type Prisma } from "@prisma/client";
 import {
   deliveryFormSchema,
   orderGetAllArg,
   lightMergedProductSchema,
   orderSchema,
 } from "~/lib/constants";
-import { getSubtotalPrice } from "~/lib/helpers/helpers";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { appRouter } from "../root";
-import { db } from "~/server/db";
 import { z } from "zod";
+import { getSubtotalPrice, getProductsByIds } from "~/lib/helpers/server";
 
 const partialCreateOrderSchema = orderSchema.pick({
   productsToBasket: true,
@@ -31,13 +29,24 @@ export const ordersRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { productsToBasket, deliveryOptionId } = input;
 
-      const ids = productsToBasket.map((item) => item.productId.toString());
-      const caller = appRouter.createCaller({ prisma });
-      const deliveryOption = await caller.deliveryOptions.getOrThrow({
-        id: parseInt(deliveryOptionId),
+      const ids = productsToBasket.map((item) => item.productId);
+      // const caller = appRouter.createCaller({ db });
+      // const deliveryOption = await caller.deliveryOptions.getOrThrow({
+      //   id: parseInt(deliveryOptionId),
+      // });
+      const deliveryOption = await ctx.db.deliveryOption.findFirstOrThrow({
+        where: {
+          id: parseInt(deliveryOptionId),
+        },
       });
-      const products = await caller.products.getByIds({ ids });
+      // const products = await caller.products.getByIds({ ids });
+      // const products = await ctx.db.product.findMany({
+      //   where: {
+      //     id: { in: ids },
+      //   },
+      // });
 
+      const products = await getProductsByIds({ ctx, input: { ids } });
       const mergedProductsRaw = productsToBasket.map((item) => {
         const product = products.find(
           (element) => element.id === item.productId,
@@ -48,6 +57,7 @@ export const ordersRouter = createTRPCRouter({
           ...item,
           optionId: item.optionId,
         };
+
         return mergedProduct;
       });
 
