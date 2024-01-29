@@ -90,7 +90,7 @@ const Home: NextPage = () => {
                         width="200"
                         height="200"
                       />
-                      <figcaption className="bg-secondary text-primary flex w-1/2 items-center  justify-center text-xl">
+                      <figcaption className="flex w-1/2 items-center justify-center bg-secondary  text-xl text-primary">
                         <span className="first-letter:uppercase">
                           {category.name}
                         </span>

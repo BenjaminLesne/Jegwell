@@ -37,6 +37,7 @@ export const productsRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(getAllInputSchema)
     .query(({ ctx, input = {} }) => {
+      console.log("TEST input", input);
       const { category = ALL_CATEGORIES, sortType = DEFAULT_SORT } = input;
 
       const arg = {
@@ -70,7 +71,48 @@ export const productsRouter = createTRPCRouter({
     }),
   [GET_BY_IDS]: publicProcedure
     .input(getByIdsInputSchema)
-    .query(getProductsByIds),
+    .query(({ ctx, input = { ids: [] } }) => {
+      const { ids } = input;
+
+      if (ids?.length === 0) return [];
+
+      const idsAsNumbers = ids
+        .map((id) => parseInt(id ?? "not a number"))
+        .filter((id: number) => !isNaN(id));
+
+      const arg = {
+        where: {
+          id: {
+            in: idsAsNumbers,
+          },
+        },
+        select: {
+          name: true,
+          image: {
+            select: {
+              url: true,
+            },
+          },
+          id: true,
+          price: true,
+          options: {
+            select: {
+              id: true,
+              name: true,
+              price: true,
+              image: {
+                select: {
+                  url: true,
+                },
+              },
+            },
+          },
+        },
+      } satisfies Prisma.ProductFindManyArgs;
+
+      const result = ctx.db.product.findMany(arg);
+      return result;
+    }),
   getBySingleId: publicProcedure
     .input(getBySingleIdInputSchema)
     .query(({ ctx, input = {} }) => {

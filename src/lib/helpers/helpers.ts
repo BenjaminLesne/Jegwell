@@ -67,46 +67,50 @@ export const getProductsByIds = ({
   ctx,
   input = { ids: [] },
 }: GetProductsByIdsProps) => {
-  const { ids } = input;
+  try {
+    const { ids } = input;
 
-  if (ids?.length === 0) return [];
+    if (ids?.length === 0) return [];
 
-  const idsAsNumbers = ids
-    .map((id) => parseInt(id ?? "not a number"))
-    .filter((id: number) => !isNaN(id));
+    const idsAsNumbers = ids
+      .map((id) => parseInt(id ?? "not a number"))
+      .filter((id: number) => !isNaN(id));
 
-  const arg = {
-    where: {
-      id: {
-        in: idsAsNumbers,
-      },
-    },
-    select: {
-      name: true,
-      image: {
-        select: {
-          url: true,
+    const arg = {
+      where: {
+        id: {
+          in: idsAsNumbers,
         },
       },
-      id: true,
-      price: true,
-      options: {
-        select: {
-          id: true,
-          name: true,
-          price: true,
-          image: {
-            select: {
-              url: true,
+      select: {
+        name: true,
+        image: {
+          select: {
+            url: true,
+          },
+        },
+        id: true,
+        price: true,
+        options: {
+          select: {
+            id: true,
+            name: true,
+            price: true,
+            image: {
+              select: {
+                url: true,
+              },
             },
           },
         },
       },
-    },
-  } satisfies Prisma.ProductFindManyArgs;
+    } satisfies Prisma.ProductFindManyArgs;
 
-  const result = ctx.db.product.findMany(arg);
-  return result;
+    const result = ctx.db.product.findMany(arg);
+    return result;
+  } catch (error) {
+    console.log("TEST", error);
+  }
 };
 
 export type GetSubtotalPriceProps = {
