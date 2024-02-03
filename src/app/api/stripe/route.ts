@@ -40,10 +40,9 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
           const paymentIntentId = z.string().parse(result.id);
           const orderId = z.number().parse(parseInt(result.metadata.orderId));
           const createCaller = createCallerFactory(ordersRouter)
-          const caller = createCaller({db, headers: req.headers})
+          const orderApi = createCaller({db, headers: req.headers})
           // const callerOld = appRouter.createCaller({ db });
-          
-          const updatedOrder = await caller.orders.paymentSucceeded({
+          const updatedOrder = await orderApi.paymentSucceeded({
             orderId,
             paymentIntentId,
           });
