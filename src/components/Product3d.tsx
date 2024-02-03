@@ -10,10 +10,10 @@ import { type MutableRefObject, Suspense } from "react";
 
 // THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
 
-// type Props = {
-//   eventSource: HTMLElement | MutableRefObject<HTMLElement> | undefined;
-//   eventPrefix: "offset" | "client" | "page" | "layer" | "screen" | undefined;
-// };
+type Props = {
+  // eventSource: HTMLElement | MutableRefObject<HTMLElement> | undefined;
+  // eventPrefix: "offset" | "client" | "page" | "layer" | "screen" | undefined;
+};
 
 // const Scene = () => {
 //   const materials = useLoader(MTLLoader, "Poimandres.mtl");

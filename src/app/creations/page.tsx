@@ -23,7 +23,7 @@ import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 
 import { useEffect, useReducer, useState } from "react";
-import { type NextRouter, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   type OrderedProduct,
   formatPrice,
@@ -55,7 +55,7 @@ const { INCREMENT } = BASKET_REDUCER_TYPE;
 const SET_CATEGORY = "SET_CATEGORY";
 const SET_SORT = "SET_SORT";
 
-const ProductsPage: NextPage = ({
+const ProductsPage = ({
   params,
 }: {
   params: { category: string; sort: string };
@@ -121,9 +121,9 @@ const ProductsPage: NextPage = ({
     initialState,
   );
   const { dispatchBasket } = useBasket();
-  const [animationsKey, setAnimationsKey] = useState<{
-    [key: string]: string;
-  }>({});
+  const [animationsKey, setAnimationsKey] = useState<Record<string, string>>(
+    {},
+  );
 
   useEffect(() => {
     if (categoryQuery) {
@@ -353,7 +353,7 @@ const ProductsPage: NextPage = ({
                         <CardFooter className="flex items-center justify-center">
                           <Button
                             variant="secondary"
-                            className="bg-secondary relative overflow-hidden border-[1px] border-solid border-black px-2 py-[10px] text-[12px] font-light text-black"
+                            className="relative overflow-hidden border-[1px] border-solid border-black bg-secondary px-2 py-[10px] text-[12px] font-light text-black"
                             onClick={() =>
                               addToBasket({
                                 key: product.id.toString(),
@@ -366,7 +366,7 @@ const ProductsPage: NextPage = ({
                             <span
                               key={animationsKey[product.id] ?? product.id}
                               className={
-                                "bg-secondary absolute inset-0 flex items-center justify-center opacity-0 " +
+                                "absolute inset-0 flex items-center justify-center bg-secondary opacity-0 " +
                                 (animationsKey[product.id] &&
                                 animationsKey[product.id] !==
                                   product.id.toString()

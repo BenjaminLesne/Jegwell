@@ -46,9 +46,7 @@ export const paymentsRouter = createTRPCRouter({
   createCheckout: publicProcedure
     .input(createCheckoutSchema)
     .mutation(async ({ ctx, input }) => {
-      const ids = input.productsToBasket.map((product) =>
-        product.productId.toString(),
-      );
+      const ids = input.productsToBasket.map((product) => product.productId);
       const orderId = input.orderId;
       const products = await getProductsByIds({ ctx, input: { ids } });
       const deliveryOption = await getOrThrowDeliveryOption({
