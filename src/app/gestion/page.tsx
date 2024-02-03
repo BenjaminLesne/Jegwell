@@ -9,7 +9,7 @@ import { Section } from "~/components/Section/Section";
 import { api } from "~/trpc/react";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
-import { cn } from "~/lib/helpers/helpers";
+import { cn } from "~/lib/helpers/client";
 
 const Home: NextPage = () => {
   const { data: orders, isLoading } = api.orders.getAllPaid.useQuery();

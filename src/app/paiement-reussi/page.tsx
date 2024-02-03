@@ -10,7 +10,7 @@ import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 import { Button } from "~/components/ui/Button/button";
 import { PRODUCTS_ROUTE } from "~/lib/constants";
-import { cn, consoleError } from "~/lib/helpers/helpers";
+import { cn, consoleError } from "~/lib/helpers/client";
 
 const jegwellEmail = "support@jegwell.fr";
 

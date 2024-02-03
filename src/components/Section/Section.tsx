@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { cn } from "~/lib/helpers/helpers";
+import { cn } from "~/lib/helpers/client";
 
 interface SectionProps {
   component?: keyof JSX.IntrinsicElements;

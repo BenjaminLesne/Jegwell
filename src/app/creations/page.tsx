@@ -28,7 +28,7 @@ import {
   type OrderedProduct,
   formatPrice,
   useBasket,
-} from "~/lib/helpers/helpers";
+} from "~/lib/helpers/client";
 import {
   Select,
   SelectContent,
@@ -44,7 +44,7 @@ import {
   CardTitle,
 } from "~/components/ui/Card/card";
 import { Button } from "~/components/ui/Button/button";
-import { capitalize } from "~/lib/helpers/helpers";
+import { capitalize } from "~/lib/helpers/client";
 import { api } from "~/trpc/react";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";

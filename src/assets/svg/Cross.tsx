@@ -1,5 +1,6 @@
 import React from "react";
-import { cn } from "~/lib/helpers/helpers";
+import { cn } from "~/lib/helpers/client";
+
 export function Cross({
   className: customClasses = "",
 }: {

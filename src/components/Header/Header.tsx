@@ -5,7 +5,7 @@ import React, { useEffect, useReducer } from "react";
 import { Basket } from "~/assets/svg/Basket";
 import { Cross } from "~/assets/svg/Cross";
 import { Rings } from "~/assets/svg/Rings";
-import { capitalize, cn } from "~/lib/helpers/helpers";
+import { capitalize, cn } from "~/lib/helpers/client";
 import {
   BASE_ADMIN_ROUTE,
   BASKET_ICON_TESTID,

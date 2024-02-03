@@ -31,7 +31,7 @@ import {
   consoleError,
   getSubtotalPrice,
   useBasket,
-} from "~/lib/helpers/helpers";
+} from "~/lib/helpers/client";
 import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
 
 const EmptyBasket = () => (

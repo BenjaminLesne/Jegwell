@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../../ui/AlertDialog/alert-dialog";
-import { type BasketAction, cn } from "~/lib/helpers/helpers";
+import { type BasketAction, cn } from "~/lib/helpers/client";
 import {
   BASKET_REDUCER_TYPE,
   NO_OPTION,

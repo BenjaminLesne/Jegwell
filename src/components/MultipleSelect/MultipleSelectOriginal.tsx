@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 
-import { cn } from "~/lib/helpers/helpers";
+import { cn } from "~/lib/helpers/client";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/Button/button";

@@ -1,6 +1,6 @@
 import React from "react";
 import { PRICE_TESTID } from "~/lib/constants";
-import { formatPrice } from "~/lib/helpers/helpers";
+import { formatPrice } from "~/lib/helpers/client";
 type Props = {
   priceInCents: number;
 };

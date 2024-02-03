@@ -20,7 +20,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/Button/button";
-import { cn } from "~/lib/helpers/helpers";
+import { cn } from "~/lib/helpers/client";
 
 import {
   type MenuItemProps,

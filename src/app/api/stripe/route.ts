@@ -2,7 +2,7 @@ import type { NextApiResponse, NextApiRequest } from "next";
 import { buffer } from "micro";
 import Stripe from "stripe";
 import { env } from "~/env";
-import { consoleError } from "~/lib/helpers/helpers";
+import { consoleError } from "~/lib/helpers/client";
 import { z } from "zod";
 import { createCallerFactory } from "~/server/api/trpc";
 import { ordersRouter } from "~/server/api/routers/orders";

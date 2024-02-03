@@ -1,5 +1,7 @@
 import Head from "next/head";
 import { Button } from "../ui/Button/button";
+import { Header } from "../Header/Header";
+import { Footer } from "../Footer/Footer";
 
 type Props = {
   message?: string;
@@ -11,6 +13,7 @@ export function Error({ message = "Une erreur est survenue." }: Props) {
       <Head>
         <title>Erreur...</title>
       </Head>
+      <Header />
       <main className="flex items-center justify-center">
         <div className="flex flex-col items-center justify-center">
           <p>{message}</p>
@@ -19,6 +22,7 @@ export function Error({ message = "Une erreur est survenue." }: Props) {
           </Button>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

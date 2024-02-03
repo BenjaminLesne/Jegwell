@@ -26,7 +26,7 @@ import {
   formatPrice,
   getStripe,
   useBasket,
-} from "~/lib/helpers/helpers";
+} from "~/lib/helpers/client";
 import { Loading } from "~/components/Loading/Loading";
 import { BASKET_ROUTE, deliveryFormSchema } from "~/lib/constants";
 import { useRouter } from "next/navigation";

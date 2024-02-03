@@ -16,12 +16,12 @@ import { Error } from "~/components/Error/Error";
 
 import { useRouter } from "next/navigation";
 import { z } from "zod";
-import { cn, consoleError, getSubtotalPrice } from "~/lib/helpers/helpers";
+import { cn, consoleError, getSubtotalPrice } from "~/lib/helpers/client";
 import Image from "next/image";
 import { Price } from "~/components/Price/Price";
 import { AdminHeader } from "~/components/Header/AdminHeader";
 
-const Home: NextPage = ({ params }: { params: { id: string } }) => {
+const Home = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const idIsNumber = !isNaN(Number(id));
   const orderNotFoundJSX = (

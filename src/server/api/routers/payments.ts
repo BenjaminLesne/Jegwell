@@ -10,7 +10,7 @@ import {
   consoleError,
   getOrThrowDeliveryOption,
   getProductsByIds,
-} from "~/lib/helpers/helpers";
+} from "~/lib/helpers/client";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const addressSchema = z.object({

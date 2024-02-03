@@ -1,14 +1,16 @@
+"use client"
+
 import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useReducer, useRef } from "react";
 import { Loading } from "~/components/Loading/Loading";
 import { Section } from "~/components/Section/Section";
 import { Button } from "~/components/ui/Button/button";
 
-import { api } from "~/lib/api";
+import { api } from "~/trpc/react";
 import {
   BASKET_REDUCER_TYPE,
   CLOSE_TYPE,
@@ -26,7 +28,7 @@ import {
   cn,
   useBasket,
   consoleError,
-} from "~/lib/helpers/helpers";
+} from "~/lib/helpers/client";
 import Slider, { type Settings } from "react-slick";
 import { OrderItemModifier } from "~/components/Buttons/OrderItemModifier";
 import { useOptionModal, useQuantityModal } from "~/lib/hooks/hooks";
@@ -36,7 +38,7 @@ import { type z } from "zod";
 import dynamic from "next/dynamic";
 import { Header } from "~/components/Header/Header";
 import { Footer } from "~/components/Footer/Footer";
-const Product3d = dynamic(() => import("../../components/Product3d"));
+const Product3d = dynamic(() => import("../../../components/Product3d"));
 
 const { RESET, ADD } = BASKET_REDUCER_TYPE;
 
@@ -90,7 +92,8 @@ const partialOrderReducer = (
 
 let didRun = false;
 
-const SingleProductPage: NextPage = () => {
+type Props = { params: { id: string } }
+const SingleProductPage = ({ params }: Props) => {
   const ref = useRef();
   const [animationKey, incrementAnimationKey] = useReducer(
     (prev: number) => prev + 1,
@@ -104,7 +107,7 @@ const SingleProductPage: NextPage = () => {
     initialPartialOrder,
   );
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = params;
   const idIsNumber = !isNaN(Number(id));
   const productNotFoundJSX = (
     <main>

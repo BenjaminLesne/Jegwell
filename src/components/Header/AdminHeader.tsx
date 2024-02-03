@@ -6,7 +6,7 @@ import {
   ADMIN_ORDERS_ROUTE,
   ADMIN_PRODUCTS,
 } from "~/lib/constants";
-import { cn } from "~/lib/helpers/helpers";
+import { cn } from "~/lib/helpers/client";
 
 export const AdminHeader = ({ children }: { children?: React.ReactNode }) => {
   return (
