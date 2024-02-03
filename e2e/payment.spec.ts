@@ -7,6 +7,7 @@ import {
 import { appRouter } from "~/server/api/root";
 import { db } from "~/server/db";
 import { stripe } from "~/server/api/routers/payments";
+import { createOrderCaller } from "~/server/api/routers/orders";
 
 test.describe("the payment process", () => {
   test.beforeEach(async ({ page }) => {
@@ -17,10 +18,10 @@ test.describe("the payment process", () => {
     locale: "en-US",
   });
 
-  test("on payment success it update the order", async ({ page }) => {
+  test.only("on payment success it update the order", async ({ page }) => {
     test.slow();
-    const caller = appRouter.createCaller({ prisma });
-    const lastOrder = await caller.orders.getLast();
+    const ordersApi = createOrderCaller({db});
+    const lastOrder = await ordersApi.getLast();
 
     expect(lastOrder).toBeDefined();
     if (lastOrder == null) throw Error("last order is null");
@@ -50,7 +51,7 @@ test.describe("the payment process", () => {
     await expect(page.getByText("Paiment réussi")).toBeVisible();
 
     await page.waitForTimeout(3_000);
-    const order = await caller.orders.get({ id: lastOrder.id + 1 });
+    const order = await ordersApi.get({ id: lastOrder.id + 1 });
 
     expect(order).toBeDefined();
     if (order == null) throw Error("order is null");

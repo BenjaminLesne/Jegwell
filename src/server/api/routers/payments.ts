@@ -9,8 +9,10 @@ import {
 import {
   consoleError,
   getOrThrowDeliveryOption,
-  getProductsByIds,
 } from "~/lib/helpers/client";
+import {
+  getProductsByIds,
+} from "~/lib/helpers/server";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const addressSchema = z.object({
