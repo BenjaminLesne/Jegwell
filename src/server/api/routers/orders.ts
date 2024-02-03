@@ -5,7 +5,7 @@ import {
   lightMergedProductSchema,
   orderSchema,
 } from "~/lib/constants";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createCallerFactory, createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { getSubtotalPrice, getProductsByIds } from "~/lib/helpers/server";
 
@@ -189,3 +189,5 @@ export const ordersRouter = createTRPCRouter({
     return order;
   }),
 });
+
+export const createOrderCaller = createCallerFactory(ordersRouter)
