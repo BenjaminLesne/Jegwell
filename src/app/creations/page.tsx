@@ -23,7 +23,7 @@ import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 
 import { useEffect, useReducer, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   type OrderedProduct,
   formatPrice,
@@ -50,6 +50,7 @@ import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 import { Header } from "~/components/Header/Header";
 import { Footer } from "~/components/Footer/Footer";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 const { INCREMENT } = BASKET_REDUCER_TYPE;
 const SET_CATEGORY = "SET_CATEGORY";
@@ -60,6 +61,9 @@ const ProductsPage = ({
 }: {
   params: { category: string; sort: string };
 }) => {
+  const searchParamsRaw = useSearchParams();
+  const searchParams = new URLSearchParams(searchParamsRaw);
+  const pathname = usePathname();
   const router = useRouter();
   const { category: categoryQuery, sort: sortQuery } = params;
   const sort = typeof sortQuery === "string" ? sortQuery : undefined;
@@ -171,27 +175,16 @@ const ProductsPage = ({
   type UpdateQueryParamsProps = {
     key: string;
     value: string | number | undefined;
-    nextRouter: NextRouter;
   };
 
-  function updateQueryParams({
-    key,
-    value,
-    nextRouter,
-  }: UpdateQueryParamsProps) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { [key]: targetParam, ...remainingParams } = nextRouter.query;
-    const queryParams = value
-      ? {
-          ...remainingParams,
-          [slugify(key)]: slugify(value.toString()),
-        }
-      : remainingParams;
+  function updateQueryParams({ key, value }: UpdateQueryParamsProps) {
+    if (value) {
+      searchParams.set(key, slugify(value.toString()));
+    } else {
+      searchParams.delete(key);
+    }
 
-    void nextRouter.push({
-      pathname: nextRouter.pathname,
-      query: queryParams,
-    });
+    router.replace(`${pathname}?${searchParams.toString()}`);
   }
   type HandleFilterProps = {
     value: Action["value"];

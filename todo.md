@@ -72,9 +72,6 @@ Doing:
 => how do I use react three fiber in one page and not as a whole application?
 => upgrade to next 14 to see if it fixes the issue
 => fixing typecheck errors
-=> fixing stripe webhook
-  => https://reacthustle.com/blog/how-to-add-stripe-webhook-using-nextjs-13-app-router
-  => https://stackoverflow.com/questions/75828724/i-am-trying-to-setup-of-a-webhook-using-stripe-and-nextjs-13-2-3
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

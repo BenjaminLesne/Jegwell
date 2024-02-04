@@ -6,7 +6,7 @@ import {
   DELIVERY_ROUTE,
   PRODUCTS_ROUTE,
 } from "~/lib/constants";
-import { appRouter } from "~/server/api/root";
+import { createOrderCaller } from "~/server/api/routers/orders";
 import { db } from "~/server/db";
 
 type TestArgs = {
@@ -75,8 +75,8 @@ export const submitDeliveryForm = async ({ page }: TestArgs) => {
   await page.waitForURL(stripeUrl);
   await expect(page).toHaveURL(stripeUrl);
 
-  const caller = appRouter.createCaller({ prisma });
-  const order = await caller.orders.getLast();
+  const apiOrder = createOrderCaller({ db });
+  const order = await apiOrder.getLast();
 
   expect(order?.comment).toBe(datetime);
 };

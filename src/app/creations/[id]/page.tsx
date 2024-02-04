@@ -216,7 +216,7 @@ const SingleProductPage = ({ params }: Props) => {
           <h1 className="sr-only">{product.name}</h1>
           <div className="flex flex-col lg:flex-row lg:gap-20">
             <div>
-              <Product3d eventSource={ref} eventPrefix="client" />
+              <Product3d />
             </div>
             <div className="mx-auto w-[400px] max-w-full lg:mx-0 lg:mt-5">
               <div className="h-full">
@@ -305,7 +305,7 @@ const SingleProductPage = ({ params }: Props) => {
 
                 <Button
                   variant="secondary"
-                  className="bg-secondary text-primary relative h-12 w-full overflow-hidden border-[1px] border-solid px-2 py-[10px] text-lg font-medium"
+                  className="relative h-12 w-full overflow-hidden border-[1px] border-solid bg-secondary px-2 py-[10px] text-lg font-medium text-primary"
                   onClick={addToBasket}
                 >
                   <span>Ajouter au panier</span>
