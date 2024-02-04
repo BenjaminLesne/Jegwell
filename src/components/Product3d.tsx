@@ -1,11 +1,12 @@
 import * as THREE from "three";
 import { Canvas, extend } from "@react-three/fiber";
 import { useLoader } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { Environment, OrbitControls } from "@react-three/drei";
 // import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 // import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
-import { DDSLoader } from "three-stdlib";
+import { DDSLoader, GLTFLoader } from "three-stdlib";
 import { type MutableRefObject, Suspense } from "react";
+import Poimandres from "~/assets/3D/Poimandres.json";
 // extend({ DDSLoader });
 
 // THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
@@ -15,24 +16,23 @@ type Props = {
   // eventPrefix: "offset" | "client" | "page" | "layer" | "screen" | undefined;
 };
 
-// const Scene = () => {
-//   const materials = useLoader(MTLLoader, "Poimandres.mtl");
-//   const obj = useLoader(OBJLoader, "Poimandres.obj", (loader) => {
-//     materials.preload();
-//     loader.setMaterials(materials);
-//   });
-
-//   console.log(obj);
-//   return <primitive object={obj} scale={0.4} />;
-// };
+const Model = () => {
+  const gltf = useLoader(GLTFLoader, "/Poimandres.gltf");
+  return (
+    <>
+      <primitive object={gltf.scene} scale={0.4} />
+    </>
+  );
+};
 
 export const Product3d = (props: Props) => {
   return (
     <Canvas>
-      <pointLight position={[10, 10, 10]} />
-      <mesh>
-        <boxGeometry />
-      </mesh>
+      <Suspense fallback={null}>
+        <Model />
+        <OrbitControls />
+        <Environment preset="sunset" background />
+      </Suspense>
     </Canvas>
   );
 };
