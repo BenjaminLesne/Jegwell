@@ -173,8 +173,7 @@ export function isSorted({ array, order }: isSortedProps) {
   if (array.length < 2) return true;
 
   let lastItem;
-  for (let i = 0; i < array.length; i++) {
-    const currentItem = array[i];
+  for (const currentItem of array) {
     if (currentItem == null) continue;
     if (lastItem == null) {
       lastItem = currentItem;

@@ -1,11 +1,15 @@
-import { type PrismaClient, type Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 import {
   deliveryFormSchema,
   orderGetAllArg,
   lightMergedProductSchema,
   orderSchema,
 } from "~/lib/constants";
-import { createCallerFactory, createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createCallerFactory,
+  createTRPCRouter,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { z } from "zod";
 import { getSubtotalPrice, getProductsByIds } from "~/lib/helpers/server";
 
@@ -30,21 +34,11 @@ export const ordersRouter = createTRPCRouter({
       const { productsToBasket, deliveryOptionId } = input;
 
       const ids = productsToBasket.map((item) => item.productId);
-      // const caller = appRouter.createCaller({ db });
-      // const deliveryOption = await caller.deliveryOptions.getOrThrow({
-      //   id: parseInt(deliveryOptionId),
-      // });
       const deliveryOption = await ctx.db.deliveryOption.findFirstOrThrow({
         where: {
           id: parseInt(deliveryOptionId),
         },
       });
-      // const products = await caller.products.getByIds({ ids });
-      // const products = await ctx.db.product.findMany({
-      //   where: {
-      //     id: { in: ids },
-      //   },
-      // });
 
       const products = await getProductsByIds({ ctx, input: { ids } });
       const mergedProductsRaw = productsToBasket.map((item) => {
@@ -190,4 +184,4 @@ export const ordersRouter = createTRPCRouter({
   }),
 });
 
-export const createOrderCaller = createCallerFactory(ordersRouter)
+export const createOrderCaller = createCallerFactory(ordersRouter);

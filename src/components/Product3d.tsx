@@ -1,20 +1,8 @@
-import * as THREE from "three";
-import { Canvas, extend } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { useLoader } from "@react-three/fiber";
 import { Environment, OrbitControls } from "@react-three/drei";
-// import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
-// import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
-import { DDSLoader, GLTFLoader } from "three-stdlib";
-import { type MutableRefObject, Suspense } from "react";
-import Poimandres from "~/assets/3D/Poimandres.json";
-// extend({ DDSLoader });
-
-// THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
-
-type Props = {
-  // eventSource: HTMLElement | MutableRefObject<HTMLElement> | undefined;
-  // eventPrefix: "offset" | "client" | "page" | "layer" | "screen" | undefined;
-};
+import { GLTFLoader } from "three-stdlib";
+import { Suspense } from "react";
 
 const Model = () => {
   const gltf = useLoader(GLTFLoader, "/Poimandres.gltf");
@@ -25,7 +13,7 @@ const Model = () => {
   );
 };
 
-export const Product3d = (props: Props) => {
+export const Product3d = () => {
   return (
     <Canvas>
       <Suspense fallback={null}>

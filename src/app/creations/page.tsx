@@ -1,6 +1,5 @@
 "use client";
 
-import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -50,7 +49,6 @@ import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 import { Header } from "~/components/Header/Header";
 import { Footer } from "~/components/Footer/Footer";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 const { INCREMENT } = BASKET_REDUCER_TYPE;
 const SET_CATEGORY = "SET_CATEGORY";

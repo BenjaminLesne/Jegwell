@@ -1,11 +1,9 @@
 "use client"
 
-import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useReducer, useRef } from "react";
+import { useReducer } from "react";
 import { Loading } from "~/components/Loading/Loading";
 import { Section } from "~/components/Section/Section";
 import { Button } from "~/components/ui/Button/button";
@@ -92,9 +90,8 @@ const partialOrderReducer = (
 
 let didRun = false;
 
-type Props = { params: { id: string } }
+type Props = { params: { id: string } };
 const SingleProductPage = ({ params }: Props) => {
-  const ref = useRef();
   const [animationKey, incrementAnimationKey] = useReducer(
     (prev: number) => prev + 1,
     0,
@@ -106,7 +103,6 @@ const SingleProductPage = ({ params }: Props) => {
     partialOrderReducer,
     initialPartialOrder,
   );
-  const router = useRouter();
   const { id } = params;
   const idIsNumber = !isNaN(Number(id));
   const productNotFoundJSX = (

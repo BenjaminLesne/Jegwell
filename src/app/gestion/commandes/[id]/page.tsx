@@ -1,6 +1,5 @@
 "use client";
 
-import { type NextPage } from "next";
 import Head from "next/head";
 
 import {
@@ -14,7 +13,6 @@ import { api } from "~/trpc/react";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 
-import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { cn, consoleError, getSubtotalPrice } from "~/lib/helpers/client";
 import Image from "next/image";
