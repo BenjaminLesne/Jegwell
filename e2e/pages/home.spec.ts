@@ -11,7 +11,7 @@ test.describe("the home page", () => {
     await testPageScreenshotMatch({ page });
   });
 
-  test.only("categories cards have right links", async ({ page, context }) => {
+  test("categories cards have right links", async ({ page, context }) => {
     await expect(page.getByTestId(CATEGORY_TEST_ID).first()).toBeVisible();
     const links = await page.getByTestId(CATEGORY_TEST_ID).all();
     expect(links.length).toBeGreaterThan(0);
