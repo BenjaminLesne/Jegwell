@@ -18,9 +18,9 @@ test.describe("the payment process", () => {
     locale: "en-US",
   });
 
-  test.only("on payment success it update the order", async ({ page }) => {
+  test("on payment success it update the order", async ({ page }) => {
     test.slow();
-    const ordersApi = createOrderCaller({db});
+    const ordersApi = createOrderCaller({ db });
     const lastOrder = await ordersApi.getLast();
 
     expect(lastOrder).toBeDefined();
