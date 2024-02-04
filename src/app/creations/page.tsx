@@ -21,7 +21,13 @@ import {
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 
-import { Dispatch, Suspense, useEffect, useReducer, useState } from "react";
+import {
+  type Dispatch,
+  Suspense,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   type OrderedProduct,
@@ -211,13 +217,14 @@ function FilterSort({
     </>
   );
 }
-
-const ProductsPage = ({
-  params,
-}: {
-  params: { category: string; sort: string };
-}) => {
-  const { category: categoryQuery, sort: sortQuery } = params;
+type ProductsPageProps = {
+  searchParams: {
+    catégorie?: string;
+    trie?: string;
+  };
+};
+const ProductsPage = ({ searchParams }: ProductsPageProps) => {
+  const { catégorie: categoryQuery, trie: sortQuery } = searchParams;
   const sort = typeof sortQuery === "string" ? sortQuery : undefined;
   const parsedIntCategoryQuery =
     typeof categoryQuery === "string" ? parseInt(categoryQuery) : NaN;
@@ -261,11 +268,14 @@ const ProductsPage = ({
   const { data: categories, isLoading: categoriesAreLoading } =
     api.categories.getAll.useQuery();
 
+  const data = {
+    category: queryOptions.category,
+    sortType: queryOptions.sort,
+  };
+  console.log("TEST data", data);
+
   const { data: products, isLoading: productsAreLoading } =
-    api.products.getAll.useQuery({
-      category: queryOptions.category,
-      sortType: queryOptions.sort,
-    });
+    api.products.getAll.useQuery(data);
 
   if (categoriesAreLoading && productsAreLoading)
     return (
