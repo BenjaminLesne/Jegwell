@@ -66,12 +66,9 @@ IMPORTANT:
 - make a doc with docusaurus for solene
 - create a dialog and form to create a product in /gestion/produits
   => MultipleSelectRelatedProducts?
-
-Doing:
-=> Error: its-fine: useFiber must be called within a <FiberProvider />!
-=> how do I use react three fiber in one page and not as a whole application?
-=> upgrade to next 14 to see if it fixes the issue
-=> fixing typecheck errors
+- feat: product3d
+=> e2e fails 
+=> figuretout how to add the 3D in the carousel of images, (swap to shadcn carousel?)
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
