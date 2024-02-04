@@ -21,7 +21,7 @@ import {
 import { Section } from "~/components/Section/Section";
 import { Title } from "~/components/Title/Title";
 
-import { useEffect, useReducer, useState } from "react";
+import { Dispatch, Suspense, useEffect, useReducer, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   type OrderedProduct,
@@ -49,20 +49,174 @@ import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
 import { Header } from "~/components/Header/Header";
 import { Footer } from "~/components/Footer/Footer";
+import { type RouterOutputs } from "~/trpc/shared";
 
 const { INCREMENT } = BASKET_REDUCER_TYPE;
 const SET_CATEGORY = "SET_CATEGORY";
 const SET_SORT = "SET_SORT";
+
+function slugify(value: string) {
+  return decodeURIComponent(encodeURIComponent(value));
+}
+
+type State = {
+  category: number | undefined;
+  sort: string | undefined;
+};
+
+const reducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case SET_CATEGORY:
+      let newCategory: State["category"] = DEFAULT_CATEGORY;
+      const parsedIntValue = parseInt(action.value ?? "");
+
+      if (
+        action.value != null &&
+        typeof parsedIntValue === "number" &&
+        parsedIntValue > ALL_CATEGORIES
+      ) {
+        newCategory = parsedIntValue;
+      }
+
+      return { ...state, category: newCategory };
+
+    case SET_SORT:
+      let newSort: State["sort"] = DEFAULT_SORT;
+
+      if (
+        action.value != null &&
+        Object.keys(SORT_OPTIONS).includes(action.value)
+      ) {
+        newSort = action.value;
+      }
+
+      return { ...state, sort: newSort };
+    default:
+      return state;
+  }
+};
+
+type UseQueryOptionsProps = {
+  initialState: {
+    category: number | undefined;
+    sort: string | undefined;
+  };
+};
+function useQueryOptions({ initialState }: UseQueryOptionsProps) {
+  return useReducer(reducer, initialState);
+}
+
+type Action = {
+  type: typeof SET_CATEGORY | typeof SET_SORT;
+  value: string | undefined;
+};
+
+type FilterSortProps = {
+  categories: RouterOutputs["categories"]["getAll"] | undefined;
+  queryOptions: State;
+  dispatchQueryOptions: Dispatch<Action>;
+};
+
+function FilterSort({
+  categories,
+  queryOptions,
+  dispatchQueryOptions,
+}: FilterSortProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParamsRaw = useSearchParams();
+  const searchParams = new URLSearchParams(searchParamsRaw);
+
+  type HandleFilterProps = {
+    value: Action["value"];
+    key: "catégorie" | "trie";
+    callback?: (value: Action["value"]) => void;
+  };
+
+  function handleFilter({ value, key, callback }: HandleFilterProps) {
+    const props = {
+      key,
+      value: value,
+    };
+    updateQueryParams(props);
+    callback?.(value);
+  }
+
+  type UpdateQueryParamsProps = {
+    key: string;
+    value: string | number | undefined;
+  };
+
+  function updateQueryParams({ key, value }: UpdateQueryParamsProps) {
+    if (value) {
+      searchParams.set(key, slugify(value.toString()));
+    } else {
+      searchParams.delete(key);
+    }
+
+    router.replace(`${pathname}?${searchParams.toString()}`);
+  }
+
+  return (
+    <>
+      <Select
+        onValueChange={(value) =>
+          handleFilter({
+            value,
+            key: CATEGORY,
+            callback: (value) =>
+              dispatchQueryOptions({ type: SET_CATEGORY, value }),
+          })
+        }
+        defaultValue={queryOptions.category?.toString() ?? ""}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder={capitalize(CATEGORY)} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={DEFAULT_CATEGORY ?? ""}>Toutes</SelectItem>
+          {categories?.map((category) => {
+            if (category.id == null) return;
+            return (
+              <SelectItem key={category.id} value={category.id.toString()}>
+                {category.name}
+              </SelectItem>
+            );
+          })}
+        </SelectContent>
+      </Select>
+      <Select
+        onValueChange={(value) =>
+          handleFilter({
+            value,
+            key: SORT,
+            callback: (value) =>
+              dispatchQueryOptions({ type: SET_SORT, value }),
+          })
+        }
+        defaultValue={DEFAULT_SORT}
+        value={queryOptions.sort?.toString() ?? DEFAULT_SORT}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder={"Trier"} />
+        </SelectTrigger>
+        <SelectContent>
+          {Object.entries(SORT_OPTIONS_NAMES).map(([value, name], index) => (
+            <SelectItem key={index} value={value}>
+              {name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </>
+  );
+}
 
 const ProductsPage = ({
   params,
 }: {
   params: { category: string; sort: string };
 }) => {
-  const searchParamsRaw = useSearchParams();
-  const searchParams = new URLSearchParams(searchParamsRaw);
-  const pathname = usePathname();
-  const router = useRouter();
   const { category: categoryQuery, sort: sortQuery } = params;
   const sort = typeof sortQuery === "string" ? sortQuery : undefined;
   const parsedIntCategoryQuery =
@@ -72,56 +226,13 @@ const ProductsPage = ({
     : parsedIntCategoryQuery;
 
   const initialState = {
-    category: category,
-    sort: sort,
+    category,
+    sort,
   };
 
-  type State = {
-    category: number | undefined;
-    sort: string | undefined;
-  };
-
-  type Action = {
-    type: typeof SET_CATEGORY | typeof SET_SORT;
-    value: string | undefined;
-  };
-
-  const reducer = (state: State, action: Action) => {
-    switch (action.type) {
-      case SET_CATEGORY:
-        let newCategory: State["category"] = DEFAULT_CATEGORY;
-        const parsedIntValue = parseInt(action.value ?? "");
-
-        if (
-          action.value != null &&
-          typeof parsedIntValue === "number" &&
-          parsedIntValue > ALL_CATEGORIES
-        ) {
-          newCategory = parsedIntValue;
-        }
-
-        return { ...state, category: newCategory };
-
-      case SET_SORT:
-        let newSort: State["sort"] = DEFAULT_SORT;
-
-        if (
-          action.value != null &&
-          Object.keys(SORT_OPTIONS).includes(action.value)
-        ) {
-          newSort = action.value;
-        }
-
-        return { ...state, sort: newSort };
-      default:
-        return state;
-    }
-  };
-
-  const [queryOptions, dispatchQueryOptions] = useReducer(
-    reducer,
+  const [queryOptions, dispatchQueryOptions] = useQueryOptions({
     initialState,
-  );
+  });
   const { dispatchBasket } = useBasket();
   const [animationsKey, setAnimationsKey] = useState<Record<string, string>>(
     {},
@@ -134,6 +245,7 @@ const ProductsPage = ({
         value: category?.toString(),
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, categoryQuery]);
 
   useEffect(() => {
@@ -143,6 +255,7 @@ const ProductsPage = ({
         value: sort?.toString(),
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, sortQuery]);
 
   const { data: categories, isLoading: categoriesAreLoading } =
@@ -164,40 +277,6 @@ const ProductsPage = ({
   const nothingIsLoading = !categoriesAreLoading && !productsAreLoading;
   if (nothingIsLoading && (!categories || !products)) {
     return <Error message="Une erreur est survenue." />;
-  }
-
-  function slugify(value: string) {
-    return decodeURIComponent(encodeURIComponent(value));
-  }
-
-  type UpdateQueryParamsProps = {
-    key: string;
-    value: string | number | undefined;
-  };
-
-  function updateQueryParams({ key, value }: UpdateQueryParamsProps) {
-    if (value) {
-      searchParams.set(key, slugify(value.toString()));
-    } else {
-      searchParams.delete(key);
-    }
-
-    router.replace(`${pathname}?${searchParams.toString()}`);
-  }
-  type HandleFilterProps = {
-    value: Action["value"];
-    key: "catégorie" | "trie";
-    callback?: (value: Action["value"]) => void;
-  };
-
-  function handleFilter({ value, key, callback }: HandleFilterProps) {
-    const props = {
-      key,
-      value: value,
-      nextRouter: router,
-    };
-    updateQueryParams(props);
-    callback?.(value);
   }
 
   const triggerAnimation = (key: string) => {
@@ -227,64 +306,13 @@ const ProductsPage = ({
             {categoriesAreLoading ? (
               <Loading />
             ) : (
-              <>
-                <Select
-                  onValueChange={(value) =>
-                    handleFilter({
-                      value,
-                      key: CATEGORY,
-                      callback: (value) =>
-                        dispatchQueryOptions({ type: SET_CATEGORY, value }),
-                    })
-                  }
-                  defaultValue={queryOptions.category?.toString() ?? ""}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder={capitalize(CATEGORY)} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={DEFAULT_CATEGORY ?? ""}>
-                      Toutes
-                    </SelectItem>
-                    {categories?.map((category) => {
-                      if (category.id == null) return;
-                      return (
-                        <SelectItem
-                          key={category.id}
-                          value={category.id.toString()}
-                        >
-                          {category.name}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
-                <Select
-                  onValueChange={(value) =>
-                    handleFilter({
-                      value,
-                      key: SORT,
-                      callback: (value) =>
-                        dispatchQueryOptions({ type: SET_SORT, value }),
-                    })
-                  }
-                  defaultValue={DEFAULT_SORT}
-                  value={queryOptions.sort?.toString() ?? DEFAULT_SORT}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder={"Trier"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(SORT_OPTIONS_NAMES).map(
-                      ([value, name], index) => (
-                        <SelectItem key={index} value={value}>
-                          {name}
-                        </SelectItem>
-                      ),
-                    )}
-                  </SelectContent>
-                </Select>
-              </>
+              <Suspense>
+                <FilterSort
+                  queryOptions={queryOptions}
+                  dispatchQueryOptions={dispatchQueryOptions}
+                  categories={categories}
+                />
+              </Suspense>
             )}
           </div>
           {productsAreLoading ? (
