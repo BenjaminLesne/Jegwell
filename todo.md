@@ -50,6 +50,7 @@
 - can I use this? https://github.com/release-it/release-it
 - clean up useEffect wrongly use see this video: https://www.youtube.com/watch?v=TGUSijXKuyA
 - make 3D model of products? (threejs)
+- make a docker commpose to run a backend/db locally cf webdeccody video
 
 IMPORTANT:
 
@@ -68,7 +69,6 @@ IMPORTANT:
   => MultipleSelectRelatedProducts?
 - feat: product3d
 => e2e fails 
-=> figuretout how to add the 3D in the carousel of images, (swap to shadcn carousel?)
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell
