@@ -65,8 +65,9 @@ IMPORTANT:
 - admin navigation
 - make a doc with docusaurus (How to use the MultipleSelect)
 - make a doc with docusaurus for solene
-- create a dialog and form to create a product in /gestion/produits
-  => MultipleSelectRelatedProducts?
+- create a form to create a product in /gestion/produits
+  => create option?
+  => when I press add it refresh the page, it does not work
 - feat: product3d
 => e2e fails 
 
