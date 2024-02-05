@@ -3,7 +3,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useReducer } from "react";
+import { Suspense, useReducer } from "react";
 import { Loading } from "~/components/Loading/Loading";
 import { Section } from "~/components/Section/Section";
 import { Button } from "~/components/ui/Button/button";
@@ -209,11 +209,11 @@ const SingleProductPage = ({ params }: Props) => {
       <Header />
       <main>
         <Section>
+          <div className="mx-auto h-[400px] max-h-[400px] max-w-full">
+            <Product3d />
+          </div>
           <h1 className="sr-only">{product.name}</h1>
-          <div className="flex flex-col lg:flex-row lg:gap-20">
-            <div>
-              <Product3d />
-            </div>
+          <div className="sx:pt-0 flex flex-col pt-4 lg:flex-row lg:gap-20">
             <div className="mx-auto w-[400px] max-w-full lg:mx-0 lg:mt-5">
               <div className="h-full">
                 <Slider {...settings}>
