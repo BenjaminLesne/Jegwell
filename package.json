@@ -20,7 +20,6 @@
     "stripe:trigger": "stripe trigger payment_intent.succeeded"
   },
   "dependencies": {
-    "server-only": "^0.0.1",
     "@builder.io/react-hydration-overlay": "^0.0.6",
     "@clerk/nextjs": "^4.17.1",
     "@fontsource/roboto": "^4.5.8",
@@ -56,6 +55,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.2",
     "react-slick": "^0.29.0",
+    "server-only": "^0.0.1",
     "sharp": "^0.33.2",
     "stripe": "^12.16.0",
     "superjson": "^2.2.1",
@@ -68,7 +68,7 @@
   "devDependencies": {
     "@playwright/test": "^1.36.2",
     "@types/eslint": "^8.44.7",
-    "@types/node": "^18.17.0",
+    "@types/node": "^18.19.10",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
@@ -82,6 +82,7 @@
     "eslint": "^8.54.0",
     "eslint-config-next": "^14.0.4",
     "jsdom": "^22.0.0",
+    "knip": "^4.5.0",
     "postcss": "^8.4.31",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",

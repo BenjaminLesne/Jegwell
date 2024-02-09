@@ -36,3 +36,6 @@ jobs:
 
       - name: Run linting
         run: pnpm run lint
+
+      - name: Run knip
+        run: pnpm knip
