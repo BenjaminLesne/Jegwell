@@ -19,7 +19,7 @@ import {
 test.describe("the delivery page form", () => {
   test.beforeEach(deliveryBeforeEach);
 
-  test("match snapshot", async ({ page }) => {
+  test.only("match snapshot", async ({ page }) => {
     await waitLoadingEnds({ page });
     await testPageScreenshotMatch({ page });
   });
@@ -36,7 +36,7 @@ test.describe("the delivery page form", () => {
     const address1WithErrorRequired = page.getByText(`Adresse${REQUIRED_TEXT}`);
     const cityWithError = page.getByText(`Ville${cityMessage}`);
     const postalCodeWithError = page.getByText(
-      `Le code postal${postalCodeMessage}`
+      `Le code postal${postalCodeMessage}`,
     );
 
     await goToPaymentButton.click();
@@ -63,7 +63,7 @@ test.describe("the delivery page form", () => {
     const address1WithError = page.getByText(`Adresse${address1Message}`);
     const cityWithError = page.getByText(`Ville${cityMessage}`);
     const postalCodeWithError = page.getByText(
-      `Le code postal${postalCodeMessage}`
+      `Le code postal${postalCodeMessage}`,
     );
     // /error messages
 
