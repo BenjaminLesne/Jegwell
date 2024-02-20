@@ -6,11 +6,17 @@ import {
   PRODUCTS_ROUTE,
 } from "~/lib/constants";
 
+declare global {
+  interface Window {
+    isSceneLoaded: boolean | Promise<unknown>;
+  }
+}
+
 test.describe("single product page", () => {
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(
       ({ EVENT_SCENE_LOADED }) => {
-        let resolveSceneLoaded = () => {};
+        let resolveSceneLoaded: (value?: unknown) => void = () => void {};
         window.isSceneLoaded = new Promise(
           (resolve) => (resolveSceneLoaded = resolve),
         );
@@ -25,6 +31,7 @@ test.describe("single product page", () => {
     await page.goto(PRODUCTS_ROUTE);
 
     await page.getByRole("link", { name: productName }).first().click();
+
     await page.waitForFunction(() => window.isSceneLoaded);
 
     await expect(quantity).toBeVisible();
