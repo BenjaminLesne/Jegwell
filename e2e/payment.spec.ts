@@ -29,7 +29,10 @@ test.describe("the payment process", () => {
     await submitDeliveryForm({ page });
     await waitLoadingEnds({ page });
 
-    await page.getByLabel("Country or region").selectOption("FR"); // pipeline has USA as default country and show a form for american credit cards
+    // pipeline has USA as default country and show a form for american credit cards
+    await page
+      .getByLabel("Country or region", { exact: true })
+      .selectOption("FR");
 
     await page.getByLabel("Email").click();
     await page.keyboard.type("jegwell@exemple.fr");
