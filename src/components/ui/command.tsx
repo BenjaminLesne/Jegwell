@@ -141,13 +141,13 @@ const CommandShortcut = ({
 CommandShortcut.displayName = "CommandShortcut";
 
 export {
-  // Command,
+  Command,
   // CommandDialog,
-  // CommandInput,
+  CommandInput,
   // CommandList,
   CommandEmpty,
   CommandGroup,
-  // CommandItem,
+  CommandItem,
   // CommandShortcut,
   // CommandSeparator,
 };
