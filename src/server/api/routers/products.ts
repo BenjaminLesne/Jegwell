@@ -36,7 +36,6 @@ export const productsRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(getAllInputSchema)
     .query(({ ctx, input = {} }) => {
-      console.log("TEST input", input);
       const { category = ALL_CATEGORIES, sortType = DEFAULT_SORT } = input;
 
       const arg = {

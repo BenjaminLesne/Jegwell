@@ -2,7 +2,7 @@
 
 import { type NextPage } from "next";
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { type FieldValues, useForm } from "react-hook-form";
 import type * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -36,24 +36,27 @@ import { Header } from "~/components/Header/Header";
 type ShortInputProps = {
   label: string;
   placeholder: string;
-  field: object;
+  field: FieldValues;
 };
-const ShortInput = ({ label, placeholder, field }: ShortInputProps) => (
-  <FormItem>
-    <FormLabel>{label}</FormLabel>
-    <FormControl>
-      <Input placeholder={placeholder} {...field} />
-    </FormControl>
-    <FormMessage />
-  </FormItem>
-);
+const ShortInput = ({ label, placeholder, field }: ShortInputProps) => {
+  return (
+    <FormItem>
+      <FormLabel>{label}</FormLabel>
+      <FormControl>
+        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+        <Input placeholder={placeholder} {...field} value={field.value ?? ""} />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  );
+};
 
 const defaultValues = {
   firstname: "",
   lastname: "",
   email: "",
-  phone: undefined,
-  deliveryOptionId: undefined,
+  phone: "",
+  deliveryOptionId: "",
   address1: "",
   address2: "",
   city: "",
@@ -72,7 +75,6 @@ const DeliveryPage: NextPage = () => {
     api.payments.createCheckout.useMutation();
 
   useEffect(() => {
-    console.log("TEST basket", basket);
     if (basket.length === 0) {
       void router.push(BASKET_ROUTE); // Redirect to home page
     }
@@ -246,13 +248,15 @@ const DeliveryPage: NextPage = () => {
               <FormField
                 control={form.control}
                 name="line1"
-                render={({ field }) => (
-                  <ShortInput
-                    label="Adresse"
-                    placeholder="16 rue de la Genetais"
-                    field={field}
-                  />
-                )}
+                render={({ field }) => {
+                  return (
+                    <ShortInput
+                      label="Adresse"
+                      placeholder="16 rue de la Genetais"
+                      field={field}
+                    />
+                  );
+                }}
               />
               <FormField
                 control={form.control}

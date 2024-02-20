@@ -72,7 +72,7 @@ export const submitDeliveryForm = async ({ page }: TestArgs) => {
   await goToPaymentButton.click();
 
   const stripeUrl = /https:\/\/checkout\.stripe\.com/;
-  await page.waitForURL(stripeUrl);
+  await page.waitForURL(stripeUrl, { waitUntil: "domcontentloaded" });
   await expect(page).toHaveURL(stripeUrl);
 
   const apiOrder = createOrderCaller({ db });

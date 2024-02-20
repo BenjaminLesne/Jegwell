@@ -19,7 +19,7 @@ import {
 test.describe("the delivery page form", () => {
   test.beforeEach(deliveryBeforeEach);
 
-  test.only("match snapshot", async ({ page }) => {
+  test("match snapshot", async ({ page }) => {
     await waitLoadingEnds({ page });
     await testPageScreenshotMatch({ page });
   });

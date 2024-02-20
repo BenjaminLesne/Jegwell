@@ -2,6 +2,37 @@ import { type PrismaClient, type Option, type Prisma } from "@prisma/client";
 import { type OrderedProduct } from "./client";
 import { z } from "zod";
 
+const getOrThrowDeliveryOptionInputSchema = z.object({
+  id: z.number(),
+});
+
+type GetOrThrowDeliveryOptionProps = {
+  ctx: {
+    db: PrismaClient<Prisma.PrismaClientOptions, never>;
+  };
+  input: z.infer<typeof getOrThrowDeliveryOptionInputSchema>;
+};
+
+export const getOrThrowDeliveryOption = async ({
+  ctx,
+  input,
+}: GetOrThrowDeliveryOptionProps) => {
+  const { id } = input;
+
+  const arg = {
+    where: {
+      id,
+    },
+    select: {
+      price: true,
+      name: true,
+    },
+  } satisfies Prisma.DeliveryOptionFindUniqueArgs;
+
+  const deliveryOption = ctx.db.deliveryOption.findUniqueOrThrow(arg);
+  return deliveryOption;
+};
+
 export type GetSubtotalPriceProps = {
   quantity: OrderedProduct["quantity"];
   optionId: OrderedProduct["optionId"];

@@ -61,6 +61,8 @@ export const DEFAULT_CATEGORY = undefined;
 export const CATEGORY_TEST_ID = "category";
 export const LOCALE_STORAGE_BASKET_KEY = "basket";
 
+export const EVENT_SCENE_LOADED = "threejsSceneLoaded";
+
 // modals
 export const OPEN_TYPE = "open";
 export const CLOSE_TYPE = "close";

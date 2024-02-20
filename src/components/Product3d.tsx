@@ -1,14 +1,21 @@
 import { Canvas } from "@react-three/fiber";
 import { useLoader } from "@react-three/fiber";
-import { Environment, OrbitControls } from "@react-three/drei";
+import { Environment, OrbitControls, useProgress } from "@react-three/drei";
 import { GLTFLoader } from "three-stdlib";
 import { Suspense } from "react";
-import { Loading } from "./Loading/Loading";
+import { EVENT_SCENE_LOADED } from "~/lib/constants";
+
+let alreadyFired = false;
 
 const Model = () => {
   const gltf = useLoader(GLTFLoader, "/ring/scene.gltf");
-  // const gltf = useLoader(GLTFLoader, "/ring2/scene.gltf");
-  // const gltf = useLoader(GLTFLoader, "/Poimandres.gltf");
+  const { active } = useProgress();
+
+  if (active === false && alreadyFired === false) {
+    alreadyFired = true;
+    window.dispatchEvent(new Event(EVENT_SCENE_LOADED));
+  }
+
   return (
     <>
       <primitive object={gltf.scene} scale={0.4} />

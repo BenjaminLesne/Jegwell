@@ -272,7 +272,6 @@ const ProductsPage = ({ searchParams }: ProductsPageProps) => {
     category: queryOptions.category,
     sortType: queryOptions.sort,
   };
-  console.log("TEST data", data);
 
   const { data: products, isLoading: productsAreLoading } =
     api.products.getAll.useQuery(data);

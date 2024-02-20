@@ -1,7 +1,7 @@
 import { type Prisma } from "@prisma/client";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
-import { getOrThrowDeliveryOption } from "~/lib/helpers/client";
+import { getOrThrowDeliveryOption } from "~/lib/helpers/server";
 
 const getDeliveryOptionSchema = z.object({
   id: z.number(),
