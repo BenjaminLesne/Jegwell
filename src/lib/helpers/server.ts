@@ -33,7 +33,7 @@ export const getOrThrowDeliveryOption = async ({
   return deliveryOption;
 };
 
-export type GetSubtotalPriceProps = {
+type GetSubtotalPriceProps = {
   quantity: OrderedProduct["quantity"];
   optionId: OrderedProduct["optionId"];
   options: {

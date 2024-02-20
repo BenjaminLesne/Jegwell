@@ -23,7 +23,7 @@ const Model = () => {
   );
 };
 
-export const Product3d = () => {
+const Product3d = () => {
   return (
     <Canvas className="mx-auto h-[400px] max-h-[400px] w-[400px] max-w-full object-cover lg:mt-5">
       <Suspense fallback={null}>

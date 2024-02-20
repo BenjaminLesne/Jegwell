@@ -91,7 +91,7 @@ export const GET_BY_IDS = "getByIds";
 // /api endpoints
 
 // prisma schema
-export const productToBasketSchema = z.object({
+const productToBasketSchema = z.object({
   id: z.number(),
   quantity: z.number(),
   optionId: z.number().nullable(),
@@ -139,22 +139,7 @@ export const lightMergedProductSchema = z
   })
   .merge(productToBasketSchema.pick({ optionId: true, quantity: true }));
 
-export const imageSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  url: z.string(),
-});
-
-export const optionSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  price: z.number(),
-  productId: z.number(),
-  imageId: z.number(),
-  image: imageSchema,
-});
-
-export const addressSchema = z.object({
+const addressSchema = z.object({
   id: z.number(),
   line1: z.string(),
   line2: z.string().nullable(),
@@ -163,7 +148,7 @@ export const addressSchema = z.object({
   city: z.string(),
 });
 
-export const customerSchema = z.object({
+const customerSchema = z.object({
   id: z.number(),
   firstname: z.string(),
   lastname: z.string(),
@@ -172,7 +157,7 @@ export const customerSchema = z.object({
   address: z.array(addressSchema),
 });
 
-export const deliveryOptionSchema = z.object({
+const deliveryOptionSchema = z.object({
   id: z.number(),
   name: z.string(),
   description: z.string().nullable(),
@@ -194,27 +179,6 @@ export const orderSchema = z.object({
   customer: customerSchema,
   deliveryOption: deliveryOptionSchema,
   address: addressSchema,
-});
-
-export const categorySchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  imageId: z.number(),
-  image: imageSchema,
-});
-
-export const productSchema = z.object({
-  id: z.number(),
-  price: z.number(),
-  createdAt: z.date(),
-  name: z.string(),
-  description: z.string().nullable(),
-  productId: z.string().nullable(),
-  imageId: z.number(),
-  categories: z.array(categorySchema),
-  options: z.array(optionSchema),
-  image: imageSchema,
-  baskets: z.array(productToBasketSchema),
 });
 
 const minShortString = 2;
@@ -239,7 +203,7 @@ export const lastnameMessage = shortStringMessage({
   max: maxShortString,
 });
 export const emailMessage = "Votre saisie n'est pas un email valide";
-export const phoneMessage = "Votre saisie doit uniquement être des nombres";
+const phoneMessage = "Votre saisie doit uniquement être des nombres";
 
 export const deliveryOptionMessage =
   "Veuillez selectionner une méthode de livraison";
@@ -368,6 +332,3 @@ export const productAdminGetAllArg: ProductAdminGetAllArg = {
   },
 };
 // /prisma schema
-
-// other zod schema
-export const urlSchema = z.string().url();

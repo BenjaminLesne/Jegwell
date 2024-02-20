@@ -6,6 +6,7 @@ import {
   DEVELOPMENT,
   LOCALE_STORAGE_BASKET_KEY,
   NO_OPTION,
+  isDevelopment,
 } from "../constants";
 import { z } from "zod";
 import { clsx, type ClassValue } from "clsx";
@@ -14,7 +15,7 @@ import { type Stripe, loadStripe } from "@stripe/stripe-js";
 import { env } from "~/env";
 import { type Option, type ProductToBasket } from "@prisma/client";
 
-export type GetSubtotalPriceProps = {
+type GetSubtotalPriceProps = {
   quantity: OrderedProduct["quantity"];
   optionId: OrderedProduct["optionId"];
   options: {
@@ -34,64 +35,6 @@ export function getSubtotalPrice(items: GetSubtotalPriceProps[]): number {
     totalPrice += optionPrice * item.quantity;
   }
   return totalPrice;
-}
-
-export async function fetchGetJSON(url: string) {
-  try {
-    const data: unknown = await fetch(url).then((res) => res.json());
-    return data;
-  } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message);
-    }
-    throw err;
-  }
-}
-
-type Address = {
-  city: string;
-  country: string;
-  line1: string;
-  line2?: string;
-  postal_code: string;
-};
-
-type StripeCustomer = {
-  address: Address;
-  email: string;
-  name: string;
-  phone: string;
-};
-
-type CheckoutSessionProps = {
-  productsToBasket: BasketState;
-  customer: StripeCustomer;
-  orderId: number;
-};
-
-export async function fetchPostJSON(url: string, data: CheckoutSessionProps) {
-  try {
-    // Default options are marked with *
-    const response = await fetch(url, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      mode: "cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "same-origin", // include, *same-origin, omit
-      headers: {
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: "follow",
-      referrerPolicy: "no-referrer",
-      body: JSON.stringify(data || {}),
-    });
-    return (await response.json()) as unknown;
-  } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message);
-    }
-    throw err;
-  }
 }
 
 let stripePromise: Promise<Stripe | null>;
@@ -149,7 +92,7 @@ export function isSorted({ array, order }: isSortedProps) {
   return true;
 }
 // BASKET RELATED
-export const orderedProductSchema = z.array(
+const orderedProductSchema = z.array(
   z.object({
     productId: z.number(),
     quantity: z.number(),
@@ -437,7 +380,7 @@ export function capitalize(str: string) {
 }
 
 export function consoleError(...values: unknown[]) {
-  if (process.env.NODE_ENV === DEVELOPMENT) {
+  if (isDevelopment) {
     console.error(...values);
   }
 }

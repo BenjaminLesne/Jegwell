@@ -85,39 +85,6 @@ type BaseMergedProduct = Prisma.ProductGetPayload<{
   };
 }>;
 
-export type MergedProductOld = Omit<
-  BaseMergedProduct,
-  "createdAt" | "description" | "imageId"
-> &
-  Omit<OrderedProduct, "id"> & {
-    options: Omit<Option, "productId" | "imageId">[];
-  };
-
-export type MergedProduct = Prisma.ProductGetPayload<{
-  include: {
-    options: {
-      select: {
-        id: true;
-        name: true;
-        price: true;
-        image: {
-          select: {
-            url: true;
-          };
-        };
-      };
-    };
-    image: {
-      select: {
-        url: true;
-      };
-    };
-  };
-}> &
-  Omit<OrderedProduct, "id"> & {
-    options: Omit<Option, "productId" | "imageId">[];
-  };
-
 export type ProductForModal =
   | (Omit<
       Prisma.ProductGetPayload<{
