@@ -64,7 +64,7 @@ test.describe("single product page", () => {
     ).toBeVisible();
   });
   test.describe("add to basket", () => {
-    test.only("option button", async ({ page }) => {
+    test("option button", async ({ page }) => {
       await page
         .getByRole("button", { name: `Option: ${NO_OPTION_TEXT}` })
         .click();
