@@ -13,17 +13,23 @@ declare global {
 }
 
 test.describe("single product page", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.addInitScript(
-      ({ EVENT_SCENE_LOADED }) => {
-        let resolveSceneLoaded: (value?: unknown) => void = () => void {};
-        window.isSceneLoaded = new Promise(
-          (resolve) => (resolveSceneLoaded = resolve),
-        );
-        window.addEventListener(EVENT_SCENE_LOADED, () => resolveSceneLoaded());
-      },
-      { EVENT_SCENE_LOADED },
-    );
+  test.beforeEach(async ({ page, headless }) => {
+    test.slow();
+    const isHeaded = headless === false;
+    if (isHeaded) {
+      await page.addInitScript(
+        ({ EVENT_SCENE_LOADED }) => {
+          let resolveSceneLoaded: (value?: unknown) => void = () => void {};
+          window.isSceneLoaded = new Promise(
+            (resolve) => (resolveSceneLoaded = resolve),
+          );
+          window.addEventListener(EVENT_SCENE_LOADED, () =>
+            resolveSceneLoaded(),
+          );
+        },
+        { EVENT_SCENE_LOADED },
+      );
+    }
 
     const productName = "Bruz";
     const quantity = page.getByTestId("quantity");
@@ -32,7 +38,9 @@ test.describe("single product page", () => {
 
     await page.getByRole("link", { name: productName }).first().click();
 
-    await page.waitForFunction(() => window.isSceneLoaded);
+    if (isHeaded) {
+      await page.waitForFunction(() => window.isSceneLoaded);
+    }
 
     await expect(quantity).toBeVisible();
   });
@@ -56,7 +64,7 @@ test.describe("single product page", () => {
     ).toBeVisible();
   });
   test.describe("add to basket", () => {
-    test("option button", async ({ page }) => {
+    test.only("option button", async ({ page }) => {
       await page
         .getByRole("button", { name: `Option: ${NO_OPTION_TEXT}` })
         .click();
@@ -75,9 +83,11 @@ test.describe("single product page", () => {
         page.getByRole("button", { name: "Confirmer" }),
       ).toBeHidden();
 
-      await page
-        .getByRole("button", { name: "Ajouter au panier Ajouté ✓" })
-        .click();
+      const addToBasketButton = page.getByRole("button", {
+        name: "Ajouter au panier Ajouté ✓",
+      });
+      await addToBasketButton.waitFor({ state: "visible" });
+      await addToBasketButton.click();
       await page.getByTestId("basket icon").click();
       await expect(page.getByRole("heading", { name: "Bruz" })).toBeVisible();
       await expect(
