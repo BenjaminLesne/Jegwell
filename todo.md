@@ -69,9 +69,7 @@ IMPORTANT:
   => create option?
   => when I press add it refresh the page, it does not work
 - feat: product3d
-  => e2e fails
-  => we need to check when threejs is loaded it take a screenshot
-  => threejs: onLoad, fire an event we would catch in playwright?
+  => e2e fails, again.. https://github.com/BenjaminLesne/Jegwell/actions/runs/7976523554/job/21777294554
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

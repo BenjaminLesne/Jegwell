@@ -202,8 +202,10 @@ export const lastnameMessage = shortStringMessage({
   min: minShortString,
   max: maxShortString,
 });
+export const PHONE_ERROR_MESSAGE =
+  "Votre numéro doit contenir au moins deux chiffres";
 export const emailMessage = "Votre saisie n'est pas un email valide";
-const phoneMessage = "Votre saisie doit uniquement être des nombres";
+const phoneMessage = "Votre numéro doit au moins contenir deux chiffres";
 
 export const deliveryOptionMessage =
   "Veuillez selectionner une méthode de livraison";
@@ -245,13 +247,17 @@ export const deliveryFormSchema = z.object({
     .min(2, { message: lastnameMessage })
     .max(50, { message: lastnameMessage }),
   email: z.string().email({ message: emailMessage }),
-  phone: z.string({
-    description: phoneMessage,
-    required_error: REQUIRED_TEXT,
-  }),
-  deliveryOptionId: z.string({
-    errorMap: () => ({ message: deliveryOptionMessage }),
-  }),
+  phone: z
+    .string()
+    .min(2, { message: PHONE_ERROR_MESSAGE })
+    .refine((value) => typeof parseInt(value) === "number", {
+      message: phoneMessage,
+    }),
+  deliveryOptionId: z
+    .string()
+    .refine((value) => isNaN(parseInt(value)) === false, {
+      message: deliveryOptionMessage,
+    }),
   line1: z
     .string({ required_error: REQUIRED_TEXT })
     .min(5, { message: address1Message })

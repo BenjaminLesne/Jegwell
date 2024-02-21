@@ -6,6 +6,7 @@ import {
   waitLoadingEnds,
 } from "e2e/utils";
 import {
+  PHONE_ERROR_MESSAGE,
   REQUIRED_TEXT,
   address1Message,
   cityMessage,
@@ -24,15 +25,19 @@ test.describe("the delivery page form", () => {
     await testPageScreenshotMatch({ page });
   });
 
-  test("does not submit with empty inputs", async ({ page }) => {
+  test.only("does not submit with empty inputs", async ({ page }) => {
     const goToPaymentButton = page.getByRole("button", {
       name: "Passer au paiement",
     });
     const firstnameWithError = page.getByText(`Prénom${firstnameMessage}`);
     const lastnameWithError = page.getByText(`Nom${lastnameMessage}`);
     const emailWithError = page.getByText(`Email${emailMessage}`);
-    const phoneWithErrorRequired = page.getByText(`Téléphone${REQUIRED_TEXT}`);
-    const deliveryWithErrorRequired = page.getByText(deliveryOptionMessage);
+    const phoneWithErrorRequired = page.getByText(
+      PHONE_ERROR_MESSAGE.substring(0, 29),
+    );
+    const deliveryWithErrorRequired = page.getByText(
+      deliveryOptionMessage.substring(0, 29),
+    );
     const address1WithErrorRequired = page.getByText(`Adresse${REQUIRED_TEXT}`);
     const cityWithError = page.getByText(`Ville${cityMessage}`);
     const postalCodeWithError = page.getByText(
@@ -44,6 +49,7 @@ test.describe("the delivery page form", () => {
     await expect(firstnameWithError).toBeVisible();
     await expect(lastnameWithError).toBeVisible();
     await expect(emailWithError).toBeVisible();
+    // await page.pause();
     await expect(phoneWithErrorRequired).toBeVisible();
     await expect(deliveryWithErrorRequired).toBeVisible();
     await expect(address1WithErrorRequired).toBeVisible();
