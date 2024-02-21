@@ -37,7 +37,7 @@ test.describe("single product page", () => {
     await expect(quantity).toBeVisible();
   });
 
-  test.only("snapshot", async ({ page }) => {
+  test("snapshot", async ({ page }) => {
     await testPageScreenshotMatch({ page });
   });
 
@@ -63,7 +63,7 @@ test.describe("single product page", () => {
       await expect(
         page.getByRole("button").filter({ hasText: NO_OPTION_TEXT }),
       ).toBeVisible();
-      await page.getByRole("button").filter({ hasText: "Vert" }).click();
+      await page.locator("button").filter({ hasText: "Vert" }).click();
       await page.getByRole("button", { name: "Confirmer" }).click();
       const optionButton = page.getByRole("button", { name: "Option: Vert" });
 
