@@ -25,7 +25,7 @@ test.describe("the delivery page form", () => {
     await testPageScreenshotMatch({ page });
   });
 
-  test.only("does not submit with empty inputs", async ({ page }) => {
+  test("does not submit with empty inputs", async ({ page }) => {
     const goToPaymentButton = page.getByRole("button", {
       name: "Passer au paiement",
     });
