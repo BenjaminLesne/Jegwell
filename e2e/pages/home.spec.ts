@@ -9,7 +9,6 @@ test.describe("the home page", () => {
     await waitLoadingEnds({ page });
   });
   test("home match snapshot", async ({ page }) => {
-    await page.bringToFront(); // https://github.com/microsoft/playwright/issues/20434#issuecomment-1477560521
     await testPageScreenshotMatch({ page });
   });
 

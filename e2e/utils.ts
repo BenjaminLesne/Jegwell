@@ -98,6 +98,7 @@ export const waitLoadingEnds = async ({ page }: TestArgs) => {
 };
 
 export async function testPageScreenshotMatch({ page, ...options }: TestArgs) {
+  await page.bringToFront(); // https://github.com/microsoft/playwright/issues/20434#issuecomment-1477560521
   await expect(page).toHaveScreenshot({
     fullPage: true,
     ...options,
