@@ -51,6 +51,7 @@
 - clean up useEffect wrongly use see this video: https://www.youtube.com/watch?v=TGUSijXKuyA
 - make 3D model of products? (threejs)
 - make a docker commpose to run a backend/db locally cf webdeccody video
+- https://github.com/BenjaminLesne/Jegwell/security/dependabot
 
 IMPORTANT:
 

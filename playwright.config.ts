@@ -35,7 +35,7 @@ export default defineConfig({
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    timeout: process.env.CI ? 10_000 * 2 : 10_000,
+    timeout: process.env.CI ? 10_000 * 4 : 10_000,
     toHaveScreenshot: {
       // An acceptable ratio of pixels that are different to the total amount of pixels, between 0 and 1.
       maxDiffPixelRatio: 0.2,
