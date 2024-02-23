@@ -45,7 +45,7 @@ test.describe("single product page", () => {
     await expect(quantity).toBeVisible();
   });
 
-  test.only("snapshot", async ({ page }) => {
+  test("snapshot", async ({ page }) => {
     await testPageScreenshotMatch({ page });
   });
 
