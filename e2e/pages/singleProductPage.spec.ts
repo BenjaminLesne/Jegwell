@@ -14,7 +14,7 @@ declare global {
 
 test.describe("single product page", () => {
   test.beforeEach(async ({ page, headless }) => {
-    test.slow();
+    test.setTimeout(30_000 * 12);
     const isHeaded = headless === false;
     if (isHeaded) {
       await page.addInitScript(

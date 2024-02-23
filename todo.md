@@ -69,7 +69,7 @@ IMPORTANT:
   => create option?
   => when I press add it refresh the page, it does not work
 - feat: product3d
-  => e2e fails, again.. https://github.com/BenjaminLesne/Jegwell/actions/runs/7976523554/job/21777294554
+  => e2e fails, again.. ca timeout dans le pipeline putain (pas de probleme en local)
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

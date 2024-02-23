@@ -6,11 +6,12 @@ test.describe("admin orders page", () => {
   test.skip(
     ({ browserName, channel }) =>
       browserName !== "chromium" || channel !== "chrome",
-    "This test is for Google Chrome on the desktop only"
+    "This test is for Google Chrome on the desktop only",
   );
 
   test.beforeEach(async ({ page }) => {
     await page.goto(ADMIN_ORDERS_ROUTE);
+    await waitLoadingEnds({ page });
   });
 
   test("see details action redirect to single order page with right price", async ({
