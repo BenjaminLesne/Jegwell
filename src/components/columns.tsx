@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { ADMIN_SINGLE_ORDER_ROUTE } from "~/lib/constants";
-import { formatPrice } from "~/lib/helpers/helpers";
+import { formatPrice } from "~/lib/helpers/client";
 import { type ProductAdminGetAllArg, type OrderGetAllArg } from "~/lib/types";
 
 type Option = Prisma.OptionGetPayload<{

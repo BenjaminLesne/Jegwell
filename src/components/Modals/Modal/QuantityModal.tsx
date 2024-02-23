@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../../ui/AlertDialog/alert-dialog";
-import { type OrderedProduct, type BasketAction } from "~/lib/helpers/helpers";
+import { type OrderedProduct, type BasketAction } from "~/lib/helpers/client";
 import { BASKET_REDUCER_TYPE } from "~/lib/constants";
 
 type OnQuantityConfirm = (

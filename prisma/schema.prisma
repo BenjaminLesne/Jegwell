@@ -2,130 +2,131 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  price       Int
-  createdAt   DateTime @default(now())
-  name        String
-  description String?
-  imageId     Int
+    id          Int      @id @default(autoincrement())
+    price       Int
+    createdAt   DateTime @default(now())
+    name        String
+    description String?
+    imageId     Int
 
-  categories Category[]
-  options    Option[]
-  relateTo   Product[]         @relation("RelatedProducts")
-  relatedBy  Product[]         @relation("RelatedProducts")
-  image      Image             @relation(fields: [imageId], references: [id])
-  baskets    ProductToBasket[]
+    categories Category[]
+    options    Option[]
+    relateTo   Product[]         @relation("RelatedProducts")
+    relatedBy  Product[]         @relation("RelatedProducts")
+    image      Image             @relation(fields: [imageId], references: [id])
+    baskets    ProductToBasket[]
 
-  @@index([imageId])
+    @@index([imageId])
 }
 
 model Category {
-  id      Int    @id @default(autoincrement())
-  name    String
-  imageId Int
+    id      Int    @id @default(autoincrement())
+    name    String
+    imageId Int
 
-  products Product[]
-  image    Image     @relation(fields: [imageId], references: [id])
+    products Product[]
+    image    Image     @relation(fields: [imageId], references: [id])
 
-  @@index([imageId])
+    @@index([imageId])
 }
 
 model Option {
-  id        Int    @id @default(autoincrement())
-  name      String
-  price     Int
-  productId Int
-  imageId   Int
+    id        Int    @id @default(autoincrement())
+    name      String
+    price     Int
+    productId Int
+    imageId   Int
 
-  image   Image             @relation(fields: [imageId], references: [id])
-  product Product           @relation(fields: [productId], references: [id])
-  baskets ProductToBasket[]
+    image   Image             @relation(fields: [imageId], references: [id])
+    product Product           @relation(fields: [productId], references: [id])
+    baskets ProductToBasket[]
 
-  @@index([productId])
-  @@index([imageId])
+    @@index([productId])
+    @@index([imageId])
 }
 
 model Image {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
-  url  String @db.Text
+    id   Int    @id @default(autoincrement())
+    name String @db.VarChar(255)
+    url  String @db.Text
 
-  products   Product[]
-  categories Category[]
-  options    Option[]
+    products   Product[]
+    categories Category[]
+    options    Option[]
 }
 
 model ProductToBasket {
-  id        Int  @id @default(autoincrement())
-  quantity  Int
-  optionId  Int?
-  productId Int
+    id        Int  @id @default(autoincrement())
+    quantity  Int
+    optionId  Int?
+    productId Int
 
-  option  Option? @relation(fields: [optionId], references: [id])
-  product Product @relation(fields: [productId], references: [id])
-  orders  Order[]
+    option  Option? @relation(fields: [optionId], references: [id])
+    product Product @relation(fields: [productId], references: [id])
+    orders  Order[]
 
-  @@index([productId])
-  @@index([optionId])
+    @@index([productId])
+    @@index([optionId])
 }
 
 model Address {
-  id         Int        @id @default(autoincrement())
-  line1      String
-  line2      String?
-  country    String
-  postalCode String
-  city       String
-  orders     Order[]
-  customers  Customer[]
+    id         Int        @id @default(autoincrement())
+    line1      String
+    line2      String?
+    country    String
+    postalCode String
+    city       String
+    orders     Order[]
+    customers  Customer[]
 }
 
 model Customer {
-  id        Int       @id @default(autoincrement())
-  firstname String
-  lastname  String
-  email     String
-  phone     String
-  addresses Address[]
-  order     Order[]
+    id        Int       @id @default(autoincrement())
+    firstname String
+    lastname  String
+    email     String
+    phone     String
+    addresses Address[]
+    order     Order[]
 }
 
 model Order {
-  id               Int      @id @default(autoincrement())
-  createdAt         DateTime @default(now())
-  isPaid           Boolean  @default(false)
-  isEmailSent      Boolean  @default(false)
-  paymentIntentId  String?
-  price            Int
-  comment          String?
-  customerId       Int
-  deliveryOptionId Int
-  addressId        Int
+    id               Int      @id @default(autoincrement())
+    createdAt        DateTime @default(now())
+    isPaid           Boolean  @default(false)
+    isEmailSent      Boolean  @default(false)
+    paymentIntentId  String?
+    price            Int
+    comment          String?
+    customerId       Int
+    deliveryOptionId Int
+    addressId        Int
 
-  productsToBasket ProductToBasket[]
-  customer         Customer          @relation(fields: [customerId], references: [id])
-  deliveryOption   DeliveryOption    @relation(fields: [deliveryOptionId], references: [id])
-  address          Address           @relation(fields: [addressId], references: [id])
+    productsToBasket ProductToBasket[]
+    customer         Customer          @relation(fields: [customerId], references: [id])
+    deliveryOption   DeliveryOption    @relation(fields: [deliveryOptionId], references: [id])
+    address          Address           @relation(fields: [addressId], references: [id])
 
-  @@index([deliveryOptionId])
-  @@index([addressId])
-  @@index([customerId])
+    @@index([deliveryOptionId])
+    @@index([addressId])
+    @@index([customerId])
 }
 
 model DeliveryOption {
-  id          Int     @id @default(autoincrement())
-  name        String
-  description String?
-  price       Int
-  orders      Order[]
+    id          Int     @id @default(autoincrement())
+    name        String
+    description String?
+    price       Int
+    orders      Order[]
 }

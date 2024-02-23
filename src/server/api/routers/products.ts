@@ -8,7 +8,6 @@ import {
   productAdminGetAllArg,
 } from "~/lib/constants";
 import { type Prisma } from "@prisma/client";
-import { getProductsByIds } from "~/lib/helpers/helpers";
 
 const getAllInputSchema = z
   .object({
@@ -32,7 +31,7 @@ const getBySingleIdInputSchema = z.object({
 export const productsRouter = createTRPCRouter({
   // AdminGetAll: adminProcedure.query(({ ctx }) => {
   AdminGetAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.product.findMany(productAdminGetAllArg);
+    return ctx.db.product.findMany(productAdminGetAllArg);
   }),
   getAll: publicProcedure
     .input(getAllInputSchema)
@@ -66,11 +65,52 @@ export const productsRouter = createTRPCRouter({
         orderBy: SORT_OPTIONS[sortType],
       } satisfies Prisma.ProductFindManyArgs;
 
-      return ctx.prisma.product.findMany(arg);
+      return ctx.db.product.findMany(arg);
     }),
   [GET_BY_IDS]: publicProcedure
     .input(getByIdsInputSchema)
-    .query(getProductsByIds),
+    .query(({ ctx, input = { ids: [] } }) => {
+      const { ids } = input;
+
+      if (ids?.length === 0) return [];
+
+      const idsAsNumbers = ids
+        .map((id) => parseInt(id ?? "not a number"))
+        .filter((id: number) => !isNaN(id));
+
+      const arg = {
+        where: {
+          id: {
+            in: idsAsNumbers,
+          },
+        },
+        select: {
+          name: true,
+          image: {
+            select: {
+              url: true,
+            },
+          },
+          id: true,
+          price: true,
+          options: {
+            select: {
+              id: true,
+              name: true,
+              price: true,
+              image: {
+                select: {
+                  url: true,
+                },
+              },
+            },
+          },
+        },
+      } satisfies Prisma.ProductFindManyArgs;
+
+      const result = ctx.db.product.findMany(arg);
+      return result;
+    }),
   getBySingleId: publicProcedure
     .input(getBySingleIdInputSchema)
     .query(({ ctx, input = {} }) => {
@@ -107,7 +147,7 @@ export const productsRouter = createTRPCRouter({
         },
       } satisfies Prisma.ProductFindUniqueArgs;
 
-      const result = ctx.prisma.product.findUnique(arg);
+      const result = ctx.db.product.findUnique(arg);
       return result;
     }),
 });

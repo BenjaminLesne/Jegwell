@@ -4,7 +4,7 @@ import {
   getPrices,
   isSorted,
   type isSortedProps,
-} from "~/lib/helpers/helpers";
+} from "~/lib/helpers/client";
 import { PRODUCTS_ROUTE } from "~/lib/constants";
 import { testPageScreenshotMatch, waitLoadingEnds } from "e2e/utils";
 

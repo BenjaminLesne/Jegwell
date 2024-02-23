@@ -4,6 +4,7 @@ import { categoriesRouter } from "./routers/categories";
 import { ordersRouter } from "./routers/orders";
 import { deliveryOptionsRouter } from "./routers/deliveryOptions";
 import { paymentsRouter } from "./routers/payments";
+import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 
 /**
  * This is the primary router for your server.

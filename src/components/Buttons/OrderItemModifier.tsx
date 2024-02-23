@@ -1,5 +1,5 @@
 import React from "react";
-import { capitalize } from "~/lib/helpers/helpers";
+import { capitalize } from "~/lib/helpers/client";
 
 import type * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 

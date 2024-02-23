@@ -1,16 +1,16 @@
 import Stripe from "stripe";
 import { z } from "zod";
-import { env } from "~/env.mjs";
+import { env } from "~/env";
 import {
   NO_OPTION,
   PAYMENT_SUCCEEDED_ROUTE,
   orderSchema,
 } from "~/lib/constants";
+import { consoleError } from "~/lib/helpers/client";
 import {
-  consoleError,
   getOrThrowDeliveryOption,
   getProductsByIds,
-} from "~/lib/helpers/helpers";
+} from "~/lib/helpers/server";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const addressSchema = z.object({
@@ -44,9 +44,7 @@ export const paymentsRouter = createTRPCRouter({
   createCheckout: publicProcedure
     .input(createCheckoutSchema)
     .mutation(async ({ ctx, input }) => {
-      const ids = input.productsToBasket.map((product) =>
-        product.productId.toString()
-      );
+      const ids = input.productsToBasket.map((product) => product.productId);
       const orderId = input.orderId;
       const products = await getProductsByIds({ ctx, input: { ids } });
       const deliveryOption = await getOrThrowDeliveryOption({
@@ -63,7 +61,7 @@ export const paymentsRouter = createTRPCRouter({
         const product = products.find((item) => item.id === productId);
         if (!product) {
           consoleError(
-            "could not find product with id : " + productId.toString()
+            "could not find product with id : " + productId.toString(),
           );
           return undefined;
         }
@@ -75,7 +73,7 @@ export const paymentsRouter = createTRPCRouter({
             "could not find option with id : " +
               (optionId ? optionId.toString() : "null") +
               " of product with id " +
-              productId.toString()
+              productId.toString(),
           );
         }
 
@@ -120,7 +118,7 @@ export const paymentsRouter = createTRPCRouter({
       const lineItemsRaw = [...productsItems, deliveryFeeItem];
 
       const lineItemsWithoutUndefined = lineItemsRaw.filter(
-        (item) => item !== undefined
+        (item) => item !== undefined,
       );
       // since typescript sucks to infer the right type after filtering the undefined...
       const line_items = z

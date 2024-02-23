@@ -1,13 +1,13 @@
 import { expect, type Page } from "@playwright/test";
-import { env } from "~/env.mjs";
+import { env } from "~/env";
 import {
   BASKET_ICON_TESTID,
   BASKET_ROUTE,
   DELIVERY_ROUTE,
   PRODUCTS_ROUTE,
 } from "~/lib/constants";
-import { appRouter } from "~/server/api/root";
-import { prisma } from "~/server/db";
+import { createOrderCaller } from "~/server/api/routers/orders";
+import { db } from "~/server/db";
 
 type TestArgs = {
   page: Page;
@@ -72,11 +72,11 @@ export const submitDeliveryForm = async ({ page }: TestArgs) => {
   await goToPaymentButton.click();
 
   const stripeUrl = /https:\/\/checkout\.stripe\.com/;
-  await page.waitForURL(stripeUrl);
+  await page.waitForURL(stripeUrl, { waitUntil: "domcontentloaded" });
   await expect(page).toHaveURL(stripeUrl);
 
-  const caller = appRouter.createCaller({ prisma });
-  const order = await caller.orders.getLast();
+  const apiOrder = createOrderCaller({ db });
+  const order = await apiOrder.getLast();
 
   expect(order?.comment).toBe(datetime);
 };
@@ -98,6 +98,7 @@ export const waitLoadingEnds = async ({ page }: TestArgs) => {
 };
 
 export async function testPageScreenshotMatch({ page, ...options }: TestArgs) {
+  await page.bringToFront(); // https://github.com/microsoft/playwright/issues/20434#issuecomment-1477560521
   await expect(page).toHaveScreenshot({
     fullPage: true,
     ...options,

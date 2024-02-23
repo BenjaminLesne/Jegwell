@@ -50,6 +50,8 @@
 - can I use this? https://github.com/release-it/release-it
 - clean up useEffect wrongly use see this video: https://www.youtube.com/watch?v=TGUSijXKuyA
 - make 3D model of products? (threejs)
+- make a docker commpose to run a backend/db locally cf webdeccody video
+- https://github.com/BenjaminLesne/Jegwell/security/dependabot
 
 IMPORTANT:
 
@@ -64,13 +66,11 @@ IMPORTANT:
 - admin navigation
 - make a doc with docusaurus (How to use the MultipleSelect)
 - make a doc with docusaurus for solene
-
-Doing:
-
-- create a dialog and form to create a product in /gestion/produits
-  => MultipleSelectRelatedProducts?
-  => trying to figure out how to type OptionType to accept value, label and any other key/properties
-  => figuring out why tsc version in github actions is 10 when locally is 9
+- create a form to create a product in /gestion/produits
+  => create option?
+  => when I press add it refresh the page, it does not work
+- feat: product3d
+  => e2e fails, again.. ca timeout dans le pipeline putain (pas de probleme en local)
 
 Note:
 When you awake the ps database you have to restard the frontend server aswell

@@ -5,9 +5,10 @@ import { CATEGORY, CATEGORY_TEST_ID, HOME_ROUTE } from "~/lib/constants";
 test.describe("the home page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(HOME_ROUTE);
+    await page.waitForURL(HOME_ROUTE, { waitUntil: "domcontentloaded" });
+    await waitLoadingEnds({ page });
   });
   test("home match snapshot", async ({ page }) => {
-    await waitLoadingEnds({ page });
     await testPageScreenshotMatch({ page });
   });
 

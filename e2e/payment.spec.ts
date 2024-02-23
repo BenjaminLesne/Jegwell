@@ -4,9 +4,9 @@ import {
   submitDeliveryForm,
   waitLoadingEnds,
 } from "./utils";
-import { appRouter } from "~/server/api/root";
-import { prisma } from "~/server/db";
+import { db } from "~/server/db";
 import { stripe } from "~/server/api/routers/payments";
+import { createOrderCaller } from "~/server/api/routers/orders";
 
 test.describe("the payment process", () => {
   test.beforeEach(async ({ page }) => {
@@ -19,8 +19,8 @@ test.describe("the payment process", () => {
 
   test("on payment success it update the order", async ({ page }) => {
     test.slow();
-    const caller = appRouter.createCaller({ prisma });
-    const lastOrder = await caller.orders.getLast();
+    const ordersApi = createOrderCaller({ db });
+    const lastOrder = await ordersApi.getLast();
 
     expect(lastOrder).toBeDefined();
     if (lastOrder == null) throw Error("last order is null");
@@ -28,7 +28,10 @@ test.describe("the payment process", () => {
     await submitDeliveryForm({ page });
     await waitLoadingEnds({ page });
 
-    await page.getByLabel("Country or region").selectOption("FR"); // pipeline has USA as default country and show a form for american credit cards
+    // pipeline has USA as default country and show a form for american credit cards
+    await page
+      .getByLabel("Country or region", { exact: true })
+      .selectOption("FR");
 
     await page.getByLabel("Email").click();
     await page.keyboard.type("jegwell@exemple.fr");
@@ -50,7 +53,7 @@ test.describe("the payment process", () => {
     await expect(page.getByText("Paiment réussi")).toBeVisible();
 
     await page.waitForTimeout(3_000);
-    const order = await caller.orders.get({ id: lastOrder.id + 1 });
+    const order = await ordersApi.get({ id: lastOrder.id + 1 });
 
     expect(order).toBeDefined();
     if (order == null) throw Error("order is null");
@@ -63,9 +66,8 @@ test.describe("the payment process", () => {
       expect(lastPaymentIntentId).toBeDefined();
       if (lastPaymentIntentId == null) throw Error("payment intent id is null");
 
-      const paymentIntent = await stripe.paymentIntents.retrieve(
-        lastPaymentIntentId
-      );
+      const paymentIntent =
+        await stripe.paymentIntents.retrieve(lastPaymentIntentId);
       const { amount } = paymentIntent;
 
       expect(amount).toBe(order.price);

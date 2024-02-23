@@ -1,0 +1,290 @@
+{
+  "accessors": [
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 7642,
+      "max": [
+        6.396365642547607,
+        4.340616226196289,
+        13.931008338928223
+      ],
+      "min": [
+        -6.396365642547607,
+        -4.423284530639648,
+        4.950202941894531
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 91704,
+      "componentType": 5126,
+      "count": 7642,
+      "max": [
+        0.9999983906745911,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -0.9492481350898743
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 10380,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 183408,
+      "componentType": 5126,
+      "count": 34856,
+      "max": [
+        10.581894874572754,
+        4.917603969573975,
+        13.385294914245605
+      ],
+      "min": [
+        -10.579073905944824,
+        -5.035750389099121,
+        -13.966486930847168
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 601680,
+      "componentType": 5126,
+      "count": 34856,
+      "max": [
+        0.9999897480010986,
+        0.9999969601631165,
+        0.9999999403953552
+      ],
+      "min": [
+        -0.9999977946281433,
+        -0.9999995231628418,
+        -0.9999997615814209
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 41520,
+      "componentType": 5125,
+      "count": 183792,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1019952,
+      "componentType": 5126,
+      "count": 10420,
+      "max": [
+        10.250293731689453,
+        3.683377742767334,
+        11.829562187194824
+      ],
+      "min": [
+        -10.288409233093262,
+        -3.786639928817749,
+        -10.668577194213867
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1144992,
+      "componentType": 5126,
+      "count": 10420,
+      "max": [
+        0.9992923736572266,
+        1.0,
+        0.9985424876213074
+      ],
+      "min": [
+        -1.0,
+        -0.9999327659606934,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 776688,
+      "componentType": 5125,
+      "count": 46101,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "realbazingamo (https://sketchfab.com/realbazingamo)",
+      "license": "SKETCHFAB Standard (https://sketchfab.com/licenses)",
+      "source": "https://sketchfab.com/3d-models/tower-ring-b89c580ea26c41f58e3e681577015614",
+      "title": "Tower Ring"
+    },
+    "generator": "Sketchfab-15.54.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 961092,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1270032,
+      "byteOffset": 961092,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 2231124,
+      "uri": "scene.bin"
+    }
+  ],
+  "extensionsUsed": [
+    "KHR_materials_clearcoat",
+    "KHR_materials_specular"
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_clearcoat": {
+          "clearcoatFactor": 1.0,
+          "clearcoatRoughnessFactor": 0.04
+        },
+        "KHR_materials_specular": {
+          "specularColorFactor": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "specularFactor": 1.0
+        }
+      },
+      "name": "material_0",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.8107694661159552,
+          0.8107694661159552,
+          0.8107694661159552,
+          1.0
+        ],
+        "metallicFactor": 0.3707436063413785,
+        "roughnessFactor": 0.0
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Object_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0
+          },
+          "indices": 2,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_1",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 4,
+            "POSITION": 3
+          },
+          "indices": 5,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_2",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 7,
+            "POSITION": 6
+          },
+          "indices": 8,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        -0.9692647457122803,
+        0.2460200935602188,
+        4.1915164005805486e-17,
+        0.0,
+        0.00028636964270845056,
+        0.0011282329214734599,
+        0.9999993443489075,
+        0.0,
+        0.24601992964744568,
+        0.9692640900611877,
+        -0.001164009096100711,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2,
+        3,
+        4
+      ],
+      "name": "T72-������.obj.cleaner.materialmerger.gles"
+    },
+    {
+      "mesh": 0,
+      "name": "Object_2"
+    },
+    {
+      "mesh": 1,
+      "name": "Object_3"
+    },
+    {
+      "mesh": 2,
+      "name": "Object_4"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}

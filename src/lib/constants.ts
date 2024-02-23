@@ -1,7 +1,7 @@
 import { type Prisma } from "@prisma/client";
 import { z } from "zod";
 import { type ProductAdminGetAllArg, type OrderGetAllArg } from "./types";
-import { env } from "~/env.mjs";
+import { env } from "~/env";
 
 export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
@@ -61,6 +61,8 @@ export const DEFAULT_CATEGORY = undefined;
 export const CATEGORY_TEST_ID = "category";
 export const LOCALE_STORAGE_BASKET_KEY = "basket";
 
+export const EVENT_SCENE_LOADED = "threejsSceneLoaded";
+
 // modals
 export const OPEN_TYPE = "open";
 export const CLOSE_TYPE = "close";
@@ -89,7 +91,7 @@ export const GET_BY_IDS = "getByIds";
 // /api endpoints
 
 // prisma schema
-export const productToBasketSchema = z.object({
+const productToBasketSchema = z.object({
   id: z.number(),
   quantity: z.number(),
   optionId: z.number().nullable(),
@@ -110,7 +112,7 @@ export const mergedProductSchema = z
         id: z.number(),
         price: z.number(),
         name: z.string(),
-      })
+      }),
     ),
     price: z.number(),
     name: z.string(),
@@ -120,7 +122,7 @@ export const mergedProductSchema = z
       quantity: true,
       optionId: true,
       productId: true,
-    })
+    }),
   );
 
 export const mergedProductsSchema = z.array(mergedProductSchema);
@@ -131,28 +133,13 @@ export const lightMergedProductSchema = z
       z.object({
         id: z.number(),
         price: z.number(),
-      })
+      }),
     ),
     price: z.number(),
   })
   .merge(productToBasketSchema.pick({ optionId: true, quantity: true }));
 
-export const imageSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  url: z.string(),
-});
-
-export const optionSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  price: z.number(),
-  productId: z.number(),
-  imageId: z.number(),
-  image: imageSchema,
-});
-
-export const addressSchema = z.object({
+const addressSchema = z.object({
   id: z.number(),
   line1: z.string(),
   line2: z.string().nullable(),
@@ -161,7 +148,7 @@ export const addressSchema = z.object({
   city: z.string(),
 });
 
-export const customerSchema = z.object({
+const customerSchema = z.object({
   id: z.number(),
   firstname: z.string(),
   lastname: z.string(),
@@ -170,7 +157,7 @@ export const customerSchema = z.object({
   address: z.array(addressSchema),
 });
 
-export const deliveryOptionSchema = z.object({
+const deliveryOptionSchema = z.object({
   id: z.number(),
   name: z.string(),
   description: z.string().nullable(),
@@ -194,27 +181,6 @@ export const orderSchema = z.object({
   address: addressSchema,
 });
 
-export const categorySchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  imageId: z.number(),
-  image: imageSchema,
-});
-
-export const productSchema = z.object({
-  id: z.number(),
-  price: z.number(),
-  createdAt: z.date(),
-  name: z.string(),
-  description: z.string().nullable(),
-  productId: z.string().nullable(),
-  imageId: z.number(),
-  categories: z.array(categorySchema),
-  options: z.array(optionSchema),
-  image: imageSchema,
-  baskets: z.array(productToBasketSchema),
-});
-
 const minShortString = 2;
 const maxShortString = 50;
 type ShortStringProps = {
@@ -236,8 +202,10 @@ export const lastnameMessage = shortStringMessage({
   min: minShortString,
   max: maxShortString,
 });
+export const PHONE_ERROR_MESSAGE =
+  "Votre numéro doit contenir au moins deux chiffres";
 export const emailMessage = "Votre saisie n'est pas un email valide";
-export const phoneMessage = "Votre saisie doit uniquement être des nombres";
+const phoneMessage = "Votre numéro doit au moins contenir deux chiffres";
 
 export const deliveryOptionMessage =
   "Veuillez selectionner une méthode de livraison";
@@ -279,13 +247,17 @@ export const deliveryFormSchema = z.object({
     .min(2, { message: lastnameMessage })
     .max(50, { message: lastnameMessage }),
   email: z.string().email({ message: emailMessage }),
-  phone: z.string({
-    description: phoneMessage,
-    required_error: REQUIRED_TEXT,
-  }),
-  deliveryOptionId: z.string({
-    errorMap: () => ({ message: deliveryOptionMessage }),
-  }),
+  phone: z
+    .string()
+    .min(2, { message: PHONE_ERROR_MESSAGE })
+    .refine((value) => typeof parseInt(value) === "number", {
+      message: phoneMessage,
+    }),
+  deliveryOptionId: z
+    .string()
+    .refine((value) => isNaN(parseInt(value)) === false, {
+      message: deliveryOptionMessage,
+    }),
   line1: z
     .string({ required_error: REQUIRED_TEXT })
     .min(5, { message: address1Message })
@@ -366,6 +338,3 @@ export const productAdminGetAllArg: ProductAdminGetAllArg = {
   },
 };
 // /prisma schema
-
-// other zod schema
-export const urlSchema = z.string().url()

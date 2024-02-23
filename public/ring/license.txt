@@ -1,0 +1,8 @@
+Model Information:
+* title:	Tower Ring
+* source:	https://sketchfab.com/3d-models/tower-ring-b89c580ea26c41f58e3e681577015614
+* author:	realbazingamo (https://sketchfab.com/realbazingamo)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

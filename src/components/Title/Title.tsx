@@ -1,5 +1,7 @@
+"use client";
+
 import React from "react";
-import { cn } from "~/lib/helpers/helpers";
+import { cn } from "~/lib/helpers/client";
 
 interface TitleProps {
   component?: keyof JSX.IntrinsicElements;
@@ -17,7 +19,7 @@ export const Title: React.FC<TitleProps> = ({
     "font-normal",
     "text-center",
     "py-12",
-    className
+    className,
   );
 
   return React.createElement(component, { className: classes }, children);
