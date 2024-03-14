@@ -9,8 +9,10 @@ import {
   productAdminGetAllArg,
 } from "~/lib/constants";
 import { type Prisma } from "@prisma/client";
-import { type DefaultArgs } from "@prisma/client/runtime/library";
-import { renameSync } from "fs";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { getPossibleInstrumentationHookFilenames } from "next/dist/build/utils";
+import { env } from "~/env";
+import { s3Client } from "~/server/db";
 
 const getAllInputSchema = z
   .object({
@@ -31,17 +33,23 @@ const getBySingleIdInputSchema = z.object({
   id: z.string().optional(),
 });
 
+const imageSchema = z.object({
+  name: z.string(),
+  url: z.string(),
+  file: z.instanceof(Buffer),
+});
+
 const createProductSchema = z.object({
   name: z.string(),
   price: z.number(),
   categories: z.array(z.number()),
   description: z.string().optional(),
-  image: imageFormSchema,
+  image: imageSchema,
   options: z.array(
     z.object({
       name: z.string(),
       price: z.number(),
-      image: imageFormSchema,
+      image: imageSchema,
     }),
   ),
   relateTo: z.array(z.number()),
@@ -51,9 +59,20 @@ export const productsRouter = createTRPCRouter({
   // create: adminProcedure.query(({ ctx }) => {
   create: publicProcedure
     .input(createProductSchema)
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { categories, description, image, name, options, price, relateTo } =
         input;
+
+      const params = {
+        Bucket: env.BUCKET_NAME,
+        Key: image.name,
+        Body: Buffer.from(await image.file.arrayBuffer()),
+        ContentType: image.file.type,
+      };
+
+      const command = new PutObjectCommand(params);
+
+      // await s3Client.send(command);
 
       return ctx.db.product.create({
         data: {

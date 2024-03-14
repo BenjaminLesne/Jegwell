@@ -14,6 +14,9 @@ import { type Stripe, loadStripe } from "@stripe/stripe-js";
 import { env } from "~/env";
 import { type Option, type ProductToBasket } from "@prisma/client";
 
+export const fileToBuffer = async (file: File) =>
+  Buffer.from(await file.arrayBuffer());
+
 export const priceToInt = (str: string) => {
   const parsedPrice = parseInt(str.replace(",", "").replace(".", "").trim());
   if (isNaN(parsedPrice)) {

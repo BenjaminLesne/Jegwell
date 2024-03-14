@@ -13,7 +13,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/Button/button";
-import { cn, priceToInt } from "~/lib/helpers/client";
+import { cn, fileToBuffer, priceToInt } from "~/lib/helpers/client";
 
 import {
   type MenuItemProps,
@@ -88,7 +88,7 @@ type DirtyOption = {
   image: {
     name: string;
     url: string;
-    file: File;
+    file: Buffer;
   };
 };
 
@@ -98,7 +98,7 @@ type CleanOption = {
   image: {
     name: string;
     url: string;
-    file: File;
+    file: Buffer;
   };
 };
 function isValidOption(option: DirtyOption): option is CleanOption {
@@ -145,19 +145,35 @@ export const ProductForm = () => {
 
     if (priceInt === undefined) return;
 
-    const cleanOptions = options
-      .map((option) => {
+    const dirtyOptions = await Promise.all(
+      options.map(async (option) => {
         return {
           name: option.name,
           price: priceToInt(option.price),
           image: {
             name: option.image.name,
             url: "/" + option.image.name,
-            file: option.image,
+            file: await fileToBuffer(option.image),
           },
         };
-      })
-      .filter(isValidOption);
+      }),
+    );
+
+    const cleanOptions = dirtyOptions.filter(isValidOption);
+
+    // const cleanOptions = options
+    //   .map((option) => {
+    //     return {
+    //       name: option.name,
+    //       price: priceToInt(option.price),
+    //       image: {
+    //         name: option.image.name,
+    //         url: "/" + option.image.name,
+    //         file: await fileToBuffer(option.image),
+    //       },
+    //     };
+    //   })
+    //   .filter(isValidOption);
 
     await createProduct({
       name,
@@ -167,7 +183,7 @@ export const ProductForm = () => {
       image: {
         name: image.name,
         url: "/" + image.name,
-        file: image,
+        file: await fileToBuffer(image),
       },
       options: cleanOptions,
       relateTo: relateTo

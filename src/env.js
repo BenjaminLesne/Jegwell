@@ -17,9 +17,17 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+
+    // STRIPE
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
     BASE_URL: z.string(),
+
+    // AWS
+    BUCKET_NAME: z.string(),
+    BUCKET_REGION: z.string(),
+    S3_ACCESS_KEY: z.string(),
+    S3_SECRET_ACCESS_KEY: z.string(),
   },
 
   /**
@@ -46,6 +54,10 @@ export const env = createEnv({
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     BASE_URL: process.env.BASE_URL,
+    BUCKET_NAME: process.env.BUCKET_NAME,
+    BUCKET_REGION: process.env.BUCKET_REGION,
+    S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
+    S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
