@@ -2,13 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { type SetStateAction } from "react";
 import { type ControllerRenderProps, useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "~/components/ui/dialog";
 
 import {
   Form,
@@ -20,7 +13,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/Button/button";
-import { cn } from "~/lib/helpers/client";
+import { cn, priceToInt } from "~/lib/helpers/client";
 
 import {
   type MenuItemProps,
@@ -32,65 +25,8 @@ import { api } from "~/trpc/react";
 import { Loading } from "../Loading/Loading";
 import { Error } from "../Error/Error";
 import Image from "next/image";
-import { Prisma } from "@prisma/client";
 import { Title } from "../Title/Title";
-
-const allowedTypes = [
-  "image/jpeg",
-  "image/jpg",
-  "image/webp",
-  "image/png",
-  "image/gif",
-];
-const allowedTypesString = allowedTypes
-  .map((type) => type.replace("image/", "."))
-  .join(", ");
-
-const formSchema = z.object({
-  name: z.string(),
-  price: z.number().int(),
-  description: z.string().optional(),
-  categories: z.array(
-    z.object({
-      label: z.string(),
-      value: z.string(),
-    }),
-  ),
-  relateTo: z.array(
-    z.object({
-      label: z.string(),
-      value: z.string(),
-      imageUrl: z.string().url(),
-    }),
-  ),
-  options: z.array(
-    z.object({
-      name: z.string(),
-      image: z.instanceof(File).refine(
-        (value) => {
-          return allowedTypes.includes(value.type);
-        },
-        {
-          message: `Fichier non valide. Types acceptés: ${allowedTypesString}`,
-        },
-      ),
-      price: z
-        .string()
-        .transform((str) => parseInt(str))
-        .refine((num) => Number.isInteger(num), {
-          message: "La valeur doit être un nombre",
-        }),
-    }),
-  ),
-  image: z.instanceof(File).refine(
-    (value) => {
-      return allowedTypes.includes(value.type);
-    },
-    {
-      message: `Fichier non valide. Types acceptés: ${allowedTypesString}`,
-    },
-  ),
-});
+import { allowedImageTypesString, createProductSchema } from "~/lib/constants";
 
 const categoryOptionSchema = z.object({
   value: z.string(),
@@ -146,11 +82,35 @@ const ProductMenuItem = ({ option, selected }: MenuItemProps) => {
   );
 };
 
-export const CreateProductForm = () => {
+type DirtyOption = {
+  name: string;
+  price: number | undefined;
+  image: {
+    name: string;
+    url: string;
+    file: File;
+  };
+};
+
+type CleanOption = {
+  name: string;
+  price: number;
+  image: {
+    name: string;
+    url: string;
+    file: File;
+  };
+};
+function isValidOption(option: DirtyOption): option is CleanOption {
+  return (option as CleanOption).price !== undefined;
+}
+
+export const ProductForm = () => {
   const { data: categories = [], isLoading: categoriesAreLoading } =
     api.categories.getAll.useQuery();
   const { data: products = [], isLoading: productsAreLoading } =
     api.products.getAll.useQuery();
+  const { mutateAsync: createProduct } = api.products.create.useMutation();
 
   const categoriesAsOptions = categories.map((category) => ({
     label: category.name,
@@ -164,12 +124,12 @@ export const CreateProductForm = () => {
     imageUrl: product.image.url,
   })) satisfies OptionType[];
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof createProductSchema>>({
+    resolver: zodResolver(createProductSchema),
     defaultValues: {
-      name: undefined,
-      price: undefined,
-      description: undefined,
+      name: "",
+      price: "",
+      description: "",
       categories: [],
 
       options: [],
@@ -178,18 +138,48 @@ export const CreateProductForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values: z.infer<typeof createProductSchema>) {
+    const { name, price, categories, image, options, relateTo, description } =
+      values;
+    const priceInt = priceToInt(price);
+
+    if (priceInt === undefined) return;
+
+    const cleanOptions = options
+      .map((option) => {
+        return {
+          name: option.name,
+          price: priceToInt(option.price),
+          image: {
+            name: option.image.name,
+            url: "/" + option.image.name,
+            file: option.image,
+          },
+        };
+      })
+      .filter(isValidOption);
+
+    await createProduct({
+      name,
+      price: priceInt,
+      categories: categories.map((category) => parseInt(category.value)),
+      description,
+      image: {
+        name: image.name,
+        url: "/" + image.name,
+        file: image,
+      },
+      options: cleanOptions,
+      relateTo: relateTo
+        .map((product) => parseInt(product.value))
+        .filter((id) => isNaN(id) === false),
+    });
   }
-  type CategoriesOnChangeProps = {
+  type ArrayOnChangeProps = {
     value: SetStateAction<OptionType[]>;
     fieldOnChange: (...args: unknown[]) => void;
   };
-  function categoriesOnChange({
-    value,
-    fieldOnChange,
-  }: CategoriesOnChangeProps) {
+  function arrayOnChange({ value, fieldOnChange }: ArrayOnChangeProps) {
     fieldOnChange(value);
   }
 
@@ -206,26 +196,10 @@ export const CreateProductForm = () => {
   }
 
   return (
-    // <Dialog>
-    //   <DialogTrigger
-    //     className={cn(
-    //       "flex",
-    //       "ml-auto",
-    //       "mb-10",
-    //       "bg-red-300",
-    //       "border-solid",
-    //       "border-blue-600",
-    //       "border-2",
-    //     )}
-    //   >
-    //     Ajouter un produit
-    //   </DialogTrigger>
-    //   <DialogContent>
-    //     <DialogHeader>
     <>
       <Title>Création de produit</Title>
       <Form {...form}>
-        <form onSubmit={void form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
             name="name"
@@ -259,7 +233,7 @@ export const CreateProductForm = () => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Input placeholder="10" {...field} />
+                  <Input placeholder="Bijou en or" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -278,13 +252,14 @@ export const CreateProductForm = () => {
                     MenuItem={CategoryMenuItem}
                     selected={categoriesAsOptions.filter((item) => {
                       const shouldFilter = field.value.some(
-                        (object) => object.value === item.value,
+                        (categoryAsOption) =>
+                          categoryAsOption.value === item.value,
                       );
 
                       return shouldFilter;
                     })}
                     onChange={(value) =>
-                      categoriesOnChange({
+                      arrayOnChange({
                         value,
                         fieldOnChange: field.onChange,
                       })
@@ -315,7 +290,7 @@ export const CreateProductForm = () => {
                       return shouldFilter;
                     })}
                     onChange={(value) =>
-                      categoriesOnChange({
+                      arrayOnChange({
                         value,
                         fieldOnChange: field.onChange,
                       })
@@ -337,7 +312,7 @@ export const CreateProductForm = () => {
                   <FormControl>
                     <Input
                       type="file"
-                      accept={allowedTypesString}
+                      accept={allowedImageTypesString}
                       onChange={(e) =>
                         field.onChange(
                           e.target.files ? e.target.files[0] : null,
@@ -358,8 +333,11 @@ export const CreateProductForm = () => {
               return (
                 <FormItem>
                   <FormLabel>Options :</FormLabel>
-                  <button
-                    onClick={() =>
+                  <Button
+                    type="button"
+                    onClick={(event) => {
+                      event.preventDefault();
+
                       form.setValue("options", [
                         ...form.getValues("options"),
                         {
@@ -367,55 +345,21 @@ export const CreateProductForm = () => {
                           price: 1000,
                           image: new File(["exemple"], "exemple.png"),
                         },
-                      ])
-                    }
+                      ]);
+                    }}
                   >
                     Ajouter
-                  </button>
+                  </Button>
                   {field.value.map((item, index) => (
                     <OptionForm key={index} id={index} field={field} />
                   ))}
-                  {/* <FormControl>
-                        <Input
-                          placeholder="Bruz"
-                          onChange={(e) => field.onChange(e.target.value)}
-                        />
-                      </FormControl>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="19.99"
-                          onChange={(e) => field.onChange(e.target.value)}
-                        />
-                      </FormControl>
-                      <FormControl>
-                        <Input
-                          type="file"
-                          accept={allowedTypesString}
-                          onChange={(e) =>
-                            field.onChange(
-                              e.target.files ? e.target.files[0] : null,
-                            )
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage /> */}
                 </FormItem>
               );
             }}
           />
-
-          {/* options  (create option, name, image)   */}
-          {/* in progress */}
-          {/* form to create an option and automaticlaly assigned it to the product being created, this form needs to be duplicatable in case we have multiple options */}
-          {/* tempId: crypto.randomUUID(), use it to identify which input is this in the array. add onChange => add to field.value option. need remove button to filter it out. Use tempId for all of it. We should be able to handle error message with the tempId (conditonnaly display the error message based on tempId)*/}
-          {/* it is too big for a dialog */}
           <Button type="submit">Envoyer</Button>
         </form>
       </Form>
-      {/* </DialogHeader>
-      </DialogContent>
-    </Dialog> */}
     </>
   );
 };
@@ -423,8 +367,8 @@ export const CreateProductForm = () => {
 type UpdateOptionProps = {
   id: number;
   value: unknown;
-  key: keyof z.infer<typeof formSchema>["options"][number];
-  options: z.infer<typeof formSchema>["options"];
+  key: keyof z.infer<typeof createProductSchema>["options"][number];
+  options: z.infer<typeof createProductSchema>["options"];
 };
 function updateOption({ id, value, key, options }: UpdateOptionProps) {
   return options.map((option, index) =>
@@ -463,7 +407,7 @@ function OptionForm({ field, id }: OptionFormProps) {
     <>
       <FormControl>
         <Input
-          placeholder="Bruz"
+          placeholder="Vert"
           onChange={(e) =>
             field.onChange(
               updateOption({
@@ -479,6 +423,8 @@ function OptionForm({ field, id }: OptionFormProps) {
       <FormControl>
         <Input
           type="number"
+          step="0.01"
+          min="0"
           placeholder="19.99"
           onChange={(e) =>
             field.onChange(
@@ -495,7 +441,7 @@ function OptionForm({ field, id }: OptionFormProps) {
       <FormControl>
         <Input
           type="file"
-          accept={allowedTypesString}
+          accept={allowedImageTypesString}
           onChange={(e) =>
             field.onChange(
               updateOption({

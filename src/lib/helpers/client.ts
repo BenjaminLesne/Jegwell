@@ -3,7 +3,6 @@
 import { useEffect, useReducer, useRef } from "react";
 import {
   BASKET_REDUCER_TYPE,
-  DEVELOPMENT,
   LOCALE_STORAGE_BASKET_KEY,
   NO_OPTION,
   isDevelopment,
@@ -14,6 +13,15 @@ import { twMerge } from "tailwind-merge";
 import { type Stripe, loadStripe } from "@stripe/stripe-js";
 import { env } from "~/env";
 import { type Option, type ProductToBasket } from "@prisma/client";
+
+export const priceToInt = (str: string) => {
+  const parsedPrice = parseInt(str.replace(",", "").replace(".", "").trim());
+  if (isNaN(parsedPrice)) {
+    new Error("could not convert price into integer");
+  } else {
+    return parsedPrice;
+  }
+};
 
 type GetSubtotalPriceProps = {
   quantity: OrderedProduct["quantity"];

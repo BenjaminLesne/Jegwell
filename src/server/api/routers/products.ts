@@ -5,9 +5,12 @@ import {
   DEFAULT_SORT,
   GET_BY_IDS,
   SORT_OPTIONS,
+  imageFormSchema,
   productAdminGetAllArg,
 } from "~/lib/constants";
 import { type Prisma } from "@prisma/client";
+import { type DefaultArgs } from "@prisma/client/runtime/library";
+import { renameSync } from "fs";
 
 const getAllInputSchema = z
   .object({
@@ -28,7 +31,62 @@ const getBySingleIdInputSchema = z.object({
   id: z.string().optional(),
 });
 
+const createProductSchema = z.object({
+  name: z.string(),
+  price: z.number(),
+  categories: z.array(z.number()),
+  description: z.string().optional(),
+  image: imageFormSchema,
+  options: z.array(
+    z.object({
+      name: z.string(),
+      price: z.number(),
+      image: imageFormSchema,
+    }),
+  ),
+  relateTo: z.array(z.number()),
+});
+
 export const productsRouter = createTRPCRouter({
+  // create: adminProcedure.query(({ ctx }) => {
+  create: publicProcedure
+    .input(createProductSchema)
+    .mutation(({ ctx, input }) => {
+      const { categories, description, image, name, options, price, relateTo } =
+        input;
+
+      return ctx.db.product.create({
+        data: {
+          name,
+          price,
+          categories: {
+            connect: categories.map((categoryId) => ({ id: categoryId })),
+          },
+          description,
+          options: {
+            create: options.map((option) => ({
+              name: option.name,
+              price: option.price,
+              image: {
+                create: {
+                  name: option.image.name,
+                  url: option.image.url,
+                },
+              },
+            })),
+          },
+          relateTo: {
+            connect: relateTo.map((productId) => ({ id: productId })),
+          },
+          image: {
+            create: {
+              name: image.name,
+              url: image.url,
+            },
+          },
+        },
+      });
+    }),
   // AdminGetAll: adminProcedure.query(({ ctx }) => {
   AdminGetAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.product.findMany(productAdminGetAllArg);

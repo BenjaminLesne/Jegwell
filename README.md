@@ -2,6 +2,7 @@
 
 Useful links:
 
+- [Jira](https://ben35170.atlassian.net/jira/software/projects/KAN/boards/1)
 - [github](https://github.com/BenjaminLesne/Jegwell)
 - [planetscale](https://auth.planetscale.com/sign-in?return_to=%2Fbenjamin-lesne%2Fjegwelldb)
 - [vercel](https://vercel.com/benjaminlesne/jegwell)

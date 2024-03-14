@@ -12,7 +12,7 @@ import { Error } from "~/components/Error/Error";
 import { DataTable } from "~/components/data-table";
 import { productColumns } from "~/components/columns";
 import { AdminHeader } from "~/components/Header/AdminHeader";
-import { CreateProductForm } from "~/components/Modals/CreateProductDialog";
+import { ProductForm } from "~/components/Forms/ProductForm";
 
 const AdminProductsPage: NextPage = () => {
   const { data: products, isLoading } = api.products.AdminGetAll.useQuery();
@@ -36,7 +36,7 @@ const AdminProductsPage: NextPage = () => {
       <main>
         <Section>
           <Title>Produits :</Title>
-          <CreateProductForm />
+          <ProductForm />
           <DataTable columns={productColumns} data={products} />
         </Section>
       </main>

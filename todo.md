@@ -45,20 +45,24 @@
 - make a system where she can check order that have been handled already
 - reset the database between each test/project in e2e tests? https://playwright.dev/docs/test-projects
 - add identification with AdminGetAll api endpoint
-- add bun as package manager, testing framework and bundler?... runtime?
-- add knip https://github.com/webpro/knip
 - can I use this? https://github.com/release-it/release-it
 - clean up useEffect wrongly use see this video: https://www.youtube.com/watch?v=TGUSijXKuyA
 - make 3D model of products? (threejs)
 - make a docker commpose to run a backend/db locally cf webdeccody video
 - https://github.com/BenjaminLesne/Jegwell/security/dependabot
+- change product3d background https://drei.pmnd.rs/?path=/docs/staging-accumulativeshadows--docs
 
 IMPORTANT:
 
+- make product.image an array of images ?
 - bug: when removing products from basket, subtotal Price is not equal to product price x quantity
+  => use library useHooks localStorage
+- migrate useBacket to useLocalStorage hook useHooks.com
 - add in test e2e of payment a check that the last payment intent succeeded without error
 - email: support@jegwell.fr (IS NOT A REAL EMAIL IN THE SUCCESS PAYMENT PAGE)
-- admin product page:p
+  => use a env variable (otherwise everytimle we want to change we have to build the app)
+- on envoie des emails on buy?
+- admin product page:
   => authentication required (clerk)
   => design to make?
 - store .env in keepassxc jegwell
@@ -66,15 +70,14 @@ IMPORTANT:
 - admin navigation
 - make a doc with docusaurus (How to use the MultipleSelect)
 - make a doc with docusaurus for solene
+- uncomment adminProcedure
+  DOING:
 - create a form to create a product in /gestion/produits
-  => create option?
-  => when I press add it refresh the page, it does not work
-- feat: product3d
-  => e2e fails, again.. ca timeout dans le pipeline putain (pas de probleme en local)
+  => store image (AWS? https://aws.amazon.com/s3/)
 
-Note:
-When you awake the ps database you have to restard the frontend server aswell
-we can add customer details (address, email) in the Stripe checkout session
+  Note:
+  When you awake the ps database you have to restard the frontend server aswell
+  we can add customer details (address, email) in the Stripe checkout session
 
 there is two branch dev and production available with current plan, we need a stage branch so we can run our e2e tests
 https://app.planetscale.com/benjamin-lesne/jegwelldb/branches

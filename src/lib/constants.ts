@@ -7,6 +7,8 @@ export const BRAND_NAME = "Jegwell";
 export const TAB_BASE_TITLE = `${BRAND_NAME} | `;
 export const DEVELOPMENT = "development";
 export const isDevelopment = env.NEXT_PUBLIC_NODE_ENV === DEVELOPMENT;
+export const minPrice = 0;
+export const maxPrice = 1000;
 // routes
 export const HOME_ROUTE = "/";
 export const PRODUCTS_ROUTE = "/creations";
@@ -91,6 +93,68 @@ export const GET_BY_IDS = "getByIds";
 // /api endpoints
 
 // prisma schema
+export const allowedImageTypes = [
+  "image/jpeg",
+  "image/jpg",
+  "image/webp",
+  "image/png",
+  "image/gif",
+];
+
+export const allowedImageTypesString = allowedImageTypes
+  .map((type) => type.replace("image/", "."))
+  .join(", ");
+
+const priceSchema = z
+  .string()
+  .regex(/^\d+(\.\d{1,2})?$/, "La saisie n'est pas un prix");
+
+const imageFileErrorMessage = `Fichier non valide. Types acceptés: ${allowedImageTypesString}`;
+
+const imageFileSchema = z
+  .instanceof(File, {
+    message: "Une image est nécessaire",
+  })
+  .refine(
+    (value) => {
+      return allowedImageTypes.includes(value.type);
+    },
+    {
+      message: imageFileErrorMessage,
+    },
+  );
+export const imageFormSchema = z.object({
+  name: z.string(),
+  url: z.string(),
+  file: imageFileSchema,
+});
+
+export const createProductSchema = z.object({
+  name: z.string().min(2, "La saisie doit contenir au moins deux caractères"),
+  price: priceSchema,
+  description: z.string().optional(),
+  categories: z.array(
+    z.object({
+      label: z.string(),
+      value: z.string(),
+    }),
+  ),
+  relateTo: z.array(
+    z.object({
+      label: z.string(),
+      value: z.string().refine((value) => isNaN(parseInt(value)) === false),
+    }),
+  ),
+  options: z.array(
+    z.object({
+      name: z.string().min(2),
+      image: imageFileSchema,
+      price: priceSchema,
+    }),
+  ),
+  image: imageFileSchema,
+});
+
 const productToBasketSchema = z.object({
   id: z.number(),
   quantity: z.number(),
