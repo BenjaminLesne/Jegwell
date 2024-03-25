@@ -57,9 +57,7 @@ model Option {
 }
 
 model Image {
-    id   String @id
-    name String @db.VarChar(255)
-    url  String @db.Text
+    id String @id
 
     products   Product[]
     categories Category[]

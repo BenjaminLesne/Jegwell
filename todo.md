@@ -73,7 +73,7 @@ IMPORTANT:
 - uncomment adminProcedure
   DOING:
 - create a form to create a product in /gestion/produits
-  => store image (AWS? https://aws.amazon.com/s3/)
+  => update prisma schema related to Image (remove name, just keep id?)
 
   Note:
   When you awake the ps database you have to restard the frontend server aswell
