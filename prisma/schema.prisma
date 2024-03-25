@@ -18,7 +18,7 @@ model Product {
     createdAt   DateTime @default(now())
     name        String
     description String?
-    imageId     Int
+    imageId     String
 
     categories Category[]
     options    Option[]
@@ -33,7 +33,7 @@ model Product {
 model Category {
     id      Int    @id @default(autoincrement())
     name    String
-    imageId Int
+    imageId String
 
     products Product[]
     image    Image     @relation(fields: [imageId], references: [id])
@@ -46,7 +46,7 @@ model Option {
     name      String
     price     Int
     productId Int
-    imageId   Int
+    imageId   String
 
     image   Image             @relation(fields: [imageId], references: [id])
     product Product           @relation(fields: [productId], references: [id])
@@ -57,7 +57,7 @@ model Option {
 }
 
 model Image {
-    id   Int    @id @default(autoincrement())
+    id   String @id
     name String @db.VarChar(255)
     url  String @db.Text
 

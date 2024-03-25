@@ -22,6 +22,7 @@ export const ADMIN_SINGLE_ORDER_ROUTE = `${ADMIN_ORDERS_ROUTE}/`;
 export const ADMIN_CATEGORIES = `${BASE_ADMIN_ROUTE}/categories`;
 export const ADMIN_PRODUCTS = `${BASE_ADMIN_ROUTE}/produits`;
 export const ADMIN_DELIVERY_OPTIONS = `${BASE_ADMIN_ROUTE}/livraisons`;
+export const CREATE_CATEGORY_ROUTE = "/gestion/categories/create";
 // /routes
 
 // social media
@@ -111,7 +112,7 @@ const priceSchema = z
 
 const imageFileErrorMessage = `Fichier non valide. Types acceptés: ${allowedImageTypesString}`;
 
-const imageFileSchema = z
+export const imageFileSchema = z
   .instanceof(File, {
     message: "Une image est nécessaire",
   })
@@ -401,4 +402,14 @@ export const productAdminGetAllArg: ProductAdminGetAllArg = {
     categories: true,
   },
 };
+
+export const CategoryFormSchema = z.object({
+  name: z.string(),
+  image: imageFileSchema,
+});
 // /prisma schema
+
+// AWS S3
+export const IMAGES_FOLDER_PATH = "images/";
+
+// /AWS S3
