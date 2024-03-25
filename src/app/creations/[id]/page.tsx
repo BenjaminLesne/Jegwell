@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense, useReducer } from "react";
+import { useReducer } from "react";
 import { Loading } from "~/components/Loading/Loading";
 import { Section } from "~/components/Section/Section";
 import { Button } from "~/components/ui/Button/button";
@@ -23,7 +23,6 @@ import {
 import {
   type BasketAction,
   type OrderedProduct,
-  cn,
   useBasket,
   consoleError,
 } from "~/lib/helpers/client";
@@ -36,6 +35,7 @@ import { type z } from "zod";
 import dynamic from "next/dynamic";
 import { Header } from "~/components/Header/Header";
 import { Footer } from "~/components/Footer/Footer";
+import { cn } from "~/lib/helpers/shared";
 const Product3d = dynamic(() => import("../../../components/Product3d"));
 
 const { RESET, ADD } = BASKET_REDUCER_TYPE;

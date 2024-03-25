@@ -6,7 +6,7 @@ import {
   ADMIN_ORDERS_ROUTE,
   ADMIN_PRODUCTS,
 } from "~/lib/constants";
-import { cn } from "~/lib/helpers/client";
+import { cn } from "~/lib/helpers/shared";
 
 export const AdminHeader = ({ children }: { children?: React.ReactNode }) => {
   return (
@@ -19,7 +19,7 @@ export const AdminHeader = ({ children }: { children?: React.ReactNode }) => {
           "py-3",
           "bg-slate-300",
           "max-w-6xl",
-          "m-auto"
+          "m-auto",
         )}
       >
         <li>

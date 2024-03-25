@@ -13,6 +13,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getPossibleInstrumentationHookFilenames } from "next/dist/build/utils";
 import { env } from "~/env";
 import { s3Client } from "~/server/db";
+import multer from "multer";
 
 const getAllInputSchema = z
   .object({
@@ -54,6 +55,9 @@ const createProductSchema = z.object({
   ),
   relateTo: z.array(z.number()),
 });
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 export const productsRouter = createTRPCRouter({
   // create: adminProcedure.query(({ ctx }) => {

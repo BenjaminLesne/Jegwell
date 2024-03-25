@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { type NextPage } from "next";
 import Head from "next/head";
@@ -9,7 +9,7 @@ import { Section } from "~/components/Section/Section";
 import { api } from "~/trpc/react";
 import { Loading } from "~/components/Loading/Loading";
 import { Error } from "~/components/Error/Error";
-import { cn } from "~/lib/helpers/client";
+import { cn } from "~/lib/helpers/shared";
 
 const Home: NextPage = () => {
   const { data: orders, isLoading } = api.orders.getAllPaid.useQuery();

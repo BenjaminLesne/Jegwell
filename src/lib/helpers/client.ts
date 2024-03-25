@@ -8,8 +8,6 @@ import {
   isDevelopment,
 } from "../constants";
 import { z } from "zod";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
 import { type Stripe, loadStripe } from "@stripe/stripe-js";
 import { env } from "~/env";
 import { type Option, type ProductToBasket } from "@prisma/client";
@@ -381,10 +379,6 @@ export const useBasket = () => {
   return { basket, dispatchBasket };
 };
 // /BASKET RELATED
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);

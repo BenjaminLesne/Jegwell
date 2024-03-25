@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { cn } from "~/lib/helpers/client";
+import { cn } from "~/lib/helpers/shared";
 
 interface TitleProps {
   component?: keyof JSX.IntrinsicElements;

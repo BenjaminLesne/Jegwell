@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "src/lib/helpers/client";
+import { cn } from "src/lib/helpers/shared";
 
 type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { type SetStateAction } from "react";
 import { type ControllerRenderProps, useForm } from "react-hook-form";
@@ -13,7 +15,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/Button/button";
-import { cn, fileToBuffer, priceToInt } from "~/lib/helpers/client";
+import { fileToBuffer, priceToInt } from "~/lib/helpers/client";
 
 import {
   type MenuItemProps,
@@ -27,6 +29,7 @@ import { Error } from "../Error/Error";
 import Image from "next/image";
 import { Title } from "../Title/Title";
 import { allowedImageTypesString, createProductSchema } from "~/lib/constants";
+import { cn } from "~/lib/helpers/shared";
 
 const categoryOptionSchema = z.object({
   value: z.string(),
@@ -160,6 +163,11 @@ export const ProductForm = () => {
     );
 
     const cleanOptions = dirtyOptions.filter(isValidOption);
+
+    const formData = new FormData();
+    formData.append("image", image);
+
+    console.log(formData);
 
     // const cleanOptions = options
     //   .map((option) => {
