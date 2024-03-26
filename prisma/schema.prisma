@@ -14,9 +14,8 @@ datasource db {
 
 model Product {
     id          Int      @id @default(autoincrement())
-    price       Int
     createdAt   DateTime @default(now())
-    name        String
+    price       Int
     description String?
     imageId     String
 
@@ -31,9 +30,10 @@ model Product {
 }
 
 model Category {
-    id      Int    @id @default(autoincrement())
-    name    String
-    imageId String
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    name      String
+    imageId   String
 
     products Product[]
     image    Image     @relation(fields: [imageId], references: [id])
@@ -42,7 +42,8 @@ model Category {
 }
 
 model Option {
-    id        Int    @id @default(autoincrement())
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
     name      String
     price     Int
     productId Int
@@ -57,7 +58,8 @@ model Option {
 }
 
 model Image {
-    id String @id
+    id        String   @id
+    createdAt DateTime @default(now())
 
     products   Product[]
     categories Category[]
@@ -80,6 +82,7 @@ model ProductToBasket {
 
 model Address {
     id         Int        @id @default(autoincrement())
+    createdAt  DateTime   @default(now())
     line1      String
     line2      String?
     country    String
@@ -91,6 +94,7 @@ model Address {
 
 model Customer {
     id        Int       @id @default(autoincrement())
+    createdAt DateTime  @default(now())
     firstname String
     lastname  String
     email     String

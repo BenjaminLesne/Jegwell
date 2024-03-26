@@ -24,7 +24,8 @@ export const ADMIN_PRODUCTS = `${BASE_ADMIN_ROUTE}/produits`;
 export const ADMIN_DELIVERY_OPTIONS_ROUTE = `${BASE_ADMIN_ROUTE}/livraison`;
 export const CREATE_CATEGORY_ROUTE = ADMIN_CATEGORIES_ROUTE + "/create";
 export const CREATE_DELIVERY_OPTION_ROUTE =
-  ADMIN_DELIVERY_OPTIONS_ROUTE + "/create";
+  ADMIN_DELIVERY_OPTIONS_ROUTE + "/creer";
+export const CREATE_PRODUCT_ROUTE = ADMIN_PRODUCTS + "/creer";
 
 // /routes
 

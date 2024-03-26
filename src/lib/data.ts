@@ -11,3 +11,14 @@ export const fetchDeliveryOptionAll = async () => {
     },
   });
 };
+
+export const fetchCategoryAll = async () => {
+  return await db.category.findMany({
+    select: {
+      id: true,
+      name: true,
+      createdAt: true,
+      imageId: true,
+    },
+  });
+};
