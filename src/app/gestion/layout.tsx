@@ -4,7 +4,7 @@ import { BRAND_NAME } from "../../lib/constants";
 export const metadata = {
   title: {
     template: "%s | gestion",
-    default: BRAND_NAME,
+    default: "gestion",
   },
 };
 

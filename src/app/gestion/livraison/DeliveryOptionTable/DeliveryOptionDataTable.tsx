@@ -1,3 +1,5 @@
+"use client";
+
 import {
   type ColumnDef,
   flexRender,
@@ -16,15 +18,13 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { OptionsDataTable } from "./options-data-table";
-import { optionColumns } from "./columns";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function DeliveryOptionDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -72,18 +72,6 @@ export function DataTable<TData, TValue>({
                       </TableCell>
                     ))}
                   </TableRow>
-                  {row.getIsExpanded() && (
-                    <TableRow>
-                      <TableCell>Options de {row.getValue("name")}: </TableCell>
-                      <TableCell colSpan={columns.length / 2}>
-                        <OptionsDataTable
-                          columns={optionColumns}
-                          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-                          data={(row.original as any).options}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  )}
                 </Fragment>
               ))
             ) : (

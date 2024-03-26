@@ -31,7 +31,6 @@ const Home: NextPage = () => {
       <Head>
         <title>{TAB_BASE_TITLE}gestion</title>
       </Head>
-      <AdminHeader />
       <main>
         <Section>
           <Title>Commandes :</Title>

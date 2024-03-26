@@ -87,7 +87,7 @@ export const getProductsByIds = async ({
         name: true,
         image: {
           select: {
-            url: true,
+            id: true,
           },
         },
         id: true,
@@ -99,7 +99,7 @@ export const getProductsByIds = async ({
             price: true,
             image: {
               select: {
-                url: true,
+                id: true,
               },
             },
           },

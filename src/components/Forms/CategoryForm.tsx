@@ -5,7 +5,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createCategory, createPresignedUrl } from "~/lib/actions";
-import { IMAGES_FOLDER_PATH, allowedImageTypes } from "~/lib/constants";
+import { FileListSchema, IMAGES_FOLDER_PATH } from "~/lib/constants";
 import {
   Form,
   FormControl,
@@ -17,29 +17,6 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/Button/button";
-
-const MAX_IMAGE_SIZE = 4;
-
-const sizeInMB = (sizeInBytes: number, decimalsNum = 2) => {
-  const result = sizeInBytes / (1024 * 1024);
-  return +result.toFixed(decimalsNum);
-};
-
-const FileListSchema = z
-  .custom<FileList>()
-  .refine((files) => {
-    return Array.from(files ?? []).length !== 0;
-  }, "Image is required")
-  .refine((files) => {
-    return Array.from(files ?? []).every(
-      (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE,
-    );
-  }, `The maximum image size is ${MAX_IMAGE_SIZE}MB`)
-  .refine((files) => {
-    return Array.from(files ?? []).every((file) =>
-      allowedImageTypes.includes(file.type),
-    );
-  }, "File type is not supported");
 
 const CategoryFormSchema = z.object({
   name: z.string(),
@@ -68,7 +45,6 @@ export const CategoryForm = () => {
       });
 
       if (response.ok) {
-        ("");
         console.log("File uploaded successfully");
       } else {
         console.error("Error uploading file:", response.statusText);

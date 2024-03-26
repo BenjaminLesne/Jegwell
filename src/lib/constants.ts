@@ -19,10 +19,13 @@ export const PAYMENT_SUCCEEDED_ROUTE = "/paiement-reussi";
 export const BASE_ADMIN_ROUTE = "/gestion";
 export const ADMIN_ORDERS_ROUTE = `${BASE_ADMIN_ROUTE}/commandes`;
 export const ADMIN_SINGLE_ORDER_ROUTE = `${ADMIN_ORDERS_ROUTE}/`;
-export const ADMIN_CATEGORIES = `${BASE_ADMIN_ROUTE}/categories`;
+export const ADMIN_CATEGORIES_ROUTE = `${BASE_ADMIN_ROUTE}/categories`;
 export const ADMIN_PRODUCTS = `${BASE_ADMIN_ROUTE}/produits`;
-export const ADMIN_DELIVERY_OPTIONS = `${BASE_ADMIN_ROUTE}/livraisons`;
-export const CREATE_CATEGORY_ROUTE = "/gestion/categories/create";
+export const ADMIN_DELIVERY_OPTIONS_ROUTE = `${BASE_ADMIN_ROUTE}/livraison`;
+export const CREATE_CATEGORY_ROUTE = ADMIN_CATEGORIES_ROUTE + "/create";
+export const CREATE_DELIVERY_OPTION_ROUTE =
+  ADMIN_DELIVERY_OPTIONS_ROUTE + "/create";
+
 // /routes
 
 // social media
@@ -93,7 +96,33 @@ export const BASKET_ICON_TESTID = "basket icon";
 export const GET_BY_IDS = "getByIds";
 // /api endpoints
 
-// prisma schema
+// zod schema
+
+export const PriceSchema = z.coerce.string().regex(/^\d+(\.\d{1,2})?$/);
+
+const MAX_IMAGE_SIZE = 4;
+
+const sizeInMB = (sizeInBytes: number, decimalsNum = 2) => {
+  const result = sizeInBytes / (1024 * 1024);
+  return +result.toFixed(decimalsNum);
+};
+
+export const FileListSchema = z
+  .custom<FileList>()
+  .refine((files) => {
+    return Array.from(files ?? []).length !== 0;
+  }, "Image is required")
+  .refine((files) => {
+    return Array.from(files ?? []).every(
+      (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE,
+    );
+  }, `The maximum image size is ${MAX_IMAGE_SIZE}MB`)
+  .refine((files) => {
+    return Array.from(files ?? []).every((file) =>
+      allowedImageTypes.includes(file.type),
+    );
+  }, "File type is not supported");
+
 export const allowedImageTypes = [
   "image/jpeg",
   "image/jpg",
@@ -222,11 +251,11 @@ const customerSchema = z.object({
   address: z.array(addressSchema),
 });
 
-const deliveryOptionSchema = z.object({
+export const deliveryOptionSchema = z.object({
   id: z.number(),
   name: z.string(),
   description: z.string().nullable(),
-  price: z.number(),
+  price: PriceSchema,
 });
 
 export const orderSchema = z.object({
@@ -365,7 +394,7 @@ export const orderGetAllArg: OrderGetAllArg = {
             price: true,
             image: {
               select: {
-                url: true,
+                id: true,
               },
             },
           },
@@ -375,7 +404,7 @@ export const orderGetAllArg: OrderGetAllArg = {
           select: {
             image: {
               select: {
-                url: true,
+                id: true,
               },
             },
             name: true,
@@ -391,7 +420,7 @@ export const productAdminGetAllArg: ProductAdminGetAllArg = {
   include: {
     image: {
       select: {
-        url: true,
+        id: true,
       },
     },
     options: {
@@ -407,7 +436,7 @@ export const CategoryFormSchema = z.object({
   name: z.string(),
   image: imageFileSchema,
 });
-// /prisma schema
+// /zod schema
 
 // AWS S3
 export const IMAGES_FOLDER_PATH = "images/";

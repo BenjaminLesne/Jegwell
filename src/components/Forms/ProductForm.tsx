@@ -167,22 +167,6 @@ export const ProductForm = () => {
     const formData = new FormData();
     formData.append("image", image);
 
-    console.log(formData);
-
-    // const cleanOptions = options
-    //   .map((option) => {
-    //     return {
-    //       name: option.name,
-    //       price: priceToInt(option.price),
-    //       image: {
-    //         name: option.image.name,
-    //         url: "/" + option.image.name,
-    //         file: await fileToBuffer(option.image),
-    //       },
-    //     };
-    //   })
-    //   .filter(isValidOption);
-
     await createProduct({
       name,
       price: priceInt,

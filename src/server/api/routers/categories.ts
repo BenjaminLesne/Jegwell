@@ -9,7 +9,7 @@ export const categoriesRouter = createTRPCRouter({
         id: true,
         image: {
           select: {
-            url: true,
+            id: true,
           },
         },
       },

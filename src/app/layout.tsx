@@ -11,7 +11,10 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: BRAND_NAME,
+  title: {
+    template: `%s | ${BRAND_NAME}`,
+    default: BRAND_NAME,
+  },
   description: "Boutique en ligne officielle",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };

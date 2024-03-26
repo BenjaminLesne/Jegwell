@@ -122,7 +122,8 @@ model Order {
 }
 
 model DeliveryOption {
-    id          Int     @id @default(autoincrement())
+    id          Int      @id @default(autoincrement())
+    createdAt   DateTime @default(now())
     name        String
     description String?
     price       Int

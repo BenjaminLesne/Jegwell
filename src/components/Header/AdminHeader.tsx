@@ -1,8 +1,8 @@
 import Link from "next/link";
 import React from "react";
 import {
-  ADMIN_CATEGORIES,
-  ADMIN_DELIVERY_OPTIONS,
+  ADMIN_CATEGORIES_ROUTE,
+  ADMIN_DELIVERY_OPTIONS_ROUTE,
   ADMIN_ORDERS_ROUTE,
   ADMIN_PRODUCTS,
 } from "~/lib/constants";
@@ -26,13 +26,13 @@ export const AdminHeader = ({ children }: { children?: React.ReactNode }) => {
           <Link href={ADMIN_ORDERS_ROUTE}>Commandes</Link>
         </li>
         <li>
-          <Link href={ADMIN_CATEGORIES}>Catégories</Link>
+          <Link href={ADMIN_CATEGORIES_ROUTE}>Catégories</Link>
         </li>
         <li>
           <Link href={ADMIN_PRODUCTS}>Produits</Link>
         </li>
         <li>
-          <Link href={ADMIN_DELIVERY_OPTIONS}>Livraisons</Link>
+          <Link href={ADMIN_DELIVERY_OPTIONS_ROUTE}>Livraisons</Link>
         </li>
         <li>
           <Link href="/">Voir le site</Link>

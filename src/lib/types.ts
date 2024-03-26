@@ -5,7 +5,7 @@ export type ProductAdminGetAllArg = {
   include: {
     image: {
       select: {
-        url: true;
+        id: true;
       };
     };
     options: {
@@ -46,7 +46,7 @@ export type OrderGetAllArg = {
             price: true;
             image: {
               select: {
-                url: true;
+                id: true;
               };
             };
           };
@@ -56,7 +56,7 @@ export type OrderGetAllArg = {
           select: {
             image: {
               select: {
-                url: true;
+                id: true;
               };
             };
             name: true;
@@ -67,23 +67,6 @@ export type OrderGetAllArg = {
     };
   };
 };
-
-type BaseMergedProduct = Prisma.ProductGetPayload<{
-  include: {
-    options: {
-      select: {
-        id: true;
-        name: true;
-        price: true;
-      };
-    };
-    image: {
-      select: {
-        url: true;
-      };
-    };
-  };
-}>;
 
 export type ProductForModal =
   | (Omit<
@@ -98,7 +81,7 @@ export type ProductForModal =
           };
           image: {
             select: {
-              url: true;
+              id: true;
             };
           };
         };
@@ -120,7 +103,7 @@ export type OptionOrderedProduct = Omit<
       };
       image: {
         select: {
-          url: true;
+          id: true;
         };
       };
     };

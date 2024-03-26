@@ -51,6 +51,7 @@
 - make a docker commpose to run a backend/db locally cf webdeccody video
 - https://github.com/BenjaminLesne/Jegwell/security/dependabot
 - change product3d background https://drei.pmnd.rs/?path=/docs/staging-accumulativeshadows--docs
+- mettre en place des migrations avec prisma, actuellement on en fait aucune, on peut rien rollback
 
 IMPORTANT:
 
@@ -72,8 +73,9 @@ IMPORTANT:
 - make a doc with docusaurus for solene
 - uncomment adminProcedure
   DOING:
+- add create button in admin pages and a /creer route
 - create a form to create a product in /gestion/produits
-  => update prisma schema related to Image (remove name, just keep id?)
+  => inspire from category to make aws s3 work
 
   Note:
   When you awake the ps database you have to restard the frontend server aswell

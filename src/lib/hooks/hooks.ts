@@ -19,7 +19,7 @@ const initialOptionModalProps = {
     optionId: -1,
     quantity: -1,
     options: [],
-    image: { url: "" },
+    image: { id: "" },
   } satisfies OptionModalPropsState["orderedProduct"],
   open: false,
 };
@@ -36,7 +36,7 @@ type OptionModalPropsState = {
 
 const optionReducer = (
   state: OptionModalPropsState,
-  action: OptionModalPropsAction
+  action: OptionModalPropsAction,
 ) => {
   switch (action.type) {
     case OPEN_TYPE:
@@ -60,7 +60,7 @@ const optionReducer = (
 export const useOptionModal = () => {
   const [optionModal, dispatchOptionModal] = useReducer(
     optionReducer,
-    initialOptionModalProps
+    initialOptionModalProps,
   );
 
   return { optionModal, dispatchOptionModal };
@@ -78,7 +78,7 @@ type QuantityModalPropsAction = {
 
 const quantityReducer = (
   state: QuantityModalPropsState,
-  action: QuantityModalPropsAction
+  action: QuantityModalPropsAction,
 ) => {
   switch (action.type) {
     case OPEN_TYPE:
@@ -102,7 +102,7 @@ const quantityReducer = (
 export const useQuantityModal = () => {
   const [quantityModal, dispatchQuantityModal] = useReducer(
     quantityReducer,
-    initialQuantityModalProps
+    initialQuantityModalProps,
   );
 
   return { quantityModal, dispatchQuantityModal };

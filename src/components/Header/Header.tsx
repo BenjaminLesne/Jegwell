@@ -5,7 +5,7 @@ import React, { useEffect, useReducer } from "react";
 import { Basket } from "~/assets/svg/Basket";
 import { Cross } from "~/assets/svg/Cross";
 import { Rings } from "~/assets/svg/Rings";
-import { capitalize, cn } from "~/lib/helpers/client";
+import { capitalize } from "~/lib/helpers/client";
 import {
   BASE_ADMIN_ROUTE,
   BASKET_ICON_TESTID,
@@ -15,6 +15,7 @@ import {
 } from "~/lib/constants";
 import { AdminHeader } from "./AdminHeader";
 import { usePathname } from "next/navigation";
+import { cn } from "~/lib/helpers/shared";
 
 const navigationLinks = [
   {
@@ -112,7 +113,7 @@ export const Header = () => {
                   onClick={toggle}
                 >
                   <Link
-                    className="text-primary mx-auto text-2xl"
+                    className="mx-auto text-2xl text-primary"
                     href={link.route}
                   >
                     {link.text}
@@ -127,16 +128,16 @@ export const Header = () => {
           id="burger-button"
           onClick={toggle}
         >
-          <span className="border-primary bg-primary w-[23px] border-[1.6px] border-solid"></span>
-          <span className="border-primary bg-primary w-[23px] border-[1.6px] border-solid"></span>
-          <span className="border-primary bg-primary w-[23px] border-[1.6px] border-solid"></span>
+          <span className="w-[23px] border-[1.6px] border-solid border-primary bg-primary"></span>
+          <span className="w-[23px] border-[1.6px] border-solid border-primary bg-primary"></span>
+          <span className="w-[23px] border-[1.6px] border-solid border-primary bg-primary"></span>
         </button>
         <Link
-          className="8px text-primary m-0 flex items-center justify-center"
+          className="8px m-0 flex items-center justify-center text-primary"
           href={HOME_ROUTE}
         >
           <div className="flex items-center gap-1">
-            <div className="z-1 border-primary fill-primary after:bg-secondary relative mt-[5px] flex h-[46.25px] w-[46.25px] items-center justify-center border-[1.12px] border-solid after:absolute after:inset-[0.41px] after:z-0 after:content-['']">
+            <div className="z-1 relative mt-[5px] flex h-[46.25px] w-[46.25px] items-center justify-center border-[1.12px] border-solid border-primary fill-primary after:absolute after:inset-[0.41px] after:z-0 after:bg-secondary after:content-['']">
               <div className="z-[3]">
                 <Rings className="relative" />
               </div>
@@ -153,7 +154,7 @@ export const Header = () => {
           {navigationLinks.map((link) => {
             return (
               <li key={link.text}>
-                <Link className="text-primary mx-auto" href={link.route}>
+                <Link className="mx-auto text-primary" href={link.route}>
                   {capitalize(link.text)}
                 </Link>
               </li>
@@ -165,7 +166,7 @@ export const Header = () => {
           href={BASKET_ROUTE}
           data-testid={BASKET_ICON_TESTID}
         >
-          <Basket className="stroke-primary w-[35px] fill-transparent stroke-[20px]" />
+          <Basket className="w-[35px] fill-transparent stroke-primary stroke-[20px]" />
         </Link>
       </nav>
     </header>
