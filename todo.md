@@ -73,7 +73,7 @@ IMPORTANT:
 - make a doc with docusaurus for solene
 - uncomment adminProcedure
   DOING:
-- add create button in admin pages and a /creer route
+- check all create and see in prisma studio if it works
 - create a form to create a product in /gestion/produits
   => inspire from category to make aws s3 work
 
